@@ -1,0 +1,11 @@
+# PlayHaven specific ignores
+PHAutoSettings.h
+
+# XCode
+.DS_Store
+*.swp
+*~.nib
+
+build/
+*.xcodeproj/*
+!*.xcodeproj/project.pbxproj
