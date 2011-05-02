@@ -1,5 +1,5 @@
 //
-//  PHPublisherTokensRequestTest.m
+//  PHPublisherPromosRequestTest.m
 //  playhaven-sdk-ios
 //
 //  Created by Jesus Fernandez on 4/20/11.
@@ -9,23 +9,23 @@
 #import <SenTestingKit/SenTestingKit.h>
 #import <UIKit/UIKit.h>
 #import "PHAPIRequest.h"
-#import "PHPublisherTokensRequest.h"
+#import "PHPublisherPromosRequest.h"
 #import "NSString+SBJSON.h"
 
 #define PUBLISHER_TOKEN @"PUBLISHER_TOKEN"
 #define PUBLISHER_SECRET @"PUBLISHER_SECRET"
 
-@interface PHPublisherTokensRequestTest: SenTestCase<PHAPIRequestDelegate>{
-  PHPublisherTokensRequest *_request;
+@interface PHPublisherPromosRequestTest: SenTestCase<PHAPIRequestDelegate>{
+  PHPublisherPromosRequest *_request;
   BOOL _didHandleRequest;
 }
 @end
 
-@implementation PHPublisherTokensRequestTest
+@implementation PHPublisherPromosRequestTest
 
 -(void)setUp{
   _didHandleRequest = NO;
-  _request = [[PHPublisherTokensRequest alloc] initWithApp:PUBLISHER_TOKEN secret:PUBLISHER_SECRET delegate:self];
+  _request = [[PHPublisherPromosRequest alloc] initWithApp:PUBLISHER_TOKEN secret:PUBLISHER_SECRET delegate:self];
 }
 
 -(void)testRequestProcessing{

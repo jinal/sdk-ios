@@ -8,7 +8,7 @@
 
 #import "RootViewController.h"
 #import "PublisherOpenViewController.h"
-#import "PublisherTokensViewController.h"
+#import "PublisherPromosViewController.h"
 #import "PublisherContentViewController.h"
 
 @implementation RootViewController
@@ -138,7 +138,7 @@
     [self.navigationController pushViewController:controller animated:YES];
     [controller release];
   } else if (indexPath.row == 1){
-    PublisherTokensViewController *controller = [[PublisherTokensViewController alloc] initWithStyle:UITableViewStylePlain];
+    PublisherPromosViewController *controller = [[PublisherPromosViewController alloc] initWithStyle:UITableViewStylePlain];
     controller.title = @"Tokens";
     [self.navigationController pushViewController:controller animated:YES];
     [controller release];

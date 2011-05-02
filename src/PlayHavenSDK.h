@@ -8,4 +8,4 @@
 
 #import "PHPublisherOpenRequest.h"
 #import "PHPublisherContentRequest.h"
-#import "PHPublisherTokensRequest.h"
+#import "PHPublisherPromosRequest.h"

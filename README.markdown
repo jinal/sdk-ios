@@ -27,7 +27,7 @@ In order to better optimize your campaigns, it is necessary for your app to repo
 
 You may create special promotional offers for your app. These may be virtual currency or unlockable rewards which are then used as incentives for your users to complete offers. This API will request the current state of these incentives. Implement PHAPIRequestDelegate methods to recieves callbacks from this request. (see sections below)
 
-> [PHPublisherTokensRequest requestForApp:(NSString *)token secret:(NSString *)secret delegate:(id)delegate]
+> [PHPublisherPromosRequest requestForApp:(NSString *)token secret:(NSString *)secret delegate:(id)delegate]
 
 #### Getting response data
 
