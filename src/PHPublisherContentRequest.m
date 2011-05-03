@@ -113,4 +113,12 @@
   [self release];
 }
 
+-(UIImage *)contentView:(PHContentView *)contentView imageForCloseButtonState:(UIControlState)state{
+  if ([self.delegate respondsToSelector:@selector(request:closeButtonImageForControlState:content:)]) {
+    return [(id <PHPublisherContentRequestDelegate>)self.delegate request:self closeButtonImageForControlState:state content:contentView.content];
+  }
+  
+  return nil;
+}
+
 @end

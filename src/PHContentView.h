@@ -18,6 +18,7 @@
 -(void) contentViewDidLoad:(PHContentView *)contentView;
 -(void) contentViewDidDismiss:(PHContentView *)contentView;
 -(void) contentView:(PHContentView *)contentView didFailWithError:(NSError *)error;
+-(UIImage *) contentView:(PHContentView *)contentView imageForCloseButtonState:(UIControlState) state;
 @end
 
 @interface _Redirect : NSObject {
