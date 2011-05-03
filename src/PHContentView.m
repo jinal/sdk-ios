@@ -393,7 +393,7 @@
       _closeButton = [[UIButton buttonWithType:UIButtonTypeCustom] retain];
       _closeButton.frame = CGRectMake(0, 0, 40, 40);
       
-      UIImage *closeImage, *closeActiveImage;
+      UIImage *closeImage = nil, *closeActiveImage = nil;
       if ([self.delegate respondsToSelector:@selector(contentView:imageForCloseButtonState:)]) {
         closeImage = [self.delegate contentView:self imageForCloseButtonState:UIControlStateNormal];
         closeActiveImage = [self.delegate contentView:self imageForCloseButtonState:UIControlStateHighlighted];
