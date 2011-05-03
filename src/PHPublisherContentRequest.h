@@ -22,6 +22,9 @@
 
 -(void)request:(PHPublisherContentRequest *)request didFailWithError:(NSError *)error;
 -(void)request:(PHPublisherContentRequest *)request contentDidFailWithError:(NSError *)error;
+
+#pragma mark - Content customization methods
+-(UIImage *)request:(PHPublisherContentRequest *)request closeButtonImageForControlState:(UIControlState)state content:(PHContent *)content;
 @end
 
 @interface PHPublisherContentRequest : PHAPIRequest<PHContentViewDelegate> {

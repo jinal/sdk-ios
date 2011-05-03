@@ -392,12 +392,17 @@
     if (_closeButton == nil) {
       _closeButton = [[UIButton buttonWithType:UIButtonTypeCustom] retain];
       _closeButton.frame = CGRectMake(0, 0, 40, 40);
-      UIImage *closeImage = [UIImage imageNamed:@"PlayHaven.bundle/images/close.png"];
-      UIImage *closeActiveImage = [UIImage imageNamed:@"PlayHaven.bundle/images/close-active.png"];
+      
+      UIImage *closeImage = nil, *closeActiveImage = nil;
+      if ([self.delegate respondsToSelector:@selector(contentView:imageForCloseButtonState:)]) {
+        closeImage = [self.delegate contentView:self imageForCloseButtonState:UIControlStateNormal];
+        closeActiveImage = [self.delegate contentView:self imageForCloseButtonState:UIControlStateHighlighted];
+      }
+      closeImage = (!closeImage)? [UIImage imageNamed:@"PlayHaven.bundle/images/close.png"] : closeImage;
+      closeActiveImage = (!closeActiveImage)?[UIImage imageNamed:@"PlayHaven.bundle/images/close-active.png"]: closeActiveImage;
       
       [_closeButton setImage:closeImage forState:UIControlStateNormal];
       [_closeButton setImage:closeActiveImage forState:UIControlStateHighlighted];
-      [_closeButton setImage:closeActiveImage forState:UIControlStateSelected];
       
       [_closeButton addTarget:self action:@selector(dismissFromButton) forControlEvents:UIControlEventTouchUpInside];
       
