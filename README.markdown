@@ -86,3 +86,11 @@ If for any reason the content request does not successfully return some content 
 If for any reason a content unit fails to load after the overlay view has appeared, the request will stop and the overlay view will be removed. You may restore sounds and animations at this point.
 
 > \-(void)request:(PHPublisherContentRequest *)request contentDidFailWithError:(NSError *)error;
+
+### Customizing content display
+
+#### Replace close button graphics
+
+Use the following request method to replace the close button image with something that more closely matches your app. Images will be scaled to a maximum size of 40x40.
+
+> \-(UIImage *)request:(PHPublisherContentRequest *)request closeButtonImageForControlState:(UIControlState)state content:(PHContent *)content;
