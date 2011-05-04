@@ -453,6 +453,7 @@
   NSString *urlPath = [queryComponents valueForKey:@"url"];
   if (!!urlPath && [urlPath isKindOfClass:[NSString class]]) {
     PHURLLoaderView *view = [[PHURLLoaderView alloc] initWithTargetURLPath:urlPath];
+    view.delegate = self;
     [view show:YES];
     [view release];
   }
