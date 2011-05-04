@@ -25,6 +25,7 @@
 
 #pragma mark - Content customization methods
 -(UIImage *)request:(PHPublisherContentRequest *)request closeButtonImageForControlState:(UIControlState)state content:(PHContent *)content;
+-(UIColor *)request:(PHPublisherContentRequest *)request borderColorForContent:(PHContent *)content;
 @end
 
 @interface PHPublisherContentRequest : PHAPIRequest<PHContentViewDelegate> {
