@@ -365,7 +365,9 @@
   NSString *urlPath = [NSString stringWithFormat:@"%@://%@%@", [url scheme], [url host], [url path]];
   _Redirect *redirect = [_redirects valueForKey:urlPath];
   if (redirect) {
-    [redirect.target performSelector:redirect.action withObject:[url queryComponents]];
+    NSString *jsonBody = [[NSString alloc] initWithData:[request HTTPBody] encoding:NSUTF8StringEncoding];
+    [redirect.target performSelector:redirect.action withObject:[jsonBody JSONValue]];
+    [jsonBody release];
     return NO;
   }
   

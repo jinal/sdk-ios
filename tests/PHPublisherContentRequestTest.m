@@ -12,6 +12,7 @@
 #import <QuartzCore/QuartzCore.h>
 
 #import "SBJsonParser.h"
+#import "NSObject+SBJSON.h"
 #import "PHContent.h"
 #import "PHContentView.h"
 #import "PHPublisherContentRequest.h"
@@ -150,7 +151,14 @@
 }
    
 -(void)testLaunchRequest{
-  NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:@"ph://launch?url=http%3A%2F%2Fadidas.com"]];
+  NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:@"ph://launch"]];
+  NSDictionary *bodyDictionary = [NSDictionary dictionaryWithObjectsAndKeys:
+                                  @"http://adidas.com", @"url", 
+                                  nil];
+  [request setHTTPMethod:@"POST"];
+  [request setHTTPBody:[[bodyDictionary JSONRepresentation] dataUsingEncoding:NSUTF8StringEncoding]];
+  [request setValue:@"text/json" forHTTPHeaderField:@"Content-Type"];
+  
   BOOL result = [_contentView webView:nil shouldStartLoadWithRequest:request navigationType:UIWebViewNavigationTypeLinkClicked];
   STAssertFalse(result, @"_contentView should not open ph://dismiss in webview!");
 }
