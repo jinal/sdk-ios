@@ -121,4 +121,12 @@
   return nil;
 }
 
+-(UIColor *)borderColorForContentView:(PHContentView *)contentView{
+  if ([self.delegate respondsToSelector:@selector(request:borderColorForContent:)]) {
+    return [(id <PHPublisherContentRequestDelegate>)self.delegate request:self borderColorForContent:contentView.content];
+  }
+  
+  return nil;
+}
+
 @end

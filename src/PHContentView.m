@@ -264,6 +264,11 @@
     _webView.layer.borderColor = [[UIColor blackColor] CGColor];
     _webView.layer.borderWidth = 1.0f;
     
+    
+    if ([self.delegate respondsToSelector:@selector(borderColorForContentView:)]) {
+      _webView.layer.borderColor = [[self.delegate borderColorForContentView:self] CGColor];
+    }
+    
     [_webView setDelegate:self];
     [self addSubview:_webView];
     
@@ -448,6 +453,7 @@
   NSString *urlPath = [queryComponents valueForKey:@"url"];
   if (!!urlPath && [urlPath isKindOfClass:[NSString class]]) {
     PHURLLoaderView *view = [[PHURLLoaderView alloc] initWithTargetURLPath:urlPath];
+    view.delegate = self;
     [view show:YES];
     [view release];
   }
