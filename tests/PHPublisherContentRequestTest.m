@@ -152,8 +152,11 @@
    
 -(void)testLaunchRequest{
   NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:@"ph://launch"]];
+  NSDictionary *contextDictionary = [NSDictionary dictionaryWithObjectsAndKeys:
+                                     @"http://adidas.com", @"url", 
+                                     nil];
   NSDictionary *bodyDictionary = [NSDictionary dictionaryWithObjectsAndKeys:
-                                  @"http://adidas.com", @"url", 
+                                  contextDictionary, @"context", 
                                   nil];
   [request setHTTPMethod:@"POST"];
   [request setHTTPBody:[[bodyDictionary JSONRepresentation] dataUsingEncoding:NSUTF8StringEncoding]];

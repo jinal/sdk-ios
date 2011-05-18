@@ -55,7 +55,7 @@
     launchRedirect.action = @selector(handleLaunch:);
     
     loadContextRedirect.target = self;
-    loadContextRedirect.action = @selector(handleLoadContext:);
+    loadContextRedirect.action = @selector(handleLoadContext:callback:);
     
     _redirects = [[NSMutableDictionary alloc] initWithObjectsAndKeys:
                   dismissRedirect,@"ph://dismiss",
@@ -366,7 +366,9 @@
   _Redirect *redirect = [_redirects valueForKey:urlPath];
   if (redirect) {
     NSString *jsonBody = [[NSString alloc] initWithData:[request HTTPBody] encoding:NSUTF8StringEncoding];
-    [redirect.target performSelector:redirect.action withObject:[jsonBody JSONValue]];
+    NSDictionary *jsonValue = [jsonBody JSONValue];
+    NSLog(@"[PHContentView] Redirecting request with callback: %@ to dispatch %@", [jsonValue valueForKey:@"id"], urlPath);
+    [redirect.target performSelector:redirect.action withObject:[jsonValue valueForKey:@"context"] withObject:[jsonValue valueForKey:@"id"]];
     [jsonBody release];
     return NO;
   }
@@ -475,10 +477,19 @@
   [self dismiss:_willAnimate];
 }
 
--(void)handleLoadContext:(NSDictionary *)queryComponents{
-  NSString *jsonString = [self.content.context JSONRepresentation];
-  NSString *loadContextCommand = [NSString stringWithFormat:@"PlayHaven.loadContext(%@)",jsonString];
-  [_webView stringByEvaluatingJavaScriptFromString:loadContextCommand];
+-(void)handleLoadContext:(NSDictionary *)queryComponents callback:(NSString*)callback{
+  [self sendCallback:callback withResponse:self.content.context error:nil];
+}
+
+#pragma - callbacks
+-(void)sendCallback:(NSString *)callback withResponse:(id)response error:(id)error{
+  NSString *_callback = @"null", *_response = @"null", *_error = @"null";
+  if (!!callback) _callback = callback;
+  if (!!response) _response = [response JSONRepresentation];
+  if (!!error) _error = [error JSONRepresentation];
+  
+  NSString *callbackCommand = [NSString stringWithFormat:@"PlayHaven.native.callback(%@,%@,%@)", _callback, _response, _error];
+  [_webView stringByEvaluatingJavaScriptFromString:callbackCommand];
 }
 
 #pragma mark -
