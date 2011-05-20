@@ -22,16 +22,6 @@
 -(UIColor *) borderColorForContentView:(PHContentView *)contentView;
 @end
 
-@interface _Redirect : NSObject {
-  id _target;
-  SEL _action;
-}
-
-@property (nonatomic, assign) id target;
-@property (nonatomic, assign) SEL action;
-
-@end
-
 @interface PHContentView : UIView<UIWebViewDelegate, PHURLLoaderDelegate> {
   PHContent *_content;
   UIInterfaceOrientation _orientation;

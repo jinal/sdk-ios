@@ -31,40 +31,30 @@
 -(void)dismissWithError:(NSError *)error;
 @end
 
-@implementation _Redirect
-
-@synthesize target = _target;
-@synthesize action = _action;
-
-@end
-
 @implementation PHContentView
 
 -(id) initWithContent:(PHContent *)content{
   if ((self = [super initWithFrame:[[UIScreen mainScreen] applicationFrame]])) {
     
-    _Redirect
-    *dismissRedirect = [[_Redirect alloc] init],
-    *launchRedirect = [[_Redirect alloc] init],
-    *loadContextRedirect = [[_Redirect alloc] init];
+    NSInvocation
+    *dismissRedirect = [NSInvocation invocationWithMethodSignature:[[self class] instanceMethodSignatureForSelector:@selector(handleDismiss:)]],
+    *launchRedirect = [NSInvocation invocationWithMethodSignature:[[self class] instanceMethodSignatureForSelector:@selector(handleLaunch:)]],
+    *loadContextRedirect = [NSInvocation invocationWithMethodSignature:[[self class] instanceMethodSignatureForSelector:@selector(handleLoadContext:callback:)]];
     
     dismissRedirect.target = self;
-    dismissRedirect.action = @selector(handleDismiss:);
+    dismissRedirect.selector = @selector(handleDismiss:);
     
     launchRedirect.target = self;
-    launchRedirect.action = @selector(handleLaunch:);
+    launchRedirect.selector = @selector(handleLaunch:);
     
     loadContextRedirect.target = self;
-    loadContextRedirect.action = @selector(handleLoadContext:callback:);
+    loadContextRedirect.selector = @selector(handleLoadContext:callback:);
     
     _redirects = [[NSMutableDictionary alloc] initWithObjectsAndKeys:
                   dismissRedirect,@"ph://dismiss",
                   launchRedirect,@"ph://launch",
                   loadContextRedirect,@"ph://loadContext",
                   nil];
-    
-    [dismissRedirect release];
-    [launchRedirect release];
     
     _content = [content retain];
     
@@ -231,7 +221,7 @@
     
     
     CGFloat navBarHeight = CGRectGetMaxY(_navBar.frame); 
-    _webView = [[UIWebView alloc] initWithFrame:CGRectMake(0, navBarHeight, width, height - navBarHeight)];
+    _webView = [[PHContentWebView alloc] initWithFrame:CGRectMake(0, navBarHeight, width, height - navBarHeight)];
     _webView.delegate = self;
     _webView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
     _webView.layer.borderWidth = 0.0f;
@@ -363,13 +353,28 @@
 -(BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType{
   NSURL *url = request.URL;
   NSString *urlPath = [NSString stringWithFormat:@"%@://%@%@", [url scheme], [url host], [url path]];
-  _Redirect *redirect = [_redirects valueForKey:urlPath];
+  NSInvocation *redirect = [_redirects valueForKey:urlPath];
   if (redirect) {
-    NSString *jsonBody = [[NSString alloc] initWithData:[request HTTPBody] encoding:NSUTF8StringEncoding];
-    NSDictionary *jsonValue = [jsonBody JSONValue];
-    NSLog(@"[PHContentView] Redirecting request with callback: %@ to dispatch %@", [jsonValue valueForKey:@"id"], urlPath);
-    [redirect.target performSelector:redirect.action withObject:[jsonValue valueForKey:@"context"] withObject:[jsonValue valueForKey:@"id"]];
-    [jsonBody release];
+    NSDictionary *queryComponents = [url queryComponents];
+    NSString *callback = [queryComponents valueForKey:@"callback"];
+    
+    NSPredicate *noCallbackPredicate = [NSPredicate predicateWithFormat:@"SELF != %@", @"callback"];
+    NSArray *filteredKeys = [[queryComponents allKeys] filteredArrayUsingPredicate:noCallbackPredicate];
+    NSDictionary *context = [queryComponents dictionaryWithValuesForKeys:filteredKeys];
+    
+    NSLog(@"[PHContentView] Redirecting request with callback: %@ to dispatch %@", callback, urlPath);
+    switch ([[redirect methodSignature] numberOfArguments]) {
+      case 5:
+        [redirect setArgument:&self atIndex:4]; 
+      case 4:
+        if(!!callback) [redirect setArgument:&callback atIndex:3]; 
+      case 3:
+        if(!!context) [redirect setArgument:&context atIndex:2]; 
+      default:
+        break;
+    }
+
+    [redirect invoke];
     return NO;
   }
   
@@ -383,7 +388,7 @@
 -(void)webViewDidFinishLoad:(UIWebView *)webView{
   [[self activityView] stopAnimating]; 
   [self showCloseButton];
-  [_webView updateOrientation:_orientation];
+  [(PHContentWebView *)webView updateOrientation:_orientation];
   
   if ([self.delegate respondsToSelector:(@selector(contentViewDidLoad:))]) {
     [self.delegate contentViewDidLoad:self];
@@ -442,12 +447,11 @@
 #pragma mark Redirects
 -(void)redirectRequest:(NSString *)urlPath toTarget:(id)target action:(SEL)action{
   if (!!target) {
-    _Redirect *redirect = [[_Redirect alloc] init];
+    NSInvocation *redirect = [NSInvocation invocationWithMethodSignature:[[target class] instanceMethodSignatureForSelector:action]];
     redirect.target = target;
-    redirect.action = action;
+    redirect.selector = action;
     
     [_redirects setValue:redirect forKey:urlPath];
-    [redirect release];
   } else {
     [_redirects setValue:nil forKey:urlPath];
   }
@@ -488,7 +492,7 @@
   if (!!response) _response = [response JSONRepresentation];
   if (!!error) _error = [error JSONRepresentation];
   
-  NSString *callbackCommand = [NSString stringWithFormat:@"PlayHaven.native.callback(%@,%@,%@)", _callback, _response, _error];
+  NSString *callbackCommand = [NSString stringWithFormat:@"PlayHaven.native.callback(\"%@\",%@,%@)", _callback, _response, _error];
   [_webView stringByEvaluatingJavaScriptFromString:callbackCommand];
 }
 

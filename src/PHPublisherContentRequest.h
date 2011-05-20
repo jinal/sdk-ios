@@ -28,10 +28,10 @@
 -(UIColor *)request:(PHPublisherContentRequest *)request borderColorForContent:(PHContent *)content;
 @end
 
-@interface PHPublisherContentRequest : PHAPIRequest<PHContentViewDelegate> {
+@interface PHPublisherContentRequest : PHAPIRequest<PHContentViewDelegate, PHAPIRequestDelegate> {
   NSString *_placement;
   BOOL _animated;
-  PHContentView *_contentView;
+  NSMutableArray *_contentViews;
 }
 
 +(id)requestForApp:(NSString *)token secret:(NSString *)secret placement:(NSString *)placement delegate:(id)delegate;
@@ -40,6 +40,9 @@
 
 @property (nonatomic,retain) NSString *placement;
 @property (nonatomic,assign) BOOL animated;
-@property (nonatomic,readonly) PHContentView *contentView;
+@property (nonatomic,readonly) NSMutableArray *contentViews;
+
+-(void)requestSubcontent:(NSDictionary *)queryParameters callback:(NSString *)callback source:(PHContentView *)source;
+-(void)pushContent:(PHContent *)content;
 
 @end

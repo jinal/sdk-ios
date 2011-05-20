@@ -158,10 +158,6 @@
   id responseValue = [responseData valueForKey:@"response"];
   if (!!responseValue && ![responseValue isEqual:[NSNull null]]) {
     [self didSucceedWithResponse:responseValue];
-    
-    if ([self.delegate respondsToSelector:@selector(request:didSucceedWithResponse:)]) {
-      [self.delegate performSelector:@selector(request:didSucceedWithResponse:) withObject:self withObject:responseValue];
-    }
   } else {
     NSInteger code = [_response statusCode]; 
     NSError *error = [NSError errorWithDomain:@"PHAPIRequest" 
@@ -173,7 +169,9 @@
 }
 
 -(void)didSucceedWithResponse:(NSDictionary *)responseData{
-
+  if ([self.delegate respondsToSelector:@selector(request:didSucceedWithResponse:)]) {
+    [self.delegate performSelector:@selector(request:didSucceedWithResponse:) withObject:self withObject:responseData];
+  }
 }
 
 -(void)didFailWithError:(NSError *)error{

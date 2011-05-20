@@ -151,22 +151,12 @@
 }
    
 -(void)testLaunchRequest{
-  NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:@"ph://launch"]];
-  NSDictionary *contextDictionary = [NSDictionary dictionaryWithObjectsAndKeys:
-                                     @"http://adidas.com", @"url", 
-                                     nil];
-  NSDictionary *bodyDictionary = [NSDictionary dictionaryWithObjectsAndKeys:
-                                  contextDictionary, @"context", 
-                                  nil];
-  [request setHTTPMethod:@"POST"];
-  [request setHTTPBody:[[bodyDictionary JSONRepresentation] dataUsingEncoding:NSUTF8StringEncoding]];
-  [request setValue:@"text/json" forHTTPHeaderField:@"Content-Type"];
-  
+  NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:@"ph://launch?url=http%3A%2F%2Fadidas.com"]];  
   BOOL result = [_contentView webView:nil shouldStartLoadWithRequest:request navigationType:UIWebViewNavigationTypeLinkClicked];
   STAssertFalse(result, @"_contentView should not open ph://dismiss in webview!");
 }
 
--(void)launchRequestCallback:(NSDictionary *)parameters{\
+-(void)launchRequestCallback:(NSDictionary *)parameters{
   STAssertNotNil(parameters, @"request with parameters returned no parameters!");
   STAssertTrue([@"http://adidas.com" isEqualToString:[parameters valueForKey:@"url"]], 
                @"Expected 'http://adidas.com' got %@ as %@", 
