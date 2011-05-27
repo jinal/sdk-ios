@@ -6,9 +6,11 @@
 //  Copyright 2011 Playhaven. All rights reserved.
 //
 
-#import "PHPublishercontentRequest.h"
+#import "PHPublisherContentRequest.h"
+#import "PHPublisherSubContentRequest.h"
 #import "PHContent.h"
 #import "PHConstants.h"
+#import "NSObject+SBJSON.h"
 
 @implementation PHPublisherContentRequest
 
@@ -35,15 +37,22 @@
 
 @synthesize placement = _placement;
 @synthesize animated = _animated;
-@synthesize contentView = _contentView;
+
+-(NSMutableArray *)contentViews{
+  if (_contentViews == nil){
+    _contentViews = [[NSMutableArray alloc] init];
+  }
+  
+  return _contentViews;
+}
 
 -(NSString *)urlPath{
   return PH_URL(/v3/publisher/content/);
 }
 
 -(void)dealloc{
-  [_contentView release], _contentView = nil;
   [_placement release], _placement = nil;
+  [_contentViews release], _contentViews = nil;
   [super dealloc];
 }
 
@@ -57,21 +66,16 @@
 }
 
 -(void)didSucceedWithResponse:(NSDictionary *)responseData{
-  if (_contentView == nil) {
-    PHContent *content = [PHContent contentWithDictionary:responseData];
-    if (!!content) {
-      if ([self.delegate respondsToSelector:@selector(request:contentWillDisplay:)]) {
-        [self.delegate performSelector:@selector(request:contentWillDisplay:) withObject:self withObject:content];
-      }
-      
-      _contentView = [[PHContentView alloc] initWithContent:content];
-      [_contentView setDelegate:self];
-      [_contentView show:self.animated];
-      
-      [self retain];
-    } else {
-      [self didFailWithError:nil];
+  PHContent *content = [PHContent contentWithDictionary:responseData];
+  if (!!content) {
+    if ([self.delegate respondsToSelector:@selector(request:contentWillDisplay:)]) {
+      [self.delegate performSelector:@selector(request:contentWillDisplay:) withObject:self withObject:content];
     }
+    
+    [self pushContent:content];
+    [self retain];
+  } else {
+    [self didFailWithError:nil];
   }
 }
 
@@ -83,34 +87,99 @@
   }
 }
 
+#pragma -
+#pragma Sub-content
+-(void)requestSubcontent:(NSDictionary *)queryParameters callback:(NSString *)callback source:(PHContentView *)source{
+//  PHPublisherSubContentRequest *request = [PHAPIRequest requestForApp:self.token secret:self.secret];
+//  request.delegate = self;
+//  
+//  request.additionalParameters = queryParameters;
+//  request.callback = callback;
+//  request.source = source;
+//  
+//  [request send];
+
+  NSString *contentString = @"{\"frame\":{\"PH_LANDSCAPE\":{\"x\":60,\"y\":40,\"w\":360,\"h\":220},\"PH_PORTRAIT\":{\"x\":10,\"y\":10,\"w\":300,\"h\":440}},\"url\":\"http://google.com\",\"transition\":\"PH_DIALOG\",\"context\":{\"title\":\"PlayHaven Toolbox\"}}";
+  
+  NSDictionary *contentData = [contentString JSONValue];
+  PHContent *content = [PHContent contentWithDictionary: contentData];
+  
+  [self pushContent:content];
+  [source sendCallback:callback withResponse:contentData error:nil];
+}
+
+-(void)request:(PHAPIRequest *)request didSucceedWithResponse:(NSDictionary *)responseData{
+  PHContent *content = [PHContent contentWithDictionary:responseData];
+  PHPublisherSubContentRequest *scRequest = (PHPublisherSubContentRequest *)request;
+  if (!!content) {
+    [self pushContent:content];
+    [scRequest.source sendCallback:scRequest.callback withResponse:responseData error:nil];
+  } else{
+    NSDictionary *errorDict = [NSDictionary dictionaryWithObjectsAndKeys:
+                               @"1",@"error", nil];
+    [scRequest.source sendCallback:scRequest.callback withResponse:nil error:errorDict];
+  }
+}
+
+-(void)request:(PHAPIRequest *)request didFailWithError:(NSError *)error{
+  PHPublisherSubContentRequest *scRequest = (PHPublisherSubContentRequest *)request;
+  NSDictionary *errorDict = [NSDictionary dictionaryWithObjectsAndKeys:
+                             @"1",@"error", nil];
+  [scRequest.source sendCallback:scRequest.callback withResponse:nil error:errorDict];
+}
+
+-(void)pushContent:(PHContent *)content{
+  PHContentView *contentView = [[PHContentView alloc] initWithContent:content];
+  [contentView redirectRequest:@"ph://subcontent" toTarget:self action:@selector(requestSubcontent:callback:source:)];
+  [contentView setDelegate:self];
+  [contentView show:self.animated];
+  
+  [self.contentViews addObject:contentView];
+  
+  [contentView release];
+}
+
 
 #pragma -
 #pragma PHContentViewDelegate
--(void)contentViewDidLoad:(PHContentView *)contentView{
-  if ([self.delegate respondsToSelector:@selector(request:contentDidDisplay:)]) {
-    [self.delegate performSelector:@selector(request:contentDidDisplay:) 
-                        withObject:self 
-                        withObject:contentView.content];
+-(void)contentViewDidLoad:(PHContentView *)contentView{  
+  if ([self.contentViews count] == 1) {
+    //only passthrough the first contentView load
+    if ([self.delegate respondsToSelector:@selector(request:contentDidDisplay:)]) {
+      [self.delegate performSelector:@selector(request:contentDidDisplay:) 
+                          withObject:self 
+                          withObject:contentView.content];
+    }
   }
 }
 
 -(void)contentViewDidDismiss:(PHContentView *)contentView{
-  if ([self.delegate respondsToSelector:@selector(requestContentDidDismiss:)]) {
-    [self.delegate performSelector:@selector(requestContentDidDismiss:) 
-                        withObject:self];
-  }
+  [self.contentViews removeObject:contentView];
   
-  [self release];
+  if ([self.contentViews count] == 0) {
+    //only passthrough the last contentView to dismiss
+    if ([self.delegate respondsToSelector:@selector(requestContentDidDismiss:)]) {
+      [self.delegate performSelector:@selector(requestContentDidDismiss:) 
+                          withObject:self];
+    }
+    
+    [self release];
+  }
 }
 
 -(void)contentView:(PHContentView *)contentView didFailWithError:(NSError *)error{
-  if ([self.delegate respondsToSelector:@selector(request:contentDidFailWithError:)]) {
-    [self.delegate performSelector:@selector(request:contentDidFailWithError:) 
-                        withObject:self 
-                        withObject:error];
-  }
+  [self.contentViews removeObject:contentView];
   
-  [self release];
+  if ([self.contentViews count] == 0) {
+    //only passthrough the last contentView to error
+    if ([self.delegate respondsToSelector:@selector(request:contentDidFailWithError:)]) {
+      [self.delegate performSelector:@selector(request:contentDidFailWithError:) 
+                          withObject:self 
+                          withObject:error];
+    }
+    
+    [self release];
+  }
 }
 
 -(UIImage *)contentView:(PHContentView *)contentView imageForCloseButtonState:(UIControlState)state{
@@ -128,5 +197,6 @@
   
   return nil;
 }
+
 
 @end
