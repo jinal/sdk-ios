@@ -100,15 +100,15 @@
     }
 
     CGFloat duration = [UIApplication sharedApplication].statusBarOrientationAnimationDuration;
-    if ((orientation == UIInterfaceOrientationLandscapeLeft && _orientation == UIInterfaceOrientationLandscapeRight)
-        ||(orientation == UIInterfaceOrientationLandscapeRight && _orientation == UIInterfaceOrientationLandscapeLeft)) {
-      duration = duration * 2;
-      
-      if (self.content.transition == PHContentTransitionDialog) {
-        CGFloat offset = (orientation == UIInterfaceOrientationLandscapeLeft)? -0.01: 0.01;
-        _webView.transform = CGAffineTransformMakeRotation(M_PI + offset);
-      }
-    }
+//    if ((orientation == UIInterfaceOrientationLandscapeLeft && _orientation == UIInterfaceOrientationLandscapeRight)
+//        ||(orientation == UIInterfaceOrientationLandscapeRight && _orientation == UIInterfaceOrientationLandscapeLeft)) {
+//      duration = duration * 2;
+//      
+//      if (self.content.transition == PHContentTransitionDialog) {
+//        CGFloat offset = (orientation == UIInterfaceOrientationLandscapeLeft)? -0.01: 0.01;
+//        _webView.transform = CGAffineTransformMakeRotation(M_PI + offset);
+//      }
+//    }
     
     
     if (self.content.transition == PHContentTransitionDialog) {
