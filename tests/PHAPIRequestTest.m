@@ -54,7 +54,7 @@
   STAssertNotNil(nonce ,@"Required nonce param is missing!");
   
   //Test for proper signature
-  NSString *signatureHash = [NSString stringWithFormat:@"%@:%@:%@:%@", device, token, PUBLISHER_SECRET, nonce];
+  NSString *signatureHash = [NSString stringWithFormat:@"%@:%@:%@:%@", token, device, nonce, PUBLISHER_SECRET];
   NSString *expectedHash = [PHAPIRequest base64SignatureWithString:signatureHash];
   STAssertTrue([expectedHash isEqualToString:signature], @"Hash mismatch. Expected %@ got %@", expectedHash, signature);
   
