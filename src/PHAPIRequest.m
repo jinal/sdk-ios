@@ -54,7 +54,7 @@
     NSString
     *device = [[UIDevice currentDevice] uniqueIdentifier],
     *nonce = [PHStringUtil uuid],
-    *signatureHash = [NSString stringWithFormat:@"%@:%@:%@:%@", device, self.token, self.secret, nonce],
+    *signatureHash = [NSString stringWithFormat:@"%@:%@:%@:%@", self.token, device, nonce, self.secret],
     *signature = [PHAPIRequest base64SignatureWithString:signatureHash],
     *appId = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleIdentifier"],
     *appVersion = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"],
