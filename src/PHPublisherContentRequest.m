@@ -62,6 +62,7 @@
 -(NSDictionary *)additionalParameters{
   return [NSDictionary dictionaryWithObjectsAndKeys:
           self.placement, @"placement_id",
+          @"always", @"_gow",
           nil];
 }
 
@@ -90,7 +91,7 @@
 #pragma -
 #pragma Sub-content
 -(void)requestSubcontent:(NSDictionary *)queryParameters callback:(NSString *)callback source:(PHContentView *)source{
-  PHPublisherSubContentRequest *request = [PHAPIRequest requestForApp:self.token secret:self.secret];
+  PHPublisherSubContentRequest *request = [PHPublisherSubContentRequest requestForApp:self.token secret:self.secret];
   request.delegate = self;
   
   request.urlPath = [queryParameters valueForKey:@"url"];
