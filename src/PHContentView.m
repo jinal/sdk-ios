@@ -389,7 +389,7 @@
   [[self activityView] stopAnimating]; 
   [self showCloseButton];
   [(PHContentWebView *)webView updateOrientation:_orientation];
-  
+  NSLog(@"Loaded WebView with url: %@", webView.request.URL);
   if ([self.delegate respondsToSelector:(@selector(contentViewDidLoad:))]) {
     [self.delegate contentViewDidLoad:self];
   }

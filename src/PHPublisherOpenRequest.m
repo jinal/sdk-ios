@@ -15,4 +15,8 @@
   return PH_URL(/v3/publisher/open/);
 }
 
+-(void)processRequestResponse:(NSDictionary *)responseData{
+  [self didSucceedWithResponse:nil];
+}
+
 @end

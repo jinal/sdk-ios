@@ -90,22 +90,14 @@
 #pragma -
 #pragma Sub-content
 -(void)requestSubcontent:(NSDictionary *)queryParameters callback:(NSString *)callback source:(PHContentView *)source{
-//  PHPublisherSubContentRequest *request = [PHAPIRequest requestForApp:self.token secret:self.secret];
-//  request.delegate = self;
-//  
-//  request.additionalParameters = queryParameters;
-//  request.callback = callback;
-//  request.source = source;
-//  
-//  [request send];
-
-  NSString *contentString = @"{\"frame\":{\"PH_LANDSCAPE\":{\"x\":60,\"y\":40,\"w\":360,\"h\":220},\"PH_PORTRAIT\":{\"x\":10,\"y\":10,\"w\":300,\"h\":440}},\"url\":\"http://google.com\",\"transition\":\"PH_DIALOG\",\"context\":{\"title\":\"PlayHaven Toolbox\"}}";
+  PHPublisherSubContentRequest *request = [PHAPIRequest requestForApp:self.token secret:self.secret];
+  request.delegate = self;
   
-  NSDictionary *contentData = [contentString JSONValue];
-  PHContent *content = [PHContent contentWithDictionary: contentData];
+  request.additionalParameters = queryParameters;
+  request.callback = callback;
+  request.source = source;
   
-  [self pushContent:content];
-  [source sendCallback:callback withResponse:contentData error:nil];
+  [request send];
 }
 
 -(void)request:(PHAPIRequest *)request didSucceedWithResponse:(NSDictionary *)responseData{
