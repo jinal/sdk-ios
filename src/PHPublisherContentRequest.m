@@ -93,7 +93,7 @@
   PHPublisherSubContentRequest *request = [PHAPIRequest requestForApp:self.token secret:self.secret];
   request.delegate = self;
   
-  request.additionalParameters = queryParameters;
+  request.urlPath = [queryParameters valueForKey:@"url"];
   request.callback = callback;
   request.source = source;
   

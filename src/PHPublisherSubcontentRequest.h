@@ -11,12 +11,10 @@
 @class PHContentView;
 
 @interface PHPublisherSubContentRequest : PHAPIRequest {
-  NSString *_placement;
   PHContentView *_source;
   NSString *_callback;
 }
 
-@property (nonatomic, copy) NSString *placement;
 @property (nonatomic, assign) PHContentView *source;
 @property (nonatomic, copy) NSString *callback;
 
