@@ -62,7 +62,6 @@
 -(NSDictionary *)additionalParameters{
   return [NSDictionary dictionaryWithObjectsAndKeys:
           self.placement, @"placement_id",
-          @"always", @"_gow",
           nil];
 }
 
