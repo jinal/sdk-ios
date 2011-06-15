@@ -121,8 +121,19 @@
 
 -(void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response{
   NSLog(@"[PlayHaven] Request recieved response: %d", [(NSHTTPURLResponse *)response statusCode]);
-  [_connectionData release], _connectionData = [[NSMutableData alloc] init];
-  [_response release], _response = [response retain];
+  if ([(NSHTTPURLResponse *)response statusCode] == 200) {
+    [_connectionData release], _connectionData = [[NSMutableData alloc] init];
+    [_response release], _response = [response retain];
+  } else {
+    NSError *error = [NSError errorWithDomain:@"PHAPIRequest" 
+                                         code:[(NSHTTPURLResponse *)response statusCode] 
+                                     userInfo:nil];
+    [self didFailWithError:error];
+    [connection cancel];
+  }
+  
+
+  
 }
 
 -(void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data{
@@ -159,9 +170,8 @@
   if (!!responseValue && ![responseValue isEqual:[NSNull null]]) {
     [self didSucceedWithResponse:responseValue];
   } else {
-    NSInteger code = [_response statusCode]; 
     NSError *error = [NSError errorWithDomain:@"PHAPIRequest" 
-                                         code:code 
+                                         code:0 
                                      userInfo:nil];
     
     [self didFailWithError:error];

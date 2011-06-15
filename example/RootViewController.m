@@ -8,7 +8,6 @@
 
 #import "RootViewController.h"
 #import "PublisherOpenViewController.h"
-#import "PublisherPromosViewController.h"
 #import "PublisherContentViewController.h"
 
 @implementation RootViewController
@@ -55,7 +54,7 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-  return 3;
+  return 2;
 }
 
 // Customize the appearance of table view cells.
@@ -75,10 +74,6 @@
       cell.detailTextLabel.text = @"/publisher/open/";
       break;
     case 1:
-      cell.textLabel.text = @"Tokens";
-      cell.detailTextLabel.text = @"/publisher/tokens/";
-      break;
-    case 2:
       cell.textLabel.text = @"Content";
       cell.detailTextLabel.text = @"/publisher/content/";
       break;
@@ -138,11 +133,6 @@
     [self.navigationController pushViewController:controller animated:YES];
     [controller release];
   } else if (indexPath.row == 1){
-    PublisherPromosViewController *controller = [[PublisherPromosViewController alloc] initWithStyle:UITableViewStylePlain];
-    controller.title = @"Tokens";
-    [self.navigationController pushViewController:controller animated:YES];
-    [controller release];
-  } else if (indexPath.row == 2){
     PublisherContentViewController *controller = [[PublisherContentViewController alloc] initWithStyle:UITableViewStylePlain];
     controller.title = @"Content";
     [self.navigationController pushViewController:controller animated:YES];

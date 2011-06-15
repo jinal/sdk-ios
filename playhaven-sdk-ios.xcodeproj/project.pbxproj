@@ -37,7 +37,6 @@
 		EA12AC281365DE7F00CB2F24 /* PlayHaven.bundle in Resources */ = {isa = PBXBuildFile; fileRef = EAC90957135E2FCB00375013 /* PlayHaven.bundle */; };
 		EA12AC3C13662AD700CB2F24 /* ExampleViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EA12AC3B13662AD700CB2F24 /* ExampleViewController.m */; };
 		EA12AC3F13662DC400CB2F24 /* PublisherOpenViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EA12AC3E13662DC400CB2F24 /* PublisherOpenViewController.m */; };
-		EA12AC42136632E800CB2F24 /* PublisherPromosViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EA12AC41136632E700CB2F24 /* PublisherPromosViewController.m */; };
 		EA12AC451366339D00CB2F24 /* PublisherContentViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EA12AC441366339D00CB2F24 /* PublisherContentViewController.m */; };
 		EA4ABA11135F859D0062AE77 /* UIDevice+HardwareString.m in Sources */ = {isa = PBXBuildFile; fileRef = EA4ABA0F135F859D0062AE77 /* UIDevice+HardwareString.m */; };
 		EA4C1912134E84D300755983 /* PHURLLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = EA4C1910134E84D300755983 /* PHURLLoader.m */; };
@@ -88,8 +87,6 @@
 		EA12AC3B13662AD700CB2F24 /* ExampleViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ExampleViewController.m; sourceTree = "<group>"; };
 		EA12AC3D13662DC400CB2F24 /* PublisherOpenViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PublisherOpenViewController.h; sourceTree = "<group>"; };
 		EA12AC3E13662DC400CB2F24 /* PublisherOpenViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PublisherOpenViewController.m; sourceTree = "<group>"; };
-		EA12AC40136632E700CB2F24 /* PublisherPromosViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PublisherPromosViewController.h; sourceTree = "<group>"; };
-		EA12AC41136632E700CB2F24 /* PublisherPromosViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PublisherPromosViewController.m; sourceTree = "<group>"; };
 		EA12AC431366339D00CB2F24 /* PublisherContentViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PublisherContentViewController.h; sourceTree = "<group>"; };
 		EA12AC441366339D00CB2F24 /* PublisherContentViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PublisherContentViewController.m; sourceTree = "<group>"; };
 		EA12AC46136635F600CB2F24 /* Constants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Constants.h; sourceTree = "<group>"; };
@@ -213,8 +210,6 @@
 				EA12AC3B13662AD700CB2F24 /* ExampleViewController.m */,
 				EA12AC3D13662DC400CB2F24 /* PublisherOpenViewController.h */,
 				EA12AC3E13662DC400CB2F24 /* PublisherOpenViewController.m */,
-				EA12AC40136632E700CB2F24 /* PublisherPromosViewController.h */,
-				EA12AC41136632E700CB2F24 /* PublisherPromosViewController.m */,
 				EA12AC431366339D00CB2F24 /* PublisherContentViewController.h */,
 				EA12AC441366339D00CB2F24 /* PublisherContentViewController.m */,
 				EA12AC46136635F600CB2F24 /* Constants.h */,
@@ -483,7 +478,6 @@
 				EA12AC251365DE1300CB2F24 /* PHPublisherOpenRequest.m in Sources */,
 				EA12AC3C13662AD700CB2F24 /* ExampleViewController.m in Sources */,
 				EA12AC3F13662DC400CB2F24 /* PublisherOpenViewController.m in Sources */,
-				EA12AC42136632E800CB2F24 /* PublisherPromosViewController.m in Sources */,
 				EA12AC451366339D00CB2F24 /* PublisherContentViewController.m in Sources */,
 				EAE0F5FD1385D1120062B950 /* PHPublisherSubContentRequest.m in Sources */,
 			);
@@ -590,7 +584,6 @@
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PRECOMPILE_PREFIX_HEADER = NO;
-				GCC_PREPROCESSOR_DEFINITIONS = DEBUG;
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
 				GCC_VERSION = com.apple.compilers.llvmgcc42;
 				INFOPLIST_FILE = example/Info.plist;
