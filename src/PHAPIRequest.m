@@ -120,20 +120,27 @@
 #pragma mark NSURLConnectionDelegate
 
 -(void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response{
-  NSLog(@"[PlayHaven] Request recieved response: %d", [(NSHTTPURLResponse *)response statusCode]);
-  if ([(NSHTTPURLResponse *)response statusCode] == 200) {
-    [_connectionData release], _connectionData = [[NSMutableData alloc] init];
-    [_response release], _response = [response retain];
+  /*
+   Nearly all connections made by the SDK will return a NSHTTPURLResponse, but we would like also make requests to file:// URLs as well.
+  */
+  if ([response isKindOfClass:[NSHTTPURLResponse class]]) {
+    NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *)response;
+    NSLog(@"[PlayHaven] Request recieved HTTP response: %d", [httpResponse statusCode]);
+    
+    if ([httpResponse statusCode] == 200) {
+      [_connectionData release], _connectionData = [[NSMutableData alloc] init];
+      [_response release], _response = [response retain];
+    } else {
+      NSError *error = [NSError errorWithDomain:@"PHAPIRequest" 
+                                           code:[httpResponse statusCode] 
+                                       userInfo:nil];
+      [self didFailWithError:error];
+      [connection cancel];
+    }
   } else {
-    NSError *error = [NSError errorWithDomain:@"PHAPIRequest" 
-                                         code:[(NSHTTPURLResponse *)response statusCode] 
-                                     userInfo:nil];
-    [self didFailWithError:error];
-    [connection cancel];
+    [_connectionData release], _connectionData = [[NSMutableData alloc] init];
+    [_response release], _response = nil;
   }
-  
-
-  
 }
 
 -(void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data{
