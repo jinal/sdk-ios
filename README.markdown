@@ -23,28 +23,6 @@ In order to better optimize your campaigns, it is necessary for your app to repo
 
 > [PHPublisherOpenRequest requestForApp:(NSString *)token secret:(NSString *)secret]
 
-### Retrieving current state of promotional offers
-
-You may create special promotional offers for your app. These may be virtual currency or unlockable rewards which are then used as incentives for your users to complete offers. This API will request the current state of these incentives. Implement PHAPIRequestDelegate methods to recieves callbacks from this request. (see sections below)
-
-> [PHPublisherPromosRequest requestForApp:(NSString *)token secret:(NSString *)secret delegate:(id)delegate]
-
-#### Getting response data
-
-Upon successful completion of the request, you will recieve response data at this delegate method. responseData may contain any of the following keys:
-
-- redeemed: array of promo_tokens redeemed by the requesting device, used to reward newly unlocked incentives to the user
-- offered: array of promo_tokens offered to the requesting device, used to remind the user of offered but not yet unlocked incentives
-- live: array of promo_tokens that are currently_active, used to determine whether or not to promote certain incentives outside of ad_units
-
-> \-(void)request:(PHAPIRequest *)request didSucceedWithResponse:(NSDictionary *)responseData;
-
-#### Handling request failure
-
-If the request was not able to go through, you will receive an error through this delegate method.
-
-> \-(void)request:(PHAPIRequest *)request didFailWithError:(NSError *)error;
-
 ### Requesting content for your placements
 
 You may request content for your app using your API token, secret, as well as a placement_id to identify the placement you are requesting content for. Implement PHPublisherContentRequestDelegate methods to recieve callbacks from this request. (see sections below)
