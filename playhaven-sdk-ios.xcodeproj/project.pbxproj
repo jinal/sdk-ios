@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		EA03810A13B25F4300A31FF7 /* PHPublisherMetadataRequestTest.m in Sources */ = {isa = PBXBuildFile; fileRef = EA03810913B25F4300A31FF7 /* PHPublisherMetadataRequestTest.m */; };
+		EA03810F13B26A1A00A31FF7 /* PHPublisherMetadataRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = EA03810E13B26A1A00A31FF7 /* PHPublisherMetadataRequest.m */; };
 		EA0BB5DF13463C00007F95FA /* PHContentView.m in Sources */ = {isa = PBXBuildFile; fileRef = EA0BB5DD13463C00007F95FA /* PHContentView.m */; };
 		EA12ABD51365DBB700CB2F24 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DF5F4DF0D08C38300B7A737 /* UIKit.framework */; };
 		EA12ABD61365DBB700CB2F24 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D30AB110D05D00D00671497 /* Foundation.framework */; };
@@ -71,6 +73,9 @@
 		1D30AB110D05D00D00671497 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		1DF5F4DF0D08C38300B7A737 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		288765FC0DF74451002DB57D /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+		EA03810913B25F4300A31FF7 /* PHPublisherMetadataRequestTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PHPublisherMetadataRequestTest.m; sourceTree = "<group>"; };
+		EA03810D13B26A1A00A31FF7 /* PHPublisherMetadataRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PHPublisherMetadataRequest.h; sourceTree = "<group>"; };
+		EA03810E13B26A1A00A31FF7 /* PHPublisherMetadataRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PHPublisherMetadataRequest.m; sourceTree = "<group>"; };
 		EA0BB5DC13463C00007F95FA /* PHContentView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PHContentView.h; sourceTree = "<group>"; };
 		EA0BB5DD13463C00007F95FA /* PHContentView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = PHContentView.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		EA12ABD31365DBB700CB2F24 /* Example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Example.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -196,6 +201,15 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		EA03810C13B2630200A31FF7 /* Metadata */ = {
+			isa = PBXGroup;
+			children = (
+				EA03810D13B26A1A00A31FF7 /* PHPublisherMetadataRequest.h */,
+				EA03810E13B26A1A00A31FF7 /* PHPublisherMetadataRequest.m */,
+			);
+			name = Metadata;
+			sourceTree = "<group>";
+		};
 		EA12ABD81365DBB700CB2F24 /* example */ = {
 			isa = PBXGroup;
 			children = (
@@ -235,6 +249,7 @@
 				EA523DD5134403AF0057DEA5 /* PHPublisherContentRequestTest.m */,
 				EAB4423213452026000DA3E9 /* PHAPIRequestTest.m */,
 				EA6EA1E7135F458E000123B0 /* PHPublisherTokensRequestTest.m */,
+				EA03810913B25F4300A31FF7 /* PHPublisherMetadataRequestTest.m */,
 			);
 			path = tests;
 			sourceTree = "<group>";
@@ -269,6 +284,7 @@
 		EA523D941343EE9D0057DEA5 /* Publisher SDK */ = {
 			isa = PBXGroup;
 			children = (
+				EA03810C13B2630200A31FF7 /* Metadata */,
 				EAB4427913454EB8000DA3E9 /* Content */,
 				EA6EA1EB135F6D5A000123B0 /* Promos */,
 				EA523D951343EEA60057DEA5 /* Open */,
@@ -510,6 +526,8 @@
 				EA6EA1EF135F6D77000123B0 /* PHPublisherPromosRequest.m in Sources */,
 				EA4ABA11135F859D0062AE77 /* UIDevice+HardwareString.m in Sources */,
 				EAE0F5FC1385D1120062B950 /* PHPublisherSubContentRequest.m in Sources */,
+				EA03810A13B25F4300A31FF7 /* PHPublisherMetadataRequestTest.m in Sources */,
+				EA03810F13B26A1A00A31FF7 /* PHPublisherMetadataRequest.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
