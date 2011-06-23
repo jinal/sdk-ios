@@ -11,11 +11,15 @@
 
 @implementation PublisherContentViewController
 
+-(void)dealloc{
+  [_notificationView release], _notificationView = nil;
+  [super dealloc];
+}
+
 -(void)startRequest{
   [super startRequest];
-  
   PHPublisherContentRequest * request = [PHPublisherContentRequest requestForApp:PH_TOKEN secret:PH_SECRET];
-  request.placement = @"placement_id";
+  request.placement = @"more_games";
   request.delegate = self;
   
   [request send];
@@ -32,6 +36,9 @@
 }
 
 -(void)request:(PHPublisherContentRequest *)request contentDidDisplay:(PHContent *)content{
+  //This is a good place to clear any notification views attached to this request.
+  [_notificationView clear];
+  
   NSString *message = [NSString stringWithFormat:@"Displayed content: %@",content];
   [self addMessage:message];
 }
@@ -51,6 +58,35 @@
   [self addMessage:message];  
 }
 
+#pragma - Notifications
+/*
+ Refresh your notification view from the server each time it appears. 
+ This way you can be sure the type and value of the notification is most
+ likely to match up to the content unit that will appear.
+ */
 
+-(void)viewDidLoad{
+  [super viewDidLoad];
+  _notificationView = [[PHNotificationView alloc] initWithApp:PH_TOKEN secret:PH_SECRET placement:@"more_games"];
+  _notificationView.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin;
+  _notificationView.center = CGPointMake(self.view.frame.size.width - 22, 19);
+}
+
+-(void)viewDidUnload{
+  [super viewDidUnload];
+  [_notificationView removeFromSuperview];
+  [_notificationView release], _notificationView = nil;
+}
+
+-(void)viewDidAppear:(BOOL)animated{
+  [super viewDidAppear:animated];
+  [self.view addSubview:_notificationView];
+  [_notificationView refresh];
+}
+
+-(void)viewDidDisappear:(BOOL)animated{
+  [super viewDidDisappear:animated];
+  [_notificationView removeFromSuperview];
+}
 
 @end

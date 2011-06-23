@@ -9,3 +9,6 @@
 #import "PHPublisherOpenRequest.h"
 #import "PHPublisherContentRequest.h"
 #import "PHPublisherPromosRequest.h"
+#import "PHPublisherMetadataRequest.h"
+
+#import "PHNotificationView.h"

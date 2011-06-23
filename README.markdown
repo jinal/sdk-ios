@@ -72,3 +72,34 @@ If for any reason a content unit fails to load after the overlay view has appear
 Use the following request method to replace the close button image with something that more closely matches your app. Images will be scaled to a maximum size of 40x40.
 
 > \-(UIImage *)request:(PHPublisherContentRequest *)request closeButtonImageForControlState:(UIControlState)state content:(PHContent *)content;
+
+### Notifications with PHNotificationView
+
+PHNotificationView provides a fully encapsulated notification view that automatically fetches an appropriate notification from the API and renders it into your view heirarchy. It is a UIView subclass that you may place in your UI where it should appear and supply it with your app token, secret, and a placement id.
+
+> \-(id)initWithApp:(NSString *)app secret:(NSString *)secret placement:(NSString *)placement;
+
+Notification view will remain anchored to the center of the position they are placed in the view, even as the size of the badge changes. You may refresh your notification view from the network using the -(void)refresh method on an instance. We recommend refreshing the notification view each time it will appear in your UI. See examples/PublisherContentViewController.m for an example.
+
+You will also need to clear any notification view instances when you successfully launch a content unit. You may do this using the -(void)clear method on any notification views you wish to clear.
+
+### Testing PHNotificationView
+
+Most of the time, the API will return an empty response, which means a notification view will not be shown. TYou can see a sample notification by using -(void)test; wherever you would use -(void)refresh. It has been marked as deprecated to remind you to switch all instances of -(void)test in your code to -(void)refresh;
+
+### Customizing notification rendering with PHNotificationRenderer
+
+PHNotificationRenderer is a base class that draws a notification view for a given notification data. The base class implements a blank notification view used for unknown notification types. PHNotificationBadgeRenderer renders a iOS default-style notification badge with a given "value" string. You may customize existing notification renderers and register new ones at runtime using the following method on PHNotificationView
+
+> \+(void)setRendererClass:(Class)class forType:(NSString *)type;
+
+Your PHNotificationRenderer subclass needs to implement the following methods to draw and size your notification view appropriately:
+
+> \-(void)drawNotification:(NSDictionary *)notificationData inRect:(CGRect)rect;
+
+This method will be called inside of the PHNotificationView instance -(void)drawRect: method whenever the view needs to be drawn. You will use specific keys inside of notificationData to draw your badge in the view. If you need access to the graphics context you may use the UIGraphicsGetCurrentContext() function.
+
+> \-(CGSize)sizeForNotification:(NSDictionary *)notificationData;
+
+This method will be called to calculate an appropriate frame for the notification badge each time the notification data changes. Using specific keys inside of notificationData, you will need to calculate an appropriate size.
+
