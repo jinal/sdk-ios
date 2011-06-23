@@ -3,13 +3,19 @@ PlayHaven SDK
 
 The PlayHaven Content SDK allows you to add dynamic content to your app. It is a flexible framework capable of delivering integrated experiences; including ads, special offers, announcements and other kinds of content which can be dynamically assigned to placements within your application.
 
-An API token and secret pair is required to use this SDK. These tokens identify your app to PlayHaven, {something something you are responsible for keeping them safe}. To obtain these credentials for your application please visit http://playhaven.com
+An API token and secret pair is required to use this SDK. These tokens identify your app to PlayHaven and prevent others from making requests to the API on your behalf. To obtain these credentials for your application please visit http://playhaven.com and log into the Developer Dashboard.
 
 Integration
 -----------
-
-1. In Xcode, open the PlayHaven SDK project at playhaven-sdk-ios.xcodeproj.
-1. Drag and drop the "PlayHaven SDK" folder from the PlayHaven SDK project into your application's project. This will copy all necessary source, libraries, and images to your project.
+1. Add the following from the sdk-ios directory that you downloaded or cloned from github to your project:
+  * src directory  
+  * PlayHaven.bundle
+  * JSON directory (unless you are already using SBJSON in your project)
+1. Ensure the following frameworks are included with your project, add any missing frameworks in the Build Phases tab for your application's target:
+  * UIKit.framework
+  * Foundation.framework
+  * CoreGraphics.framework
+  * QuartzCore.framework
 1. Include the PlayHavenSDK headers in your code wherever you will be using PlayHaven request classes.
 
 > \#import "PlayHavenSDK.h"
@@ -28,6 +34,8 @@ In order to better optimize your campaigns, it is necessary for your app to repo
 You may request content for your app using your API token, secret, as well as a placement_id to identify the placement you are requesting content for. Implement PHPublisherContentRequestDelegate methods to recieve callbacks from this request. (see sections below)
 
 > [PHPublisherContentRequest requestForApp:(NSString *)token secret:(NSString *)secret placement:(NSString *)placement delegate:(id)delegate]
+
+*NOTE:* Currently the only valid placement is *"more_games"*.
 
 #### Starting a content request
 
@@ -78,6 +86,8 @@ Use the following request method to replace the close button image with somethin
 PHNotificationView provides a fully encapsulated notification view that automatically fetches an appropriate notification from the API and renders it into your view heirarchy. It is a UIView subclass that you may place in your UI where it should appear and supply it with your app token, secret, and a placement id.
 
 > \-(id)initWithApp:(NSString *)app secret:(NSString *)secret placement:(NSString *)placement;
+
+*NOTE:* Currently the only valid placement is *"more_games"*.
 
 Notification view will remain anchored to the center of the position they are placed in the view, even as the size of the badge changes. You may refresh your notification view from the network using the -(void)refresh method on an instance. We recommend refreshing the notification view each time it will appear in your UI. See examples/PublisherContentViewController.m for an example.
 
