@@ -11,7 +11,7 @@
 #import "PlayHavenSDK.h"
 
 @interface PublisherContentViewController : ExampleViewController<PHPublisherContentRequestDelegate> {
-    
+  PHNotificationView *_notificationView;
 }
 
 @end

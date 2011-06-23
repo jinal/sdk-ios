@@ -7,6 +7,16 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		EA03810A13B25F4300A31FF7 /* PHPublisherMetadataRequestTest.m in Sources */ = {isa = PBXBuildFile; fileRef = EA03810913B25F4300A31FF7 /* PHPublisherMetadataRequestTest.m */; };
+		EA03810F13B26A1A00A31FF7 /* PHPublisherMetadataRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = EA03810E13B26A1A00A31FF7 /* PHPublisherMetadataRequest.m */; };
+		EA03811313B26FF500A31FF7 /* PHNotificationViewTest.m in Sources */ = {isa = PBXBuildFile; fileRef = EA03811213B26FF500A31FF7 /* PHNotificationViewTest.m */; };
+		EA03811613B272C400A31FF7 /* PHNotificationView.m in Sources */ = {isa = PBXBuildFile; fileRef = EA03811513B272C400A31FF7 /* PHNotificationView.m */; };
+		EA03811713B272C400A31FF7 /* PHNotificationView.m in Sources */ = {isa = PBXBuildFile; fileRef = EA03811513B272C400A31FF7 /* PHNotificationView.m */; };
+		EA03811813B272FB00A31FF7 /* PHPublisherMetadataRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = EA03810E13B26A1A00A31FF7 /* PHPublisherMetadataRequest.m */; };
+		EA03811B13B298AF00A31FF7 /* PHNotificationRenderer.m in Sources */ = {isa = PBXBuildFile; fileRef = EA03811A13B298AF00A31FF7 /* PHNotificationRenderer.m */; };
+		EA03811C13B298AF00A31FF7 /* PHNotificationRenderer.m in Sources */ = {isa = PBXBuildFile; fileRef = EA03811A13B298AF00A31FF7 /* PHNotificationRenderer.m */; };
+		EA03811F13B2A0F200A31FF7 /* PHNotificationBadgeRenderer.m in Sources */ = {isa = PBXBuildFile; fileRef = EA03811E13B2A0F200A31FF7 /* PHNotificationBadgeRenderer.m */; };
+		EA03812013B2A0F200A31FF7 /* PHNotificationBadgeRenderer.m in Sources */ = {isa = PBXBuildFile; fileRef = EA03811E13B2A0F200A31FF7 /* PHNotificationBadgeRenderer.m */; };
 		EA0BB5DF13463C00007F95FA /* PHContentView.m in Sources */ = {isa = PBXBuildFile; fileRef = EA0BB5DD13463C00007F95FA /* PHContentView.m */; };
 		EA12ABD51365DBB700CB2F24 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DF5F4DF0D08C38300B7A737 /* UIKit.framework */; };
 		EA12ABD61365DBB700CB2F24 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D30AB110D05D00D00671497 /* Foundation.framework */; };
@@ -71,6 +81,16 @@
 		1D30AB110D05D00D00671497 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		1DF5F4DF0D08C38300B7A737 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		288765FC0DF74451002DB57D /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+		EA03810913B25F4300A31FF7 /* PHPublisherMetadataRequestTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PHPublisherMetadataRequestTest.m; sourceTree = "<group>"; };
+		EA03810D13B26A1A00A31FF7 /* PHPublisherMetadataRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PHPublisherMetadataRequest.h; sourceTree = "<group>"; };
+		EA03810E13B26A1A00A31FF7 /* PHPublisherMetadataRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PHPublisherMetadataRequest.m; sourceTree = "<group>"; };
+		EA03811213B26FF500A31FF7 /* PHNotificationViewTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PHNotificationViewTest.m; sourceTree = "<group>"; };
+		EA03811413B272C400A31FF7 /* PHNotificationView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PHNotificationView.h; sourceTree = "<group>"; };
+		EA03811513B272C400A31FF7 /* PHNotificationView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PHNotificationView.m; sourceTree = "<group>"; };
+		EA03811913B298AF00A31FF7 /* PHNotificationRenderer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PHNotificationRenderer.h; sourceTree = "<group>"; };
+		EA03811A13B298AF00A31FF7 /* PHNotificationRenderer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PHNotificationRenderer.m; sourceTree = "<group>"; };
+		EA03811D13B2A0F200A31FF7 /* PHNotificationBadgeRenderer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PHNotificationBadgeRenderer.h; sourceTree = "<group>"; };
+		EA03811E13B2A0F200A31FF7 /* PHNotificationBadgeRenderer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PHNotificationBadgeRenderer.m; sourceTree = "<group>"; };
 		EA0BB5DC13463C00007F95FA /* PHContentView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PHContentView.h; sourceTree = "<group>"; };
 		EA0BB5DD13463C00007F95FA /* PHContentView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = PHContentView.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		EA12ABD31365DBB700CB2F24 /* Example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Example.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -196,6 +216,21 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		EA03810C13B2630200A31FF7 /* Metadata */ = {
+			isa = PBXGroup;
+			children = (
+				EA03810D13B26A1A00A31FF7 /* PHPublisherMetadataRequest.h */,
+				EA03810E13B26A1A00A31FF7 /* PHPublisherMetadataRequest.m */,
+				EA03811413B272C400A31FF7 /* PHNotificationView.h */,
+				EA03811513B272C400A31FF7 /* PHNotificationView.m */,
+				EA03811913B298AF00A31FF7 /* PHNotificationRenderer.h */,
+				EA03811A13B298AF00A31FF7 /* PHNotificationRenderer.m */,
+				EA03811D13B2A0F200A31FF7 /* PHNotificationBadgeRenderer.h */,
+				EA03811E13B2A0F200A31FF7 /* PHNotificationBadgeRenderer.m */,
+			);
+			name = Metadata;
+			sourceTree = "<group>";
+		};
 		EA12ABD81365DBB700CB2F24 /* example */ = {
 			isa = PBXGroup;
 			children = (
@@ -230,11 +265,13 @@
 		EA523D891343EE670057DEA5 /* tests */ = {
 			isa = PBXGroup;
 			children = (
+				EA03811213B26FF500A31FF7 /* PHNotificationViewTest.m */,
 				EA7BC61813537F8700B4518D /* PHURLLoaderTest.m */,
 				EA523D8A1343EE670057DEA5 /* PHPublisherOpenRequestTest.m */,
 				EA523DD5134403AF0057DEA5 /* PHPublisherContentRequestTest.m */,
 				EAB4423213452026000DA3E9 /* PHAPIRequestTest.m */,
 				EA6EA1E7135F458E000123B0 /* PHPublisherTokensRequestTest.m */,
+				EA03810913B25F4300A31FF7 /* PHPublisherMetadataRequestTest.m */,
 			);
 			path = tests;
 			sourceTree = "<group>";
@@ -269,6 +306,7 @@
 		EA523D941343EE9D0057DEA5 /* Publisher SDK */ = {
 			isa = PBXGroup;
 			children = (
+				EA03810C13B2630200A31FF7 /* Metadata */,
 				EAB4427913454EB8000DA3E9 /* Content */,
 				EA6EA1EB135F6D5A000123B0 /* Promos */,
 				EA523D951343EEA60057DEA5 /* Open */,
@@ -456,6 +494,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				EA03811813B272FB00A31FF7 /* PHPublisherMetadataRequest.m in Sources */,
 				EA12ABE01365DBB700CB2F24 /* main.m in Sources */,
 				EA12ABE31365DBB700CB2F24 /* AppDelegate.m in Sources */,
 				EA12ABE91365DBB700CB2F24 /* RootViewController.m in Sources */,
@@ -480,6 +519,9 @@
 				EA12AC3F13662DC400CB2F24 /* PublisherOpenViewController.m in Sources */,
 				EA12AC451366339D00CB2F24 /* PublisherContentViewController.m in Sources */,
 				EAE0F5FD1385D1120062B950 /* PHPublisherSubContentRequest.m in Sources */,
+				EA03811713B272C400A31FF7 /* PHNotificationView.m in Sources */,
+				EA03811C13B298AF00A31FF7 /* PHNotificationRenderer.m in Sources */,
+				EA03812013B2A0F200A31FF7 /* PHNotificationBadgeRenderer.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -510,6 +552,12 @@
 				EA6EA1EF135F6D77000123B0 /* PHPublisherPromosRequest.m in Sources */,
 				EA4ABA11135F859D0062AE77 /* UIDevice+HardwareString.m in Sources */,
 				EAE0F5FC1385D1120062B950 /* PHPublisherSubContentRequest.m in Sources */,
+				EA03810A13B25F4300A31FF7 /* PHPublisherMetadataRequestTest.m in Sources */,
+				EA03810F13B26A1A00A31FF7 /* PHPublisherMetadataRequest.m in Sources */,
+				EA03811313B26FF500A31FF7 /* PHNotificationViewTest.m in Sources */,
+				EA03811613B272C400A31FF7 /* PHNotificationView.m in Sources */,
+				EA03811B13B298AF00A31FF7 /* PHNotificationRenderer.m in Sources */,
+				EA03811F13B2A0F200A31FF7 /* PHNotificationBadgeRenderer.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
