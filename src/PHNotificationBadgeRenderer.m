@@ -25,7 +25,7 @@ static UIImage *BadgeImage;
     return;
   }
   CGSize notificationSize = [self sizeForNotification:notificationData];
-  [BadgeImage drawInRect:CGRectMake(0, 0, notificationSize.width, 31.0f)];
+  [BadgeImage drawInRect:CGRectMake(0, 0, notificationSize.width, BadgeImage.size.height)];
   
   [[UIColor whiteColor] set]; 
   [value drawAtPoint:CGPointMake(10.0f, 1.0f) withFont:[UIFont boldSystemFontOfSize:17.0f]];
@@ -38,7 +38,7 @@ static UIImage *BadgeImage;
   }
   
   CGFloat valueWidth = [value sizeWithFont:[UIFont boldSystemFontOfSize:17.0f]].width + 20.0f;
-  return CGSizeMake(valueWidth, 31.0f);
+  return CGSizeMake(valueWidth, BadgeImage.size.height);
 }
 
 @end
