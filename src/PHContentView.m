@@ -389,7 +389,6 @@
   [[self activityView] stopAnimating]; 
   [self showCloseButton];
   [(PHContentWebView *)webView updateOrientation:_orientation];
-  NSLog(@"Loaded WebView with url: %@", webView.request.URL);
   if ([self.delegate respondsToSelector:(@selector(contentViewDidLoad:))]) {
     [self.delegate contentViewDidLoad:self];
   }
@@ -423,13 +422,16 @@
     }
     
     UIInterfaceOrientation orientation = [UIApplication sharedApplication].statusBarOrientation;
-    CGFloat barHeight = ([[UIApplication sharedApplication] isStatusBarHidden])? 0 : 20;
+    CGFloat barHeight = ([[UIApplication sharedApplication] isStatusBarHidden])? 0 : 20;\
     CGRect contentFrame = CGRectOffset([self.content frameForOrientation:orientation], 0, barHeight);
 
+    CGRect screen = [[UIScreen mainScreen] applicationFrame];
+    CGFloat maxWidth = (UIInterfaceOrientationIsLandscape(orientation))? screen.size.height : screen.size.width;
+    
     CGFloat
       x = CGRectGetMaxX(contentFrame),
       y = CGRectGetMinY(contentFrame),
-      maxX = ((UIInterfaceOrientationIsLandscape(orientation))? 480 : 320) - MAX_MARGIN,
+      maxX = maxWidth - MAX_MARGIN,
       minY = MAX_MARGIN + barHeight;
     
     _closeButton.center = CGPointMake(MIN(x, maxX), MAX(y, minY));
