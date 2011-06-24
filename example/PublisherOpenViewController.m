@@ -14,9 +14,13 @@
 -(void)startRequest{
   [super startRequest];
   
+  /*
+   * This is an alternate implementation which allows you you get response 
+   * data from API requests. This isn't necessary for most developers.
+   */
+  
   PHPublisherOpenRequest * request = [PHPublisherOpenRequest requestForApp:PH_TOKEN secret:PH_SECRET];
   request.delegate = self;
-  
   [request send];
 }
 

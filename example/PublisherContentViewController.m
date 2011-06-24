@@ -18,11 +18,7 @@
 
 -(void)startRequest{
   [super startRequest];
-  PHPublisherContentRequest * request = [PHPublisherContentRequest requestForApp:PH_TOKEN secret:PH_SECRET];
-  request.placement = @"more_games";
-  request.delegate = self;
-  
-  [request send];
+  [[PHPublisherContentRequest requestForApp:PH_TOKEN secret:PH_SECRET placement:@"more_games" delegate:self] send];
 }
 
 #pragma mark - PHPublisherContentRequestDelegate
@@ -60,9 +56,9 @@
 
 #pragma - Notifications
 /*
- Refresh your notification view from the server each time it appears. 
- This way you can be sure the type and value of the notification is most
- likely to match up to the content unit that will appear.
+ * Refresh your notification view from the server each time it appears. 
+ * This way you can be sure the type and value of the notification is most
+ * likely to match up to the content unit that will appear.
  */
 
 -(void)viewDidLoad{
