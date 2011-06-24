@@ -7,11 +7,9 @@
 //
 
 #ifndef PH_TOKEN 
-#warning Don't forget to replace these values with your PlayHaven assigned token and secret.
-#define PH_TOKEN @"TOKEN"
+#error Please define PH_TOKEN as your assigned token.
 #endif
 
 #ifndef PH_SECRET
-#warning Don't forget to replace these values with your PlayHaven assigned token and secret.
-#define PH_SECRET @"SECRET"
+#error Please define PH_SECRET as your assigned secret.
 #endif
