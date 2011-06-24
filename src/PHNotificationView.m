@@ -23,9 +23,9 @@ static NSMutableDictionary *RendererMap;
   }
 }
 
-+(void)setRendererClass:(Class)class forType:(NSString *)type{
-  if ([class isSubclassOfClass:[PHNotificationRenderer class]]) {
-    [RendererMap setValue:class forKey:type];
++(void)setRendererClass:(Class)rendererClass forType:(NSString *)type{
+  if ([rendererClass isSubclassOfClass:[PHNotificationRenderer class]]) {
+    [RendererMap setValue:rendererClass forKey:type];
   }
 }
 

@@ -19,7 +19,7 @@
   PHNotificationRenderer *_notificationRenderer;
 }
 
-+(void)setRendererClass:(Class)class forType:(NSString *)type;
++(void)setRendererClass:(Class)rendererClass forType:(NSString *)type;
 +(PHNotificationRenderer *)newRendererForData:(NSDictionary *)notificationData;
 
 -(id)initWithApp:(NSString *)app secret:(NSString *)secret placement:(NSString *)placement;
