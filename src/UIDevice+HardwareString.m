@@ -12,6 +12,15 @@
 
 @implementation UIDevice(HardwareString)
 -(NSString *)hardware{
+#if TARGET_IPHONE_SIMULATOR
+  //use idiom to send appropriate string
+  if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad){
+    return @"iPad Simulator";
+  } else {
+    return @"iPhone Simulator";
+  }
+#else
+  //use actual hw machine name
   size_t size;
   sysctlbyname("hw.machine", NULL, &size, NULL, 0);
   char *machine = malloc(size);
@@ -19,5 +28,6 @@
   NSString *hardware = [NSString stringWithCString:machine encoding:NSUTF8StringEncoding];
   free(machine);
   return hardware;
+#endif
 }
 @end
