@@ -26,12 +26,12 @@ Included with the SDK is an example implementation in its own XCode project. It 
 API Reference
 -------------
 ### Recording game opens
-In order to better optimize your campaigns, it is necessary for your app to report all game opens. This will allow us to calculate impression rates based on all game opens. A delegate is not needed for this request, but if you would like to recieve a callback when this request succeeds or fails refer to the implementation found in *example/PublisherOpenViewController.m*.
+In order to better optimize your campaigns, it is necessary for your app to report all game opens. This will allow us to calculate impression rates based on all game opens. A delegate is not needed for this request, but if you would like to receive a callback when this request succeeds or fails refer to the implementation found in *example/PublisherOpenViewController.m*.
 
 > [[PHPublisherOpenRequest requestForApp:(NSString *)token secret:(NSString *)secret] send]
 
 ### Requesting content for your placements
-You may request content for your app using your API token, secret, as well as a placement_id to identify the placement you are requesting content for. Implement PHPublisherContentRequestDelegate methods to recieve callbacks from this request. Refer to the section below as well as *example/PublisherContentViewController.m* for a sample implementation.
+You may request content for your app using your API token, secret, as well as a placement_id to identify the placement you are requesting content for. Implement PHPublisherContentRequestDelegate methods to receive callbacks from this request. Refer to the section below as well as *example/PublisherContentViewController.m* for a sample implementation.
 
 > [[PHPublisherContentRequest requestForApp:(NSString *)token secret:(NSString *)secret placement:(NSString *)placement delegate:(id)delegate] send]
 
