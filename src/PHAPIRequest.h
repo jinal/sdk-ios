@@ -23,6 +23,7 @@
   NSString *_urlPath;
   NSDictionary *_additionalParameters;
   NSHTTPURLResponse *_response;
+  int _hashCode;
 }
 
 +(NSString *) base64SignatureWithString:(NSString *)string;
@@ -37,6 +38,7 @@
 @property (nonatomic, readonly) NSDictionary *signedParameters;
 @property (nonatomic, assign) id<NSObject> delegate;
 @property (nonatomic, retain) NSDictionary *additionalParameters;
+@property (nonatomic, assign) int hashCode;
 
 -(NSString *)signedParameterString;
 

@@ -37,6 +37,7 @@
 @synthesize delegate = _delegate;
 @synthesize urlPath = _urlPath;
 @synthesize additionalParameters = _additionalParameters;
+@synthesize hashCode = _hashCode;
 
 -(NSURL *) URL{
   if (_URL == nil) {
