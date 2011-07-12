@@ -222,7 +222,7 @@ NSString *const PHPublisherContentRequestRewardSignatureKey = @"signature";
       PHReward *reward = [PHReward new];
       reward.name = [rewardData valueForKey:PHPublisherContentRequestRewardIDKey];
       reward.quantity = [[rewardData valueForKey:PHPublisherContentRequestRewardQuantityKey] integerValue];
-      reward.receipt = [rewardData valueForKey:PHPublisherContentRequestRewardReceiptKey];
+      reward.receipt = [[rewardData valueForKey:PHPublisherContentRequestRewardReceiptKey] stringValue];
       
       if ([self.delegate respondsToSelector:@selector(request:unlockedReward:)]) {
         [(id <PHPublisherContentRequestDelegate>)self.delegate request:self unlockedReward:reward];

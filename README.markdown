@@ -73,6 +73,17 @@ Use the following request method to replace the close button image with somethin
 
 > \-(UIImage *)request:(PHPublisherContentRequest *)request closeButtonImageForControlState:(UIControlState)state content:(PHContent *)content;
 
+### Unlocking rewards with the SDK
+If you have configured unlockable rewards for your content units, you will receive unlock events through a delegate method. It is important to handle these unlock events in every placement that has rewards configured.
+
+> \-(void)request:(PHPublisherContentRequest *)request unlockedReward:(PHReward *)reward;
+
+The PHReward object passed through this method has the following helpful properties:
+
+  * __name__: the name of your reward as configured on the dashboard
+  * __quantity__: if there is a quantity associated with the reward, it will be an integer value here
+  * __receipt__: a unique identifier that is used to detect duplicate reward unlocks
+
 ### Notifications with PHNotificationView
 PHNotificationView provides a fully encapsulated notification view that automatically fetches an appropriate notification from the API and renders it into your view heirarchy. It is a UIView subclass that you may place in your UI where it should appear and supply it with your app token, secret, and a placement id.
 
