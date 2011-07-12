@@ -11,5 +11,7 @@
 #define PH_BASE_URL @"http://api.playhaven.com"
 #endif
 
+#define PH_DISPATCH_PROTOCOL_VERSION 2
+
 #define PH_URL(PATH) [PH_BASE_URL stringByAppendingString:@#PATH]
 #define PH_URL_FMT(PATH,FMT) [PH_BASE_URL stringByAppendingFormat:@#PATH, FMT]

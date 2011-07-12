@@ -12,6 +12,7 @@
 #import "PHURLLoaderView.h"
 #import "NSObject+QueryComponents.h"
 #import "JSON.h"
+#import "PHConstants.h"
 
 #define MAX_MARGIN 20
 
@@ -131,8 +132,6 @@
       [self sizeToFitOrientation:YES];
     }
     [UIView commitAnimations];
-
-    [_webView updateOrientation:_orientation];
   }
 }
 
@@ -391,7 +390,11 @@
 -(void)webViewDidFinishLoad:(UIWebView *)webView{
   [[self activityView] stopAnimating]; 
   [self showCloseButton];
-  [(PHContentWebView *)webView updateOrientation:_orientation];
+  
+  //update Webview with current PH_DISPATCH_PROTOCOL_VERSION
+  NSString *loadCommand = [NSString stringWithFormat:@"window.PlayHavenDispatchProtocolVersion = %d", PH_DISPATCH_PROTOCOL_VERSION];
+  [webView stringByEvaluatingJavaScriptFromString:loadCommand];
+  
   if ([self.delegate respondsToSelector:(@selector(contentViewDidLoad:))]) {
     [self.delegate contentViewDidLoad:self];
   }
