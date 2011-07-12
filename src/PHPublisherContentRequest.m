@@ -87,8 +87,8 @@
   }
 }
 
-#pragma -
-#pragma Sub-content
+#pragma mark -
+#pragma mark Sub-content
 -(void)requestSubcontent:(NSDictionary *)queryParameters callback:(NSString *)callback source:(PHContentView *)source{
   PHPublisherSubContentRequest *request = [PHPublisherSubContentRequest requestForApp:self.token secret:self.secret];
   request.delegate = self;
@@ -132,8 +132,8 @@
 }
 
 
-#pragma -
-#pragma PHContentViewDelegate
+#pragma mark -
+#pragma mark PHContentViewDelegate
 -(void)contentViewDidLoad:(PHContentView *)contentView{  
   if ([self.contentViews count] == 1) {
     //only passthrough the first contentView load

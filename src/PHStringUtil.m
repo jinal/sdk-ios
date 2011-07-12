@@ -289,7 +289,7 @@ static int CompareEntityPairs(const void *voidCharacter, const void *voidEntityT
 	const uint8_t *bytes = data.bytes;
 	NSMutableString *result = [NSMutableString stringWithCapacity:2 * data.length];
 
-	for (int i = 0; i < data.length; i++) {
+	for (NSUInteger i = 0; i < data.length; i++) {
 		[result appendFormat:@"%02x", bytes[i]];
 	}
 	
