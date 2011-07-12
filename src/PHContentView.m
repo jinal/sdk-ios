@@ -358,9 +358,12 @@
     NSDictionary *queryComponents = [url queryComponents];
     NSString *callback = [queryComponents valueForKey:@"callback"];
     
-    NSPredicate *noCallbackPredicate = [NSPredicate predicateWithFormat:@"SELF != %@", @"callback"];
-    NSArray *filteredKeys = [[queryComponents allKeys] filteredArrayUsingPredicate:noCallbackPredicate];
-    NSDictionary *context = [queryComponents dictionaryWithValuesForKeys:filteredKeys];
+//    NSPredicate *noCallbackPredicate = [NSPredicate predicateWithFormat:@"SELF != %@", @"callback"];
+//    NSArray *filteredKeys = [[queryComponents allKeys] filteredArrayUsingPredicate:noCallbackPredicate];
+//    NSDictionary *context = [queryComponents dictionaryWithValuesForKeys:filteredKeys];
+    
+    NSString *contextString = [queryComponents valueForKey:@"context"];
+    NSDictionary *context = (!!contextString)?[contextString JSONValue]:nil;
     
     NSLog(@"[PHContentView] Redirecting request with callback: %@ to dispatch %@", callback, urlPath);
     switch ([[redirect methodSignature] numberOfArguments]) {
