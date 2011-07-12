@@ -12,6 +12,7 @@
 
 @class PHPublisherContentRequest;
 @class PHContent;
+@class PHReward;
 
 @protocol PHPublisherContentRequestDelegate <NSObject>
 @optional
@@ -26,6 +27,10 @@
 #pragma mark - Content customization methods
 -(UIImage *)request:(PHPublisherContentRequest *)request closeButtonImageForControlState:(UIControlState)state content:(PHContent *)content;
 -(UIColor *)request:(PHPublisherContentRequest *)request borderColorForContent:(PHContent *)content;
+
+#pragma mark - Reward unlocking methods
+-(void)request:(PHPublisherContentRequest *)request unlockedReward:(PHReward *)reward;
+
 @end
 
 @interface PHPublisherContentRequest : PHAPIRequest<PHContentViewDelegate, PHAPIRequestDelegate> {
@@ -44,5 +49,9 @@
 
 -(void)requestSubcontent:(NSDictionary *)queryParameters callback:(NSString *)callback source:(PHContentView *)source;
 -(void)pushContent:(PHContent *)content;
+
+-(BOOL)isValidReward:(NSDictionary *)rewardData;
+-(void)requestRewards:(NSDictionary *)queryParameters callback:(NSString *)callback source:(PHContentView *)source;
+
 
 @end

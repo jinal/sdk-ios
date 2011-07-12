@@ -54,6 +54,11 @@
   [self addMessage:message];  
 }
 
+-(void)request:(PHPublisherContentRequest *)request unlockedReward:(PHReward *)reward{
+  NSString *message = [NSString stringWithFormat:@"☆ Unlocked reward: %dx %@", reward.quantity, reward.name];
+  [self addMessage:message]; 
+}
+
 #pragma - Notifications
 /*
  * Refresh your notification view from the server each time it appears. 

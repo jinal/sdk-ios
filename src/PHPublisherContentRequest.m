@@ -11,6 +11,13 @@
 #import "PHContent.h"
 #import "PHConstants.h"
 #import "NSObject+SBJSON.h"
+#import "PHStringUtil.h"
+#import "PHReward.h"
+
+NSString *const PHPublisherContentRequestRewardIDKey = @"reward";
+NSString *const PHPublisherContentRequestRewardQuantityKey = @"quantity";
+NSString *const PHPublisherContentRequestRewardReceiptKey = @"receipt";
+NSString *const PHPublisherContentRequestRewardSignatureKey = @"signature";
 
 @implementation PHPublisherContentRequest
 
@@ -123,6 +130,7 @@
 -(void)pushContent:(PHContent *)content{
   PHContentView *contentView = [[PHContentView alloc] initWithContent:content];
   [contentView redirectRequest:@"ph://subcontent" toTarget:self action:@selector(requestSubcontent:callback:source:)];
+  [contentView redirectRequest:@"ph://reward" toTarget:self action:@selector(requestRewards:callback:source:)];
   [contentView setDelegate:self];
   [contentView show:self.animated];
   
@@ -188,6 +196,41 @@
   }
   
   return nil;
+}
+
+#pragma mark - Reward unlocking methods
+-(BOOL)isValidReward:(NSDictionary *)rewardData{
+  NSString *reward = [rewardData valueForKey:PHPublisherContentRequestRewardIDKey];
+  NSNumber *quantity = [rewardData valueForKey:PHPublisherContentRequestRewardQuantityKey];
+  NSString *receipt = [rewardData valueForKey:PHPublisherContentRequestRewardReceiptKey];
+  NSString *signature = [rewardData valueForKey:PHPublisherContentRequestRewardSignatureKey];
+  
+  NSString *generatedSignature = [PHStringUtil hexDigestForString:[NSString stringWithFormat:@"%@:%@:%@:%@:%@",
+                                  reward, 
+                                  quantity, 
+                                  [[UIDevice currentDevice] uniqueIdentifier], 
+                                  receipt, 
+                                  self.secret]];
+  
+  return [generatedSignature isEqualToString:signature];
+}
+
+-(void)requestRewards:(NSDictionary *)queryParameters callback:(NSString *)callback source:(PHContentView *)source{
+  NSArray *rewardsArray = [queryParameters valueForKey:@"rewards"];
+  for (NSDictionary *rewardData in rewardsArray) {
+    if ([self isValidReward:rewardData]) {
+      PHReward *reward = [PHReward new];
+      reward.name = [rewardData valueForKey:PHPublisherContentRequestRewardIDKey];
+      reward.quantity = [[rewardData valueForKey:PHPublisherContentRequestRewardQuantityKey] integerValue];
+      reward.receipt = [rewardData valueForKey:PHPublisherContentRequestRewardReceiptKey];
+      
+      if ([self.delegate respondsToSelector:@selector(request:unlockedReward:)]) {
+        [(id <PHPublisherContentRequestDelegate>)self.delegate request:self unlockedReward:reward];
+      }
+    }
+  }
+  
+  [source sendCallback:callback withResponse:nil error:nil];
 }
 
 
