@@ -32,6 +32,9 @@
   NSString *_placement;
   BOOL _animated;
   NSMutableArray *_contentViews;
+  UIView *_overlayView;
+  BOOL _showsOverlayImmediately;
+  UIButton *_closeButton;
 }
 
 +(id)requestForApp:(NSString *)token secret:(NSString *)secret placement:(NSString *)placement delegate:(id)delegate;
@@ -41,6 +44,8 @@
 @property (nonatomic,retain) NSString *placement;
 @property (nonatomic,assign) BOOL animated;
 @property (nonatomic,readonly) NSMutableArray *contentViews;
+@property (nonatomic,readonly) UIView *overlayView;
+@property (nonatomic, assign) BOOL showsOverlayImmediately;
 
 -(void)requestSubcontent:(NSDictionary *)queryParameters callback:(NSString *)callback source:(PHContentView *)source;
 -(void)pushContent:(PHContent *)content;
