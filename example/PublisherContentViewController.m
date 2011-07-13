@@ -18,7 +18,10 @@
 
 -(void)startRequest{
   [super startRequest];
-  [[PHPublisherContentRequest requestForApp:PH_TOKEN secret:PH_SECRET placement:@"more_games" delegate:self] send];
+  PHPublisherContentRequest * request = [PHPublisherContentRequest requestForApp:PH_TOKEN secret:PH_SECRET placement:@"more_games" delegate:self];
+  
+  request.showsOverlayImmediately = YES;
+  [request send];
 }
 
 #pragma mark - PHPublisherContentRequestDelegate

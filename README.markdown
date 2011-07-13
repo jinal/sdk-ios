@@ -33,9 +33,12 @@ In order to better optimize your campaigns, it is necessary for your app to repo
 ### Requesting content for your placements
 You may request content for your app using your API token, secret, as well as a placement_id to identify the placement you are requesting content for. Implement PHPublisherContentRequestDelegate methods to receive callbacks from this request. Refer to the section below as well as *example/PublisherContentViewController.m* for a sample implementation.
 
-> [[PHPublisherContentRequest requestForApp:(NSString *)token secret:(NSString *)secret placement:(NSString *)placement delegate:(id)delegate] send]
+> PHPublisherContentRequest *request = [PHPublisherContentRequest requestForApp:(NSString *)token secret:(NSString *)secret placement:(NSString *)placement delegate:(id)delegate];
+> [request send];
 
 *NOTE:* Currently the only valid placement is *"more_games"*.
+
+Optionally, you may choose to show the loading overlay immediately by setting the request object's *showOverlayImmediately* property to YES.
 
 #### Starting a content request
 The request is about to attempt to get content from the PlayHaven API. 

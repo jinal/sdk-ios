@@ -22,7 +22,6 @@
 -(void)viewDidShow;
 -(void)viewDidDismiss;
 -(void)dismissView;
--(void)dismissFromButton;
 -(void)handleLaunch:(NSDictionary *)queryComponents;
 -(void)handleDismiss:(NSDictionary *)queryComponents;
 -(UIActivityIndicatorView *)activityView;
@@ -58,6 +57,10 @@
     
     _content = [content retain];
     
+    
+    UIWindow *window = [[UIApplication sharedApplication] keyWindow];
+    _targetView = window;
+    
     self.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     
   }
@@ -67,6 +70,7 @@
 
 @synthesize content = _content;
 @synthesize delegate = _delegate;
+@synthesize targetView = _targetView;
 
 -(UIActivityIndicatorView *)activityView{
   if (_activityView == nil){
@@ -100,16 +104,6 @@
     }
 
     CGFloat duration = [UIApplication sharedApplication].statusBarOrientationAnimationDuration;
-//    if ((orientation == UIInterfaceOrientationLandscapeLeft && _orientation == UIInterfaceOrientationLandscapeRight)
-//        ||(orientation == UIInterfaceOrientationLandscapeRight && _orientation == UIInterfaceOrientationLandscapeLeft)) {
-//      duration = duration * 2;
-//      
-//      if (self.content.transition == PHContentTransitionDialog) {
-//        CGFloat offset = (orientation == UIInterfaceOrientationLandscapeLeft)? -0.01: 0.01;
-//        _webView.transform = CGAffineTransformMakeRotation(M_PI + offset);
-//      }
-//    }
-    
     
     if (self.content.transition == PHContentTransitionDialog) {
       CGFloat barHeight = ([[UIApplication sharedApplication] isStatusBarHidden])? 0 : 20;
@@ -123,8 +117,8 @@
     
     [UIView beginAnimations:nil context:nil];
     [UIView setAnimationDuration:duration];
-    [UIView setAnimationDelegate:self];
-    [UIView setAnimationDidStopSelector:@selector(showCloseButton)];
+    //[UIView setAnimationDelegate:self];
+    //[UIView setAnimationDidStopSelector:@selector(showCloseButton)];
     if (self.content.transition == PHContentTransitionDialog) {
       _webView.transform = CGAffineTransformIdentity;
     } else{
@@ -179,9 +173,9 @@
 -(void) show:(BOOL)animated{
   
   _willAnimate = animated;
-  UIWindow *window = [[UIApplication sharedApplication] keyWindow];
+  [self.targetView addSubview: self];
   [self sizeToFitOrientation:YES];
-  [window addSubview: self];
+
   
   if (CGRectIsNull([self.content frameForOrientation:_orientation])) {
     //this is an invalid frame and we should dismiss immediately!
@@ -245,7 +239,7 @@
       [self viewDidShow];
     }
   } else if (self.content.transition == PHContentTransitionDialog) {
-    self.backgroundColor = [UIColor colorWithWhite:0.0 alpha:0.5];
+    self.backgroundColor = [UIColor colorWithWhite:0.0 alpha:0.1];
     self.opaque = NO;
     
     UIInterfaceOrientation orientation = [UIApplication sharedApplication].statusBarOrientation;
@@ -387,7 +381,7 @@
 
 -(void)webViewDidFinishLoad:(UIWebView *)webView{
   [[self activityView] stopAnimating]; 
-  [self showCloseButton];
+  //[self showCloseButton];
   [(PHContentWebView *)webView updateOrientation:_orientation];
   if ([self.delegate respondsToSelector:(@selector(contentViewDidLoad:))]) {
     [self.delegate contentViewDidLoad:self];
@@ -395,7 +389,7 @@
 }
 
 -(void)didBounceInWebView{
-  [self performSelector:@selector(showCloseButton) withObject:nil afterDelay:self.content.closeButtonDelay];
+  //[self performSelector:@selector(showCloseButton) withObject:nil afterDelay:self.content.closeButtonDelay];
 }
 
 -(void)showCloseButton{
