@@ -13,6 +13,13 @@
 #define TRANSFORM_IN CGAffineTransformIdentity
 #define TRANSFORM_OUT CGAffineTransformMakeScale(1.2, 1.2)
 
+@interface PHURLLoaderView(Private)
+
+-(void) finishShow;
+-(void) finishDismiss;
+
+@end
+
 @implementation PHURLLoaderView
 #pragma mark -
 #pragma mark Instance

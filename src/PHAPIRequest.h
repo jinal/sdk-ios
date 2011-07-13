@@ -22,7 +22,7 @@
   NSMutableData *_connectionData;
   NSString *_urlPath;
   NSDictionary *_additionalParameters;
-  NSHTTPURLResponse *_response;
+  NSURLResponse *_response;
   int _hashCode;
 }
 

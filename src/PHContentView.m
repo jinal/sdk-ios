@@ -24,7 +24,9 @@
 -(void)dismissView;
 -(void)handleLaunch:(NSDictionary *)queryComponents;
 -(void)handleDismiss:(NSDictionary *)queryComponents;
+-(void)handleLoadContext:(NSDictionary *)queryComponents callback:(NSString*)callback;
 -(UIActivityIndicatorView *)activityView;
+-(void)didBounceInWebView;
 -(void)showCloseButton;
 -(void)hideCloseButton;
 -(void)dismissWithError:(NSError *)error;
@@ -342,8 +344,8 @@
   }
 }
 
-#pragma -
-#pragma UIWebViewDelegate
+#pragma mark -
+#pragma mark UIWebViewDelegate
 -(BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType{
   NSURL *url = request.URL;
   NSString *urlPath = [NSString stringWithFormat:@"%@://%@%@", [url scheme], [url host], [url path]];
@@ -481,7 +483,7 @@
   [self sendCallback:callback withResponse:self.content.context error:nil];
 }
 
-#pragma - callbacks
+#pragma mark - callbacks
 -(void)sendCallback:(NSString *)callback withResponse:(id)response error:(id)error{
   NSString *_callback = @"null", *_response = @"null", *_error = @"null";
   if (!!callback) _callback = callback;
