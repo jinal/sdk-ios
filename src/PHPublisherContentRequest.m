@@ -202,15 +202,16 @@ NSString *const PHPublisherContentRequestRewardSignatureKey = @"signature";
 -(BOOL)isValidReward:(NSDictionary *)rewardData{
   NSString *reward = [rewardData valueForKey:PHPublisherContentRequestRewardIDKey];
   NSNumber *quantity = [rewardData valueForKey:PHPublisherContentRequestRewardQuantityKey];
-  NSString *receipt = [rewardData valueForKey:PHPublisherContentRequestRewardReceiptKey];
+  NSNumber *receipt = [rewardData valueForKey:PHPublisherContentRequestRewardReceiptKey];
   NSString *signature = [rewardData valueForKey:PHPublisherContentRequestRewardSignatureKey];
   
-  NSString *generatedSignature = [PHStringUtil hexDigestForString:[NSString stringWithFormat:@"%@:%@:%@:%@:%@",
-                                  reward, 
-                                  quantity, 
-                                  [[UIDevice currentDevice] uniqueIdentifier], 
-                                  receipt, 
-                                  self.secret]];
+  NSString *generatedSignatureString = [NSString stringWithFormat:@"%@:%@:%@:%@:%@",
+                                        reward, 
+                                        quantity, 
+                                        [[UIDevice currentDevice] uniqueIdentifier], 
+                                        receipt, 
+                                        self.secret];
+  NSString *generatedSignature = [PHStringUtil hexDigestForString:generatedSignatureString];
   
   return [generatedSignature isEqualToString:signature];
 }
