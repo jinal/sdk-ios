@@ -19,6 +19,13 @@ NSString *const PHPublisherContentRequestRewardQuantityKey = @"quantity";
 NSString *const PHPublisherContentRequestRewardReceiptKey = @"receipt";
 NSString *const PHPublisherContentRequestRewardSignatureKey = @"signature";
 
+#define MAX_MARGIN 20
+
+@interface PHPublisherContentRequest()
+-(CGAffineTransform) transformForOrientation:(UIInterfaceOrientation)orientation;
+-(void)showCloseButton;
+@end
+
 @implementation PHPublisherContentRequest
 
 +(id)requestForApp:(NSString *)token secret:(NSString *)secret placement:(NSString *)placement delegate:(id)delegate{
@@ -44,6 +51,7 @@ NSString *const PHPublisherContentRequestRewardSignatureKey = @"signature";
 
 @synthesize placement = _placement;
 @synthesize animated = _animated;
+@synthesize showsOverlayImmediately = _showsOverlayImmediately;
 
 -(NSMutableArray *)contentViews{
   if (_contentViews == nil){
@@ -53,6 +61,17 @@ NSString *const PHPublisherContentRequestRewardSignatureKey = @"signature";
   return _contentViews;
 }
 
+-(UIView *)overlayView{
+  if (_overlayView == nil) {
+    CGRect frame = [UIScreen mainScreen].bounds;
+    _overlayView = [[UIView alloc] initWithFrame:frame];
+    _overlayView.backgroundColor = [UIColor colorWithWhite:0.0 alpha:0.5];
+    _overlayView.opaque = NO;
+  }
+  
+  return _overlayView;
+}
+
 -(NSString *)urlPath{
   return PH_URL(/v3/publisher/content/);
 }
@@ -60,6 +79,8 @@ NSString *const PHPublisherContentRequestRewardSignatureKey = @"signature";
 -(void)dealloc{
   [_placement release], _placement = nil;
   [_contentViews release], _contentViews = nil;
+  [_overlayView release], _overlayView = nil;
+  [_closeButton release], _closeButton = nil;
   [super dealloc];
 }
 
@@ -79,10 +100,22 @@ NSString *const PHPublisherContentRequestRewardSignatureKey = @"signature";
       [self.delegate performSelector:@selector(request:contentWillDisplay:) withObject:self withObject:content];
     }
     
+    [[[UIApplication sharedApplication] keyWindow] addSubview:self.overlayView];
+    [self showCloseButton];
+    
     [self pushContent:content];
     [self retain];
   } else {
     [self didFailWithError:nil];
+  }
+}
+
+-(void)didFailWithError:(NSError *)error{
+  [super didFailWithError:error];
+  
+  if (self.showsOverlayImmediately) {
+    [self.overlayView removeFromSuperview];
+    [_closeButton removeFromSuperview];
   }
 }
 
@@ -92,10 +125,15 @@ NSString *const PHPublisherContentRequestRewardSignatureKey = @"signature";
   if ([self.delegate respondsToSelector:@selector(requestWillGetContent:)]) {
     [self.delegate performSelector:@selector(requestWillGetContent:) withObject:self];
   }
+  
+  if(self.showsOverlayImmediately){
+    [[[UIApplication sharedApplication] keyWindow] addSubview:self.overlayView];
+    [self showCloseButton];
+  }
 }
 
-#pragma -
-#pragma Sub-content
+#pragma mark -
+#pragma mark Sub-content
 -(void)requestSubcontent:(NSDictionary *)queryParameters callback:(NSString *)callback source:(PHContentView *)source{
   PHPublisherSubContentRequest *request = [PHPublisherSubContentRequest requestForApp:self.token secret:self.secret];
   request.delegate = self;
@@ -133,15 +171,109 @@ NSString *const PHPublisherContentRequestRewardSignatureKey = @"signature";
   [contentView redirectRequest:@"ph://reward" toTarget:self action:@selector(requestRewards:callback:source:)];
   [contentView setDelegate:self];
   [contentView show:self.animated];
+  [contentView setTargetView:self.overlayView];
   
   [self.contentViews addObject:contentView];
   
   [contentView release];
+  
+  [self showCloseButton];
+}
+
+-(void)showCloseButton{
+  if ([_closeButton superview] == nil) {   
+    //TRACK_ORIENTATION see STOP_TRACK_ORIENTATION
+    [[NSNotificationCenter defaultCenter] 
+     addObserver:self
+     selector:@selector(showCloseButton) 
+     name:UIDeviceOrientationDidChangeNotification
+     object:nil];
+    
+  }
+
+  if (_closeButton == nil) {
+    _closeButton = [[UIButton buttonWithType:UIButtonTypeCustom] retain];
+    _closeButton.frame = CGRectMake(0, 0, 40, 40);
+    
+    UIImage
+      *closeImage = [self contentView:nil imageForCloseButtonState:UIControlStateNormal],
+      *closeActiveImage = [self contentView:nil imageForCloseButtonState:UIControlStateHighlighted];
+    
+    closeImage = (!closeImage)? [UIImage imageNamed:@"PlayHaven.bundle/images/close.png"] : closeImage;
+    closeActiveImage = (!closeActiveImage)?[UIImage imageNamed:@"PlayHaven.bundle/images/close-active.png"]: closeActiveImage;
+    
+    [_closeButton setImage:closeImage forState:UIControlStateNormal];
+    [_closeButton setImage:closeActiveImage forState:UIControlStateHighlighted];
+    
+    [_closeButton addTarget:self action:@selector(dismissFromButton) forControlEvents:UIControlEventTouchUpInside];
+    
+  }
+  
+  UIInterfaceOrientation orientation = [UIApplication sharedApplication].statusBarOrientation;
+  CGFloat barHeight = ([[UIApplication sharedApplication] isStatusBarHidden])? 0 : 20;
+  
+  CGRect screen = [[UIScreen mainScreen] applicationFrame];
+  CGFloat width = screen.size.width, height = screen.size.height, X,Y;
+  switch (orientation) {
+    case UIInterfaceOrientationPortrait:
+      X = width - MAX_MARGIN;
+      Y = MAX_MARGIN + barHeight;
+      break;
+    case UIInterfaceOrientationPortraitUpsideDown:
+      X = MAX_MARGIN;
+      Y = height - MAX_MARGIN;
+      break;
+    case UIInterfaceOrientationLandscapeLeft:
+      X = MAX_MARGIN + barHeight;
+      Y = MAX_MARGIN;
+      break;
+    case UIInterfaceOrientationLandscapeRight:
+      X = width - barHeight;
+      Y = height - MAX_MARGIN;
+      break;
+  }
+  
+  _closeButton.center = CGPointMake(X, Y);
+  _closeButton.transform = [self transformForOrientation:orientation];
+  
+  [[[UIApplication sharedApplication] keyWindow] addSubview:_closeButton];
+}
+
+-(void)hideCloseButton{
+  [_closeButton removeFromSuperview];
+  [[NSNotificationCenter defaultCenter] removeObserver:self name:UIDeviceOrientationDidChangeNotification object:nil];
+}
+
+-(void)dismissFromButton{
+  [_connection cancel];
+  
+  
+  if ([self.contentViews count] > 0) {
+    for (PHContentView *contentView in self.contentViews) {
+      [contentView dismissFromButton];
+    }
+  } else {
+    [self.overlayView removeFromSuperview];
+    [self hideCloseButton];
+    [self release];
+  }
+}
+
+-(CGAffineTransform) transformForOrientation:(UIInterfaceOrientation)orientation{
+  if (orientation == UIInterfaceOrientationLandscapeLeft) {
+    return CGAffineTransformMakeRotation(-M_PI/2);
+  } else if (orientation == UIInterfaceOrientationLandscapeRight) {
+    return CGAffineTransformMakeRotation(M_PI/2);
+  } else if (orientation == UIInterfaceOrientationPortraitUpsideDown) {
+    return CGAffineTransformMakeRotation(-M_PI);
+  } else {
+    return CGAffineTransformIdentity;
+  }
 }
 
 
-#pragma -
-#pragma PHContentViewDelegate
+#pragma mark -
+#pragma mark PHContentViewDelegate
 -(void)contentViewDidLoad:(PHContentView *)contentView{  
   if ([self.contentViews count] == 1) {
     //only passthrough the first contentView load
@@ -163,6 +295,8 @@ NSString *const PHPublisherContentRequestRewardSignatureKey = @"signature";
                           withObject:self];
     }
     
+    [self.overlayView removeFromSuperview];
+    [self hideCloseButton];
     [self release];
   }
 }
@@ -178,6 +312,8 @@ NSString *const PHPublisherContentRequestRewardSignatureKey = @"signature";
                           withObject:error];
     }
     
+    [self.overlayView removeFromSuperview];
+    [self hideCloseButton];
     [self release];
   }
 }

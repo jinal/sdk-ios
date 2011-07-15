@@ -18,6 +18,15 @@
 #define DURATION_1 0.125
 #define DURATION_2 0.125
 
+@interface PHContentWebView(Private)
+
+-(void)continueBounceIn;
+-(void)finishBounceIn;
+-(void)continueBounceOut;
+-(void)finishBounceOut;
+
+@end
+
 @implementation PHContentWebView
 
 @synthesize isAnimating = _isAnimating;

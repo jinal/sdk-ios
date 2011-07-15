@@ -23,10 +23,11 @@
 -(void)viewDidShow;
 -(void)viewDidDismiss;
 -(void)dismissView;
--(void)dismissFromButton;
 -(void)handleLaunch:(NSDictionary *)queryComponents;
 -(void)handleDismiss:(NSDictionary *)queryComponents;
+-(void)handleLoadContext:(NSDictionary *)queryComponents callback:(NSString*)callback;
 -(UIActivityIndicatorView *)activityView;
+-(void)didBounceInWebView;
 -(void)showCloseButton;
 -(void)hideCloseButton;
 -(void)dismissWithError:(NSError *)error;
@@ -59,6 +60,10 @@
     
     _content = [content retain];
     
+    
+    UIWindow *window = [[UIApplication sharedApplication] keyWindow];
+    _targetView = window;
+    
     self.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     
   }
@@ -68,6 +73,7 @@
 
 @synthesize content = _content;
 @synthesize delegate = _delegate;
+@synthesize targetView = _targetView;
 
 -(UIActivityIndicatorView *)activityView{
   if (_activityView == nil){
@@ -101,16 +107,6 @@
     }
 
     CGFloat duration = [UIApplication sharedApplication].statusBarOrientationAnimationDuration;
-//    if ((orientation == UIInterfaceOrientationLandscapeLeft && _orientation == UIInterfaceOrientationLandscapeRight)
-//        ||(orientation == UIInterfaceOrientationLandscapeRight && _orientation == UIInterfaceOrientationLandscapeLeft)) {
-//      duration = duration * 2;
-//      
-//      if (self.content.transition == PHContentTransitionDialog) {
-//        CGFloat offset = (orientation == UIInterfaceOrientationLandscapeLeft)? -0.01: 0.01;
-//        _webView.transform = CGAffineTransformMakeRotation(M_PI + offset);
-//      }
-//    }
-    
     
     if (self.content.transition == PHContentTransitionDialog) {
       CGFloat barHeight = ([[UIApplication sharedApplication] isStatusBarHidden])? 0 : 20;
@@ -124,8 +120,8 @@
     
     [UIView beginAnimations:nil context:nil];
     [UIView setAnimationDuration:duration];
-    [UIView setAnimationDelegate:self];
-    [UIView setAnimationDidStopSelector:@selector(showCloseButton)];
+    //[UIView setAnimationDelegate:self];
+    //[UIView setAnimationDidStopSelector:@selector(showCloseButton)];
     if (self.content.transition == PHContentTransitionDialog) {
       _webView.transform = CGAffineTransformIdentity;
     } else{
@@ -178,9 +174,9 @@
 -(void) show:(BOOL)animated{
   
   _willAnimate = animated;
-  UIWindow *window = [[UIApplication sharedApplication] keyWindow];
+  [self.targetView addSubview: self];
   [self sizeToFitOrientation:YES];
-  [window addSubview: self];
+
   
   if (CGRectIsNull([self.content frameForOrientation:_orientation])) {
     //this is an invalid frame and we should dismiss immediately!
@@ -244,7 +240,7 @@
       [self viewDidShow];
     }
   } else if (self.content.transition == PHContentTransitionDialog) {
-    self.backgroundColor = [UIColor colorWithWhite:0.0 alpha:0.5];
+    self.backgroundColor = [UIColor colorWithWhite:0.0 alpha:0.1];
     self.opaque = NO;
     
     UIInterfaceOrientation orientation = [UIApplication sharedApplication].statusBarOrientation;
@@ -347,8 +343,8 @@
   }
 }
 
-#pragma -
-#pragma UIWebViewDelegate
+#pragma mark -
+#pragma mark UIWebViewDelegate
 -(BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType{
   NSURL *url = request.URL;
   NSString *urlPath = [NSString stringWithFormat:@"%@://%@%@", [url scheme], [url host], [url path]];
@@ -389,7 +385,6 @@
 
 -(void)webViewDidFinishLoad:(UIWebView *)webView{
   [[self activityView] stopAnimating]; 
-  [self showCloseButton];
   
   //update Webview with current PH_DISPATCH_PROTOCOL_VERSION
   NSString *loadCommand = [NSString stringWithFormat:@"window.PlayHavenDispatchProtocolVersion = %d", PH_DISPATCH_PROTOCOL_VERSION];
@@ -401,7 +396,7 @@
 }
 
 -(void)didBounceInWebView{
-  [self performSelector:@selector(showCloseButton) withObject:nil afterDelay:self.content.closeButtonDelay];
+  //[self performSelector:@selector(showCloseButton) withObject:nil afterDelay:self.content.closeButtonDelay];
 }
 
 -(void)showCloseButton{
@@ -493,7 +488,7 @@
   [self sendCallback:callback withResponse:self.content.context error:nil];
 }
 
-#pragma - callbacks
+#pragma mark - callbacks
 -(void)sendCallback:(NSString *)callback withResponse:(id)response error:(id)error{
   NSString *_callback = @"null", *_response = @"null", *_error = @"null";
   if (!!callback) _callback = callback;

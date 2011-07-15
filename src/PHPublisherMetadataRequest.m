@@ -31,7 +31,7 @@
   [super dealloc];
 }
 
-#pragma - PHAPIRequest
+#pragma mark - PHAPIRequest
 
 -(NSString *)urlPath{
   return PH_URL(/v3/publisher/content/);
