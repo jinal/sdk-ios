@@ -24,6 +24,7 @@ NSString *const PHPublisherContentRequestRewardSignatureKey = @"signature";
 @interface PHPublisherContentRequest()
 -(CGAffineTransform) transformForOrientation:(UIInterfaceOrientation)orientation;
 -(void)showCloseButton;
+-(void)hideCloseButton;
 @end
 
 @implementation PHPublisherContentRequest
@@ -115,7 +116,7 @@ NSString *const PHPublisherContentRequestRewardSignatureKey = @"signature";
   
   if (self.showsOverlayImmediately) {
     [self.overlayView removeFromSuperview];
-    [_closeButton removeFromSuperview];
+    [self hideCloseButton];
   }
 }
 
