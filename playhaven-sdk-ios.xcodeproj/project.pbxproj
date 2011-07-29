@@ -60,6 +60,8 @@
 		EA6EA1EF135F6D77000123B0 /* PHPublisherPromosRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = EA6EA1ED135F6D77000123B0 /* PHPublisherPromosRequest.m */; };
 		EA7BC61A13537F8700B4518D /* PHURLLoaderTest.m in Sources */ = {isa = PBXBuildFile; fileRef = EA7BC61813537F8700B4518D /* PHURLLoaderTest.m */; };
 		EA7EE600134D458B00A0ADE6 /* PHContentWebView.m in Sources */ = {isa = PBXBuildFile; fileRef = EA7EE5FE134D458A00A0ADE6 /* PHContentWebView.m */; };
+		EAB2B44713CBD172006D2391 /* PHReward.m in Sources */ = {isa = PBXBuildFile; fileRef = EAB2B44613CBD172006D2391 /* PHReward.m */; };
+		EAB2B44813CBD172006D2391 /* PHReward.m in Sources */ = {isa = PBXBuildFile; fileRef = EAB2B44613CBD172006D2391 /* PHReward.m */; };
 		EAB4423313452026000DA3E9 /* PHAPIRequestTest.m in Sources */ = {isa = PBXBuildFile; fileRef = EAB4423213452026000DA3E9 /* PHAPIRequestTest.m */; };
 		EAB44269134539F4000DA3E9 /* NSObject+SBJSON.m in Sources */ = {isa = PBXBuildFile; fileRef = EAB44260134539F4000DA3E9 /* NSObject+SBJSON.m */; };
 		EAB4426A134539F4000DA3E9 /* NSString+SBJSON.m in Sources */ = {isa = PBXBuildFile; fileRef = EAB44262134539F4000DA3E9 /* NSString+SBJSON.m */; };
@@ -134,6 +136,8 @@
 		EA7EE5FD134D458A00A0ADE6 /* PHContentWebView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PHContentWebView.h; sourceTree = "<group>"; };
 		EA7EE5FE134D458A00A0ADE6 /* PHContentWebView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PHContentWebView.m; sourceTree = "<group>"; };
 		EAB19C8C1357BA390067F27A /* PHConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PHConstants.h; sourceTree = "<group>"; };
+		EAB2B44513CBD172006D2391 /* PHReward.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PHReward.h; sourceTree = "<group>"; };
+		EAB2B44613CBD172006D2391 /* PHReward.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PHReward.m; sourceTree = "<group>"; };
 		EAB4423213452026000DA3E9 /* PHAPIRequestTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PHAPIRequestTest.m; sourceTree = "<group>"; };
 		EAB4425E134539F4000DA3E9 /* JSON.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSON.h; sourceTree = "<group>"; };
 		EAB4425F134539F4000DA3E9 /* NSObject+SBJSON.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSObject+SBJSON.h"; sourceTree = "<group>"; };
@@ -373,6 +377,8 @@
 				EAED519E134B949D00D0DCB6 /* PHPublisherContentRequest.m */,
 				EA7EE5FD134D458A00A0ADE6 /* PHContentWebView.h */,
 				EA7EE5FE134D458A00A0ADE6 /* PHContentWebView.m */,
+				EAB2B44513CBD172006D2391 /* PHReward.h */,
+				EAB2B44613CBD172006D2391 /* PHReward.m */,
 			);
 			name = Content;
 			sourceTree = "<group>";
@@ -522,6 +528,7 @@
 				EA03811713B272C400A31FF7 /* PHNotificationView.m in Sources */,
 				EA03811C13B298AF00A31FF7 /* PHNotificationRenderer.m in Sources */,
 				EA03812013B2A0F200A31FF7 /* PHNotificationBadgeRenderer.m in Sources */,
+				EAB2B44813CBD172006D2391 /* PHReward.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -533,7 +540,6 @@
 				EA523D9B1343EEDA0057DEA5 /* PHPublisherOpenRequest.m in Sources */,
 				EA523D9E1343EEED0057DEA5 /* PHStringUtil.m in Sources */,
 				EA523DC51343F9740057DEA5 /* PHAPIRequest.m in Sources */,
-				EA523DD6134403AF0057DEA5 /* PHPublisherContentRequestTest.m in Sources */,
 				EAB4423313452026000DA3E9 /* PHAPIRequestTest.m in Sources */,
 				EAB44269134539F4000DA3E9 /* NSObject+SBJSON.m in Sources */,
 				EAB4426A134539F4000DA3E9 /* NSString+SBJSON.m in Sources */,
@@ -558,6 +564,8 @@
 				EA03811613B272C400A31FF7 /* PHNotificationView.m in Sources */,
 				EA03811B13B298AF00A31FF7 /* PHNotificationRenderer.m in Sources */,
 				EA03811F13B2A0F200A31FF7 /* PHNotificationBadgeRenderer.m in Sources */,
+				EA523DD6134403AF0057DEA5 /* PHPublisherContentRequestTest.m in Sources */,
+				EAB2B44713CBD172006D2391 /* PHReward.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
