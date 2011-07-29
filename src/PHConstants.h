@@ -17,7 +17,7 @@
 // native code. See content-templates:src/js/playhaven.js for template impl.
 //
 //   1: GET request with dispatch parameter keys and values in query string
-// * 2: GET request with dispatch parameters encoded as a single JSON string 
+//   2: GET request with dispatch parameters encoded as a single JSON string 
 //      in query string. Rewards support requires this setting.
 
 #define PH_DISPATCH_PROTOCOL_VERSION 2

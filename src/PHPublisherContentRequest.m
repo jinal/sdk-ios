@@ -25,6 +25,8 @@ NSString *const PHPublisherContentRequestRewardSignatureKey = @"signature";
 -(CGAffineTransform) transformForOrientation:(UIInterfaceOrientation)orientation;
 -(void)showCloseButton;
 -(void)hideCloseButton;
+
+@property (nonatomic, readonly) UIButton *closeButton;
 @end
 
 @implementation PHPublisherContentRequest
@@ -71,6 +73,27 @@ NSString *const PHPublisherContentRequestRewardSignatureKey = @"signature";
   }
   
   return _overlayView;
+}
+
+-(UIButton *)closeButton{
+  if (_closeButton == nil) {
+    _closeButton = [[UIButton buttonWithType:UIButtonTypeCustom] retain];
+    _closeButton.frame = CGRectMake(0, 0, 40, 40);
+    
+    UIImage
+    *closeImage = [self contentView:nil imageForCloseButtonState:UIControlStateNormal],
+    *closeActiveImage = [self contentView:nil imageForCloseButtonState:UIControlStateHighlighted];
+    
+    closeImage = (!closeImage)? [UIImage imageNamed:@"PlayHaven.bundle/images/close.png"] : closeImage;
+    closeActiveImage = (!closeActiveImage)?[UIImage imageNamed:@"PlayHaven.bundle/images/close-active.png"]: closeActiveImage;
+    
+    [_closeButton setImage:closeImage forState:UIControlStateNormal];
+    [_closeButton setImage:closeActiveImage forState:UIControlStateHighlighted];
+    
+    [_closeButton addTarget:self action:@selector(dismissFromButton) forControlEvents:UIControlEventTouchUpInside];
+  }
+  
+  return _closeButton;
 }
 
 -(NSString *)urlPath{
@@ -170,6 +193,7 @@ NSString *const PHPublisherContentRequestRewardSignatureKey = @"signature";
   PHContentView *contentView = [[PHContentView alloc] initWithContent:content];
   [contentView redirectRequest:@"ph://subcontent" toTarget:self action:@selector(requestSubcontent:callback:source:)];
   [contentView redirectRequest:@"ph://reward" toTarget:self action:@selector(requestRewards:callback:source:)];
+  [contentView redirectRequest:@"ph://closeButton" toTarget:self action:@selector(requestCloseButton:callback:source:)];
   [contentView setDelegate:self];
   [contentView show:self.animated];
   [contentView setTargetView:self.overlayView];
@@ -189,24 +213,6 @@ NSString *const PHPublisherContentRequestRewardSignatureKey = @"signature";
      selector:@selector(showCloseButton) 
      name:UIDeviceOrientationDidChangeNotification
      object:nil];
-    
-  }
-
-  if (_closeButton == nil) {
-    _closeButton = [[UIButton buttonWithType:UIButtonTypeCustom] retain];
-    _closeButton.frame = CGRectMake(0, 0, 40, 40);
-    
-    UIImage
-      *closeImage = [self contentView:nil imageForCloseButtonState:UIControlStateNormal],
-      *closeActiveImage = [self contentView:nil imageForCloseButtonState:UIControlStateHighlighted];
-    
-    closeImage = (!closeImage)? [UIImage imageNamed:@"PlayHaven.bundle/images/close.png"] : closeImage;
-    closeActiveImage = (!closeActiveImage)?[UIImage imageNamed:@"PlayHaven.bundle/images/close-active.png"]: closeActiveImage;
-    
-    [_closeButton setImage:closeImage forState:UIControlStateNormal];
-    [_closeButton setImage:closeActiveImage forState:UIControlStateHighlighted];
-    
-    [_closeButton addTarget:self action:@selector(dismissFromButton) forControlEvents:UIControlEventTouchUpInside];
     
   }
   
@@ -234,10 +240,10 @@ NSString *const PHPublisherContentRequestRewardSignatureKey = @"signature";
       break;
   }
   
-  _closeButton.center = CGPointMake(X, Y);
-  _closeButton.transform = [self transformForOrientation:orientation];
+  self.closeButton.center = CGPointMake(X, Y);
+  self.closeButton.transform = [self transformForOrientation:orientation];
   
-  [[[UIApplication sharedApplication] keyWindow] addSubview:_closeButton];
+  [[[UIApplication sharedApplication] keyWindow] addSubview:self.closeButton];
 }
 
 -(void)hideCloseButton{
@@ -369,6 +375,18 @@ NSString *const PHPublisherContentRequestRewardSignatureKey = @"signature";
   }
   
   [source sendCallback:callback withResponse:nil error:nil];
+}
+
+#pragma mark - Close button control
+-(void)requestCloseButton:(NSDictionary *)queryParameters callback:(NSString *)callback source:(PHContentView *)source{
+  
+  if ([queryParameters valueForKey:@"hidden"]) {
+    self.closeButton.hidden = [[queryParameters valueForKey:@"hidden"] boolValue];
+  }
+  
+  NSArray *keys = [NSArray arrayWithObjects:@"hidden",nil];
+  NSDictionary *response = [self.closeButton dictionaryWithValuesForKeys:keys];
+  [source sendCallback:callback withResponse:response error:nil];
 }
 
 

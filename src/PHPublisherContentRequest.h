@@ -58,5 +58,6 @@
 -(BOOL)isValidReward:(NSDictionary *)rewardData;
 -(void)requestRewards:(NSDictionary *)queryParameters callback:(NSString *)callback source:(PHContentView *)source;
 
+-(void)requestCloseButton:(NSDictionary *)queryParameters callback:(NSString *)callback source:(PHContentView *)source;
 
 @end
