@@ -28,7 +28,6 @@
   NSObject<PHContentViewDelegate> *_delegate;
   
   PHContentWebView *_webView;
-  UINavigationBar *_navBar;
   BOOL _willAnimate;
   
   NSMutableDictionary *_redirects;
