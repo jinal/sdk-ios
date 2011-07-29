@@ -153,7 +153,7 @@
 }
    
 -(void)testLaunchRequest{
-  NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:@"ph://launch?url=http%3A%2F%2Fadidas.com"]];  
+  NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:@"ph://launch?context=%7B%22url%22%3A%22http%3A%2F%2Fadidas.com%22%7D"]];  
   BOOL result = [_contentView webView:nil shouldStartLoadWithRequest:request navigationType:UIWebViewNavigationTypeLinkClicked];
   STAssertFalse(result, @"_contentView should not open ph://dismiss in webview!");
 }

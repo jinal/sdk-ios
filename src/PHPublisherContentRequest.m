@@ -24,6 +24,7 @@ NSString *const PHPublisherContentRequestRewardSignatureKey = @"signature";
 @interface PHPublisherContentRequest()
 -(CGAffineTransform) transformForOrientation:(UIInterfaceOrientation)orientation;
 -(void)showCloseButton;
+-(void)hideCloseButton;
 @end
 
 @implementation PHPublisherContentRequest
@@ -115,7 +116,7 @@ NSString *const PHPublisherContentRequestRewardSignatureKey = @"signature";
   
   if (self.showsOverlayImmediately) {
     [self.overlayView removeFromSuperview];
-    [_closeButton removeFromSuperview];
+    [self hideCloseButton];
   }
 }
 
@@ -338,15 +339,16 @@ NSString *const PHPublisherContentRequestRewardSignatureKey = @"signature";
 -(BOOL)isValidReward:(NSDictionary *)rewardData{
   NSString *reward = [rewardData valueForKey:PHPublisherContentRequestRewardIDKey];
   NSNumber *quantity = [rewardData valueForKey:PHPublisherContentRequestRewardQuantityKey];
-  NSString *receipt = [rewardData valueForKey:PHPublisherContentRequestRewardReceiptKey];
+  NSNumber *receipt = [rewardData valueForKey:PHPublisherContentRequestRewardReceiptKey];
   NSString *signature = [rewardData valueForKey:PHPublisherContentRequestRewardSignatureKey];
   
-  NSString *generatedSignature = [PHStringUtil hexDigestForString:[NSString stringWithFormat:@"%@:%@:%@:%@:%@",
-                                  reward, 
-                                  quantity, 
-                                  [[UIDevice currentDevice] uniqueIdentifier], 
-                                  receipt, 
-                                  self.secret]];
+  NSString *generatedSignatureString = [NSString stringWithFormat:@"%@:%@:%@:%@:%@",
+                                        reward, 
+                                        quantity, 
+                                        [[UIDevice currentDevice] uniqueIdentifier], 
+                                        receipt, 
+                                        self.secret];
+  NSString *generatedSignature = [PHStringUtil hexDigestForString:generatedSignatureString];
   
   return [generatedSignature isEqualToString:signature];
 }
@@ -358,7 +360,7 @@ NSString *const PHPublisherContentRequestRewardSignatureKey = @"signature";
       PHReward *reward = [PHReward new];
       reward.name = [rewardData valueForKey:PHPublisherContentRequestRewardIDKey];
       reward.quantity = [[rewardData valueForKey:PHPublisherContentRequestRewardQuantityKey] integerValue];
-      reward.receipt = [rewardData valueForKey:PHPublisherContentRequestRewardReceiptKey];
+      reward.receipt = [[rewardData valueForKey:PHPublisherContentRequestRewardReceiptKey] stringValue];
       
       if ([self.delegate respondsToSelector:@selector(request:unlockedReward:)]) {
         [(id <PHPublisherContentRequestDelegate>)self.delegate request:self unlockedReward:reward];

@@ -20,6 +20,4 @@
 -(void)bounceInWithTarget:(id)target action:(SEL)action;
 -(void)bounceOutWithTarget:(id)target action:(SEL)action;
 
--(void)updateOrientation:(UIInterfaceOrientation)orientation;
-
 @end

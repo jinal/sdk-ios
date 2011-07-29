@@ -121,12 +121,4 @@
   _isAnimating = NO;
 }
 
-#pragma mark -
--(void)updateOrientation:(UIInterfaceOrientation)orientation{
-  NSString *jsonString = (UIInterfaceOrientationIsLandscape(orientation))? @"PH_LANDSCAPE": @"PH_PORTRAIT";
-  NSString *loadContextCommand = [NSString stringWithFormat:@"PlayHaven.updateOrientation(%@)",jsonString];
-  [self stringByEvaluatingJavaScriptFromString:loadContextCommand];
-}
-
-
 @end
