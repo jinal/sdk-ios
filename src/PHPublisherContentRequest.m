@@ -159,14 +159,20 @@ NSString *const PHPublisherContentRequestRewardSignatureKey = @"signature";
 #pragma mark -
 #pragma mark Sub-content
 -(void)requestSubcontent:(NSDictionary *)queryParameters callback:(NSString *)callback source:(PHContentView *)source{
-  PHPublisherSubContentRequest *request = [PHPublisherSubContentRequest requestForApp:self.token secret:self.secret];
-  request.delegate = self;
-  
-  request.urlPath = [queryParameters valueForKey:@"url"];
-  request.callback = callback;
-  request.source = source;
-  
-  [request send];
+  if (!!queryParameters && [queryParameters valueForKey:@"url"]) {
+    PHPublisherSubContentRequest *request = [PHPublisherSubContentRequest requestForApp:self.token secret:self.secret];
+    request.delegate = self;
+    
+    request.urlPath = [queryParameters valueForKey:@"url"];
+    request.callback = callback;
+    request.source = source;
+    
+    [request send];
+  } else {
+    NSDictionary *errorDict = [NSDictionary dictionaryWithObjectsAndKeys:
+                               @"1",@"error", nil];
+    [source sendCallback:callback withResponse:nil error:errorDict];
+  }
 }
 
 -(void)request:(PHAPIRequest *)request didSucceedWithResponse:(NSDictionary *)responseData{
