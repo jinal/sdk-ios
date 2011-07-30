@@ -28,15 +28,6 @@
 @end
 
 @implementation PHContentWebView
-
--(id)initWithFrame:(CGRect)frame{
-  self = [super initWithFrame:frame];
-  if (!!self) {
-    [self loadHTMLString:@"<html><body style=\"background:#bdc5c9\"></body></html>" baseURL:nil];
-  }
-  return self;
-}
-
 @synthesize isAnimating = _isAnimating;
 
 -(void)bounceInWithTarget:(id)target action:(SEL)action{
