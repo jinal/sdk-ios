@@ -16,6 +16,7 @@
 #import "PHContent.h"
 #import "PHContentView.h"
 #import "PHPublisherContentRequest.h"
+#import "PHStringUtil.h"
 
 #define PUBLISHER_TOKEN @"PUBLISHER_TOKEN"
 #define PUBLISHER_SECRET @"PUBLISHER_SECRET"
@@ -29,6 +30,7 @@
   BOOL _didDismiss, _didLaunch;
 }@end
 @interface PHPublisherContentRequestTest : SenTestCase @end
+@interface PHPublisherContentRewardsTest : SenTestCase @end
 
 @implementation PHContentTest
 
@@ -151,7 +153,7 @@
 }
    
 -(void)testLaunchRequest{
-  NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:@"ph://launch?url=http%3A%2F%2Fadidas.com"]];  
+  NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:@"ph://launch?context=%7B%22url%22%3A%22http%3A%2F%2Fadidas.com%22%7D"]];  
   BOOL result = [_contentView webView:nil shouldStartLoadWithRequest:request navigationType:UIWebViewNavigationTypeLinkClicked];
   STAssertFalse(result, @"_contentView should not open ph://dismiss in webview!");
 }
@@ -194,6 +196,36 @@
     STAssertFalse([parameterString rangeOfString:placementParam].location == NSNotFound,
                   @"Placment_id parameter not present!");
     
+}
+
+@end
+
+@implementation PHPublisherContentRewardsTest
+
+-(void)testValidation{
+  NSString *reward = @"SLAPPY_COINS";
+  NSNumber *quantity = [NSNumber numberWithInt:1234];
+  NSNumber *receipt = [NSNumber numberWithInt:102930193];
+  NSString *signature = [PHStringUtil hexDigestForString:[NSString stringWithFormat:@"%@:%@:%@:%@:%@",
+                         reward, quantity, [[UIDevice currentDevice] uniqueIdentifier], receipt, PUBLISHER_SECRET]];
+  
+  NSDictionary *rewardDict = [NSDictionary dictionaryWithObjectsAndKeys:
+                              reward, @"reward",
+                              quantity, @"quantity",
+                              receipt, @"receipt",
+                              signature, @"signature",
+                              nil];
+  NSDictionary *badRewardDict = [NSDictionary dictionaryWithObjectsAndKeys:
+                                 reward, @"reward",
+                                 quantity, @"quantity",
+                                 receipt, @"receipt",
+                                 @"BAD_SIGNATURE_RARARA", @"signature",
+                                 nil];
+  
+  PHPublisherContentRequest *request = [PHPublisherContentRequest requestForApp:PUBLISHER_TOKEN secret:PUBLISHER_SECRET];
+  
+  STAssertTrue([request isValidReward:rewardDict], @"PHPublisherContentRequest could not validate valid reward.");
+  STAssertFalse([request isValidReward:badRewardDict], @"PHPublisherContentRequest validated invalid reward.");
 }
 
 @end

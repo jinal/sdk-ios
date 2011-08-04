@@ -37,7 +37,7 @@ You may request content for your app using your API token, secret, as well as a 
 	request.showsOverlayImmediately = YES //optional, see below.
 	[request send];
 
-*NOTE:* Currently the only valid placement is *"more_games"*.
+*NOTE:* You may set placement_ids through the PlayHaven Developer Dashboard.
 
 Optionally, you may choose to show the loading overlay immediately by setting the request object's *showsOverlayImmediately* property to YES.
 
@@ -77,12 +77,23 @@ Use the following request method to replace the close button image with somethin
 
 	-(UIImage *)request:(PHPublisherContentRequest *)request closeButtonImageForControlState:(UIControlState)state content:(PHContent *)content;
 
+### Unlocking rewards with the SDK
+If you have configured unlockable rewards for your content units, you will receive unlock events through a delegate method. It is important to handle these unlock events in every placement that has rewards configured.
+
+> \-(void)request:(PHPublisherContentRequest *)request unlockedReward:(PHReward *)reward;
+
+The PHReward object passed through this method has the following helpful properties:
+
+  * __name__: the name of your reward as configured on the dashboard
+  * __quantity__: if there is a quantity associated with the reward, it will be an integer value here
+  * __receipt__: a unique identifier that is used to detect duplicate reward unlocks, your app should ensure that each receipt is only unlocked once
+
 ### Notifications with PHNotificationView
 PHNotificationView provides a fully encapsulated notification view that automatically fetches an appropriate notification from the API and renders it into your view heirarchy. It is a UIView subclass that you may place in your UI where it should appear and supply it with your app token, secret, and a placement id.
 
 	-(id)initWithApp:(NSString *)app secret:(NSString *)secret placement:(NSString *)placement;
 
-*NOTE:* Currently the only valid placement is *"more_games"*.
+*NOTE:* You may set up placement_ids through the PlayHaven Developer Dashboard.
 
 Notification view will remain anchored to the center of the position they are placed in the view, even as the size of the badge changes. You may refresh your notification view from the network using the -(void)refresh method on an instance. We recommend refreshing the notification view each time it will appear in your UI. See examples/PublisherContentViewController.m for an example.
 

@@ -12,6 +12,7 @@
 #import "PHURLLoaderView.h"
 #import "NSObject+QueryComponents.h"
 #import "JSON.h"
+#import "PHConstants.h"
 
 #define MAX_MARGIN 20
 
@@ -88,7 +89,6 @@
   [[NSNotificationCenter defaultCenter] removeObserver:self];
   [_content release], _content = nil;
   [_webView release], _webView = nil;
-  [_navBar release], _navBar = nil;
   [_redirects release], _redirects = nil;
   [_activityView release] , _activityView = nil;
   [_closeButton release], _closeButton = nil;
@@ -127,8 +127,6 @@
       [self sizeToFitOrientation:YES];
     }
     [UIView commitAnimations];
-
-    [_webView updateOrientation:_orientation];
   }
 }
 
@@ -189,8 +187,8 @@
   CGFloat barHeight = ([[UIApplication sharedApplication] isStatusBarHidden])? 0 : 20;
   
   if (self.content.transition == PHContentTransitionModal) {
-    self.backgroundColor = [UIColor groupTableViewBackgroundColor];
-    self.opaque = YES;
+    self.backgroundColor = [UIColor clearColor];
+    self.opaque = NO;
     
     CGFloat width, height;
     if (UIInterfaceOrientationIsPortrait(_orientation)) {
@@ -201,28 +199,11 @@
       height = self.frame.size.width;
     }
     
-    
-    _navBar = [[UINavigationBar alloc] initWithFrame:CGRectMake(0, barHeight, width, 44)];
-    _navBar.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleBottomMargin;
-    
-    UINavigationItem *navItem = [[UINavigationItem alloc] initWithTitle:nil];
-    UIBarButtonItem *closeButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone
-                                                                                 target:self 
-                                                                                 action:@selector(dismissFromButton)];
-    navItem.leftBarButtonItem = closeButton;
-    [closeButton release];
-    
-    [_navBar pushNavigationItem:navItem animated:NO];
-    [navItem release];
-    
-    
-    CGFloat navBarHeight = CGRectGetMaxY(_navBar.frame); 
-    _webView = [[PHContentWebView alloc] initWithFrame:CGRectMake(0, navBarHeight, width, height - navBarHeight)];
+    _webView = [[PHContentWebView alloc] initWithFrame:CGRectMake(0, barHeight, width, height-barHeight)];
     _webView.delegate = self;
     _webView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
     _webView.layer.borderWidth = 0.0f;
     
-    [self addSubview: _navBar];
     [self addSubview:_webView];
     
     [self activityView].center = _webView.center;
@@ -316,7 +297,6 @@
 -(void)dismissView{
   [self removeFromSuperview];
   [_webView release], _webView = nil;
-  [_navBar release], _navBar = nil;
   
   [self viewDidDismiss];
 }
@@ -324,7 +304,6 @@
 -(void)dismissWithError:(NSError *)error{
   [self removeFromSuperview];
   [_webView release], _webView = nil;
-  [_navBar release], _navBar = nil;
   
   if ([self.delegate respondsToSelector:(@selector(contentView:didFailWithError:))]) {
     [self.delegate contentView:self didFailWithError:error];
@@ -354,9 +333,8 @@
     NSDictionary *queryComponents = [url queryComponents];
     NSString *callback = [queryComponents valueForKey:@"callback"];
     
-    NSPredicate *noCallbackPredicate = [NSPredicate predicateWithFormat:@"SELF != %@", @"callback"];
-    NSArray *filteredKeys = [[queryComponents allKeys] filteredArrayUsingPredicate:noCallbackPredicate];
-    NSDictionary *context = [queryComponents dictionaryWithValuesForKeys:filteredKeys];
+    NSString *contextString = [queryComponents valueForKey:@"context"];
+    NSDictionary *context = (!!contextString)?[contextString JSONValue]:nil;
     
     NSLog(@"[PHContentView] Redirecting request with callback: %@ to dispatch %@", callback, urlPath);
     switch ([[redirect methodSignature] numberOfArguments]) {
@@ -374,7 +352,7 @@
     return NO;
   }
   
-  return YES;
+  return ![[url scheme] isEqualToString:@"ph"];
 }
 
 -(void)webView:(UIWebView *)webView didFailLoadWithError:(NSError *)error{
@@ -383,8 +361,11 @@
 
 -(void)webViewDidFinishLoad:(UIWebView *)webView{
   [[self activityView] stopAnimating]; 
-  //[self showCloseButton];
-  [(PHContentWebView *)webView updateOrientation:_orientation];
+  
+  //update Webview with current PH_DISPATCH_PROTOCOL_VERSION
+  NSString *loadCommand = [NSString stringWithFormat:@"window.PlayHavenDispatchProtocolVersion = %d", PH_DISPATCH_PROTOCOL_VERSION];
+  [webView stringByEvaluatingJavaScriptFromString:loadCommand];
+  
   if ([self.delegate respondsToSelector:(@selector(contentViewDidLoad:))]) {
     [self.delegate contentViewDidLoad:self];
   }

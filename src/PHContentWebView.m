@@ -28,7 +28,6 @@
 @end
 
 @implementation PHContentWebView
-
 @synthesize isAnimating = _isAnimating;
 
 -(void)bounceInWithTarget:(id)target action:(SEL)action{
@@ -120,13 +119,5 @@
   [_target performSelector:_action];
   _isAnimating = NO;
 }
-
-#pragma mark -
--(void)updateOrientation:(UIInterfaceOrientation)orientation{
-  NSString *jsonString = (UIInterfaceOrientationIsLandscape(orientation))? @"PH_LANDSCAPE": @"PH_PORTRAIT";
-  NSString *loadContextCommand = [NSString stringWithFormat:@"PlayHaven.updateOrientation(%@)",jsonString];
-  [self stringByEvaluatingJavaScriptFromString:loadContextCommand];
-}
-
 
 @end

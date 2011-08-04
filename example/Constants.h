@@ -5,6 +5,8 @@
 //  Created by Jesus Fernandez on 4/25/11.
 //  Copyright 2011 Playhaven. All rights reserved.
 //
+#define PH_TOKEN @"DEBUG"
+#define PH_SECRET @"SECRET"
 
 #ifndef PH_TOKEN 
 #error Please define PH_TOKEN as your assigned token.

@@ -12,3 +12,4 @@
 #import "PHPublisherMetadataRequest.h"
 
 #import "PHNotificationView.h"
+#import "PHReward.h"
