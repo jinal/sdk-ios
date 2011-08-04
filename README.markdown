@@ -37,7 +37,7 @@ You may request content for your app using your API token, secret, as well as a 
 	request.showsOverlayImmediately = YES //optional, see below.
 	[request send];
 
-*NOTE:* The placement\_id *"more_games"* is available to all games in our system. You may set up additional placement_ids through the PlayHaven Developer Dashboard.
+*NOTE:* You may set placement_ids through the PlayHaven Developer Dashboard.
 
 Optionally, you may choose to show the loading overlay immediately by setting the request object's *showsOverlayImmediately* property to YES.
 
@@ -93,7 +93,7 @@ PHNotificationView provides a fully encapsulated notification view that automati
 
 	-(id)initWithApp:(NSString *)app secret:(NSString *)secret placement:(NSString *)placement;
 
-*NOTE:* The placement\_id *"more_games"* is available to all games in our system. You may set up additional placement_ids through the PlayHaven Developer Dashboard.
+*NOTE:* You may set up placement_ids through the PlayHaven Developer Dashboard.
 
 Notification view will remain anchored to the center of the position they are placed in the view, even as the size of the badge changes. You may refresh your notification view from the network using the -(void)refresh method on an instance. We recommend refreshing the notification view each time it will appear in your UI. See examples/PublisherContentViewController.m for an example.
 

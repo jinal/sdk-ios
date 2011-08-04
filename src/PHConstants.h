@@ -8,7 +8,7 @@
 
 // Constants
 #ifndef PH_BASE_URL
-#define PH_BASE_URL @"http://api.playhaven.com"
+#define PH_BASE_URL @"http://api2.playhaven.com"
 #endif
 
 
