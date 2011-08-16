@@ -64,6 +64,8 @@
            [[UIDevice currentDevice] systemName],
            [[UIDevice currentDevice] systemVersion]];
     
+    NSNumber *idiom = [NSNumber numberWithInt:(int)UI_USER_INTERFACE_IDIOM()];
+    
     
     NSMutableDictionary *additionalParams = (!!self.additionalParameters)? [self.additionalParameters mutableCopy]: [[NSMutableDictionary alloc] init];  
     NSDictionary *signatureParams = [NSDictionary dictionaryWithObjectsAndKeys:
@@ -75,6 +77,7 @@
                                      appVersion, @"app_version",
                                      hardware,@"hardware",
                                      os,@"os",
+                                     idiom,@"idiom",
                                      nil];
     
     [additionalParams addEntriesFromDictionary:signatureParams];
