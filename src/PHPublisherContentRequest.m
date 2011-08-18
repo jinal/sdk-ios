@@ -246,6 +246,23 @@ NSString *const PHPublisherContentRequestRewardSignatureKey = @"signature";
       break;
   }
   
+  //find the topmost contentView
+  PHContentView *topContentView = [self.contentViews lastObject];
+  if (!!topContentView){
+    CGRect contentFrame = [topContentView.content frameForOrientation:orientation];
+    switch (orientation) {
+      case UIInterfaceOrientationPortrait:
+        X = MIN(X, CGRectGetMaxX(contentFrame));
+        Y = MAX(Y, CGRectGetMinY(contentFrame));
+        break;
+
+      case UIInterfaceOrientationPortraitUpsideDown:
+        X = MAX(X, CGRectGetMinX(contentFrame));
+        Y = MIN(Y, CGRectGetMaxY(contentFrame));
+        break;
+    }
+  }
+  
   self.closeButton.center = CGPointMake(X, Y);
   self.closeButton.transform = [self transformForOrientation:orientation];
   
