@@ -241,7 +241,7 @@ NSString *const PHPublisherContentRequestRewardSignatureKey = @"signature";
       Y = MAX_MARGIN;
       break;
     case UIInterfaceOrientationLandscapeRight:
-      X = width - barHeight - MAX_MARGIN;
+      X = width - MAX_MARGIN;
       Y = height - MAX_MARGIN;
       break;
   }
