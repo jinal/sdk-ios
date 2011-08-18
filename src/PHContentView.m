@@ -471,7 +471,7 @@
   if (!!response) _response = [response JSONRepresentation];
   if (!!error) _error = [error JSONRepresentation];
   
-  NSString *callbackCommand = [NSString stringWithFormat:@"PlayHaven.native.callback(\"%@\",%@,%@)", _callback, _response, _error];
+  NSString *callbackCommand = [NSString stringWithFormat:@"PlayHaven.nativeAPI.callback(\"%@\",%@,%@)", _callback, _response, _error];
   [_webView stringByEvaluatingJavaScriptFromString:callbackCommand];
 }
 
