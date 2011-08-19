@@ -30,7 +30,7 @@ Adding a Cross-Promotion Widget to Your Game
 Each game is pre-configured for our Cross-Promotion Widget, which will give your game the ability to deliver quality game recommendations to your users. To integrate the Cross-Promotion Widget, you'll need to do the following:
 
 ### Record game opens
-In order to better optimize your content units, it is necessary for your app to report all game opens. This will allow us to calculate impression rates based on all game opens. This request is asynchronous and may run in the background while your game is loading.
+In order to better optimize your content units, it is necessary for your app to report all game opens. This allows you to measure the click-through rate of your Cross-Promotion Widget to help optimize the performance of your implementation. This request is asynchronous and may run in the background while your game is loading.
 
 Find a place in your code that runs when your app is launched, e.g. inside the implementation of your UIApplicationDelegate's - (void)applicationDidFinishLaunching:(NSNotification *)aNotification method, and add the following line:
 
@@ -50,8 +50,8 @@ Inside your button's event handler, use the following code to request the pre-co
 
 You will need to implement PHPublisherContentRequestDelegate methods if you would like to know when the Cross-Promotion Widget has loaded or dismissed. See "Requesting content for your placements" in the API Reference section for more information about these delegate methods as well as other things you can do with PHPublisherContentRequest.
 
-### Add a Notification View
-Adding a notification view to your "More Games" button will greatly increase the number of Cross-Promotion Widget opens for your game, by up to 300% compared to the same button without a notification view. To create a notification view:
+### Add a Notification View (Notifier Badge)
+Adding a notification view to your "More Games" button will greatly increase the number of Cross-Promotion Widget opens for your game, by up to 300%. To create a notification view:
 
     PHNotificationView *notificationView = [[PHNotificationView alloc] initWithApp:MYTOKEN secret:MYSECRET placement:@"more_games"];
     [myView addSubview:notificationView];
@@ -75,7 +75,7 @@ API Reference
 	[[PHPublisherOpenRequest requestForApp:(NSString *)token secret:(NSString *)secret] send]
 
 ### Requesting content for your placements
-You may request content for your app using your API token, secret, as well as a placement_id to identify the placement you are requesting content for. Implement PHPublisherContentRequestDelegate methods to receive callbacks from this request. Refer to the section below as well as *example/PublisherContentViewController.m* for a sample implementation.
+You may request content for your app using your API token, secret, as well as a placement tag to identify the placement you are requesting content for. Implement PHPublisherContentRequestDelegate methods to receive callbacks from this request. Refer to the section below as well as *example/PublisherContentViewController.m* for a sample implementation.
 
 	PHPublisherContentRequest *request = [PHPublisherContentRequest requestForApp:(NSString *)token secret:(NSString *)secret placement:(NSString *)placement delegate:(id)delegate];
 	request.showsOverlayImmediately = YES; //optional, see below.
@@ -83,7 +83,7 @@ You may request content for your app using your API token, secret, as well as a 
 
 *NOTE:* You may set placement_ids through the PlayHaven Developer Dashboard.
 
-Optionally, you may choose to show the loading overlay immediately by setting the request object's *showsOverlayImmediately* property to YES. This is useful if you would like keep users from interacting with your UI while the placement is loading.
+Optionally, you may choose to show the loading overlay immediately by setting the request object's *showsOverlayImmediately* property to YES. This is useful if you would like keep users from interacting with your UI while the content is loading.
 
 #### Starting a content request
 The request is about to attempt to get content from the PlayHaven API. 
@@ -122,7 +122,7 @@ Use the following request method to replace the close button image with somethin
 	-(UIImage *)request:(PHPublisherContentRequest *)request closeButtonImageForControlState:(UIControlState)state content:(PHContent *)content;
 
 ### Unlocking rewards with the SDK
-If you have configured unlockable rewards for your content units, you will receive unlock events through a delegate method. It is important to handle these unlock events in every placement that has rewards configured.
+PlayHaven allows you to reward users with virtual currency, in-game items, or any other content within your game. If you have configured unlockable rewards for your content units, you will receive unlock events through a delegate method. It is important to handle these unlock events in every placement that has rewards configured.
 
 > \-(void)request:(PHPublisherContentRequest *)request unlockedReward:(PHReward *)reward;
 
