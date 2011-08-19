@@ -51,9 +51,21 @@ Inside your button's event handler, use the following code to request the pre-co
 You will need to implement PHPublisherContentRequestDelegate methods if you would like to know when the Cross-Promotion Widget has loaded or dismissed. See "Requesting content for your placements" in the API Reference section for more information about these delegate methods as well as other things you can do with PHPublisherContentRequest.
 
 ### Add a Notification View
-Adding a notification view to your "More Games" button will greatly increase the number of Cross-Promotion Widget opens for your game, by up to 300% compared to the same button without a notification view. 
+Adding a notification view to your "More Games" button will greatly increase the number of Cross-Promotion Widget opens for your game, by up to 300% compared to the same button without a notification view. To create a notification view:
 
-See "Notifications with PHNotificationView" in the API Reference section for more information.
+    PHNotificationView *notificationView = [[PHNotificationView alloc] initWithApp:MYTOKEN secret:MYSECRET placement:@"more_games"];
+    [myView addSubview:notificationView];
+    [notificationView release];
+    
+Add the notification view as a subview somewhere in your view controller's view. Adjust the position of the badge by setting the notificationView's center property. 
+
+    notificationView.center = CGPointMake(10,10);
+
+The notification view will query and update itself when its -(void)refresh method is called.
+
+    [notificationView refresh];
+
+See "Notifications with PHNotificationView" in the API Reference section for more information about customizing the presentation of your PHNotificationView instances.
 
 API Reference
 -------------
@@ -131,10 +143,10 @@ Notification view will remain anchored to the center of the position they are pl
 
 You will also need to clear any notification view instances when you successfully launch a content unit. You may do this using the -(void)clear method on any notification views you wish to clear.
 
-### Testing PHNotificationView
+#### Testing PHNotificationView
 Most of the time the API will return an empty response, which means a notification view will not be shown. You can see a sample notification by using -(void)test; wherever you would use -(void)refresh. It has been marked as deprecated to remind you to switch all instances of -(void)test in your code to -(void)refresh;
 
-### Customizing notification rendering with PHNotificationRenderer
+#### Customizing notification rendering with PHNotificationRenderer
 PHNotificationRenderer is a base class that draws a notification view for a given notification data. The base class implements a blank notification view used for unknown notification types. PHNotificationBadgeRenderer renders a iOS default-style notification badge with a given "value" string. You may customize existing notification renderers and register new ones at runtime using the following method on PHNotificationView
 
 	+(void)setRendererClass:(Class)class forType:(NSString *)type;
