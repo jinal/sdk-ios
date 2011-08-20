@@ -8,6 +8,8 @@ An API token and secret is required to use this SDK. These tokens uniquely ident
 
 Integration
 -----------
+If you are using Unity for your game, please integrate the Unity SDK located here: https://github.com/playhaven/sdk-unity/
+
 1. Add the following from the sdk-ios directory that you downloaded or cloned from github to your project:
   * src directory  
   * PlayHaven.bundle
