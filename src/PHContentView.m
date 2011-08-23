@@ -27,7 +27,6 @@
 -(void)handleDismiss:(NSDictionary *)queryComponents;
 -(void)handleLoadContext:(NSDictionary *)queryComponents callback:(NSString*)callback;
 -(UIActivityIndicatorView *)activityView;
--(void)didBounceInWebView;
 -(void)dismissWithError:(NSError *)error;
 @end
 
@@ -240,7 +239,7 @@
     [self viewDidShow];
     
     if (animated) {
-      [_webView bounceInWithTarget:self action:@selector(didBounceInWebView)];
+      [_webView bounceInWithTarget:nil action:nil];
     }
   }
   
@@ -322,7 +321,7 @@
 
 #pragma mark -
 #pragma mark UIWebViewDelegate
--(BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType{
+-(BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType{  
   NSURL *url = request.URL;
   NSString *urlPath = [NSString stringWithFormat:@"%@://%@%@", [url scheme], [url host], [url path]];
   NSInvocation *redirect = [_redirects valueForKey:urlPath];
@@ -356,20 +355,18 @@
   [self dismissWithError:error];
 }
 
--(void)webViewDidFinishLoad:(UIWebView *)webView{
-  [[self activityView] stopAnimating]; 
-  
+-(void)webViewDidStartLoad:(UIWebView *)webView{
   //update Webview with current PH_DISPATCH_PROTOCOL_VERSION
   NSString *loadCommand = [NSString stringWithFormat:@"window.PlayHavenDispatchProtocolVersion = %d", PH_DISPATCH_PROTOCOL_VERSION];
   [webView stringByEvaluatingJavaScriptFromString:loadCommand];
+}
+
+-(void)webViewDidFinishLoad:(UIWebView *)webView{
+  [[self activityView] stopAnimating]; 
   
   if ([self.delegate respondsToSelector:(@selector(contentViewDidLoad:))]) {
     [self.delegate contentViewDidLoad:self];
   }
-}
-
--(void)didBounceInWebView{
-  //[self performSelector:@selector(showCloseButton) withObject:nil afterDelay:self.content.closeButtonDelay];
 }
 
 #pragma mark -
