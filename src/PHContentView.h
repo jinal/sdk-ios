@@ -32,8 +32,6 @@
   
   NSMutableDictionary *_redirects;
   UIActivityIndicatorView *_activityView;
-  
-  UIButton *_closeButton;
   UIView *_targetView;
 }
 
