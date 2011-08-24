@@ -37,14 +37,14 @@
     
     NSInvocation
     *dismissRedirect = [NSInvocation invocationWithMethodSignature:[[self class] instanceMethodSignatureForSelector:@selector(handleDismiss:)]],
-    *launchRedirect = [NSInvocation invocationWithMethodSignature:[[self class] instanceMethodSignatureForSelector:@selector(handleLaunch:)]],
+    *launchRedirect = [NSInvocation invocationWithMethodSignature:[[self class] instanceMethodSignatureForSelector:@selector(handleLaunch:callback:)]],
     *loadContextRedirect = [NSInvocation invocationWithMethodSignature:[[self class] instanceMethodSignatureForSelector:@selector(handleLoadContext:callback:)]];
     
     dismissRedirect.target = self;
     dismissRedirect.selector = @selector(handleDismiss:);
     
     launchRedirect.target = self;
-    launchRedirect.selector = @selector(handleLaunch:);
+    launchRedirect.selector = @selector(handleLaunch:callback:);
     
     loadContextRedirect.target = self;
     loadContextRedirect.selector = @selector(handleLoadContext:callback:);
@@ -330,7 +330,10 @@
     NSString *callback = [queryComponents valueForKey:@"callback"];
     
     NSString *contextString = [queryComponents valueForKey:@"context"];
-    NSDictionary *context = (!!contextString)?[contextString JSONValue]:nil;
+   
+    SBJsonParser *parser = [SBJsonParser new];
+    NSDictionary *context = [parser objectWithString:contextString];
+    [parser release];
     
     NSLog(@"[PHContentView] Redirecting request with callback: %@ to dispatch %@", callback, urlPath);
     switch ([[redirect methodSignature] numberOfArguments]) {
@@ -383,13 +386,15 @@
   }
 }
 
--(void)handleLaunch:(NSDictionary *)queryComponents{
+-(void)handleLaunch:(NSDictionary *)queryComponents callback:(NSString *)callback{
   NSString *urlPath = [queryComponents valueForKey:@"url"];
   if (!!urlPath && [urlPath isKindOfClass:[NSString class]]) {
-    PHURLLoaderView *view = [[PHURLLoaderView alloc] initWithTargetURLPath:urlPath];
-    view.delegate = self;
-    [view show:YES];
-    [view release];
+    PHURLLoader *loader = [[PHURLLoader alloc] init];
+    loader.targetURL = [NSURL URLWithString:urlPath];
+    loader.delegate = self;
+    loader.context = [NSDictionary dictionaryWithObject:callback forKey:@"callback"];
+    [loader open];
+    [loader release];
   }
 }
 
@@ -426,6 +431,23 @@
 #pragma mark -
 #pragma mark PHURLLoaderDelegate
 -(void)loaderFinished:(PHURLLoader *)loader{
-  [self dismissFromButton];
+  NSDictionary *contextData = (NSDictionary *)loader.context;
+  NSDictionary *responseDict = [NSDictionary dictionaryWithObjectsAndKeys:
+                                [loader.targetURL absoluteString], @"url",
+                                nil];
+  [self sendCallback:[contextData valueForKey:@"callback"]
+        withResponse:responseDict 
+               error:nil];
+}
+
+-(void)loaderFailed:(PHURLLoader *)loader{
+  NSDictionary *contextData = (NSDictionary *)loader.context;
+  NSDictionary *responseDict = [NSDictionary dictionaryWithObjectsAndKeys:
+                                [loader.targetURL absoluteString], @"url",
+                                nil];
+  NSDictionary *errorDict = [NSDictionary dictionaryWithObject:@"1" forKey:@"error"];
+  [self sendCallback:[contextData valueForKey:@"callback"]
+        withResponse:responseDict 
+               error:errorDict];
 }
 @end
