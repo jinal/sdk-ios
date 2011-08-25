@@ -16,9 +16,9 @@ If your publisher token has a colon (":") character in it, you will need to get 
 
 Content Units
 -------------
-### "If I don't set up any content units on a placement I'm requesting, 	_-request:didFailWithError:_ is executed."
+### "If I don't set up any content units on a placement I'm requesting, the request error delegate( _-request:didFailWithError:_ ) is called."
 
-The SDK uses the error delegate on any content request that doesn't produce a valid content unit. Your app will need to accomodate this behavior if you are planning on having placements that will only sometimes have content units assigned to them.
+The SDK calls the request error delegate on any content request that doesn't produce a valid content unit. Your app will need to accomodate this behavior if you are planning on having placements that will only sometimes have content units assigned to them.
 
 ### "When I'm showing a content unit, the close button seems to be invisible."
 - Did you include PlayHaven.bundle?
