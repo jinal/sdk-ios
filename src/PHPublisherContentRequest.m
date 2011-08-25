@@ -23,8 +23,9 @@ NSString *const PHPublisherContentRequestRewardSignatureKey = @"signature";
 
 @interface PHPublisherContentRequest()
 -(CGAffineTransform) transformForOrientation:(UIInterfaceOrientation)orientation;
--(void)showCloseButton;
+-(void)placeCloseButton;
 -(void)hideCloseButton;
+-(void)showCloseButtonBecauseOfTimeout;
 
 @property (nonatomic, readonly) UIButton *closeButton;
 @end
@@ -79,6 +80,7 @@ NSString *const PHPublisherContentRequestRewardSignatureKey = @"signature";
   if (_closeButton == nil) {
     _closeButton = [[UIButton buttonWithType:UIButtonTypeCustom] retain];
     _closeButton.frame = CGRectMake(0, 0, 40, 40);
+    _closeButton.hidden = YES;
     
     UIImage
     *closeImage = [self contentView:nil imageForCloseButtonState:UIControlStateNormal],
@@ -94,6 +96,10 @@ NSString *const PHPublisherContentRequestRewardSignatureKey = @"signature";
   }
   
   return _closeButton;
+}
+
+-(void)showCloseButtonBecauseOfTimeout{
+  self.closeButton.hidden = NO;
 }
 
 -(NSString *)urlPath{
@@ -125,7 +131,7 @@ NSString *const PHPublisherContentRequestRewardSignatureKey = @"signature";
     }
     
     [[[UIApplication sharedApplication] keyWindow] addSubview:self.overlayView];
-    [self showCloseButton];
+    [self placeCloseButton];
     
     [self pushContent:content];
     [self retain];
@@ -152,7 +158,8 @@ NSString *const PHPublisherContentRequestRewardSignatureKey = @"signature";
   
   if(self.showsOverlayImmediately){
     [[[UIApplication sharedApplication] keyWindow] addSubview:self.overlayView];
-    [self showCloseButton];
+    [self placeCloseButton];
+    [self performSelector:@selector(showCloseButtonBecauseOfTimeout) withObject:nil afterDelay:4.0];
   }
 }
 
@@ -208,15 +215,16 @@ NSString *const PHPublisherContentRequestRewardSignatureKey = @"signature";
   
   [contentView release];
   
-  [self showCloseButton];
+  [self placeCloseButton];
+  [PHPublisherContentRequest cancelPreviousPerformRequestsWithTarget:self selector:@selector(showCloseButtonBecauseOfTimeout) object:nil];
 }
 
--(void)showCloseButton{
+-(void)placeCloseButton{
   if ([_closeButton superview] == nil) {   
     //TRACK_ORIENTATION see STOP_TRACK_ORIENTATION
     [[NSNotificationCenter defaultCenter] 
      addObserver:self
-     selector:@selector(showCloseButton) 
+     selector:@selector(placeCloseButton) 
      name:UIDeviceOrientationDidChangeNotification
      object:nil];
     
@@ -246,6 +254,33 @@ NSString *const PHPublisherContentRequestRewardSignatureKey = @"signature";
       break;
   }
   
+  //find the topmost contentView
+  PHContentView *topContentView = [self.contentViews lastObject];
+  if (!!topContentView){
+    CGRect contentFrame = [topContentView.content frameForOrientation:orientation];
+    switch (orientation) {
+      case UIInterfaceOrientationPortrait:
+        X = MIN(X, CGRectGetMaxX(contentFrame));
+        Y = MAX(Y, CGRectGetMinY(contentFrame) + barHeight);
+        break;
+        
+      case UIInterfaceOrientationPortraitUpsideDown:
+        X = MAX(X, width - CGRectGetMaxX(contentFrame));
+        Y = MIN(Y, height - CGRectGetMinY(contentFrame));
+        break;
+
+      case UIInterfaceOrientationLandscapeLeft:
+        X = MAX(X, CGRectGetMinY(contentFrame) + barHeight);
+        Y = MAX(Y, height - CGRectGetMaxX(contentFrame));
+        break;
+
+      case UIInterfaceOrientationLandscapeRight:
+        X = MIN(X, width - CGRectGetMinY(contentFrame));
+        Y = MIN(Y, CGRectGetMaxX(contentFrame));
+        break;
+    }
+  }
+  
   self.closeButton.center = CGPointMake(X, Y);
   self.closeButton.transform = [self transformForOrientation:orientation];
   
@@ -253,8 +288,9 @@ NSString *const PHPublisherContentRequestRewardSignatureKey = @"signature";
 }
 
 -(void)hideCloseButton{
-  [_closeButton removeFromSuperview];
+  [PHPublisherContentRequest cancelPreviousPerformRequestsWithTarget:self selector:@selector(showCloseButtonBecauseOfTimeout) object:nil];
   [[NSNotificationCenter defaultCenter] removeObserver:self name:UIDeviceOrientationDidChangeNotification object:nil];
+  [_closeButton removeFromSuperview];
 }
 
 -(void)dismissFromButton{

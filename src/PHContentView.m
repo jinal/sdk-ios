@@ -27,9 +27,6 @@
 -(void)handleDismiss:(NSDictionary *)queryComponents;
 -(void)handleLoadContext:(NSDictionary *)queryComponents callback:(NSString*)callback;
 -(UIActivityIndicatorView *)activityView;
--(void)didBounceInWebView;
--(void)showCloseButton;
--(void)hideCloseButton;
 -(void)dismissWithError:(NSError *)error;
 @end
 
@@ -40,14 +37,14 @@
     
     NSInvocation
     *dismissRedirect = [NSInvocation invocationWithMethodSignature:[[self class] instanceMethodSignatureForSelector:@selector(handleDismiss:)]],
-    *launchRedirect = [NSInvocation invocationWithMethodSignature:[[self class] instanceMethodSignatureForSelector:@selector(handleLaunch:)]],
+    *launchRedirect = [NSInvocation invocationWithMethodSignature:[[self class] instanceMethodSignatureForSelector:@selector(handleLaunch:callback:)]],
     *loadContextRedirect = [NSInvocation invocationWithMethodSignature:[[self class] instanceMethodSignatureForSelector:@selector(handleLoadContext:callback:)]];
     
     dismissRedirect.target = self;
     dismissRedirect.selector = @selector(handleDismiss:);
     
     launchRedirect.target = self;
-    launchRedirect.selector = @selector(handleLaunch:);
+    launchRedirect.selector = @selector(handleLaunch:callback:);
     
     loadContextRedirect.target = self;
     loadContextRedirect.selector = @selector(handleLoadContext:callback:);
@@ -91,7 +88,6 @@
   [_webView release], _webView = nil;
   [_redirects release], _redirects = nil;
   [_activityView release] , _activityView = nil;
-  [_closeButton release], _closeButton = nil;
   [super dealloc];
 }
 
@@ -113,7 +109,6 @@
       _webView.frame = contentFrame;
       
       [self sizeToFitOrientation:YES];
-      [self hideCloseButton];
     }
     
     
@@ -244,7 +239,7 @@
     [self viewDidShow];
     
     if (animated) {
-      [_webView bounceInWithTarget:self action:@selector(didBounceInWebView)];
+      [_webView bounceInWithTarget:nil action:nil];
     }
   }
   
@@ -311,6 +306,7 @@
 }
 
 -(void) viewDidShow{
+  //NSLog(@"Loading content unit template: %@", self.content.URL);
   [_webView loadRequest:[NSURLRequest requestWithURL:self.content.URL]];
   if ([self.delegate respondsToSelector:(@selector(contentViewDidShow:))]) {
     [self.delegate contentViewDidShow:self];
@@ -325,7 +321,7 @@
 
 #pragma mark -
 #pragma mark UIWebViewDelegate
--(BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType{
+-(BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType{  
   NSURL *url = request.URL;
   NSString *urlPath = [NSString stringWithFormat:@"%@://%@%@", [url scheme], [url host], [url path]];
   NSInvocation *redirect = [_redirects valueForKey:urlPath];
@@ -334,7 +330,10 @@
     NSString *callback = [queryComponents valueForKey:@"callback"];
     
     NSString *contextString = [queryComponents valueForKey:@"context"];
-    NSDictionary *context = (!!contextString)?[contextString JSONValue]:nil;
+   
+    SBJsonParser *parser = [SBJsonParser new];
+    NSDictionary *context = [parser objectWithString:contextString];
+    [parser release];
     
     NSLog(@"[PHContentView] Redirecting request with callback: %@ to dispatch %@", callback, urlPath);
     switch ([[redirect methodSignature] numberOfArguments]) {
@@ -359,67 +358,18 @@
   [self dismissWithError:error];
 }
 
--(void)webViewDidFinishLoad:(UIWebView *)webView{
-  [[self activityView] stopAnimating]; 
-  
+-(void)webViewDidStartLoad:(UIWebView *)webView{
   //update Webview with current PH_DISPATCH_PROTOCOL_VERSION
   NSString *loadCommand = [NSString stringWithFormat:@"window.PlayHavenDispatchProtocolVersion = %d", PH_DISPATCH_PROTOCOL_VERSION];
   [webView stringByEvaluatingJavaScriptFromString:loadCommand];
+}
+
+-(void)webViewDidFinishLoad:(UIWebView *)webView{
+  [[self activityView] stopAnimating]; 
   
   if ([self.delegate respondsToSelector:(@selector(contentViewDidLoad:))]) {
     [self.delegate contentViewDidLoad:self];
   }
-}
-
--(void)didBounceInWebView{
-  //[self performSelector:@selector(showCloseButton) withObject:nil afterDelay:self.content.closeButtonDelay];
-}
-
--(void)showCloseButton{
-  if (self.content.transition == PHContentTransitionDialog) {
-    [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(showCloseButton) object:nil];
-    
-    if (_closeButton == nil) {
-      _closeButton = [[UIButton buttonWithType:UIButtonTypeCustom] retain];
-      _closeButton.frame = CGRectMake(0, 0, 40, 40);
-      
-      UIImage *closeImage = nil, *closeActiveImage = nil;
-      if ([self.delegate respondsToSelector:@selector(contentView:imageForCloseButtonState:)]) {
-        closeImage = [self.delegate contentView:self imageForCloseButtonState:UIControlStateNormal];
-        closeActiveImage = [self.delegate contentView:self imageForCloseButtonState:UIControlStateHighlighted];
-      }
-      closeImage = (!closeImage)? [UIImage imageNamed:@"PlayHaven.bundle/images/close.png"] : closeImage;
-      closeActiveImage = (!closeActiveImage)?[UIImage imageNamed:@"PlayHaven.bundle/images/close-active.png"]: closeActiveImage;
-      
-      [_closeButton setImage:closeImage forState:UIControlStateNormal];
-      [_closeButton setImage:closeActiveImage forState:UIControlStateHighlighted];
-      
-      [_closeButton addTarget:self action:@selector(dismissFromButton) forControlEvents:UIControlEventTouchUpInside];
-      
-    }
-    
-    UIInterfaceOrientation orientation = [UIApplication sharedApplication].statusBarOrientation;
-    CGFloat barHeight = ([[UIApplication sharedApplication] isStatusBarHidden])? 0 : 20;\
-    CGRect contentFrame = CGRectOffset([self.content frameForOrientation:orientation], 0, barHeight);
-
-    CGRect screen = [[UIScreen mainScreen] applicationFrame];
-    CGFloat maxWidth = (UIInterfaceOrientationIsLandscape(orientation))? screen.size.height : screen.size.width;
-    
-    CGFloat
-      x = CGRectGetMaxX(contentFrame),
-      y = CGRectGetMinY(contentFrame),
-      maxX = maxWidth - MAX_MARGIN,
-      minY = MAX_MARGIN + barHeight;
-    
-    _closeButton.center = CGPointMake(MIN(x, maxX), MAX(y, minY));
-    
-    [self addSubview:_closeButton];
-
-  }
-}
-
--(void)hideCloseButton{
-  [_closeButton removeFromSuperview];
 }
 
 #pragma mark -
@@ -436,13 +386,15 @@
   }
 }
 
--(void)handleLaunch:(NSDictionary *)queryComponents{
+-(void)handleLaunch:(NSDictionary *)queryComponents callback:(NSString *)callback{
   NSString *urlPath = [queryComponents valueForKey:@"url"];
   if (!!urlPath && [urlPath isKindOfClass:[NSString class]]) {
-    PHURLLoaderView *view = [[PHURLLoaderView alloc] initWithTargetURLPath:urlPath];
-    view.delegate = self;
-    [view show:YES];
-    [view release];
+    PHURLLoader *loader = [[PHURLLoader alloc] init];
+    loader.targetURL = [NSURL URLWithString:urlPath];
+    loader.delegate = self;
+    loader.context = [NSDictionary dictionaryWithObject:callback forKey:@"callback"];
+    [loader open];
+    [loader release];
   }
 }
 
@@ -471,13 +423,31 @@
   if (!!response) _response = [response JSONRepresentation];
   if (!!error) _error = [error JSONRepresentation];
   
-  NSString *callbackCommand = [NSString stringWithFormat:@"PlayHaven.nativeAPI.callback(\"%@\",%@,%@)", _callback, _response, _error];
-  [_webView stringByEvaluatingJavaScriptFromString:callbackCommand];
+  NSString *callbackCommand = [NSString stringWithFormat:@"var PlayHavenAPICallback = (window[\"PlayHavenAPICallback\"])? PlayHavenAPICallback : function(c,r,e){try{PlayHaven.nativeAPI.callback(c,r,e);return \"OK\";}catch(err){ return JSON.stringify(err);}}; PlayHavenAPICallback(\"%@\",%@,%@)", _callback, _response, _error];
+  NSString *callbackResponse = [_webView stringByEvaluatingJavaScriptFromString:callbackCommand];
+  NSLog(@"callback response: %@", callbackResponse);
 }
 
 #pragma mark -
 #pragma mark PHURLLoaderDelegate
 -(void)loaderFinished:(PHURLLoader *)loader{
-  [self dismissFromButton];
+  NSDictionary *contextData = (NSDictionary *)loader.context;
+  NSDictionary *responseDict = [NSDictionary dictionaryWithObjectsAndKeys:
+                                [loader.targetURL absoluteString], @"url",
+                                nil];
+  [self sendCallback:[contextData valueForKey:@"callback"]
+        withResponse:responseDict 
+               error:nil];
+}
+
+-(void)loaderFailed:(PHURLLoader *)loader{
+  NSDictionary *contextData = (NSDictionary *)loader.context;
+  NSDictionary *responseDict = [NSDictionary dictionaryWithObjectsAndKeys:
+                                [loader.targetURL absoluteString], @"url",
+                                nil];
+  NSDictionary *errorDict = [NSDictionary dictionaryWithObject:@"1" forKey:@"error"];
+  [self sendCallback:[contextData valueForKey:@"callback"]
+        withResponse:responseDict 
+               error:errorDict];
 }
 @end

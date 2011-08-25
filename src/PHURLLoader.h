@@ -21,6 +21,7 @@
   NSURL *_targetURL;
   NSInteger _totalRedirects;
   BOOL _opensFinalURLOnDevice;
+  id _context;
 }
 
 +(PHURLLoader *)openDeviceURL:(NSString*)url;
@@ -28,6 +29,7 @@
 @property (nonatomic, assign) id <PHURLLoaderDelegate> delegate;
 @property (nonatomic, retain) NSURL *targetURL;
 @property (nonatomic, assign) BOOL opensFinalURLOnDevice;
+@property (nonatomic, retain) id context;
 
 -(void)open;
 @end
