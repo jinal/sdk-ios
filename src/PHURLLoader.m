@@ -19,6 +19,7 @@
 @synthesize delegate = _delegate;
 @synthesize targetURL = _targetURL;
 @synthesize opensFinalURLOnDevice = _opensFinalURLOnDevice;
+@synthesize context = _context;
 
 #pragma mark -
 #pragma mark Static
@@ -47,6 +48,7 @@
   
   [_connection cancel];
   [_connection release], _connection = nil;
+  [_context release], _context = nil;
   
   [super dealloc];
 }

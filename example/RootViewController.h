@@ -12,5 +12,6 @@
 
 }
 
+-(void)touchedToggleStatusBar:(id)sender;
 
 @end

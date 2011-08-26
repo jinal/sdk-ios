@@ -19,9 +19,10 @@
 //   1: GET request with dispatch parameter keys and values in query string
 //   2: GET request with dispatch parameters encoded as a single JSON string 
 //      in query string. Rewards support requires this setting.
-// * 3: Unknown dispatches are ignored instead of throwing an error
+//   3: Unknown dispatches are ignored instead of throwing an error
+// * 4: ph://launch dispatches no longer create native spinner views
 
-#define PH_DISPATCH_PROTOCOL_VERSION 3
+#define PH_DISPATCH_PROTOCOL_VERSION 4
 
 
 // Macros

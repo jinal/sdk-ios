@@ -63,6 +63,9 @@
     *os = [NSString stringWithFormat:@"%@ %@",
            [[UIDevice currentDevice] systemName],
            [[UIDevice currentDevice] systemVersion]];
+    if(!appVersion) appVersion = @"NA";
+    
+    NSNumber *idiom = [NSNumber numberWithInt:(int)UI_USER_INTERFACE_IDIOM()];
     
     
     NSMutableDictionary *additionalParams = (!!self.additionalParameters)? [self.additionalParameters mutableCopy]: [[NSMutableDictionary alloc] init];  
@@ -72,9 +75,10 @@
                                      signature, @"signature",
                                      nonce, @"nonce",
                                      appId, @"app",
-                                     appVersion, @"app_version",
                                      hardware,@"hardware",
                                      os,@"os",
+                                     idiom,@"idiom",
+                                     appVersion, @"app_version",
                                      nil];
     
     [additionalParams addEntriesFromDictionary:signatureParams];

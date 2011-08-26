@@ -20,6 +20,23 @@
 {
   [super viewDidLoad];
   self.title = @"PlayHaven";
+  
+  UIBarButtonItem *toggleButton = [[UIBarButtonItem alloc] initWithTitle:@"Toggle" style:UIBarButtonItemStyleBordered target:self action:@selector(touchedToggleStatusBar:)];
+  self.navigationItem.rightBarButtonItem = toggleButton;
+  [toggleButton release];
+}
+
+-(void)touchedToggleStatusBar:(id)sender{
+  BOOL statusBarHidden = [[UIApplication sharedApplication] isStatusBarHidden];
+  
+  if ([[UIApplication sharedApplication] respondsToSelector:@selector(setStatusBarHidden:withAnimation:)]) {
+    [[UIApplication sharedApplication] setStatusBarHidden:!statusBarHidden withAnimation:UIStatusBarAnimationSlide];
+  } else {
+    [[UIApplication sharedApplication] setStatusBarHidden:!statusBarHidden animated:YES];    
+  }
+  
+  [self.navigationController setNavigationBarHidden:!self.navigationController.navigationBarHidden animated:NO];
+  [self.navigationController setNavigationBarHidden:!self.navigationController.navigationBarHidden animated:NO];
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
