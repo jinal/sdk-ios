@@ -83,6 +83,7 @@ static NSMutableDictionary *RendererMap;
 }
 
 -(void)dealloc{
+  [_request setDelegate:nil];
   [self removeObserver:self forKeyPath:@"notificationData"];
   
   [_app release],_app = nil;
@@ -94,15 +95,19 @@ static NSMutableDictionary *RendererMap;
 }
 
 -(void)refresh{
-  PHPublisherMetadataRequest *request = [PHPublisherMetadataRequest requestForApp:_app secret:_secret placement:_placement delegate:self];
-  [request send];
+  if (!_request) {
+    _request = [PHPublisherMetadataRequest requestForApp:_app secret:_secret placement:_placement delegate:self];
+    [_request send];
+  }
 }
 
 -(void)request:(PHAPIRequest *)request didSucceedWithResponse:(NSDictionary *)responseData{
+  _request = nil;
   self.notificationData = [responseData valueForKey:@"notification"];
 }
 
 -(void)request:(PHAPIRequest *)request didFailWithError:(NSError *)error{
+  _request = nil;
   self.notificationData = nil;
 }
 
@@ -119,6 +124,11 @@ static NSMutableDictionary *RendererMap;
 }
 
 -(void)clear{
+  if (!!_request) {
+    _request.delegate = nil;
+    _request = nil;
+  }
+  
   self.notificationData = nil;
 }
 

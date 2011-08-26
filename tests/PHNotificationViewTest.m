@@ -13,6 +13,11 @@
 @interface PHNotificationViewTest : SenTestCase
 @end
 
+@interface PHNotificationViewDeallocTest : SenTestCase{
+  PHNotificationView *_notificationView;
+}
+@end
+
 
 @implementation PHNotificationViewTest
 
@@ -20,6 +25,19 @@
   PHNotificationView *notificationView = [[PHNotificationView alloc]initWithApp:@"" secret:@"" placement:@""];
   STAssertNotNil(notificationView, @"expected notification view instance, got nil");
   STAssertTrue([notificationView respondsToSelector:@selector(refresh)], @"refresh method not present");
+}
+
+@end
+
+
+@implementation PHNotificationViewDeallocTest
+-(void)setUp{
+  _notificationView = [[PHNotificationView alloc] initWithApp:@"TOKEN" secret:@"SECRET" placement:@"more_games"];
+  [_notificationView refresh];
+}
+
+-(void)testRelease{
+  [_notificationView release];
 }
 
 @end

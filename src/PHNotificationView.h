@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "PHAPIRequest.h"
 @class PHNotificationRenderer;
+@class PHPublisherMetadataRequest;
 
 @interface PHNotificationView : UIView<PHAPIRequestDelegate>{
   NSString *_app;
@@ -17,6 +18,7 @@
   
   NSDictionary *_notificationData;
   PHNotificationRenderer *_notificationRenderer;
+  PHPublisherMetadataRequest *_request;
 }
 
 +(void)setRendererClass:(Class)rendererClass forType:(NSString *)type;
