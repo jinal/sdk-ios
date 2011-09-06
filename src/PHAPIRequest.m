@@ -136,11 +136,11 @@
       [_connectionData release], _connectionData = [[NSMutableData alloc] init];
       [_response release], _response = [response retain];
     } else {
+      [connection cancel];
       NSError *error = [NSError errorWithDomain:@"PHAPIRequest" 
                                            code:[httpResponse statusCode] 
                                        userInfo:nil];
-      [self didFailWithError:error];
-      [connection cancel];
+      [self connection:nil didFailWithError:error];
     }
   } else {
     [_connectionData release], _connectionData = [[NSMutableData alloc] init];
