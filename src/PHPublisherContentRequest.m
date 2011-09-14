@@ -159,8 +159,9 @@ NSString *const PHPublisherContentRequestRewardSignatureKey = @"signature";
   if(self.showsOverlayImmediately){
     [[[UIApplication sharedApplication] keyWindow] addSubview:self.overlayView];
     [self placeCloseButton];
-    [self performSelector:@selector(showCloseButtonBecauseOfTimeout) withObject:nil afterDelay:4.0];
   }
+  
+  [self performSelector:@selector(showCloseButtonBecauseOfTimeout) withObject:nil afterDelay:4.0];
 }
 
 #pragma mark -
