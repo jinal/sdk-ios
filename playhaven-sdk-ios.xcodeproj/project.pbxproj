@@ -49,6 +49,7 @@
 		EA12AC3F13662DC400CB2F24 /* PublisherOpenViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EA12AC3E13662DC400CB2F24 /* PublisherOpenViewController.m */; };
 		EA12AC451366339D00CB2F24 /* PublisherContentViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EA12AC441366339D00CB2F24 /* PublisherContentViewController.m */; };
 		EA1799E014200FAE005F286F /* PHConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = EA1799DF14200FAE005F286F /* PHConstants.m */; };
+		EA21F69D14215EAD00A4177E /* PHConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = EA1799DF14200FAE005F286F /* PHConstants.m */; };
 		EA4ABA11135F859D0062AE77 /* UIDevice+HardwareString.m in Sources */ = {isa = PBXBuildFile; fileRef = EA4ABA0F135F859D0062AE77 /* UIDevice+HardwareString.m */; };
 		EA4C1912134E84D300755983 /* PHURLLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = EA4C1910134E84D300755983 /* PHURLLoader.m */; };
 		EA4C1916134E8D6200755983 /* PHURLLoaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = EA4C1914134E8D6200755983 /* PHURLLoaderView.m */; };
@@ -569,6 +570,7 @@
 				EA03811B13B298AF00A31FF7 /* PHNotificationRenderer.m in Sources */,
 				EA03811F13B2A0F200A31FF7 /* PHNotificationBadgeRenderer.m in Sources */,
 				EA523DD6134403AF0057DEA5 /* PHPublisherContentRequestTest.m in Sources */,
+				EA21F69D14215EAD00A4177E /* PHConstants.m in Sources */,
 				EAB2B44713CBD172006D2391 /* PHReward.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
