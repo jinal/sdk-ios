@@ -429,7 +429,7 @@
   if ([callbackResponse isEqualToString:@"OK"]) {
     return YES;
   } else {
-    NSLog(@"[Oops!] A content template callback failed. If this is a recurring issue, please include this console message along with the following information in your support request: %@", callbackResponse);
+    NSLog(@"[PlayHaven] content template callback failed. If this is a recurring issue, please include this console message along with the following information in your support request: %@", callbackResponse);
     return NO;
   }
 }
