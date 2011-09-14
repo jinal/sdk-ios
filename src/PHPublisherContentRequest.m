@@ -10,9 +10,9 @@
 #import "PHPublisherSubContentRequest.h"
 #import "PHContent.h"
 #import "PHConstants.h"
-#import "NSObject+SBJSON.h"
 #import "PHStringUtil.h"
 #import "PHReward.h"
+#import "JSON.h"
 
 NSString *const PHPublisherContentRequestRewardIDKey = @"reward";
 NSString *const PHPublisherContentRequestRewardQuantityKey = @"quantity";

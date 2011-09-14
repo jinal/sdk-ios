@@ -418,8 +418,15 @@
 -(BOOL)sendCallback:(NSString *)callback withResponse:(id)response error:(id)error{
   NSString *_callback = @"null", *_response = @"null", *_error = @"null";
   if (!!callback) _callback = callback;
-  if (!!response) _response = [response JSONRepresentation];
-  if (!!error) _error = [error JSONRepresentation];
+  
+  SBJsonWriter *jsonWriter = [SBJsonWriter new];
+  if (!!response) {
+    _response = [jsonWriter stringWithObject:response];
+  }
+  if (!!error) {
+    _error = [jsonWriter stringWithObject:error];
+  }
+  [jsonWriter release];
   
   NSString *callbackCommand = [NSString stringWithFormat:@"var PlayHavenAPICallback = (window[\"PlayHavenAPICallback\"])? PlayHavenAPICallback : function(c,r,e){try{PlayHaven.nativeAPI.callback(c,r,e);return \"OK\";}catch(err){ return JSON.stringify(err);}}; PlayHavenAPICallback(\"%@\",%@,%@)", _callback, _response, _error];
   NSString *callbackResponse = [_webView stringByEvaluatingJavaScriptFromString:callbackCommand];
