@@ -48,6 +48,7 @@
 		EA12AC3C13662AD700CB2F24 /* ExampleViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EA12AC3B13662AD700CB2F24 /* ExampleViewController.m */; };
 		EA12AC3F13662DC400CB2F24 /* PublisherOpenViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EA12AC3E13662DC400CB2F24 /* PublisherOpenViewController.m */; };
 		EA12AC451366339D00CB2F24 /* PublisherContentViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EA12AC441366339D00CB2F24 /* PublisherContentViewController.m */; };
+		EA1799E014200FAE005F286F /* PHConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = EA1799DF14200FAE005F286F /* PHConstants.m */; };
 		EA4ABA11135F859D0062AE77 /* UIDevice+HardwareString.m in Sources */ = {isa = PBXBuildFile; fileRef = EA4ABA0F135F859D0062AE77 /* UIDevice+HardwareString.m */; };
 		EA4C1912134E84D300755983 /* PHURLLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = EA4C1910134E84D300755983 /* PHURLLoader.m */; };
 		EA4C1916134E8D6200755983 /* PHURLLoaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = EA4C1914134E8D6200755983 /* PHURLLoaderView.m */; };
@@ -113,6 +114,7 @@
 		EA12AC441366339D00CB2F24 /* PublisherContentViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PublisherContentViewController.m; sourceTree = "<group>"; };
 		EA12AC46136635F600CB2F24 /* Constants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Constants.h; sourceTree = "<group>"; };
 		EA14C6611342604000E228E0 /* Unit Tests.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Unit Tests.octest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		EA1799DF14200FAE005F286F /* PHConstants.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PHConstants.m; sourceTree = "<group>"; };
 		EA4ABA0E135F859D0062AE77 /* UIDevice+HardwareString.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIDevice+HardwareString.h"; sourceTree = "<group>"; };
 		EA4ABA0F135F859D0062AE77 /* UIDevice+HardwareString.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIDevice+HardwareString.m"; sourceTree = "<group>"; };
 		EA4C190F134E84D300755983 /* PHURLLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PHURLLoader.h; sourceTree = "<group>"; };
@@ -302,6 +304,7 @@
 				EA4C1913134E8D6200755983 /* PHURLLoaderView.h */,
 				EA4C1914134E8D6200755983 /* PHURLLoaderView.m */,
 				EAB19C8C1357BA390067F27A /* PHConstants.h */,
+				EA1799DF14200FAE005F286F /* PHConstants.m */,
 				EA6031CD1361FFD6007B2BF5 /* PlayHavenSDK.h */,
 			);
 			name = Common;
@@ -529,6 +532,7 @@
 				EA03811C13B298AF00A31FF7 /* PHNotificationRenderer.m in Sources */,
 				EA03812013B2A0F200A31FF7 /* PHNotificationBadgeRenderer.m in Sources */,
 				EAB2B44813CBD172006D2391 /* PHReward.m in Sources */,
+				EA1799E014200FAE005F286F /* PHConstants.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

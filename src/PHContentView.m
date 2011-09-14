@@ -95,9 +95,7 @@
   UIInterfaceOrientation orientation = [UIApplication sharedApplication].statusBarOrientation;
   if (orientation != _orientation) {
     if (CGRectIsNull([self.content frameForOrientation:orientation])) {
-      //this is an invalid frame and we should dismiss immediately!
-      NSError *error = [NSError errorWithDomain:@"PHOrientation" code:500 userInfo:nil];
-      [self dismissWithError:error];
+      [self dismissWithError:PHCreateError(PHOrientationErrorType)];
       return;
     }
 
@@ -174,8 +172,7 @@
   
   if (CGRectIsNull([self.content frameForOrientation:_orientation])) {
     //this is an invalid frame and we should dismiss immediately!
-    NSError *error = [NSError errorWithDomain:@"PHOrientation" code:500 userInfo:nil];
-    [self dismissWithError:error];
+    [self dismissWithError:PHCreateError(PHOrientationErrorType)];
     return;
   }
   
