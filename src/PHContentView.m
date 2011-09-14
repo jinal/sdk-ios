@@ -95,9 +95,7 @@
   UIInterfaceOrientation orientation = [UIApplication sharedApplication].statusBarOrientation;
   if (orientation != _orientation) {
     if (CGRectIsNull([self.content frameForOrientation:orientation])) {
-      //this is an invalid frame and we should dismiss immediately!
-      NSError *error = [NSError errorWithDomain:@"PHOrientation" code:500 userInfo:nil];
-      [self dismissWithError:error];
+      [self dismissWithError:PHCreateError(PHOrientationErrorType)];
       return;
     }
 
@@ -174,8 +172,7 @@
   
   if (CGRectIsNull([self.content frameForOrientation:_orientation])) {
     //this is an invalid frame and we should dismiss immediately!
-    NSError *error = [NSError errorWithDomain:@"PHOrientation" code:500 userInfo:nil];
-    [self dismissWithError:error];
+    [self dismissWithError:PHCreateError(PHOrientationErrorType)];
     return;
   }
   
@@ -225,7 +222,6 @@
     _webView = [[PHContentWebView alloc] initWithFrame:contentFrame];
     _webView.layer.borderColor = [[UIColor blackColor] CGColor];
     _webView.layer.borderWidth = 1.0f;
-    
     
     if ([self.delegate respondsToSelector:@selector(borderColorForContentView:)]) {
       _webView.layer.borderColor = [[self.delegate borderColorForContentView:self] CGColor];
@@ -413,19 +409,34 @@
 }
 
 -(void)handleLoadContext:(NSDictionary *)queryComponents callback:(NSString*)callback{
-  [self sendCallback:callback withResponse:self.content.context error:nil];
+  if(![self sendCallback:callback withResponse:self.content.context error:nil]){
+    [self dismissWithError:PHCreateError(PHLoadContextErrorType)];
+  };
 }
 
 #pragma mark - callbacks
--(void)sendCallback:(NSString *)callback withResponse:(id)response error:(id)error{
+-(BOOL)sendCallback:(NSString *)callback withResponse:(id)response error:(id)error{
   NSString *_callback = @"null", *_response = @"null", *_error = @"null";
   if (!!callback) _callback = callback;
-  if (!!response) _response = [response JSONRepresentation];
-  if (!!error) _error = [error JSONRepresentation];
+  
+  SBJsonWriter *jsonWriter = [SBJsonWriter new];
+  if (!!response) {
+    _response = [jsonWriter stringWithObject:response];
+  }
+  if (!!error) {
+    _error = [jsonWriter stringWithObject:error];
+  }
+  [jsonWriter release];
   
   NSString *callbackCommand = [NSString stringWithFormat:@"var PlayHavenAPICallback = (window[\"PlayHavenAPICallback\"])? PlayHavenAPICallback : function(c,r,e){try{PlayHaven.nativeAPI.callback(c,r,e);return \"OK\";}catch(err){ return JSON.stringify(err);}}; PlayHavenAPICallback(\"%@\",%@,%@)", _callback, _response, _error];
   NSString *callbackResponse = [_webView stringByEvaluatingJavaScriptFromString:callbackCommand];
-  NSLog(@"callback response: %@", callbackResponse);
+  
+  if ([callbackResponse isEqualToString:@"OK"]) {
+    return YES;
+  } else {
+    NSLog(@"[PlayHaven] content template callback failed. If this is a recurring issue, please include this console message along with the following information in your support request: %@", callbackResponse);
+    return NO;
+  }
 }
 
 #pragma mark -

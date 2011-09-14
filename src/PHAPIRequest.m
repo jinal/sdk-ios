@@ -12,6 +12,7 @@
 #import "PHStringUtil.h"
 #import "SBJsonParser.h"
 #import "UIDevice+HardwareString.h"
+#import "PHConstants.h"
 
 @implementation PHAPIRequest
 
@@ -136,10 +137,7 @@
       [_connectionData release], _connectionData = [[NSMutableData alloc] init];
       [_response release], _response = [response retain];
     } else {
-      NSError *error = [NSError errorWithDomain:@"PHAPIRequest" 
-                                           code:[httpResponse statusCode] 
-                                       userInfo:nil];
-      [self didFailWithError:error];
+      [self didFailWithError:PHCreateError(PHAPIResponseErrorType)];
       [connection cancel];
     }
   } else {
@@ -181,12 +179,8 @@
   id responseValue = [responseData valueForKey:@"response"];
   if (!!responseValue && ![responseValue isEqual:[NSNull null]]) {
     [self didSucceedWithResponse:responseValue];
-  } else {
-    NSError *error = [NSError errorWithDomain:@"PHAPIRequest" 
-                                         code:0 
-                                     userInfo:nil];
-    
-    [self didFailWithError:error];
+  } else {    
+    [self didFailWithError:PHCreateError(PHRequestResponseErrorType)];
   }
 }
 
