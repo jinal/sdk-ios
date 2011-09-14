@@ -411,7 +411,6 @@
 
 -(void)handleLoadContext:(NSDictionary *)queryComponents callback:(NSString*)callback{
   if(![self sendCallback:callback withResponse:self.content.context error:nil]){
-    
     [self dismissWithError:PHCreateError(PHLoadContextErrorType)];
   };
 }
