@@ -45,7 +45,7 @@
 -(void) dismiss:(BOOL)animated;
 
 -(void)redirectRequest:(NSString *)urlPath toTarget:(id)target action:(SEL)action;
--(void)sendCallback:(NSString *)callback withResponse:(id)response error:(id)error;
+-(BOOL)sendCallback:(NSString *)callback withResponse:(id)response error:(id)error;
 
 
 -(void)dismissFromButton;

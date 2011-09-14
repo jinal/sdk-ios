@@ -28,3 +28,13 @@
 // Macros
 #define PH_URL(PATH) [PH_BASE_URL stringByAppendingString:@#PATH]
 #define PH_URL_FMT(PATH,FMT) [PH_BASE_URL stringByAppendingFormat:@#PATH, FMT]
+
+// Errors
+typedef enum{
+  PHAPIResponseErrorType,
+  PHRequestResponseErrorType,
+  PHOrientationErrorType,
+  PHLoadContextErrorType
+} PHErrorType;
+
+NSError *PHCreateError(PHErrorType errorType);
