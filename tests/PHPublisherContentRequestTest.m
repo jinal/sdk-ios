@@ -12,7 +12,6 @@
 #import <QuartzCore/QuartzCore.h>
 
 #import "SBJsonParser.h"
-#import "NSObject+SBJSON.h"
 #import "PHContent.h"
 #import "PHContentView.h"
 #import "PHPublisherContentRequest.h"
