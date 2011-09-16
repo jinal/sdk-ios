@@ -169,7 +169,7 @@
   id errorValue = [responseData valueForKey:@"error"];
   if (!!errorValue && ![errorValue isEqual:[NSNull null]]) {
     NSLog(@"[PlayHaven] Error response: %@", errorValue);
-    [self didFailWithError:PHCreateError(PHRequestResponseErrorType)];
+    [self didFailWithError:PHCreateError(PHAPIResponseErrorType)];
   } else {
     id responseValue = [responseData valueForKey:@"response"]; 
     if ([responseValue isEqual:[NSNull null]]) {
