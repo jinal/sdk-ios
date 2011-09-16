@@ -126,24 +126,14 @@
 #pragma mark NSURLConnectionDelegate
 
 -(void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response{
-  /*
-   Nearly all connections made by the SDK will return a NSHTTPURLResponse, but we would like also make requests to file:// URLs as well.
-  */
   if ([response isKindOfClass:[NSHTTPURLResponse class]]) {
     NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *)response;
     NSLog(@"[PlayHaven] Request recieved HTTP response: %d", [httpResponse statusCode]);
-    
-    if ([httpResponse statusCode] == 200) {
-      [_connectionData release], _connectionData = [[NSMutableData alloc] init];
-      [_response release], _response = [response retain];
-    } else {
-      [self didFailWithError:PHCreateError(PHAPIResponseErrorType)];
-      [connection cancel];
-    }
-  } else {
-    [_connectionData release], _connectionData = [[NSMutableData alloc] init];
-    [_response release], _response = nil;
   }
+  
+  /* We want to get response objects for everything */
+  [_connectionData release], _connectionData = [[NSMutableData alloc] init];
+  [_response release], _response = nil;
 }
 
 -(void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data{
@@ -176,11 +166,16 @@
 
 #pragma mark -
 -(void)processRequestResponse:(NSDictionary *)responseData{
-  id responseValue = [responseData valueForKey:@"response"];
-  if (!!responseValue && ![responseValue isEqual:[NSNull null]]) {
-    [self didSucceedWithResponse:responseValue];
-  } else {    
+  id errorValue = [responseData valueForKey:@"error"];
+  if (!!errorValue && ![errorValue isEqual:[NSNull null]]) {
+    NSLog(@"[PlayHaven] Error response: %@", errorValue);
     [self didFailWithError:PHCreateError(PHRequestResponseErrorType)];
+  } else {
+    id responseValue = [responseData valueForKey:@"response"]; 
+    if ([responseValue isEqual:[NSNull null]]) {
+      responseValue = nil;
+    }
+    [self didSucceedWithResponse:responseValue];
   }
 }
 
