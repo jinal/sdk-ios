@@ -51,6 +51,18 @@
   return _URL;
 }
 
+-(NSString *)phid{
+  NSString *phid = [[NSUserDefaults standardUserDefaults] valueForKey:@"PlayHavenID"];
+  if (phid == nil) {
+    phid = [PHStringUtil uuid];
+    
+    NSLog(@"[PlayHaven] Generating new phid: %@", phid);
+    [[NSUserDefaults standardUserDefaults] setValue:phid forKey:@"PlayHavenID"];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+  }
+  return phid;
+}
+
 -(NSDictionary *) signedParameters{
   if (_signedParameters == nil) {
     NSString
@@ -80,6 +92,7 @@
                                      os,@"os",
                                      idiom,@"idiom",
                                      appVersion, @"app_version",
+                                     self.phid, @"phid",
                                      nil];
     
     [additionalParams addEntriesFromDictionary:signatureParams];

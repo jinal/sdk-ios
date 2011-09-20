@@ -39,6 +39,7 @@
 @property (nonatomic, assign) id<NSObject> delegate;
 @property (nonatomic, retain) NSDictionary *additionalParameters;
 @property (nonatomic, assign) int hashCode;
+@property (nonatomic, readonly) NSString *phid;
 
 -(NSString *)signedParameterString;
 
