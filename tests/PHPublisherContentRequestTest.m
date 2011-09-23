@@ -12,7 +12,6 @@
 #import <QuartzCore/QuartzCore.h>
 
 #import "SBJsonParser.h"
-#import "NSObject+SBJSON.h"
 #import "PHContent.h"
 #import "PHContentView.h"
 #import "PHPublisherContentRequest.h"
@@ -20,7 +19,6 @@
 
 #define PUBLISHER_TOKEN @"PUBLISHER_TOKEN"
 #define PUBLISHER_SECRET @"PUBLISHER_SECRET"
-#define EXPECTED_HASH @"3L0xlrDOt02UrTDwMSnye05Awwk"
 
 @interface PHContentTest : SenTestCase @end
 @interface PHContentViewTest : SenTestCase @end
