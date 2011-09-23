@@ -26,6 +26,8 @@ NSString *const PHPublisherContentRequestRewardSignatureKey = @"signature";
 -(void)placeCloseButton;
 -(void)hideCloseButton;
 -(void)showCloseButtonBecauseOfTimeout;
+-(BOOL)showOverlayWindow;
+-(void)hideOverlayWindow;
 
 @property (nonatomic, readonly) UIButton *closeButton;
 @end
@@ -65,15 +67,13 @@ NSString *const PHPublisherContentRequestRewardSignatureKey = @"signature";
   return _contentViews;
 }
 
--(UIView *)overlayView{
-  if (_overlayView == nil) {
-    CGRect frame = [UIScreen mainScreen].bounds;
-    _overlayView = [[UIView alloc] initWithFrame:frame];
-    _overlayView.backgroundColor = [UIColor colorWithWhite:0.0 alpha:0.5];
-    _overlayView.opaque = NO;
+-(UIWindow *)overlayWindow{
+  if (_overlayWindow == nil){
+    _overlayWindow = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+    _overlayWindow.backgroundColor = [UIColor colorWithWhite:0.0 alpha:0.5];
   }
   
-  return _overlayView;
+  return  _overlayWindow;
 }
 
 -(UIButton *)closeButton{
@@ -98,127 +98,15 @@ NSString *const PHPublisherContentRequestRewardSignatureKey = @"signature";
   return _closeButton;
 }
 
--(void)showCloseButtonBecauseOfTimeout{
-  self.closeButton.hidden = NO;
-}
-
--(NSString *)urlPath{
-  return PH_URL(/v3/publisher/content/);
-}
-
 -(void)dealloc{
   [_placement release], _placement = nil;
   [_contentViews release], _contentViews = nil;
-  [_overlayView release], _overlayView = nil;
   [_closeButton release], _closeButton = nil;
+  [_overlayWindow release], _overlayWindow = nil;
   [super dealloc];
 }
 
-#pragma mark -
-#pragma mark PHAPIRequest
-
--(NSDictionary *)additionalParameters{
-  return [NSDictionary dictionaryWithObjectsAndKeys:
-          self.placement, @"placement_id",
-          nil];
-}
-
--(void)didSucceedWithResponse:(NSDictionary *)responseData{
-  PHContent *content = [PHContent contentWithDictionary:responseData];
-  if (!!content) {
-    if ([self.delegate respondsToSelector:@selector(request:contentWillDisplay:)]) {
-      [self.delegate performSelector:@selector(request:contentWillDisplay:) withObject:self withObject:content];
-    }
-    
-    [[[UIApplication sharedApplication] keyWindow] addSubview:self.overlayView];
-    [self placeCloseButton];
-    
-    [self pushContent:content];
-    [self retain];
-  } else {
-    [self didFailWithError:nil];
-  }
-}
-
--(void)didFailWithError:(NSError *)error{
-  [super didFailWithError:error];
-  
-  if (self.showsOverlayImmediately) {
-    [self.overlayView removeFromSuperview];
-    [self hideCloseButton];
-  }
-}
-
--(void)send{
-  [super send];
-  
-  if ([self.delegate respondsToSelector:@selector(requestWillGetContent:)]) {
-    [self.delegate performSelector:@selector(requestWillGetContent:) withObject:self];
-  }
-  
-  if(self.showsOverlayImmediately){
-    [[[UIApplication sharedApplication] keyWindow] addSubview:self.overlayView];
-    [self placeCloseButton];
-  }
-  
-  [self performSelector:@selector(showCloseButtonBecauseOfTimeout) withObject:nil afterDelay:4.0];
-}
-
-#pragma mark -
-#pragma mark Sub-content
--(void)requestSubcontent:(NSDictionary *)queryParameters callback:(NSString *)callback source:(PHContentView *)source{
-  if (!!queryParameters && [queryParameters valueForKey:@"url"]) {
-    PHPublisherSubContentRequest *request = [PHPublisherSubContentRequest requestForApp:self.token secret:self.secret];
-    request.delegate = self;
-    
-    request.urlPath = [queryParameters valueForKey:@"url"];
-    request.callback = callback;
-    request.source = source;
-    
-    [request send];
-  } else {
-    NSDictionary *errorDict = [NSDictionary dictionaryWithObjectsAndKeys:
-                               @"1",@"error", nil];
-    [source sendCallback:callback withResponse:nil error:errorDict];
-  }
-}
-
--(void)request:(PHAPIRequest *)request didSucceedWithResponse:(NSDictionary *)responseData{
-  PHContent *content = [PHContent contentWithDictionary:responseData];
-  PHPublisherSubContentRequest *scRequest = (PHPublisherSubContentRequest *)request;
-  if (!!content) {
-    [self pushContent:content];
-    [scRequest.source sendCallback:scRequest.callback withResponse:responseData error:nil];
-  } else{
-    NSDictionary *errorDict = [NSDictionary dictionaryWithObjectsAndKeys:
-                               @"1",@"error", nil];
-    [scRequest.source sendCallback:scRequest.callback withResponse:nil error:errorDict];
-  }
-}
-
--(void)request:(PHAPIRequest *)request didFailWithError:(NSError *)error{
-  PHPublisherSubContentRequest *scRequest = (PHPublisherSubContentRequest *)request;
-  NSDictionary *errorDict = [NSDictionary dictionaryWithObjectsAndKeys:
-                             @"1",@"error", nil];
-  [scRequest.source sendCallback:scRequest.callback withResponse:nil error:errorDict];
-}
-
--(void)pushContent:(PHContent *)content{
-  PHContentView *contentView = [[PHContentView alloc] initWithContent:content];
-  [contentView redirectRequest:@"ph://subcontent" toTarget:self action:@selector(requestSubcontent:callback:source:)];
-  [contentView redirectRequest:@"ph://reward" toTarget:self action:@selector(requestRewards:callback:source:)];
-  [contentView redirectRequest:@"ph://closeButton" toTarget:self action:@selector(requestCloseButton:callback:source:)];
-  [contentView setDelegate:self];
-  [contentView show:self.animated];
-  [contentView setTargetView:self.overlayView];
-  
-  [self.contentViews addObject:contentView];
-  
-  [contentView release];
-  
-  [self placeCloseButton];
-  [PHPublisherContentRequest cancelPreviousPerformRequestsWithTarget:self selector:@selector(showCloseButtonBecauseOfTimeout) object:nil];
-}
+#pragma mark - Internal UI management
 
 -(void)placeCloseButton{
   if ([_closeButton superview] == nil) {   
@@ -269,12 +157,12 @@ NSString *const PHPublisherContentRequestRewardSignatureKey = @"signature";
         X = MAX(X, width - CGRectGetMaxX(contentFrame));
         Y = MIN(Y, height - CGRectGetMinY(contentFrame));
         break;
-
+        
       case UIInterfaceOrientationLandscapeLeft:
         X = MAX(X, CGRectGetMinY(contentFrame) + barHeight);
         Y = MAX(Y, height - CGRectGetMaxX(contentFrame));
         break;
-
+        
       case UIInterfaceOrientationLandscapeRight:
         X = MIN(X, width - CGRectGetMinY(contentFrame));
         Y = MIN(Y, CGRectGetMaxX(contentFrame));
@@ -284,14 +172,136 @@ NSString *const PHPublisherContentRequestRewardSignatureKey = @"signature";
   
   self.closeButton.center = CGPointMake(X, Y);
   self.closeButton.transform = [self transformForOrientation:orientation];
-  
-  [[[UIApplication sharedApplication] keyWindow] addSubview:self.closeButton];
+  [self.overlayWindow insertSubview:self.closeButton aboveSubview:topContentView];
+}
+
+-(void)showCloseButtonBecauseOfTimeout{
+  self.closeButton.hidden = NO;
 }
 
 -(void)hideCloseButton{
   [PHPublisherContentRequest cancelPreviousPerformRequestsWithTarget:self selector:@selector(showCloseButtonBecauseOfTimeout) object:nil];
   [[NSNotificationCenter defaultCenter] removeObserver:self name:UIDeviceOrientationDidChangeNotification object:nil];
   [_closeButton removeFromSuperview];
+}
+
+-(BOOL)showOverlayWindow{
+  if (![self.overlayWindow isKeyWindow]) {
+    //_previousKeyWindow = [[UIApplication sharedApplication] keyWindow];
+    [self.overlayWindow makeKeyAndVisible];
+    return YES;
+  }
+  
+  return NO;
+}
+
+-(void)hideOverlayWindow{
+  self.overlayWindow.hidden = YES;
+}
+
+#pragma mark - PHAPIRequest
+
+-(NSString *)urlPath{
+  return PH_URL(/v3/publisher/content/);
+}
+
+-(NSDictionary *)additionalParameters{
+  return [NSDictionary dictionaryWithObjectsAndKeys:
+          self.placement, @"placement_id",
+          nil];
+}
+
+-(void)didSucceedWithResponse:(NSDictionary *)responseData{
+  PHContent *content = [PHContent contentWithDictionary:responseData];
+  if (!!content) {
+    if ([self.delegate respondsToSelector:@selector(request:contentWillDisplay:)]) {
+      [self.delegate performSelector:@selector(request:contentWillDisplay:) withObject:self withObject:content];
+    }
+    
+    if([self showOverlayWindow] || self.showsOverlayImmediately){
+      [self pushContent:content];
+      [self retain]; 
+    } else {
+      [self didFailWithError:PHCreateError(PHWindowErrorType)];
+    }
+    
+  } else {
+    [self didFailWithError:PHCreateError(PHRequestResponseErrorType)];
+  }
+}
+
+-(void)didFailWithError:(NSError *)error{
+  [super didFailWithError:error];
+  [self hideOverlayWindow];
+  [self hideCloseButton];
+}
+
+-(void)send{
+  [super send];
+  
+  if ([self.delegate respondsToSelector:@selector(requestWillGetContent:)]) {
+    [self.delegate performSelector:@selector(requestWillGetContent:) withObject:self];
+  }
+  
+  [self showOverlayWindow];
+  [self placeCloseButton];
+  [self performSelector:@selector(showCloseButtonBecauseOfTimeout) withObject:nil afterDelay:4.0];
+}
+
+#pragma mark -
+#pragma mark Sub-content
+-(void)requestSubcontent:(NSDictionary *)queryParameters callback:(NSString *)callback source:(PHContentView *)source{
+  if (!!queryParameters && [queryParameters valueForKey:@"url"]) {
+    PHPublisherSubContentRequest *request = [PHPublisherSubContentRequest requestForApp:self.token secret:self.secret];
+    request.delegate = self;
+    
+    request.urlPath = [queryParameters valueForKey:@"url"];
+    request.callback = callback;
+    request.source = source;
+    
+    [request send];
+  } else {
+    NSDictionary *errorDict = [NSDictionary dictionaryWithObjectsAndKeys:
+                               @"1",@"error", nil];
+    [source sendCallback:callback withResponse:nil error:errorDict];
+  }
+}
+
+-(void)request:(PHAPIRequest *)request didSucceedWithResponse:(NSDictionary *)responseData{
+  PHContent *content = [PHContent contentWithDictionary:responseData];
+  PHPublisherSubContentRequest *scRequest = (PHPublisherSubContentRequest *)request;
+  if (!!content) {
+    [self pushContent:content];
+    [scRequest.source sendCallback:scRequest.callback withResponse:responseData error:nil];
+  } else{
+    NSDictionary *errorDict = [NSDictionary dictionaryWithObjectsAndKeys:
+                               @"1",@"error", nil];
+    [scRequest.source sendCallback:scRequest.callback withResponse:nil error:errorDict];
+  }
+}
+
+-(void)request:(PHAPIRequest *)request didFailWithError:(NSError *)error{
+  PHPublisherSubContentRequest *scRequest = (PHPublisherSubContentRequest *)request;
+  NSDictionary *errorDict = [NSDictionary dictionaryWithObjectsAndKeys:
+                             @"1",@"error", nil];
+  [scRequest.source sendCallback:scRequest.callback withResponse:nil error:errorDict];
+}
+
+-(void)pushContent:(PHContent *)content{
+  PHContentView *contentView = [[PHContentView alloc] initWithContent:content];
+  [contentView redirectRequest:@"ph://subcontent" toTarget:self action:@selector(requestSubcontent:callback:source:)];
+  [contentView redirectRequest:@"ph://reward" toTarget:self action:@selector(requestRewards:callback:source:)];
+  [contentView redirectRequest:@"ph://closeButton" toTarget:self action:@selector(requestCloseButton:callback:source:)];
+  [contentView setDelegate:self];
+  [contentView setTargetView:self.overlayWindow];
+  [contentView show:self.animated];
+  
+  [self.contentViews addObject:contentView];
+  
+  [contentView release];
+  
+  [self placeCloseButton];
+  [PHPublisherContentRequest cancelPreviousPerformRequestsWithTarget:self selector:@selector(showCloseButtonBecauseOfTimeout) object:nil];
 }
 
 -(void)dismissFromButton{
@@ -303,7 +313,7 @@ NSString *const PHPublisherContentRequestRewardSignatureKey = @"signature";
       [contentView dismissFromButton];
     }
   } else {
-    [self.overlayView removeFromSuperview];
+    [self hideOverlayWindow];
     [self hideCloseButton];
     [self release];
   }
@@ -345,7 +355,7 @@ NSString *const PHPublisherContentRequestRewardSignatureKey = @"signature";
                           withObject:self];
     }
     
-    [self.overlayView removeFromSuperview];
+    [self hideOverlayWindow];
     [self hideCloseButton];
     [self release];
   }
@@ -362,7 +372,7 @@ NSString *const PHPublisherContentRequestRewardSignatureKey = @"signature";
                           withObject:error];
     }
     
-    [self.overlayView removeFromSuperview];
+    [self hideOverlayWindow];
     [self hideCloseButton];
     [self release];
   }

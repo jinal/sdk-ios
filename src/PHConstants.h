@@ -34,7 +34,8 @@ typedef enum{
   PHAPIResponseErrorType,
   PHRequestResponseErrorType,
   PHOrientationErrorType,
-  PHLoadContextErrorType
+  PHLoadContextErrorType,
+  PHWindowErrorType
 } PHErrorType;
 
 NSError *PHCreateError(PHErrorType errorType);

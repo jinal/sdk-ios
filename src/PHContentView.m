@@ -58,7 +58,7 @@
     _content = [content retain];
     
     
-    UIWindow *window = [[UIApplication sharedApplication] keyWindow];
+    UIWindow *window = ([[[UIApplication sharedApplication] windows] count] > 0)?[[[UIApplication sharedApplication] windows] objectAtIndex:0]: nil;
     _targetView = window;
     
     self.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
@@ -112,8 +112,6 @@
     
     [UIView beginAnimations:nil context:nil];
     [UIView setAnimationDuration:duration];
-    //[UIView setAnimationDelegate:self];
-    //[UIView setAnimationDidStopSelector:@selector(showCloseButton)];
     if (self.content.transition == PHContentTransitionDialog) {
       _webView.transform = CGAffineTransformIdentity;
     } else{
@@ -302,7 +300,7 @@
 }
 
 -(void) viewDidShow{
-  //NSLog(@"Loading content unit template: %@", self.content.URL);
+  NSLog(@"Loading content unit template: %@", self.content.URL);
   [_webView loadRequest:[NSURLRequest requestWithURL:self.content.URL]];
   if ([self.delegate respondsToSelector:(@selector(contentViewDidShow:))]) {
     [self.delegate contentViewDidShow:self];
