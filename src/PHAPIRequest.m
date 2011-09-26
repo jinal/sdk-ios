@@ -51,7 +51,7 @@
   return _URL;
 }
 
--(NSString *)phid{
+-(NSString *)gid{
   NSString *phid = [[NSUserDefaults standardUserDefaults] valueForKey:@"PlayHavenID"];
   if (phid == nil) {
     phid = [PHStringUtil uuid];
@@ -92,7 +92,7 @@
                                      os,@"os",
                                      idiom,@"idiom",
                                      appVersion, @"app_version",
-                                     self.phid, @"phid",
+                                     self.gid, @"phid",
                                      nil];
     
     [additionalParams addEntriesFromDictionary:signatureParams];
