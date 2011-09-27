@@ -226,7 +226,14 @@ NSString *const PHPublisherContentRequestRewardSignatureKey = @"signature";
     }
     
   } else {
-    [self didFailWithError:PHCreateError(PHRequestResponseErrorType)];
+    NSLog(@"[PlayHaven] This request was successful but did not contain any displayable content. Dismissing now.");
+    if ([self.delegate respondsToSelector:@selector(requestContentDidDismiss:)]) {
+      [self.delegate performSelector:@selector(requestContentDidDismiss:) 
+                          withObject:self];
+    }
+    
+    [self.overlayView removeFromSuperview];
+    [self hideCloseButton];    
   }
 }
 

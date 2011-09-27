@@ -107,6 +107,8 @@ The content has been successfully loaded and the user is now interacting with th
 #### Content view dismissing
 The content has successfully dismissed and control is being returned to your app. This can happen as a result of the user clicking on the close button or clicking on a link that will open outside of the app. You may restore sounds and animations at this point.
 
+As of 1.3.3, this delegate method will also be called if a content request returns no content to display.
+
 	-(void)requestContentDidDismiss:(PHPublisherContentRequest *)request;
 
 #### Content request failing

@@ -1,7 +1,7 @@
 PlayHaven SDK Troubleshooting Guide
 ===================================
 
-This guide is designed to help you troubleshoot common issues encountered while implementing the PlayHaven SDK in your game. If your issue isn't covered here please get in touch with PlayHaven through our support page. https://dashboard.playhaven.com/#/support/
+This guide is designed to help you troubleshoot common issues encountered while implementing the PlayHaven SDK in your game. If your issue isn't covered here please get in touch with PlayHaven through our support page. https://playhaven.com/support
 
 Requests
 --------
@@ -18,7 +18,7 @@ Content Units
 -------------
 ### "If I don't set up any content units on a placement I'm requesting, the request error delegate( _-request:didFailWithError:_ ) is called."
 
-The SDK calls the request error delegate on any content request that doesn't produce a valid content unit. Your app will need to accomodate this behavior if you are planning on having placements that will only sometimes have content units assigned to them.
+As of SDK 1.3.3, content requests that are successful, but don't return a content unit will trigger the dismiss delegate method as opposed to the error delegate method.
 
 ### "When I'm showing a content unit, the close button seems to be invisible."
 - Did you include PlayHaven.bundle?

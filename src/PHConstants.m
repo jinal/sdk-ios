@@ -13,10 +13,10 @@ NSError *PHCreateError(PHErrorType errorType){
   static NSArray *errorArray;
   if (errorArray == nil) {
     errorArray = [[NSArray alloc] initWithObjects:
-                  @"PlayHaven received an error response from the API.",
-                  @"PlayHaven was not able to parse the API response.",
+                  @"PlayHaven received an error response from the API. Please check your token and secret values and try again.",
+                  @"Response was successful, but did not contain a response object.",
                   @"The content you requested was not able to be shown because it is missing required orientation data.",
-                  @"The content you requested was not able to be shown because PlayHaven was not able to load content data.",
+                  @"The content you requested has been dismissed because PlayHaven was not able to load content data.",
                   @"PlayHaven was not able to create the content unit overlay",
                   nil];
   }
