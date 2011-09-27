@@ -17,6 +17,7 @@ NSError *PHCreateError(PHErrorType errorType){
                   @"PlayHaven was not able to parse the API response.",
                   @"The content you requested was not able to be shown because it is missing required orientation data.",
                   @"The content you requested was not able to be shown because PlayHaven was not able to load content data.",
+                  @"PlayHaven was not able to create the content unit overlay",
                   nil];
   }
   
