@@ -49,6 +49,8 @@ Inside your button's event handler, use the following code to request the pre-co
 	PHPublisherContentRequest *request = [PHPublisherContentRequest requestForApp:MYTOKEN secret:MYSECRET placement:@"more_games" delegate:self];
 	request.showsOverlayImmediately = YES;
 	[request send];
+	
+*NOTE:* The Cross-Promotion Widget only supports the "more_games" placement tag.  Please ensure that this tag is used for any location you wish to integrate the Cross-Promotion Widget.  Support for custom placements is coming soon!
 
 You will need to implement PHPublisherContentRequestDelegate methods if you would like to know when the Cross-Promotion Widget has loaded or dismissed. See "Requesting content for your placements" in the API Reference section for more information about these delegate methods as well as other things you can do with PHPublisherContentRequest.
 
