@@ -232,7 +232,7 @@ NSString *const PHPublisherContentRequestRewardSignatureKey = @"signature";
                           withObject:self];
     }
     
-    [self.overlayView removeFromSuperview];
+    [self hideOverlayWindow];
     [self hideCloseButton];    
   }
 }
