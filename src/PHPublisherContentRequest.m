@@ -226,7 +226,7 @@ NSString *const PHPublisherContentRequestRewardSignatureKey = @"signature";
     }
     
   } else {
-    NSLog(@"[PlayHaven] This request was successful but did not contain any displayable content. Dismissing now.");
+    PH_NOTE(@"This request was successful but did not contain any displayable content. Dismissing now.");
     if ([self.delegate respondsToSelector:@selector(requestContentDidDismiss:)]) {
       [self.delegate performSelector:@selector(requestContentDidDismiss:) 
                           withObject:self];
@@ -380,7 +380,7 @@ NSString *const PHPublisherContentRequestRewardSignatureKey = @"signature";
     }
     
     if ([self.delegate respondsToSelector:@selector(request:contentDidFailWithError:)]) {
-      NSLog(@"[PlayHaven] It seems like you're using the -request:contentDidFailWithError: delegate method. This delegate has been deprecated, please use -request:didFailWithError: instead.");
+      PH_NOTE(@"It seems like you're using the -request:contentDidFailWithError: delegate method. This delegate has been deprecated, please use -request:didFailWithError: instead.");
       [self.delegate performSelector:@selector(request:contentDidFailWithError:) 
                           withObject:self 
                           withObject:error];

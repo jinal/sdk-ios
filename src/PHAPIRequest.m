@@ -112,7 +112,7 @@
 
 -(void) send{
   if (_connection == nil) {
-    NSLog(@"[PlayHaven] Sending request: %@", [self.URL absoluteString]);
+    PH_LOG(@"Sending request: %@", [self.URL absoluteString]);
     NSURLRequest *request = [NSURLRequest requestWithURL:self.URL];
     _connection = [[NSURLConnection alloc] initWithRequest:request delegate:self];
     [_connection start];
@@ -128,7 +128,7 @@
 -(void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response{
   if ([response isKindOfClass:[NSHTTPURLResponse class]]) {
     NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *)response;
-    NSLog(@"[PlayHaven] Request recieved HTTP response: %d", [httpResponse statusCode]);
+    PH_LOG(@"Request recieved HTTP response: %d", [httpResponse statusCode]);
   }
   
   /* We want to get response objects for everything */
@@ -141,7 +141,7 @@
 }
 
 -(void)connectionDidFinishLoading:(NSURLConnection *)connection{
-  NSLog(@"[PlayHaven] Request finished!");
+  PH_NOTE(@"Request finished!");
   if (!!self.delegate) {
     NSString *responseString = [[NSString alloc] initWithData:_connectionData encoding:NSUTF8StringEncoding];
     
@@ -158,7 +158,7 @@
 }
 
 -(void) connection:(NSURLConnection *)connection didFailWithError:(NSError *)error{
-  NSLog(@"[PlayHaven] Request failed with error: %@", [error localizedDescription]);
+  PH_LOG(@"Request failed with error: %@", [error localizedDescription]);
   //REQUEST_RELEASE see REQUEST_RETAIN
   [self didFailWithError:error];
   [self release];
@@ -168,7 +168,7 @@
 -(void)processRequestResponse:(NSDictionary *)responseData{
   id errorValue = [responseData valueForKey:@"error"];
   if (!!errorValue && ![errorValue isEqual:[NSNull null]]) {
-    NSLog(@"[PlayHaven] Error response: %@", errorValue);
+    PH_LOG(@"Error response: %@", errorValue);
     [self didFailWithError:PHCreateError(PHAPIResponseErrorType)];
   } else {
     id responseValue = [responseData valueForKey:@"response"]; 
