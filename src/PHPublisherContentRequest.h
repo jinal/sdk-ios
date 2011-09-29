@@ -22,7 +22,7 @@
 -(void)requestContentDidDismiss:(PHPublisherContentRequest *)request;
 
 -(void)request:(PHPublisherContentRequest *)request didFailWithError:(NSError *)error;
--(void)request:(PHPublisherContentRequest *)request contentDidFailWithError:(NSError *)error;
+-(void)request:(PHPublisherContentRequest *)request contentDidFailWithError:(NSError *)error DEPRECATED_ATTRIBUTE;
 
 #pragma mark - Content customization methods
 -(UIImage *)request:(PHPublisherContentRequest *)request closeButtonImageForControlState:(UIControlState)state content:(PHContent *)content;

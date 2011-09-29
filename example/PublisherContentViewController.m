@@ -52,11 +52,6 @@
   [self addMessage:message];  
 }
 
--(void)request:(PHPublisherContentRequest *)request contentDidFailWithError:(NSError *)error{
-  NSString *message = [NSString stringWithFormat:@"✖ Content failed with error: %@", error];
-  [self addMessage:message];  
-}
-
 -(void)request:(PHPublisherContentRequest *)request unlockedReward:(PHReward *)reward{
   NSString *message = [NSString stringWithFormat:@"☆ Unlocked reward: %dx %@", reward.quantity, reward.name];
   [self addMessage:message]; 

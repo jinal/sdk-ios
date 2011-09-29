@@ -112,14 +112,11 @@ As of 1.3.3, this delegate method will also be called if a content request retur
 	-(void)requestContentDidDismiss:(PHPublisherContentRequest *)request;
 
 #### Content request failing
-If for any reason the content request does not successfully return some content to display, the request will stop. At this point, no visible changes have occurred in your app.
+If for any reason the content request does not successfully return some content to display or fails to load after the overlay view has appears, the request will stop any any visible overlays will be removed.
 
 	-(void)request:(PHPublisherContentRequest *)request didFailWithError:(NSError *)error;
 
-#### Content view failing to load
-If for any reason a content unit fails to load after the overlay view has appeared, the request will stop and the overlay view will be removed. You may restore sounds and animations at this point.
-
-	-(void)request:(PHPublisherContentRequest *)request contentDidFailWithError:(NSError *)error;
+NOTE: -(void)request:contentDidFailWithError: is now deprecared in favor of request:didFailWithError: please update implementations accordingly.
 
 ### Customizing content display
 #### Replace close button graphics

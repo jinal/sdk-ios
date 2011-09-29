@@ -373,7 +373,14 @@ NSString *const PHPublisherContentRequestRewardSignatureKey = @"signature";
   
   if ([self.contentViews count] == 0) {
     //only passthrough the last contentView to error
+    if ([self.delegate respondsToSelector:@selector(request:didFailWithError::)]) {
+      [self.delegate performSelector:@selector(request:didFailWithError:) 
+                          withObject:self 
+                          withObject:error];
+    }
+    
     if ([self.delegate respondsToSelector:@selector(request:contentDidFailWithError:)]) {
+      NSLog(@"[PlayHaven] It seems like you're using the -request:contentDidFailWithError: delegate method. This delegate has been deprecated, please use -request:didFailWithError: instead.");
       [self.delegate performSelector:@selector(request:contentDidFailWithError:) 
                           withObject:self 
                           withObject:error];
