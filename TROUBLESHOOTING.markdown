@@ -8,7 +8,7 @@ Requests
 ### "I get 403 errors when making requests to the API"
 - Are you using the correct publisher token and secret?
 
-The most common cause of any 403 status in the new SDK is an incorrect token or secret. You can see the token and secret values for your game on the PlayHaven Developer Dashboard.
+The most common cause of any 403 status in the new SDK is an incorrect token or secret. You can see the token and secret values for your game on the PlayHaven Developer Dashboard. If your token and secret are correct, then this may be a problem with our server.
 
 - Are you updating from a legacy SDK?
 
@@ -16,10 +16,6 @@ If your publisher token has a colon (":") character in it, you will need to get 
 
 Content Units
 -------------
-### "If I don't set up any content units on a placement I'm requesting, the request error delegate( _-request:didFailWithError:_ ) is called."
-
-As of SDK 1.3.3, content requests that are successful, but don't return a content unit will trigger the dismiss delegate method as opposed to the error delegate method.
-
 ### "When I'm showing a content unit, the close button seems to be invisible."
 - Did you include PlayHaven.bundle?
 
