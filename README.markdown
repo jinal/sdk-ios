@@ -9,8 +9,9 @@ An API token and secret is required to use this SDK. These tokens uniquely ident
 What's New in 1.3.6
 ==========================
 * Successful requests for placements that have no content assigned or available will no longer trigger an error response. These requests will instead will indicate in your console logs that they will dismiss because there is no content to show and then dismiss using the appropriate delegate methods
-* -(void)request:contentDidFailWithError: has been deprecated, now all content request errors will be sent through -(void)request:didFailWithError:
+* -(void)request:contentDidFailWithError: has been deprecated, please transition your error handling code to use -(void)request:didFailWithError: for all content request errors.
 * Content units are now displayed in their own UIWindow instance, and will now appear below any alert views (UIAlertView, Game Center alerts, etc.).
+* Developers are now recommended to send open requests each time their app becomes active. (This means each launch and every time the app is foregrounded on devices that support multitasking.) See "Record game opens" under "Adding a Cross-Promotion Widget to Your Game" for more information.
 
 
 Integration
@@ -39,9 +40,9 @@ Adding a Cross-Promotion Widget to Your Game
 Each game is pre-configured for our Cross-Promotion Widget, which will give your game the ability to deliver quality game recommendations to your users. To integrate the Cross-Promotion Widget, you'll need to do the following:
 
 ### Record game opens
-In order to better optimize your content units, it is necessary for your app to report all game opens. This allows you to measure the click-through rate of your Cross-Promotion Widget to help optimize the performance of your implementation. This request is asynchronous and may run in the background while your game is loading.
+In order to better optimize your content units, it is necessary for your app to report each time your application comes to the foreground. PlayHaven uses these events to measure the click-through rate of your Cross-Promotion Widget to help optimize the performance of your implementation. This request is asynchronous and may run in the background while your game is loading.
 
-Find a place in your code that runs when your app is launched, e.g. inside the implementation of your UIApplicationDelegate's - (void)applicationDidFinishLaunching:(NSNotification *)aNotification method, and add the following line:
+The best place to run this code in your app is in the implementation of the UIApplicationDelegate's -(void)applicationDidBecomeActive:(UIApplication *)application method. This will record a game open each time the app is launched. The following line will send a request:
 
 	[[PHPublisherOpenRequest requestForApp:MYTOKEN secret:MYSECRET] send];
 
