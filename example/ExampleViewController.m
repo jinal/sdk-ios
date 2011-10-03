@@ -11,6 +11,7 @@
 #define LOG_FONT [UIFont systemFontOfSize:13]
 
 @implementation ExampleViewController
+@synthesize tableView = _tableView;
 
 - (id)initWithStyle:(UITableViewStyle)style {
   self = [super initWithStyle:style];
@@ -20,8 +21,17 @@
   return self;
 }
 
+-(id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil{
+  self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
+  if (self){
+    _messages = [[NSMutableArray alloc] init];    
+  }
+  return self;
+}
+
 - (void)dealloc {
   [_messages release], _messages = nil;
+  [_tableView release], _tableView = nil;
   [super dealloc];
 }
 
@@ -87,4 +97,9 @@
   return cell;
 }
 
+- (void)viewDidUnload {
+  [self setTableView:nil];
+  [self setTableView:nil];
+  [super viewDidUnload];
+}
 @end

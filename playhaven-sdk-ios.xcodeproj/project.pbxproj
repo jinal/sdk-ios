@@ -51,6 +51,7 @@
 		EA4ABA11135F859D0062AE77 /* UIDevice+HardwareString.m in Sources */ = {isa = PBXBuildFile; fileRef = EA4ABA0F135F859D0062AE77 /* UIDevice+HardwareString.m */; };
 		EA4C1912134E84D300755983 /* PHURLLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = EA4C1910134E84D300755983 /* PHURLLoader.m */; };
 		EA4C1916134E8D6200755983 /* PHURLLoaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = EA4C1914134E8D6200755983 /* PHURLLoaderView.m */; };
+		EA50F3D31436426F0055EB3A /* PublisherContentViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = EA50F3D21436426F0055EB3A /* PublisherContentViewController.xib */; };
 		EA523D8B1343EE670057DEA5 /* PHPublisherOpenRequestTest.m in Sources */ = {isa = PBXBuildFile; fileRef = EA523D8A1343EE670057DEA5 /* PHPublisherOpenRequestTest.m */; };
 		EA523D9B1343EEDA0057DEA5 /* PHPublisherOpenRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = EA523D8E1343EE790057DEA5 /* PHPublisherOpenRequest.m */; };
 		EA523D9E1343EEED0057DEA5 /* PHStringUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = EA523D901343EE790057DEA5 /* PHStringUtil.m */; };
@@ -118,6 +119,7 @@
 		EA4C1910134E84D300755983 /* PHURLLoader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PHURLLoader.m; sourceTree = "<group>"; };
 		EA4C1913134E8D6200755983 /* PHURLLoaderView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PHURLLoaderView.h; sourceTree = "<group>"; };
 		EA4C1914134E8D6200755983 /* PHURLLoaderView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PHURLLoaderView.m; sourceTree = "<group>"; };
+		EA50F3D21436426F0055EB3A /* PublisherContentViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PublisherContentViewController.xib; sourceTree = "<group>"; };
 		EA523D8A1343EE670057DEA5 /* PHPublisherOpenRequestTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PHPublisherOpenRequestTest.m; sourceTree = "<group>"; };
 		EA523D8D1343EE790057DEA5 /* PHPublisherOpenRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PHPublisherOpenRequest.h; sourceTree = "<group>"; };
 		EA523D8E1343EE790057DEA5 /* PHPublisherOpenRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PHPublisherOpenRequest.m; sourceTree = "<group>"; };
@@ -246,6 +248,7 @@
 				EA12AC3E13662DC400CB2F24 /* PublisherOpenViewController.m */,
 				EA12AC431366339D00CB2F24 /* PublisherContentViewController.h */,
 				EA12AC441366339D00CB2F24 /* PublisherContentViewController.m */,
+				EA50F3D21436426F0055EB3A /* PublisherContentViewController.xib */,
 				EA12AC46136635F600CB2F24 /* Constants.h */,
 			);
 			path = example;
@@ -459,6 +462,7 @@
 				EA12ABDD1365DBB700CB2F24 /* InfoPlist.strings in Resources */,
 				EA12ABE61365DBB700CB2F24 /* MainWindow.xib in Resources */,
 				EA12ABEC1365DBB700CB2F24 /* RootViewController.xib in Resources */,
+				EA50F3D31436426F0055EB3A /* PublisherContentViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

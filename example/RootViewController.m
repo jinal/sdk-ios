@@ -83,7 +83,7 @@
     [self.navigationController pushViewController:controller animated:YES];
     [controller release];
   } else if (indexPath.row == 1){
-    PublisherContentViewController *controller = [[PublisherContentViewController alloc] initWithStyle:UITableViewStylePlain];
+    PublisherContentViewController *controller = [[PublisherContentViewController alloc] initWithNibName:@"PublisherContentViewController" bundle:nil];
     controller.title = @"Content";
     [self.navigationController pushViewController:controller animated:YES];
     [controller release];

@@ -10,16 +10,18 @@
 #import "Constants.h"
 
 @implementation PublisherContentViewController
+@synthesize placementField = _placementField;
 
 -(void)dealloc{
   [_notificationView release], _notificationView = nil;
+  [_placementField release], _placementField = nil;
   [super dealloc];
 }
 
 -(void)startRequest{
   [super startRequest];
-  PHPublisherContentRequest * request = [PHPublisherContentRequest requestForApp:PH_TOKEN secret:PH_SECRET placement:@"more_games" delegate:self];
-  
+  NSString *placement = (![self.placementField.text isEqualToString:@""])? self.placementField.text : @"more_games";
+  PHPublisherContentRequest * request = [PHPublisherContentRequest requestForApp:PH_TOKEN secret:PH_SECRET placement:placement delegate:self];
   request.showsOverlayImmediately = YES;
   [request send];
 }
@@ -72,6 +74,7 @@
 }
 
 -(void)viewDidUnload{
+    [self setPlacementField:nil];
   [super viewDidUnload];
   [_notificationView removeFromSuperview];
   [_notificationView release], _notificationView = nil;

@@ -11,7 +11,9 @@
 
 @interface ExampleViewController : UITableViewController {
   NSMutableArray *_messages;
+  UITableView *_tableView;
 }
+@property (nonatomic, retain) IBOutlet UITableView *tableView;
 
 -(void)addMessage:(NSString *)message;
 -(void)startRequest;
