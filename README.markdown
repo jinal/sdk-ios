@@ -11,7 +11,7 @@ What's New in 1.3.6
 * Successful requests for placements that have no content assigned or available will no longer trigger an error response. These requests will instead will indicate in your console logs that they will dismiss because there is no content to show and then dismiss using the appropriate delegate methods
 * -(void)request:contentDidFailWithError: has been deprecated, please transition your error handling code to use -(void)request:didFailWithError: for all content request errors.
 * Content units are now displayed in their own UIWindow instance, and will now appear below any alert views (UIAlertView, Game Center alerts, etc.).
-* Developers are now recommended to send open requests each time their app becomes active. (This means each launch and every time the app is foregrounded on devices that support multitasking.)
+* Developers are now recommended to send open requests each time their app becomes active. (This means each launch and every time the app is foregrounded on devices that support multitasking.) See "Record game opens" under "Adding a Cross-Promotion Widget to Your Game" for more information.
 
 
 Integration
