@@ -12,14 +12,8 @@
 
 @implementation ExampleViewController
 @synthesize tableView = _tableView;
-
-- (id)initWithStyle:(UITableViewStyle)style {
-  self = [super initWithStyle:style];
-  if (self) {
-    _messages = [[NSMutableArray alloc] init];
-  }
-  return self;
-}
+@synthesize token = _token;
+@synthesize secret = _secret;
 
 -(id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil{
   self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
@@ -32,6 +26,8 @@
 - (void)dealloc {
   [_messages release], _messages = nil;
   [_tableView release], _tableView = nil;
+  [_token release], _token = nil;
+  [_secret release], _secret = nil;
   [super dealloc];
 }
 

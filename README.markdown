@@ -33,7 +33,7 @@ If you are using Unity for your game, please integrate the Unity SDK located her
 
 Example App
 -----------
-Included with the SDK is an example implementation in its own XCode project. It features open and content request implementations including relevant delegate methods for each. To run the example app, you will need to define the preprocessor macros found in *example/Constants.h".
+Included with the SDK is an example implementation in its own XCode project. It features open and content request implementations including relevant delegate methods for each. You will need a PlayHaven API token and secret to make requests with the Example app.
 
 Adding a Cross-Promotion Widget to Your Game
 --------------------------------------------

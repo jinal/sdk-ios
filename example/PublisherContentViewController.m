@@ -7,7 +7,6 @@
 //
 
 #import "PublisherContentViewController.h"
-#import "Constants.h"
 
 @implementation PublisherContentViewController
 @synthesize placementField = _placementField;
@@ -21,7 +20,7 @@
 -(void)startRequest{
   [super startRequest];
   NSString *placement = (![self.placementField.text isEqualToString:@""])? self.placementField.text : @"more_games";
-  PHPublisherContentRequest * request = [PHPublisherContentRequest requestForApp:PH_TOKEN secret:PH_SECRET placement:placement delegate:self];
+  PHPublisherContentRequest * request = [PHPublisherContentRequest requestForApp:self.token secret:self.secret placement:placement delegate:self];
   request.showsOverlayImmediately = YES;
   [request send];
 }
@@ -68,7 +67,7 @@
 
 -(void)viewDidLoad{
   [super viewDidLoad];
-  _notificationView = [[PHNotificationView alloc] initWithApp:PH_TOKEN secret:PH_SECRET placement:@"more_games"];
+  _notificationView = [[PHNotificationView alloc] initWithApp:self.token secret:self.secret placement:@"more_games"];
   _notificationView.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin;
   _notificationView.center = CGPointMake(self.view.frame.size.width - 22, 19);
 }

@@ -72,6 +72,7 @@
 		EAB44398134554B3000DA3E9 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DF5F4DF0D08C38300B7A737 /* UIKit.framework */; };
 		EAB44399134554B3000DA3E9 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 288765FC0DF74451002DB57D /* CoreGraphics.framework */; };
 		EAB4439A134554B3000DA3E9 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EAB442A113455467000DA3E9 /* QuartzCore.framework */; };
+		EABC1CE7143A770000638B09 /* ExampleViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = EABC1CE6143A770000638B09 /* ExampleViewController.xib */; };
 		EAC53A94134E5F7A00F2F956 /* NSObject+QueryComponents.m in Sources */ = {isa = PBXBuildFile; fileRef = EAC53A92134E5F7A00F2F956 /* NSObject+QueryComponents.m */; };
 		EAE0F5FC1385D1120062B950 /* PHPublisherSubContentRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = EAE0F5FB1385D1120062B950 /* PHPublisherSubContentRequest.m */; };
 		EAE0F5FD1385D1120062B950 /* PHPublisherSubContentRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = EAE0F5FB1385D1120062B950 /* PHPublisherSubContentRequest.m */; };
@@ -110,7 +111,6 @@
 		EA12AC3E13662DC400CB2F24 /* PublisherOpenViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PublisherOpenViewController.m; sourceTree = "<group>"; };
 		EA12AC431366339D00CB2F24 /* PublisherContentViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PublisherContentViewController.h; sourceTree = "<group>"; };
 		EA12AC441366339D00CB2F24 /* PublisherContentViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PublisherContentViewController.m; sourceTree = "<group>"; };
-		EA12AC46136635F600CB2F24 /* Constants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Constants.h; sourceTree = "<group>"; };
 		EA14C6611342604000E228E0 /* Unit Tests.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Unit Tests.octest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		EA1799DF14200FAE005F286F /* PHConstants.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PHConstants.m; sourceTree = "<group>"; };
 		EA4ABA0E135F859D0062AE77 /* UIDevice+HardwareString.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIDevice+HardwareString.h"; sourceTree = "<group>"; };
@@ -150,6 +150,7 @@
 		EAB4429413454F34000DA3E9 /* PHContent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = PHContent.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		EAB4429513454F34000DA3E9 /* PHContent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = PHContent.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		EAB442A113455467000DA3E9 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		EABC1CE6143A770000638B09 /* ExampleViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ExampleViewController.xib; sourceTree = "<group>"; };
 		EAC53A91134E5F7A00F2F956 /* NSObject+QueryComponents.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSObject+QueryComponents.h"; sourceTree = "<group>"; };
 		EAC53A92134E5F7A00F2F956 /* NSObject+QueryComponents.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSObject+QueryComponents.m"; sourceTree = "<group>"; };
 		EAC90957135E2FCB00375013 /* PlayHaven.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = PlayHaven.bundle; sourceTree = "<group>"; };
@@ -246,10 +247,10 @@
 				EA12AC3B13662AD700CB2F24 /* ExampleViewController.m */,
 				EA12AC3D13662DC400CB2F24 /* PublisherOpenViewController.h */,
 				EA12AC3E13662DC400CB2F24 /* PublisherOpenViewController.m */,
+				EABC1CE6143A770000638B09 /* ExampleViewController.xib */,
 				EA12AC431366339D00CB2F24 /* PublisherContentViewController.h */,
 				EA12AC441366339D00CB2F24 /* PublisherContentViewController.m */,
 				EA50F3D21436426F0055EB3A /* PublisherContentViewController.xib */,
-				EA12AC46136635F600CB2F24 /* Constants.h */,
 			);
 			path = example;
 			sourceTree = "<group>";
@@ -463,6 +464,7 @@
 				EA12ABE61365DBB700CB2F24 /* MainWindow.xib in Resources */,
 				EA12ABEC1365DBB700CB2F24 /* RootViewController.xib in Resources */,
 				EA50F3D31436426F0055EB3A /* PublisherContentViewController.xib in Resources */,
+				EABC1CE7143A770000638B09 /* ExampleViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
