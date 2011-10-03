@@ -250,7 +250,10 @@ NSString *const PHPublisherContentRequestRewardSignatureKey = @"signature";
     [self.delegate performSelector:@selector(requestWillGetContent:) withObject:self];
   }
   
-  [self showOverlayWindow];
+  if (self.showsOverlayImmediately) {
+    [self showOverlayWindow];
+  }
+  
   [self placeCloseButton];
   [self performSelector:@selector(showCloseButtonBecauseOfTimeout) withObject:nil afterDelay:4.0];
 }
