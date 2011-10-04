@@ -380,9 +380,7 @@ NSString *const PHPublisherContentRequestRewardSignatureKey = @"signature";
       [self.delegate performSelector:@selector(request:didFailWithError:) 
                           withObject:self 
                           withObject:error];
-    }
-    
-    if ([self.delegate respondsToSelector:@selector(request:contentDidFailWithError:)]) {
+    } else if ([self.delegate respondsToSelector:@selector(request:contentDidFailWithError:)]) {
       PH_NOTE(@"It seems like you're using the -request:contentDidFailWithError: delegate method. This delegate has been deprecated, please use -request:didFailWithError: instead.");
       [self.delegate performSelector:@selector(request:contentDidFailWithError:) 
                           withObject:self 
