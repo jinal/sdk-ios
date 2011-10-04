@@ -19,6 +19,11 @@
 
 -(void)startRequest{
   [super startRequest];
+  
+  UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"PlayHaven" message:@"Our content views have changed. Now they will appear under alert views like this. You can see this behavior by leaving this alert box open as the content unit comes into the view." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+  [alert show];
+  [alert release];
+  
   NSString *placement = (![self.placementField.text isEqualToString:@""])? self.placementField.text : @"more_games";
   PHPublisherContentRequest * request = [PHPublisherContentRequest requestForApp:self.token secret:self.secret placement:placement delegate:self];
   request.showsOverlayImmediately = YES;
