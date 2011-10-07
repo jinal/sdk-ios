@@ -14,6 +14,8 @@
 #import "UIDevice+HardwareString.h"
 #import "PHConstants.h"
 
+#define PH_USE_UDID_SIGNATURE 1
+
 @implementation PHAPIRequest
 
 +(NSString *) base64SignatureWithString:(NSString *)string{
@@ -68,7 +70,11 @@
     NSString
     *device = [[UIDevice currentDevice] uniqueIdentifier],
     *nonce = [PHStringUtil uuid],
+#ifdef PH_USE_UDID_SIGNATURE
     *signatureHash = [NSString stringWithFormat:@"%@:%@:%@:%@", self.token, device, nonce, self.secret],
+#else
+    *signatureHash = [NSString stringWithFormat:@"%@:%@:%@:%@", self.token, self.gid, nonce, self.secret],
+#endif
     *signature = [PHAPIRequest base64SignatureWithString:signatureHash],
     *appId = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleIdentifier"],
     *appVersion = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"],
