@@ -209,8 +209,8 @@ NSString *const PHPublisherContentRequestRewardSignatureKey = @"signature";
   [contentView redirectRequest:@"ph://reward" toTarget:self action:@selector(requestRewards:callback:source:)];
   [contentView redirectRequest:@"ph://closeButton" toTarget:self action:@selector(requestCloseButton:callback:source:)];
   [contentView setDelegate:self];
-  [contentView show:self.animated];
   [contentView setTargetView:self.overlayView];
+  [contentView show:self.animated];
   
   [self.contentViews addObject:contentView];
   
