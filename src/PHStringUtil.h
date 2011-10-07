@@ -18,6 +18,7 @@
 +(NSString *)stringByHtmlEscapingString:(NSString *)input;
 +(NSString *)stringByUrlEncodingString:(NSString *)input;
 +(NSString *)stringByUrlDecodingString:(NSString *)input;
++(NSString *)gid;
 +(NSString *)uuid;
 +(NSDictionary *)dictionaryWithQueryString:(NSString *)input;
 

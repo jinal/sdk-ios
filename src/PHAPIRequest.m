@@ -54,15 +54,15 @@
 }
 
 -(NSString *)gid{
-  NSString *phid = [[NSUserDefaults standardUserDefaults] valueForKey:@"PlayHavenID"];
-  if (phid == nil) {
-    phid = [PHStringUtil uuid];
+  NSString *gid = [[NSUserDefaults standardUserDefaults] valueForKey:@"PlayHavenGID"];
+  if (gid == nil) {
+    gid = [PHStringUtil gid];
     
-    NSLog(@"[PlayHaven] Generating new phid: %@", phid);
-    [[NSUserDefaults standardUserDefaults] setValue:phid forKey:@"PlayHavenID"];
+    NSLog(@"[PlayHaven] Generating new gid: %@", gid);
+    [[NSUserDefaults standardUserDefaults] setValue:gid forKey:@"PlayHavenGID"];
     [[NSUserDefaults standardUserDefaults] synchronize];
   }
-  return phid;
+  return gid;
 }
 
 -(NSDictionary *) signedParameters{
@@ -98,7 +98,7 @@
                                      os,@"os",
                                      idiom,@"idiom",
                                      appVersion, @"app_version",
-                                     self.gid, @"phid",
+                                     self.gid, @"gid",
                                      nil];
     
     [additionalParams addEntriesFromDictionary:signatureParams];
