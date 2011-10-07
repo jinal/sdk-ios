@@ -219,15 +219,21 @@ static int CompareEntityPairs(const void *voidCharacter, const void *voidEntityT
 	return [input stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
 }
 
-+(NSString *) uuid {
-	CFUUIDRef uuid = CFUUIDCreate(kCFAllocatorDefault);
++(NSString *)gid{
+  CFUUIDRef uuid = CFUUIDCreate(kCFAllocatorDefault);
 	CFStringRef uuidRef = CFUUIDCreateString(kCFAllocatorDefault, uuid);
 	CFRelease(uuid);
 	
 	NSString *result = [NSString stringWithString:(NSString *)uuidRef];
 	CFRelease(uuidRef);
+  
+  return result;
+}
 
-	return [self b64DigestForString:result];
++(NSString *) uuid {
+
+
+	return [self b64DigestForString:[self gid]];
 }
 
 +(NSData *)dataDigestForString:(NSString *)input {
