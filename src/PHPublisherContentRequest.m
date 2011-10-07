@@ -130,7 +130,7 @@ NSString *const PHPublisherContentRequestRewardSignatureKey = @"signature";
       [self.delegate performSelector:@selector(request:contentWillDisplay:) withObject:self withObject:content];
     }
     
-    [[[UIApplication sharedApplication] keyWindow] addSubview:self.overlayView];
+    [[[[UIApplication sharedApplication] windows] objectAtIndex:0] addSubview:self.overlayView];
     [self placeCloseButton];
     
     [self pushContent:content];
@@ -157,7 +157,7 @@ NSString *const PHPublisherContentRequestRewardSignatureKey = @"signature";
   }
   
   if(self.showsOverlayImmediately){
-    [[[UIApplication sharedApplication] keyWindow] addSubview:self.overlayView];
+    [[[[UIApplication sharedApplication] windows] objectAtIndex:0] addSubview:self.overlayView];
     [self placeCloseButton];
   }
   
@@ -209,15 +209,14 @@ NSString *const PHPublisherContentRequestRewardSignatureKey = @"signature";
   [contentView redirectRequest:@"ph://reward" toTarget:self action:@selector(requestRewards:callback:source:)];
   [contentView redirectRequest:@"ph://closeButton" toTarget:self action:@selector(requestCloseButton:callback:source:)];
   [contentView setDelegate:self];
-  [contentView show:self.animated];
   [contentView setTargetView:self.overlayView];
+  [contentView show:self.animated];
   
   [self.contentViews addObject:contentView];
   
   [contentView release];
   
   [self placeCloseButton];
-  [PHPublisherContentRequest cancelPreviousPerformRequestsWithTarget:self selector:@selector(showCloseButtonBecauseOfTimeout) object:nil];
 }
 
 -(void)placeCloseButton{
@@ -285,7 +284,7 @@ NSString *const PHPublisherContentRequestRewardSignatureKey = @"signature";
   self.closeButton.center = CGPointMake(X, Y);
   self.closeButton.transform = [self transformForOrientation:orientation];
   
-  [[[UIApplication sharedApplication] keyWindow] addSubview:self.closeButton];
+  [[[[UIApplication sharedApplication] windows] objectAtIndex:0] addSubview:self.closeButton];
 }
 
 -(void)hideCloseButton{
@@ -422,6 +421,7 @@ NSString *const PHPublisherContentRequestRewardSignatureKey = @"signature";
 
 #pragma mark - Close button control
 -(void)requestCloseButton:(NSDictionary *)queryParameters callback:(NSString *)callback source:(PHContentView *)source{
+  [PHPublisherContentRequest cancelPreviousPerformRequestsWithTarget:self selector:@selector(showCloseButtonBecauseOfTimeout) object:nil];
   
   if ([queryParameters valueForKey:@"hidden"]) {
     self.closeButton.hidden = [[queryParameters valueForKey:@"hidden"] boolValue];
