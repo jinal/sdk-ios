@@ -130,7 +130,7 @@ NSString *const PHPublisherContentRequestRewardSignatureKey = @"signature";
       [self.delegate performSelector:@selector(request:contentWillDisplay:) withObject:self withObject:content];
     }
     
-    [[[UIApplication sharedApplication] keyWindow] addSubview:self.overlayView];
+    [[[[UIApplication sharedApplication] windows] objectAtIndex:0] addSubview:self.overlayView];
     [self placeCloseButton];
     
     [self pushContent:content];
@@ -157,7 +157,7 @@ NSString *const PHPublisherContentRequestRewardSignatureKey = @"signature";
   }
   
   if(self.showsOverlayImmediately){
-    [[[UIApplication sharedApplication] keyWindow] addSubview:self.overlayView];
+    [[[[UIApplication sharedApplication] windows] objectAtIndex:0] addSubview:self.overlayView];
     [self placeCloseButton];
   }
   
@@ -285,7 +285,7 @@ NSString *const PHPublisherContentRequestRewardSignatureKey = @"signature";
   self.closeButton.center = CGPointMake(X, Y);
   self.closeButton.transform = [self transformForOrientation:orientation];
   
-  [[[UIApplication sharedApplication] keyWindow] addSubview:self.closeButton];
+  [[[[UIApplication sharedApplication] windows] objectAtIndex:0] addSubview:self.closeButton];
 }
 
 -(void)hideCloseButton{
