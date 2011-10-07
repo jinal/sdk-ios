@@ -14,6 +14,8 @@
 #import "UIDevice+HardwareString.h"
 #import "PHConstants.h"
 
+#define PH_USE_UDID_SIGNATURE 1
+
 @implementation PHAPIRequest
 
 +(NSString *) base64SignatureWithString:(NSString *)string{
@@ -51,12 +53,28 @@
   return _URL;
 }
 
+-(NSString *)gid{
+  NSString *phid = [[NSUserDefaults standardUserDefaults] valueForKey:@"PlayHavenID"];
+  if (phid == nil) {
+    phid = [PHStringUtil uuid];
+    
+    NSLog(@"[PlayHaven] Generating new phid: %@", phid);
+    [[NSUserDefaults standardUserDefaults] setValue:phid forKey:@"PlayHavenID"];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+  }
+  return phid;
+}
+
 -(NSDictionary *) signedParameters{
   if (_signedParameters == nil) {
     NSString
     *device = [[UIDevice currentDevice] uniqueIdentifier],
     *nonce = [PHStringUtil uuid],
+#ifdef PH_USE_UDID_SIGNATURE
     *signatureHash = [NSString stringWithFormat:@"%@:%@:%@:%@", self.token, device, nonce, self.secret],
+#else
+    *signatureHash = [NSString stringWithFormat:@"%@:%@:%@:%@", self.token, self.gid, nonce, self.secret],
+#endif
     *signature = [PHAPIRequest base64SignatureWithString:signatureHash],
     *appId = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleIdentifier"],
     *appVersion = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"],
@@ -80,6 +98,7 @@
                                      os,@"os",
                                      idiom,@"idiom",
                                      appVersion, @"app_version",
+                                     self.gid, @"phid",
                                      nil];
     
     [additionalParams addEntriesFromDictionary:signatureParams];
