@@ -1,5 +1,5 @@
-PlayHaven SDK
-==============
+PlayHaven SDK 1.3.2a
+====================
 PlayHaven is a real-time mobile game marketing platform to help you take control of the business of your games.
 
 Acquire, retain, re-engage, and monetize your players with the help of PlayHaven's powerful marketing platform. Integrate once and embrace the flexibility of the web as you build, schedule, deploy, and analyze your in-game promotions and monetization in real-time through PlayHaven's easy-to-use, web-based dashboard. 
