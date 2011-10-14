@@ -9,9 +9,16 @@
 #import <UIKit/UIKit.h>
 
 
-@interface ExampleViewController : UITableViewController {
+@interface ExampleViewController : UIViewController<UITableViewDelegate, UITableViewDataSource> {
   NSMutableArray *_messages;
+  UITableView *_tableView;
+  
+  NSString *_token;
+  NSString *_secret;
 }
+@property (nonatomic, retain) IBOutlet UITableView *tableView;
+@property (nonatomic, copy) NSString *token;
+@property (nonatomic, copy) NSString *secret;
 
 -(void)addMessage:(NSString *)message;
 -(void)startRequest;

@@ -58,7 +58,7 @@
     _content = [content retain];
     
     
-    UIWindow *window = [[UIApplication sharedApplication] keyWindow];
+    UIWindow *window = ([[[UIApplication sharedApplication] windows] count] > 0)?[[[UIApplication sharedApplication] windows] objectAtIndex:0]: nil;
     _targetView = window;
     
     self.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
@@ -112,8 +112,6 @@
     
     [UIView beginAnimations:nil context:nil];
     [UIView setAnimationDuration:duration];
-    //[UIView setAnimationDelegate:self];
-    //[UIView setAnimationDidStopSelector:@selector(showCloseButton)];
     if (self.content.transition == PHContentTransitionDialog) {
       _webView.transform = CGAffineTransformIdentity;
     } else{
@@ -302,7 +300,7 @@
 }
 
 -(void) viewDidShow{
-  //NSLog(@"Loading content unit template: %@", self.content.URL);
+  PH_LOG(@"Loading content unit template: %@", self.content.URL);
   [_webView loadRequest:[NSURLRequest requestWithURL:self.content.URL]];
   if ([self.delegate respondsToSelector:(@selector(contentViewDidShow:))]) {
     [self.delegate contentViewDidShow:self];
@@ -331,7 +329,7 @@
     NSDictionary *context = [parser objectWithString:contextString];
     [parser release];
     
-    NSLog(@"[PHContentView] Redirecting request with callback: %@ to dispatch %@", callback, urlPath);
+    PH_LOG(@"Redirecting request with callback: %@ to dispatch %@", callback, urlPath);
     switch ([[redirect methodSignature] numberOfArguments]) {
       case 5:
         [redirect setArgument:&self atIndex:4]; 
@@ -434,7 +432,7 @@
   if ([callbackResponse isEqualToString:@"OK"]) {
     return YES;
   } else {
-    NSLog(@"[PlayHaven] content template callback failed. If this is a recurring issue, please include this console message along with the following information in your support request: %@", callbackResponse);
+    PH_LOG(@"content template callback failed. If this is a recurring issue, please include this console message along with the following information in your support request: %@", callbackResponse);
     return NO;
   }
 }

@@ -7,7 +7,6 @@
 //
 
 #import "PublisherOpenViewController.h"
-#import "Constants.h"
 
 @implementation PublisherOpenViewController
 
@@ -19,7 +18,7 @@
    * data from API requests. This isn't necessary for most developers.
    */
   
-  PHPublisherOpenRequest * request = [PHPublisherOpenRequest requestForApp:PH_TOKEN secret:PH_SECRET];
+  PHPublisherOpenRequest * request = [PHPublisherOpenRequest requestForApp:self.token secret:self.secret];
   request.delegate = self;
   [request send];
 }

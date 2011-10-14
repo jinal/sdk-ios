@@ -10,7 +10,12 @@
 
 @interface RootViewController : UITableViewController {
 
+  UITextField *tokenField;
+  UITextField *secretField;
 }
+
+@property (nonatomic, retain) IBOutlet UITextField *tokenField;
+@property (nonatomic, retain) IBOutlet UITextField *secretField;
 
 -(void)touchedToggleStatusBar:(id)sender;
 

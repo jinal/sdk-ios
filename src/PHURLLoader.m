@@ -7,6 +7,7 @@
 //
 #import <UIKit/UIKit.h>
 #import "PHURLLoader.h"
+#import "PHConstants.h"
 #define MAXIMUM_REDIRECTS 10
 
 @interface PHURLLoader(Private)
@@ -57,7 +58,7 @@
 #pragma mark PHURLLoader
 -(void) open{
   if (!!self.targetURL) {
-    NSLog(@"PHURLLoader: opening url %@", self.targetURL);
+    PH_LOG(@"opening url %@", self.targetURL);
     _totalRedirects = 0;
     NSURLRequest *request = [NSURLRequest requestWithURL:self.targetURL];
     
@@ -96,12 +97,11 @@
 #pragma mark -
 #pragma mark NSURLConnection
 -(NSURLRequest *) connection:(NSURLConnection *)connection willSendRequest:(NSURLRequest *)request redirectResponse:(NSURLResponse *)response{
-  NSLog(@"PHURLLoader: processing redirect");
   self.targetURL = [request URL];
   if (++_totalRedirects < MAXIMUM_REDIRECTS) {
     return request;
   } else {
-    NSLog(@"PHURLLoader: max redirects with URL %@", self.targetURL);
+    PH_LOG(@"max redirects with URL %@", self.targetURL);
     [self finish];
     
     [connection cancel];
@@ -110,18 +110,17 @@
 }
 
 -(void) connection:(NSURLConnection *)connection didFailWithError:(NSError *)error{
-  NSLog(@"PHURLLoader: failing with error: %@", [error localizedDescription]);
+  PH_LOG(@"failing with error: %@", [error localizedDescription]);
   [self fail];
 }
 
 -(void) connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response{
   NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *)response;
-  NSLog(@"PHURLLoader: did recieve response with code: %d", [httpResponse statusCode]);
   if ([httpResponse statusCode] < 300) {
-    NSLog(@"PHURLLoader: finishing with URL %@", self.targetURL);
+    PH_LOG(@"finishing with URL %@", self.targetURL);
     [self finish];
   } else {
-    NSLog(@"PHURLLoader: failing with URL %@", self.targetURL);
+    PH_LOG(@"failing with URL %@", self.targetURL);
     [self fail];
   }
   

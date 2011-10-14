@@ -131,7 +131,7 @@
 
 -(void) send{
   if (_connection == nil) {
-    NSLog(@"[PlayHaven] Sending request: %@", [self.URL absoluteString]);
+    PH_LOG(@"Sending request: %@", [self.URL absoluteString]);
     NSURLRequest *request = [NSURLRequest requestWithURL:self.URL];
     _connection = [[NSURLConnection alloc] initWithRequest:request delegate:self];
     [_connection start];
@@ -145,24 +145,14 @@
 #pragma mark NSURLConnectionDelegate
 
 -(void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response{
-  /*
-   Nearly all connections made by the SDK will return a NSHTTPURLResponse, but we would like also make requests to file:// URLs as well.
-  */
   if ([response isKindOfClass:[NSHTTPURLResponse class]]) {
     NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *)response;
-    NSLog(@"[PlayHaven] Request recieved HTTP response: %d", [httpResponse statusCode]);
-    
-    if ([httpResponse statusCode] == 200) {
-      [_connectionData release], _connectionData = [[NSMutableData alloc] init];
-      [_response release], _response = [response retain];
-    } else {
-      [self didFailWithError:PHCreateError(PHAPIResponseErrorType)];
-      [connection cancel];
-    }
-  } else {
-    [_connectionData release], _connectionData = [[NSMutableData alloc] init];
-    [_response release], _response = nil;
+    PH_LOG(@"Request recieved HTTP response: %d", [httpResponse statusCode]);
   }
+  
+  /* We want to get response objects for everything */
+  [_connectionData release], _connectionData = [[NSMutableData alloc] init];
+  [_response release], _response = nil;
 }
 
 -(void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data{
@@ -170,7 +160,7 @@
 }
 
 -(void)connectionDidFinishLoading:(NSURLConnection *)connection{
-  NSLog(@"[PlayHaven] Request finished!");
+  PH_NOTE(@"Request finished!");
   if (!!self.delegate) {
     NSString *responseString = [[NSString alloc] initWithData:_connectionData encoding:NSUTF8StringEncoding];
     
@@ -187,7 +177,7 @@
 }
 
 -(void) connection:(NSURLConnection *)connection didFailWithError:(NSError *)error{
-  NSLog(@"[PlayHaven] Request failed with error: %@", [error localizedDescription]);
+  PH_LOG(@"Request failed with error: %@", [error localizedDescription]);
   //REQUEST_RELEASE see REQUEST_RETAIN
   [self didFailWithError:error];
   [self release];
@@ -195,11 +185,16 @@
 
 #pragma mark -
 -(void)processRequestResponse:(NSDictionary *)responseData{
-  id responseValue = [responseData valueForKey:@"response"];
-  if (!!responseValue && ![responseValue isEqual:[NSNull null]]) {
+  id errorValue = [responseData valueForKey:@"error"];
+  if (!!errorValue && ![errorValue isEqual:[NSNull null]]) {
+    PH_LOG(@"Error response: %@", errorValue);
+    [self didFailWithError:PHCreateError(PHAPIResponseErrorType)];
+  } else {
+    id responseValue = [responseData valueForKey:@"response"]; 
+    if ([responseValue isEqual:[NSNull null]]) {
+      responseValue = nil;
+    }
     [self didSucceedWithResponse:responseValue];
-  } else {    
-    [self didFailWithError:PHCreateError(PHRequestResponseErrorType)];
   }
 }
 

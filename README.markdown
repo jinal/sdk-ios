@@ -6,6 +6,14 @@ Acquire, retain, re-engage, and monetize your players with the help of PlayHaven
 
 An API token and secret is required to use this SDK. These tokens uniquely identify your app to PlayHaven and prevent others from making requests to the API on your behalf. To get a token and secret, please visit the PlayHaven developer dashboard at https://dashboard.playhaven.com
 
+What's New in 1.3.6
+==========================
+* Successful requests for placements that have no content assigned or available will no longer trigger an error response. These requests will instead will indicate in your console logs that they will dismiss because there is no content to show and then dismiss using the appropriate delegate methods
+* -(void)request:contentDidFailWithError: has been deprecated, please transition your error handling code to use -(void)request:didFailWithError: for all content request errors.
+* Content units are now displayed in their own UIWindow instance, and will now appear below any alert views (UIAlertView, Game Center alerts, etc.).
+* Developers are now recommended to send open requests each time their app becomes active. (This means each launch and every time the app is foregrounded on devices that support multitasking.) See "Record game opens" under "Adding a Cross-Promotion Widget to Your Game" for more information.
+
+
 Integration
 -----------
 If you are using Unity for your game, please integrate the Unity SDK located here: https://github.com/playhaven/sdk-unity/
@@ -25,16 +33,16 @@ If you are using Unity for your game, please integrate the Unity SDK located her
 
 Example App
 -----------
-Included with the SDK is an example implementation in its own XCode project. It features open and content request implementations including relevant delegate methods for each. To run the example app, you will need to define the preprocessor macros found in *example/Constants.h".
+Included with the SDK is an example implementation in its own XCode project. It features open and content request implementations including relevant delegate methods for each. You will need a PlayHaven API token and secret to make requests with the Example app.
 
 Adding a Cross-Promotion Widget to Your Game
 --------------------------------------------
 Each game is pre-configured for our Cross-Promotion Widget, which will give your game the ability to deliver quality game recommendations to your users. To integrate the Cross-Promotion Widget, you'll need to do the following:
 
 ### Record game opens
-In order to better optimize your content units, it is necessary for your app to report all game opens. This allows you to measure the click-through rate of your Cross-Promotion Widget to help optimize the performance of your implementation. This request is asynchronous and may run in the background while your game is loading.
+In order to better optimize your content units, it is necessary for your app to report each time your application comes to the foreground. PlayHaven uses these events to measure the click-through rate of your Cross-Promotion Widget to help optimize the performance of your implementation. This request is asynchronous and may run in the background while your game is loading.
 
-Find a place in your code that runs when your app is launched, e.g. inside the implementation of your UIApplicationDelegate's - (void)applicationDidFinishLaunching:(NSNotification *)aNotification method, and add the following line:
+The best place to run this code in your app is in the implementation of the UIApplicationDelegate's -(void)applicationDidBecomeActive:(UIApplication *)application method. This will record a game open each time the app is launched. The following line will send a request:
 
 	[[PHPublisherOpenRequest requestForApp:MYTOKEN secret:MYSECRET] send];
 
@@ -107,17 +115,16 @@ The content has been successfully loaded and the user is now interacting with th
 #### Content view dismissing
 The content has successfully dismissed and control is being returned to your app. This can happen as a result of the user clicking on the close button or clicking on a link that will open outside of the app. You may restore sounds and animations at this point.
 
+As of 1.3.3, this delegate method will also be called if a content request returns no content to display.
+
 	-(void)requestContentDidDismiss:(PHPublisherContentRequest *)request;
 
 #### Content request failing
-If for any reason the content request does not successfully return some content to display, the request will stop. At this point, no visible changes have occurred in your app.
+If for any reason the content request does not successfully return some content to display or fails to load after the overlay view has appears, the request will stop any any visible overlays will be removed.
 
 	-(void)request:(PHPublisherContentRequest *)request didFailWithError:(NSError *)error;
 
-#### Content view failing to load
-If for any reason a content unit fails to load after the overlay view has appeared, the request will stop and the overlay view will be removed. You may restore sounds and animations at this point.
-
-	-(void)request:(PHPublisherContentRequest *)request contentDidFailWithError:(NSError *)error;
+NOTE: -(void)request:contentDidFailWithError: is now deprecared in favor of request:didFailWithError: please update implementations accordingly.
 
 ### Customizing content display
 #### Replace close button graphics

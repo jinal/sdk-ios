@@ -8,7 +8,6 @@
 
 #import "PHContent.h"
 
-
 @implementation PHContent
 
 +(id) contentWithDictionary:(NSDictionary *)dictionaryRepresentation{
@@ -75,6 +74,7 @@
   [_URL release], _URL = nil;
   [_context release], _context = nil;
   [_closeButtonURLPath release], _closeButtonURLPath = nil;
+  [_frameDict release], _frameDict = nil;
   [super dealloc];
 }
   

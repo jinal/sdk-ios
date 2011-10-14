@@ -11,17 +11,23 @@
 #define LOG_FONT [UIFont systemFontOfSize:13]
 
 @implementation ExampleViewController
+@synthesize tableView = _tableView;
+@synthesize token = _token;
+@synthesize secret = _secret;
 
-- (id)initWithStyle:(UITableViewStyle)style {
-  self = [super initWithStyle:style];
-  if (self) {
-    _messages = [[NSMutableArray alloc] init];
+-(id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil{
+  self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
+  if (self){
+    _messages = [[NSMutableArray alloc] init];    
   }
   return self;
 }
 
 - (void)dealloc {
   [_messages release], _messages = nil;
+  [_tableView release], _tableView = nil;
+  [_token release], _token = nil;
+  [_secret release], _secret = nil;
   [super dealloc];
 }
 
@@ -87,4 +93,9 @@
   return cell;
 }
 
+- (void)viewDidUnload {
+  [self setTableView:nil];
+  [self setTableView:nil];
+  [super viewDidUnload];
+}
 @end
