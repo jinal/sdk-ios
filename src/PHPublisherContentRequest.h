@@ -22,7 +22,7 @@
 -(void)requestContentDidDismiss:(PHPublisherContentRequest *)request;
 
 -(void)request:(PHPublisherContentRequest *)request didFailWithError:(NSError *)error;
--(void)request:(PHPublisherContentRequest *)request contentDidFailWithError:(NSError *)error;
+-(void)request:(PHPublisherContentRequest *)request contentDidFailWithError:(NSError *)error DEPRECATED_ATTRIBUTE;
 
 #pragma mark - Content customization methods
 -(UIImage *)request:(PHPublisherContentRequest *)request closeButtonImageForControlState:(UIControlState)state content:(PHContent *)content;
@@ -37,9 +37,11 @@
   NSString *_placement;
   BOOL _animated;
   NSMutableArray *_contentViews;
-  UIView *_overlayView;
   BOOL _showsOverlayImmediately;
   UIButton *_closeButton;
+  
+  UIWindow *_overlayWindow;
+  UIWindow *_previousKeyWindow;
 }
 
 +(id)requestForApp:(NSString *)token secret:(NSString *)secret placement:(NSString *)placement delegate:(id)delegate;
@@ -49,8 +51,8 @@
 @property (nonatomic,retain) NSString *placement;
 @property (nonatomic,assign) BOOL animated;
 @property (nonatomic,readonly) NSMutableArray *contentViews;
-@property (nonatomic,readonly) UIView *overlayView;
 @property (nonatomic, assign) BOOL showsOverlayImmediately;
+@property (nonatomic, readonly) UIWindow *overlayWindow;
 
 -(void)requestSubcontent:(NSDictionary *)queryParameters callback:(NSString *)callback source:(PHContentView *)source;
 -(void)pushContent:(PHContent *)content;

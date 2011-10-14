@@ -7,19 +7,25 @@
 //
 
 #import "PublisherContentViewController.h"
-#import "Constants.h"
 
 @implementation PublisherContentViewController
+@synthesize placementField = _placementField;
 
 -(void)dealloc{
   [_notificationView release], _notificationView = nil;
+  [_placementField release], _placementField = nil;
   [super dealloc];
 }
 
 -(void)startRequest{
   [super startRequest];
-  PHPublisherContentRequest * request = [PHPublisherContentRequest requestForApp:PH_TOKEN secret:PH_SECRET placement:@"more_games" delegate:self];
   
+  UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"PlayHaven" message:@"Our content views have changed. Now they will appear under alert views like this. You can see this behavior by leaving this alert box open as the content unit comes into the view." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+  [alert show];
+  [alert release];
+  
+  NSString *placement = (![self.placementField.text isEqualToString:@""])? self.placementField.text : @"more_games";
+  PHPublisherContentRequest * request = [PHPublisherContentRequest requestForApp:self.token secret:self.secret placement:placement delegate:self];
   request.showsOverlayImmediately = YES;
   [request send];
 }
@@ -52,11 +58,6 @@
   [self addMessage:message];  
 }
 
--(void)request:(PHPublisherContentRequest *)request contentDidFailWithError:(NSError *)error{
-  NSString *message = [NSString stringWithFormat:@"✖ Content failed with error: %@", error];
-  [self addMessage:message];  
-}
-
 -(void)request:(PHPublisherContentRequest *)request unlockedReward:(PHReward *)reward{
   NSString *message = [NSString stringWithFormat:@"☆ Unlocked reward: %dx %@", reward.quantity, reward.name];
   [self addMessage:message]; 
@@ -71,12 +72,13 @@
 
 -(void)viewDidLoad{
   [super viewDidLoad];
-  _notificationView = [[PHNotificationView alloc] initWithApp:PH_TOKEN secret:PH_SECRET placement:@"more_games"];
+  _notificationView = [[PHNotificationView alloc] initWithApp:self.token secret:self.secret placement:@"more_games"];
   _notificationView.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin;
   _notificationView.center = CGPointMake(self.view.frame.size.width - 22, 19);
 }
 
 -(void)viewDidUnload{
+    [self setPlacementField:nil];
   [super viewDidUnload];
   [_notificationView removeFromSuperview];
   [_notificationView release], _notificationView = nil;
