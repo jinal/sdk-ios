@@ -250,14 +250,9 @@ NSString *const PHPublisherContentRequestRewardSignatureKey = @"signature";
     [self.delegate performSelector:@selector(requestWillGetContent:) withObject:self];
   }
   
-<<<<<<< HEAD
-  if(self.showsOverlayImmediately){
-    [[[[UIApplication sharedApplication] windows] objectAtIndex:0] addSubview:self.overlayView];
-    [self placeCloseButton];
-=======
+
   if (self.showsOverlayImmediately) {
     [self showOverlayWindow];
->>>>>>> 1.3.6-release
   }
   
   [self placeCloseButton];
@@ -309,11 +304,7 @@ NSString *const PHPublisherContentRequestRewardSignatureKey = @"signature";
   [contentView redirectRequest:@"ph://reward" toTarget:self action:@selector(requestRewards:callback:source:)];
   [contentView redirectRequest:@"ph://closeButton" toTarget:self action:@selector(requestCloseButton:callback:source:)];
   [contentView setDelegate:self];
-<<<<<<< HEAD
-  [contentView setTargetView:self.overlayView];
-=======
   [contentView setTargetView:self.overlayWindow];
->>>>>>> 1.3.6-release
   [contentView show:self.animated];
   
   [self.contentViews addObject:contentView];
@@ -323,83 +314,6 @@ NSString *const PHPublisherContentRequestRewardSignatureKey = @"signature";
   [self placeCloseButton];
 }
 
-<<<<<<< HEAD
--(void)placeCloseButton{
-  if ([_closeButton superview] == nil) {   
-    //TRACK_ORIENTATION see STOP_TRACK_ORIENTATION
-    [[NSNotificationCenter defaultCenter] 
-     addObserver:self
-     selector:@selector(placeCloseButton) 
-     name:UIDeviceOrientationDidChangeNotification
-     object:nil];
-    
-  }
-  
-  UIInterfaceOrientation orientation = [UIApplication sharedApplication].statusBarOrientation;
-  CGFloat barHeight = ([[UIApplication sharedApplication] isStatusBarHidden])? 0 : 20;
-  
-  CGRect screen = [[UIScreen mainScreen] applicationFrame];
-  CGFloat width = screen.size.width, height = screen.size.height, X,Y;
-  switch (orientation) {
-    case UIInterfaceOrientationPortrait:
-      X = width - MAX_MARGIN;
-      Y = MAX_MARGIN + barHeight;
-      break;
-    case UIInterfaceOrientationPortraitUpsideDown:
-      X = MAX_MARGIN;
-      Y = height - MAX_MARGIN;
-      break;
-    case UIInterfaceOrientationLandscapeLeft:
-      X = MAX_MARGIN + barHeight;
-      Y = MAX_MARGIN;
-      break;
-    case UIInterfaceOrientationLandscapeRight:
-      X = width - MAX_MARGIN;
-      Y = height - MAX_MARGIN;
-      break;
-  }
-  
-  //find the topmost contentView
-  PHContentView *topContentView = [self.contentViews lastObject];
-  if (!!topContentView){
-    CGRect contentFrame = [topContentView.content frameForOrientation:orientation];
-    switch (orientation) {
-      case UIInterfaceOrientationPortrait:
-        X = MIN(X, CGRectGetMaxX(contentFrame));
-        Y = MAX(Y, CGRectGetMinY(contentFrame) + barHeight);
-        break;
-        
-      case UIInterfaceOrientationPortraitUpsideDown:
-        X = MAX(X, width - CGRectGetMaxX(contentFrame));
-        Y = MIN(Y, height - CGRectGetMinY(contentFrame));
-        break;
-
-      case UIInterfaceOrientationLandscapeLeft:
-        X = MAX(X, CGRectGetMinY(contentFrame) + barHeight);
-        Y = MAX(Y, height - CGRectGetMaxX(contentFrame));
-        break;
-
-      case UIInterfaceOrientationLandscapeRight:
-        X = MIN(X, width - CGRectGetMinY(contentFrame));
-        Y = MIN(Y, CGRectGetMaxX(contentFrame));
-        break;
-    }
-  }
-  
-  self.closeButton.center = CGPointMake(X, Y);
-  self.closeButton.transform = [self transformForOrientation:orientation];
-  
-  [[[[UIApplication sharedApplication] windows] objectAtIndex:0] addSubview:self.closeButton];
-}
-
--(void)hideCloseButton{
-  [PHPublisherContentRequest cancelPreviousPerformRequestsWithTarget:self selector:@selector(showCloseButtonBecauseOfTimeout) object:nil];
-  [[NSNotificationCenter defaultCenter] removeObserver:self name:UIDeviceOrientationDidChangeNotification object:nil];
-  [_closeButton removeFromSuperview];
-}
-
-=======
->>>>>>> 1.3.6-release
 -(void)dismissFromButton{
   [_connection cancel];
   
