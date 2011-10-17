@@ -172,7 +172,12 @@ NSString *const PHPublisherContentRequestRewardSignatureKey = @"signature";
   
   self.closeButton.center = CGPointMake(X, Y);
   self.closeButton.transform = [self transformForOrientation:orientation];
-  [self.overlayWindow insertSubview:self.closeButton aboveSubview:topContentView];
+
+  if (!!topContentView) {
+    [self.overlayWindow insertSubview:self.closeButton aboveSubview:topContentView];
+  } else {
+    [self.overlayWindow addSubview:self.closeButton];
+  }
 }
 
 -(void)showCloseButtonBecauseOfTimeout{
