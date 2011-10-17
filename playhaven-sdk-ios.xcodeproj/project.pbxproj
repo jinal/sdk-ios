@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		E4DA3653144CB89F00EABE0C /* PHAdvertiserOpenRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = E4DA3652144CB89F00EABE0C /* PHAdvertiserOpenRequest.m */; };
+		E4DA3654144CB89F00EABE0C /* PHAdvertiserOpenRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = E4DA3652144CB89F00EABE0C /* PHAdvertiserOpenRequest.m */; };
+		E4DA3657144CC10100EABE0C /* AdvertiserOpenController.m in Sources */ = {isa = PBXBuildFile; fileRef = E4DA3656144CC10100EABE0C /* AdvertiserOpenController.m */; };
+		E4DA3658144CC10100EABE0C /* AdvertiserOpenController.m in Sources */ = {isa = PBXBuildFile; fileRef = E4DA3656144CC10100EABE0C /* AdvertiserOpenController.m */; };
 		EA03810A13B25F4300A31FF7 /* PHPublisherMetadataRequestTest.m in Sources */ = {isa = PBXBuildFile; fileRef = EA03810913B25F4300A31FF7 /* PHPublisherMetadataRequestTest.m */; };
 		EA03810F13B26A1A00A31FF7 /* PHPublisherMetadataRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = EA03810E13B26A1A00A31FF7 /* PHPublisherMetadataRequest.m */; };
 		EA03811313B26FF500A31FF7 /* PHNotificationViewTest.m in Sources */ = {isa = PBXBuildFile; fileRef = EA03811213B26FF500A31FF7 /* PHNotificationViewTest.m */; };
@@ -81,6 +85,10 @@
 		1D30AB110D05D00D00671497 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		1DF5F4DF0D08C38300B7A737 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		288765FC0DF74451002DB57D /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+		E4DA3651144CB89F00EABE0C /* PHAdvertiserOpenRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PHAdvertiserOpenRequest.h; sourceTree = "<group>"; };
+		E4DA3652144CB89F00EABE0C /* PHAdvertiserOpenRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PHAdvertiserOpenRequest.m; sourceTree = "<group>"; };
+		E4DA3655144CC10100EABE0C /* AdvertiserOpenController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AdvertiserOpenController.h; sourceTree = "<group>"; };
+		E4DA3656144CC10100EABE0C /* AdvertiserOpenController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AdvertiserOpenController.m; sourceTree = "<group>"; };
 		EA03810913B25F4300A31FF7 /* PHPublisherMetadataRequestTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PHPublisherMetadataRequestTest.m; sourceTree = "<group>"; };
 		EA03810D13B26A1A00A31FF7 /* PHPublisherMetadataRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PHPublisherMetadataRequest.h; sourceTree = "<group>"; };
 		EA03810E13B26A1A00A31FF7 /* PHPublisherMetadataRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PHPublisherMetadataRequest.m; sourceTree = "<group>"; };
@@ -215,6 +223,15 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		E4DA364F144CB84000EABE0C /* Advertiser SDK */ = {
+			isa = PBXGroup;
+			children = (
+				E4DA3651144CB89F00EABE0C /* PHAdvertiserOpenRequest.h */,
+				E4DA3652144CB89F00EABE0C /* PHAdvertiserOpenRequest.m */,
+			);
+			name = "Advertiser SDK";
+			sourceTree = "<group>";
+		};
 		EA03810C13B2630200A31FF7 /* Metadata */ = {
 			isa = PBXGroup;
 			children = (
@@ -246,6 +263,8 @@
 				EA12AC3E13662DC400CB2F24 /* PublisherOpenViewController.m */,
 				EA12AC431366339D00CB2F24 /* PublisherContentViewController.h */,
 				EA12AC441366339D00CB2F24 /* PublisherContentViewController.m */,
+				E4DA3655144CC10100EABE0C /* AdvertiserOpenController.h */,
+				E4DA3656144CC10100EABE0C /* AdvertiserOpenController.m */,
 				EA12AC46136635F600CB2F24 /* Constants.h */,
 			);
 			path = example;
@@ -280,6 +299,7 @@
 			children = (
 				EAC53A90134E5F1700F2F956 /* Additions */,
 				EA523D931343EE8E0057DEA5 /* Common */,
+				E4DA364F144CB84000EABE0C /* Advertiser SDK */,
 				EA523D941343EE9D0057DEA5 /* Publisher SDK */,
 			);
 			path = src;
@@ -520,6 +540,8 @@
 				EA03812013B2A0F200A31FF7 /* PHNotificationBadgeRenderer.m in Sources */,
 				EAB2B44813CBD172006D2391 /* PHReward.m in Sources */,
 				EA1799E014200FAE005F286F /* PHConstants.m in Sources */,
+				E4DA3654144CB89F00EABE0C /* PHAdvertiserOpenRequest.m in Sources */,
+				E4DA3658144CC10100EABE0C /* AdvertiserOpenController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -556,6 +578,8 @@
 				EA523DD6134403AF0057DEA5 /* PHPublisherContentRequestTest.m in Sources */,
 				EA21F69D14215EAD00A4177E /* PHConstants.m in Sources */,
 				EAB2B44713CBD172006D2391 /* PHReward.m in Sources */,
+				E4DA3653144CB89F00EABE0C /* PHAdvertiserOpenRequest.m in Sources */,
+				E4DA3657144CC10100EABE0C /* AdvertiserOpenController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

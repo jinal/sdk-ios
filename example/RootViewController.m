@@ -9,6 +9,7 @@
 #import "RootViewController.h"
 #import "PublisherOpenViewController.h"
 #import "PublisherContentViewController.h"
+#import "AdvertiserOpenController.h"
 
 @implementation RootViewController
 
@@ -48,32 +49,36 @@
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-  return 2;
+  return 3;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-  static NSString *CellIdentifier = @"Cell";
-  
-  UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-  if (cell == nil) {
-    cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier] autorelease];
-    cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-  }
-  
-  switch (indexPath.row) {
-    case 0:
-      cell.textLabel.text = @"Open";
-      cell.detailTextLabel.text = @"/publisher/open/";
-      break;
-    case 1:
-      cell.textLabel.text = @"Content";
-      cell.detailTextLabel.text = @"/publisher/content/";
-      break;
-    default:
-      break;
-  }
-  
-  return cell;
+    static NSString *CellIdentifier = @"Cell";
+    
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+    if (cell == nil) {
+        cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier] autorelease];
+        cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+    }
+    
+    switch (indexPath.row) {
+        case 0:
+            cell.textLabel.text = @"Open";
+            cell.detailTextLabel.text = @"/publisher/open/";
+            break;
+        case 1:
+            cell.textLabel.text = @"Content";
+            cell.detailTextLabel.text = @"/publisher/content/";
+            break;
+        case 2:
+            cell.textLabel.text = @"Advertiser Open";
+            cell.detailTextLabel.text = @"/advertiser/open/";
+            break;
+        default:
+            break;
+    }
+    
+    return cell;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -87,6 +92,11 @@
     controller.title = @"Content";
     [self.navigationController pushViewController:controller animated:YES];
     [controller release];
+  } else if (indexPath.row == 2) {
+      AdvertiserOpenController *controller = [[AdvertiserOpenController alloc] initWithStyle:UITableViewStylePlain];
+      controller.title = @"Advertiser Open";
+      [self.navigationController pushViewController:controller animated:YES];
+      [controller release];
   }
   
 }

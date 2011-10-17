@@ -11,5 +11,7 @@
 #import "PHPublisherPromosRequest.h"
 #import "PHPublisherMetadataRequest.h"
 
+#import "PHAdvertiserOpenRequest.h"
+
 #import "PHNotificationView.h"
 #import "PHReward.h"

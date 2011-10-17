@@ -220,19 +220,17 @@ static int CompareEntityPairs(const void *voidCharacter, const void *voidEntityT
 }
 
 +(NSString *)gid{
-  CFUUIDRef uuid = CFUUIDCreate(kCFAllocatorDefault);
+    CFUUIDRef uuid = CFUUIDCreate(kCFAllocatorDefault);
 	CFStringRef uuidRef = CFUUIDCreateString(kCFAllocatorDefault, uuid);
 	CFRelease(uuid);
 	
 	NSString *result = [NSString stringWithString:(NSString *)uuidRef];
 	CFRelease(uuidRef);
-  
-  return result;
+    
+    return result;
 }
 
 +(NSString *) uuid {
-
-
 	return [self b64DigestForString:[self gid]];
 }
 
