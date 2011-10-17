@@ -20,10 +20,6 @@
 -(void)startRequest{
   [super startRequest];
   
-  UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"PlayHaven" message:@"Our content views have changed. Now they will appear under alert views like this. You can see this behavior by leaving this alert box open as the content unit comes into the view." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-  [alert show];
-  [alert release];
-  
   NSString *placement = (![self.placementField.text isEqualToString:@""])? self.placementField.text : @"more_games";
   PHPublisherContentRequest * request = [PHPublisherContentRequest requestForApp:self.token secret:self.secret placement:placement delegate:self];
   request.showsOverlayImmediately = YES;
@@ -74,7 +70,6 @@
   [super viewDidLoad];
   _notificationView = [[PHNotificationView alloc] initWithApp:self.token secret:self.secret placement:@"more_games"];
   _notificationView.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin;
-  _notificationView.center = CGPointMake(self.view.frame.size.width - 22, 19);
 }
 
 -(void)viewDidUnload{
@@ -87,6 +82,7 @@
 -(void)viewDidAppear:(BOOL)animated{
   [super viewDidAppear:animated];
   [self.view addSubview:_notificationView];
+  [_notificationView setCenter:CGPointMake(self.view.frame.size.width - 22, 19)];
   [_notificationView refresh];
 }
 

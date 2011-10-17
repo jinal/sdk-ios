@@ -301,7 +301,9 @@
 
 -(void) viewDidShow{
   PH_LOG(@"Loading content unit template: %@", self.content.URL);
-  [_webView loadRequest:[NSURLRequest requestWithURL:self.content.URL]];
+  [_webView loadRequest:[NSURLRequest requestWithURL:self.content.URL
+                                         cachePolicy:NSURLRequestReturnCacheDataElseLoad 
+                                     timeoutInterval:PH_REQUEST_TIMEOUT]];
   if ([self.delegate respondsToSelector:(@selector(contentViewDidShow:))]) {
     [self.delegate contentViewDidShow:self];
   }
