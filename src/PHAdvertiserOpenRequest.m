@@ -37,7 +37,7 @@
     [signedParameters removeObjectForKey:@"app_version"];
     [signedParameters removeObjectForKey:@"app"];
     [signedParameters removeObjectForKey:@"hardware"];
-    [signedParameters removeObjectForKey:@"nonce"];
+    //[signedParameters removeObjectForKey:@"nonce"];
     [signedParameters removeObjectForKey:@"os"];
     [signedParameters removeObjectForKey:@"idiom"];
     
