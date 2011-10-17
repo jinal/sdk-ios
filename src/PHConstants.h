@@ -23,9 +23,10 @@
 //      in query string. Rewards support requires this setting.
 //   3: Unknown dispatches are ignored instead of throwing an error
 // * 4: ph://launch dispatches no longer create native spinner views
-
 #define PH_DISPATCH_PROTOCOL_VERSION 4
 
+// PH_REQUEST_TIMEOUT
+#define PH_REQUEST_TIMEOUT 10
 
 // Macros
 #define PH_URL(PATH) [PH_BASE_URL stringByAppendingString:@#PATH]

@@ -113,7 +113,9 @@
 -(void) send{
   if (_connection == nil) {
     PH_LOG(@"Sending request: %@", [self.URL absoluteString]);
-    NSURLRequest *request = [NSURLRequest requestWithURL:self.URL];
+    NSURLRequest *request = [NSURLRequest requestWithURL:self.URL 
+                                             cachePolicy:NSURLRequestReturnCacheDataElseLoad 
+                                         timeoutInterval:PH_REQUEST_TIMEOUT];
     _connection = [[NSURLConnection alloc] initWithRequest:request delegate:self];
     [_connection start];
     
