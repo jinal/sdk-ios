@@ -9,7 +9,8 @@
 #import "PHAPIRequest.h"
 
 @interface PHPublisherOpenRequest : PHAPIRequest {
-
+    NSString *_phid;
 }
 
+@property (nonatomic, retain) NSString *phid;
 @end

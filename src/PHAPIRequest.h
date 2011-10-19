@@ -18,7 +18,7 @@
   NSString *_token, *_secret;
   NSURLConnection *_connection;
   NSDictionary *_signedParameters;
-  id<NSObject> _delegate;
+  id<PHAPIRequestDelegate> _delegate;
   NSMutableData *_connectionData;
   NSString *_urlPath;
   NSDictionary *_additionalParameters;
@@ -36,7 +36,7 @@
 @property (nonatomic, readonly) NSString *token;
 @property (nonatomic, readonly) NSString *secret;
 @property (nonatomic, readonly) NSDictionary *signedParameters;
-@property (nonatomic, assign) id<NSObject> delegate;
+@property (nonatomic, assign) id<PHAPIRequestDelegate> delegate;
 @property (nonatomic, retain) NSDictionary *additionalParameters;
 @property (nonatomic, assign) int hashCode;
 @property (nonatomic, readonly) NSString *gid;
