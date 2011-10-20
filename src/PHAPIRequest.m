@@ -80,6 +80,7 @@
                                      os,@"os",
                                      idiom,@"idiom",
                                      appVersion, @"app_version",
+                                     PH_SDK_VERSION, @"sdk",
                                      nil];
     
     [additionalParams addEntriesFromDictionary:signatureParams];
