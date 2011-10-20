@@ -10,29 +10,9 @@
 #import "PHConstants.h"
 #import "PHStringUtil.h"
 
-#define PASTEBOARD_NAME @"com.playhaven.ios.sdk.phid"
-
 @implementation PHPublisherOpenRequest
-@dynamic phid;
 
-#pragma mark PHID Management
-- (NSString*)phid {
-    if (!_phid) {
-        UIPasteboard *pasteboard = [UIPasteboard pasteboardWithName:PASTEBOARD_NAME create:YES];
-        pasteboard.persistent = YES;
-        NSString *saved_id = pasteboard.string;
-        
-        self.phid = saved_id;
-        
-        return saved_id;
-    }
-    return _phid;
-}
-- (void)setPhid:(NSString*)phid {
-    if (_phid && _phid != phid) [_phid release], _phid = nil;
 
-    _phid = [phid retain];
-}
 
 #pragma mark PHAPIRequest Override
 -(NSString *)urlPath{
@@ -40,7 +20,7 @@
 }
 
 -(NSDictionary*)additionalParameters {
-    return (self.phid ? [NSDictionary dictionaryWithObjectsAndKeys:self.phid, @"phid", nil] : nil);
+    return ([PHStringUtil phid] ? [NSDictionary dictionaryWithObjectsAndKeys:[PHStringUtil phid], @"phid", nil] : nil);
 }
 
 
@@ -48,10 +28,7 @@
     NSDictionary *response = [responseData objectForKey:@"response"];
     NSString *phid = [response objectForKey:@"phid"];
     
-    UIPasteboard *pasteboard = [UIPasteboard pasteboardWithName:PASTEBOARD_NAME create:YES];
-    pasteboard.persistent = YES;
-    pasteboard.string = phid;
-    self.phid = phid;
+    [PHStringUtil setPhid:phid];
     
     [self didSucceedWithResponse:nil];
 }

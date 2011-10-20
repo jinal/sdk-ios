@@ -12,5 +12,4 @@
     NSString *_phid;
 }
 
-@property (nonatomic, retain) NSString *phid;
 @end
