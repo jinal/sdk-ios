@@ -24,6 +24,8 @@
   id _context;
 }
 
+
++(void)invalidateAllLoadersWithDelegate:(id <PHURLLoaderDelegate>) delegate;
 +(PHURLLoader *)openDeviceURL:(NSString*)url;
 
 @property (nonatomic, assign) id <PHURLLoaderDelegate> delegate;
@@ -32,4 +34,5 @@
 @property (nonatomic, retain) id context;
 
 -(void)open;
+-(void)invalidate;
 @end

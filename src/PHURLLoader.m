@@ -11,6 +11,7 @@
 #define MAXIMUM_REDIRECTS 10
 
 @interface PHURLLoader(Private)
++(NSMutableSet *)allLoaders;
 -(void)finish;
 -(void)fail;
 @end
@@ -33,6 +34,31 @@
   return result;
 }
 
++(NSMutableSet *)allLoaders{
+  static NSMutableSet *allLoaders = nil;
+  
+  if (allLoaders == nil) {
+    allLoaders = [[NSMutableSet alloc] init];
+  }
+  
+  return allLoaders;
+}
+
++(void)invalidateAllLoadersWithDelegate:(id<PHURLLoaderDelegate>)delegate{
+  NSEnumerator *allLoaders = [[PHURLLoader allLoaders] objectEnumerator];
+  PHURLLoader *loader = nil;
+  
+  NSMutableSet *invalidatedLoaders = [NSMutableSet set];
+  
+  while (loader = [allLoaders nextObject]){
+    if ([[loader delegate] isEqual:delegate]) {
+      [invalidatedLoaders addObject:loader];
+    }
+  }
+  
+  [invalidatedLoaders makeObjectsPerformSelector:@selector(invalidate)];
+}
+
 
 #pragma mark -
 #pragma mark Instance
@@ -46,8 +72,6 @@
 
 -(void) dealloc{
   [_targetURL release], _targetURL = nil;
-  
-  [_connection cancel];
   [_connection release], _connection = nil;
   [_context release], _context = nil;
   
@@ -62,11 +86,24 @@
     _totalRedirects = 0;
     NSURLRequest *request = [NSURLRequest requestWithURL:self.targetURL];
     
-    [_connection cancel];
-    [_connection release], _connection = [[NSURLConnection alloc] initWithRequest:request delegate:self startImmediately:YES];
+    @synchronized(self){
+      [_connection cancel];
+      [_connection release], _connection = [[NSURLConnection alloc] initWithRequest:request delegate:self startImmediately:YES];
 
-    //PHURLLOADER_RETAIN see PHURLLOADER_RELEASE
-    [self retain];
+      
+      //PHURLLOADER_RETAIN see PHURLLOADER_RELEASE
+      [[PHURLLoader allLoaders] addObject:self];
+    }
+  }
+}
+
+-(void) invalidate{
+  self.delegate = nil;
+  
+  //PHURLLOADER_RELEASE see PHURLLOADER_RETAIN
+  @synchronized(self){
+    [_connection cancel];
+    [[PHURLLoader allLoaders] removeObject:self];
   }
 }
 
@@ -75,8 +112,7 @@
     [self.delegate loaderFinished:self];
   }
   
-  //PHURLLOADER_RELEASE see PHURLLOADER_RETAIN
-  [self release];
+  [self invalidate];
   
   if (self.opensFinalURLOnDevice) {
     //actually open in app at this point
@@ -89,8 +125,7 @@
     [self.delegate loaderFailed:self];
   }
   
-  //PHURLLOADER_RELEASE see PHURLLOADER_RETAIN
-  [self release];
+  [self invalidate];
 }
 
 
@@ -103,8 +138,6 @@
   } else {
     PH_LOG(@"max redirects with URL %@", self.targetURL);
     [self finish];
-    
-    [connection cancel];
     return nil;
   }
 }
@@ -123,9 +156,6 @@
     PH_LOG(@"failing with URL %@", self.targetURL);
     [self fail];
   }
-  
-  //we don't need the rest of this connection anymore;
-  [connection cancel];
 }
 
 @end
