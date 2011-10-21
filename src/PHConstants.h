@@ -46,3 +46,12 @@ typedef enum{
 } PHErrorType;
 
 NSError *PHCreateError(PHErrorType errorType);
+
+
+// PHNetworkStatus
+// Determines the status of the device's connectivity. Returns an NSNumber value suitable for including in requests:
+// 
+// 0: No connection
+// 1: Cellular data, 3G/EDGE
+// 2: Wifi
+int PHNetworkStatus();
