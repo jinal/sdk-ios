@@ -9,7 +9,6 @@
 #import "PHContentView.h"
 #import "PHContent.h"
 #import "PHContentWebView.h"
-#import "PHURLLoaderView.h"
 #import "NSObject+QueryComponents.h"
 #import "JSON.h"
 #import "PHConstants.h"
@@ -84,6 +83,8 @@
 
 - (void)dealloc {
   [[NSNotificationCenter defaultCenter] removeObserver:self];
+  [PHURLLoader invalidateAllLoadersWithDelegate:self];
+  
   [_content release], _content = nil;
   [_webView release], _webView = nil;
   [_redirects release], _redirects = nil;
@@ -400,7 +401,6 @@
     PHURLLoader *loader = [[PHURLLoader alloc] init];
     loader.opensFinalURLOnDevice = NO;
     loader.targetURL = [NSURL URLWithString:pingPath];
-    
     [loader open];
     [loader release];
   }
