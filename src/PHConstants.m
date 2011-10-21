@@ -72,14 +72,18 @@ NSString *_getWiFiIPAddress(){
   return NULL;
 }
 
+/*
+ * Network status code courtesy of unforgiven on Stack Overflow
+ * http://stackoverflow.com/questions/1448411/how-to-check-for-local-wi-fi-not-just-cellular-connection-using-iphone-sdk/1480867#1480867
+ */
+
 int PHNetworkStatus(){
-  // Part 1 - Create Internet socket addr of zero
+  //TODO: change this to check API accessibility specifically
 	struct sockaddr_in zeroAddr;
 	bzero(&zeroAddr, sizeof(zeroAddr));
 	zeroAddr.sin_len = sizeof(zeroAddr);
 	zeroAddr.sin_family = AF_INET;
   
-	// Part 2- Create target in format need by SCNetwork
 	SCNetworkReachabilityRef target = 
   SCNetworkReachabilityCreateWithAddress(NULL, (struct sockaddr *) &zeroAddr);
   
