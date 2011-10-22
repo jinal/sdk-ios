@@ -16,4 +16,5 @@
 - (id)initWithApp:(NSString *)token secret:(NSString *)secret delegate:(id)delegate;
 
 @property (nonatomic, retain) NSString *game_token;
+@property (assign) BOOL new_device;
 @end

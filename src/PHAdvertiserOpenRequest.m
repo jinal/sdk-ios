@@ -11,8 +11,16 @@
 #import "PHStringUtil.h"
 #import "PHPublisherOpenRequest.h"
 
+#define PH_USE_OLD_ADVERTISER_API 0
+
+//change PH_URL to old api..
+#ifdef PH_USE_OLD_ADVERTISER_API
+#undef PH_URL
+#define PH_URL(PATH) [[PH_BASE_URL  stringByReplacingOccurrencesOfString:@"2" withString:@""] stringByAppendingString:@#PATH] 
+#endif
+
 @implementation PHAdvertiserOpenRequest
-@synthesize game_token=_game_token;
+@synthesize game_token=_game_token, new_device;
 
 + (id)requestForApp:(NSString *)token secret:(NSString *)secret delegate:(id)delegate {
     return [[[self class] alloc] initWithApp:token secret:secret];
@@ -28,8 +36,9 @@
 #pragma mark Override Methods
 - (NSDictionary*)additionalParameters {
     //Request Required Params: device, token, signature, advertiser_token, new_device
-    NSMutableDictionary *params = [NSMutableDictionary dictionaryWithObjectsAndKeys:@"true", @"new_device", 
-            self.game_token, @"advertiser_token", nil];
+    NSMutableDictionary *params = [NSMutableDictionary dictionaryWithObjectsAndKeys:
+                                   (self.new_device ? @"1" : @"0"), @"new_device", 
+                                   self.game_token, @"advertiser_token", nil];
     
     if ([PHStringUtil phid]) [params setObject:[PHStringUtil phid] forKey:@"phid"];
     
@@ -45,24 +54,8 @@
     [self didSucceedWithResponse:nil];
 }
 
-- (NSDictionary*)signedParameters {
-    //we override to cleanup parameters we don't need
-    NSMutableDictionary *signedParameters = [[super signedParameters] mutableCopy];
-    
-#warning Debug hack to create hash from device instead of new gid for legacy api
-    NSString 
-    *device = [[UIDevice currentDevice] uniqueIdentifier],
-    *nonce = [PHStringUtil uuid],
-    *signatureHash = [NSString stringWithFormat:@"%@:%@:%@:%@", self.token, device, nonce, self.secret];
-    
-    signatureHash = [PHPublisherOpenRequest base64SignatureWithString:signatureHash];
-    [signedParameters setObject:signatureHash forKey:@"signature"];
-    
-    return [signedParameters autorelease];
-    
-}
 - (NSString*)urlPath {
-    return [PH_URL(/v3/advertiser/open/) stringByReplacingOccurrencesOfString:@"2" withString:@""];
+    return PH_URL(/v3/advertiser/open/);
 }
 
 - (void)dealloc {
