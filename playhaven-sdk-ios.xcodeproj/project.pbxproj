@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		E4DA3653144CB89F00EABE0C /* PHAdvertiserOpenRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = E4DA3652144CB89F00EABE0C /* PHAdvertiserOpenRequest.m */; };
 		E4DA3654144CB89F00EABE0C /* PHAdvertiserOpenRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = E4DA3652144CB89F00EABE0C /* PHAdvertiserOpenRequest.m */; };
-		E4DA3657144CC10100EABE0C /* AdvertiserOpenController.m in Sources */ = {isa = PBXBuildFile; fileRef = E4DA3656144CC10100EABE0C /* AdvertiserOpenController.m */; };
 		E4DA3658144CC10100EABE0C /* AdvertiserOpenController.m in Sources */ = {isa = PBXBuildFile; fileRef = E4DA3656144CC10100EABE0C /* AdvertiserOpenController.m */; };
 		E4DA365B144CF14300EABE0C /* PHAdvertiserOpenRequestTest.m in Sources */ = {isa = PBXBuildFile; fileRef = E4DA365A144CF14300EABE0C /* PHAdvertiserOpenRequestTest.m */; };
 		EA03810A13B25F4300A31FF7 /* PHPublisherMetadataRequestTest.m in Sources */ = {isa = PBXBuildFile; fileRef = EA03810913B25F4300A31FF7 /* PHPublisherMetadataRequestTest.m */; };
@@ -268,7 +267,6 @@
 				EA50F3D21436426F0055EB3A /* PublisherContentViewController.xib */,
 				E4DA3655144CC10100EABE0C /* AdvertiserOpenController.h */,
 				E4DA3656144CC10100EABE0C /* AdvertiserOpenController.m */,
-				EA12AC46136635F600CB2F24 /* Constants.h */,
 			);
 			path = example;
 			sourceTree = "<group>";
@@ -581,7 +579,6 @@
 				EA21F69D14215EAD00A4177E /* PHConstants.m in Sources */,
 				EAB2B44713CBD172006D2391 /* PHReward.m in Sources */,
 				E4DA3653144CB89F00EABE0C /* PHAdvertiserOpenRequest.m in Sources */,
-				E4DA3657144CC10100EABE0C /* AdvertiserOpenController.m in Sources */,
 				E4DA365B144CF14300EABE0C /* PHAdvertiserOpenRequestTest.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

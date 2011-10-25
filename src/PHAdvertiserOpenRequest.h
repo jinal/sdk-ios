@@ -8,12 +8,8 @@
 
 #import "PHAPIRequest.h"
 
-@interface PHAdvertiserOpenRequest : PHAPIRequest
-
-
-+ (id)requestForApp:(NSString *)token secret:(NSString *)secret delegate:(id)delegate;
-
-- (id)initWithApp:(NSString *)token secret:(NSString *)secret delegate:(id)delegate;
-
-@property (nonatomic, retain) NSString *game_token;
+@interface PHAdvertiserOpenRequest : PHAPIRequest{
+    BOOL _isNewDevice;
+}
+@property (assign) BOOL isNewDevice;
 @end

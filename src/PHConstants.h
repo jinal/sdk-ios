@@ -46,3 +46,13 @@ typedef enum{
 } PHErrorType;
 
 NSError *PHCreateError(PHErrorType errorType);
+
+
+// 1.4.0 DEBUG CONTSTANTS
+// Comment out this define to have the SDK start signing the SDK using a gid and sending advertiser open requests to PH_BASE_URL
+#define PH_1_4_0_DEBUG 1
+
+#ifdef PH_1_4_0_DEBUG
+#define PH_USE_UDID_SIGNATURE 1
+#define PH_USE_OLD_ADVERTISER_API 1
+#endif

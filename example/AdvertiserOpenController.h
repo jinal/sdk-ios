@@ -8,7 +8,6 @@
 
 #import "ExampleViewController.h"
 #import "PlayHavenSDK.h"
-#import "Constants.h"
 
 @interface AdvertiserOpenController : ExampleViewController <PHAPIRequestDelegate>
 

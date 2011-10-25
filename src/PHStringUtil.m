@@ -8,6 +8,9 @@
 
 #import "PHStringUtil.h"
 #import <CommonCrypto/CommonDigest.h>
+#import <UIKit/UIKit.h>
+
+#define PASTEBOARD_NAME @"com.playhaven.ios.sdk.phid"
 
 typedef struct {
 	unichar character;
@@ -76,6 +79,8 @@ static int CompareEntityPairs(const void *voidCharacter, const void *voidEntityT
 }
 
 @implementation PHStringUtil
+
+static NSString *_phid;
 
 // NOTE: Left intact for backwards-quirkiness.
 // Any service-facing input should continue to use this method, 
@@ -219,6 +224,23 @@ static int CompareEntityPairs(const void *voidCharacter, const void *voidEntityT
 	return [input stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
 }
 
++(NSString*)phid {
+    if (!_phid) {
+        UIPasteboard *pasteboard = [UIPasteboard pasteboardWithName:PASTEBOARD_NAME create:YES];
+        pasteboard.persistent = YES;
+        _phid = [pasteboard.string copy];
+    }
+    return _phid;
+}
++(void)setPhid:(NSString*)phid {
+    if (![_phid isEqualToString:phid]){
+        UIPasteboard *pasteboard = [UIPasteboard pasteboardWithName:PASTEBOARD_NAME create:YES];
+        pasteboard.persistent = YES;
+        pasteboard.string = phid;
+    
+        [_phid release], _phid = [phid retain];
+    }
+}
 +(NSString *)gid{
     CFUUIDRef uuid = CFUUIDCreate(kCFAllocatorDefault);
 	CFStringRef uuidRef = CFUUIDCreateString(kCFAllocatorDefault, uuid);

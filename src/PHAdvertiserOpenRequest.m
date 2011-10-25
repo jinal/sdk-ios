@@ -8,48 +8,35 @@
 
 #import "PHAdvertiserOpenRequest.h"
 #import "PHConstants.h"
+#import "PHStringUtil.h"
 
 @implementation PHAdvertiserOpenRequest
-@synthesize game_token=_game_token;
+@synthesize isNewDevice = _isNewDevice;
 
-+ (id)requestForApp:(NSString *)token secret:(NSString *)secret delegate:(id)delegate {
-    return [[[self class] alloc] initWithApp:token secret:secret];
-}
-- (id)initWithApp:(NSString *)token secret:(NSString *)secret delegate:(id)delegate {
-    if ((self = [super initWithApp:token secret:secret])) {
-        self.delegate = delegate;
-    }
-    
-    return self;
-}
-
-#pragma mark Override Methods
+#pragma mark PHAPIRequest
 - (NSDictionary*)additionalParameters {
-    //Request Required Params: device, token, signature, advertiser_token, new_device
-    return [NSDictionary dictionaryWithObjectsAndKeys:@"true", @"new_device", 
-            self.game_token, @"advertiser_token", nil];
+    NSDictionary *params = [NSDictionary dictionaryWithObjectsAndKeys:
+                            (self.isNewDevice ? @"1" : @"0"), @"new_device", 
+                            self.token, @"advertiser_token", 
+                            [PHStringUtil phid], @"phid",
+                            nil];
+    return params;
 }
 
-- (NSDictionary*)signedParameters {
-    //we override to cleanup parameters we don't need
-    NSMutableDictionary *signedParameters = [[super signedParameters] mutableCopy];
-    
-    [signedParameters removeObjectForKey:@"app_version"];
-    [signedParameters removeObjectForKey:@"app"];
-    [signedParameters removeObjectForKey:@"hardware"];
-    //[signedParameters removeObjectForKey:@"nonce"];
-    [signedParameters removeObjectForKey:@"os"];
-    [signedParameters removeObjectForKey:@"idiom"];
-    
-    return [signedParameters autorelease];
-    
+-(void)didSucceedWithResponse:(NSDictionary *)responseData{
+    [PHStringUtil setPhid:[responseData valueForKey:@"phid"]];
+    [super didSucceedWithResponse:responseData]; 
 }
+
 - (NSString*)urlPath {
+#ifdef PH_USE_OLD_ADVERTISER_API
+    return [PH_URL(/v3/advertiser/open/) stringByReplacingOccurrencesOfString:@"2" withString:@""];
+#else
     return PH_URL(/v3/advertiser/open/);
+#endif
 }
 
 - (void)dealloc {
-    [_game_token release], _game_token = nil;
     [super dealloc];
 }
 @end

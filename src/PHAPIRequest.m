@@ -14,8 +14,6 @@
 #import "UIDevice+HardwareString.h"
 #import "PHConstants.h"
 
-#define PH_USE_UDID_SIGNATURE 1
-
 @implementation PHAPIRequest
 
 +(NSString *) base64SignatureWithString:(NSString *)string{

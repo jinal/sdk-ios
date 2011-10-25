@@ -26,8 +26,6 @@
     STAssertFalse([requestURL rangeOfString:@"advertiser_token="].location == NSNotFound, @"Advertiser token not present!");
     STAssertFalse([requestURL rangeOfString:@"new_device="].location == NSNotFound, @"New device not present!");
     
-    STAssertTrue([request respondsToSelector:@selector(setGameToken:)], @"Cannot set game token");
-    
 }
 
 @end

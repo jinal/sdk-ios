@@ -19,6 +19,8 @@
 +(NSString *)stringByUrlEncodingString:(NSString *)input;
 +(NSString *)stringByUrlDecodingString:(NSString *)input;
 +(NSString *)gid;
++(NSString *)phid;
++(void)setPhid:(NSString*)phid;
 +(NSString *)uuid;
 +(NSDictionary *)dictionaryWithQueryString:(NSString *)input;
 
