@@ -11,6 +11,9 @@
 #import "PublisherContentViewController.h"
 #import "AdvertiserOpenController.h"
 
+#define PUBLISHER_SECTION 0
+#define ADVERTISER_SECTION 1
+
 @interface RootViewController(Private)
 -(void)loadTokenAndSecretFromDefaults;
 -(void)saveTokenAndSecretToDefaults;
@@ -78,11 +81,39 @@
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-  return 1;
+    return 2;
+}
+
+-(NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section{
+    NSString *result;
+    switch (section) {
+        case PUBLISHER_SECTION:
+            result = @"Publisher";
+            break;
+        case ADVERTISER_SECTION:
+            result = @"Advertiser";
+            break;
+        default:
+            result = @"";
+            break;
+    }
+    return result;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-  return 3;
+    NSInteger result;
+    switch (section) {
+        case PUBLISHER_SECTION:
+            result = 2;
+            break;
+        case ADVERTISER_SECTION:
+            result = 1;
+            break;
+        default:
+            result = 0;
+            break;
+    }
+    return result;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -94,19 +125,31 @@
         cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     }
     
-    switch (indexPath.row) {
-        case 0:
-            cell.textLabel.text = @"Open";
-            cell.detailTextLabel.text = @"/publisher/open/";
+    
+    switch (indexPath.section) {
+        case PUBLISHER_SECTION:
+            switch (indexPath.row) {
+                case 0:
+                    cell.textLabel.text = @"Open";
+                    cell.detailTextLabel.text = @"/publisher/open/";
+                    break;
+                case 1:
+                    cell.textLabel.text = @"Content";
+                    cell.detailTextLabel.text = @"/publisher/content/";
+                    break;
+                default:
+                    break;
+            }
             break;
-        case 1:
-            cell.textLabel.text = @"Content";
-            cell.detailTextLabel.text = @"/publisher/content/";
-            break;
-        case 2:
-            cell.textLabel.text = @"Advertiser Open";
-            cell.detailTextLabel.text = @"/advertiser/open/";
-            break;
+        case ADVERTISER_SECTION:
+            switch (indexPath.row) {
+                case 0:
+                    cell.textLabel.text = @"Open";
+                    cell.detailTextLabel.text = @"/advertiser/open/";
+                    break;
+                default:
+                    break;
+            }
         default:
             break;
     }
@@ -115,36 +158,42 @@
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-  if ( !( [self.tokenField.text isEqualToString:@""] || [self.secretField.text isEqualToString:@""] ) ) {
-    [self saveTokenAndSecretToDefaults];
-    if (indexPath.row == 0) {
-      PublisherOpenViewController *controller = [[PublisherOpenViewController alloc] initWithNibName:@"ExampleViewController" bundle:nil];
-      controller.title = @"Open";
-      controller.token = self.tokenField.text;
-      controller.secret = self.secretField.text;
-      [self.navigationController pushViewController:controller animated:YES];
-      [controller release];
-    } else if (indexPath.row == 1){
-      PublisherContentViewController *controller = [[PublisherContentViewController alloc] initWithNibName:@"PublisherContentViewController" bundle:nil];
-      controller.title = @"Content";
-      controller.token = self.tokenField.text;
-      controller.secret = self.secretField.text;
-      [self.navigationController pushViewController:controller animated:YES];
-      [controller release];
-    } else if (indexPath.row == 2){
-      AdvertiserOpenController *controller = [[AdvertiserOpenController alloc] initWithNibName:@"ExampleViewController" bundle:nil];
-      controller.title = @"Advertiser Open";
-      controller.token = self.tokenField.text;
-      controller.secret = self.secretField.text;
-      [self.navigationController pushViewController:controller animated:YES];
-      [controller release];
+    if ( !( [self.tokenField.text isEqualToString:@""] || [self.secretField.text isEqualToString:@""] ) ) {
+        [self saveTokenAndSecretToDefaults];
+        
+        if (indexPath.section == PUBLISHER_SECTION) {
+            if (indexPath.row == 0) {
+                PublisherOpenViewController *controller = [[PublisherOpenViewController alloc] initWithNibName:@"ExampleViewController" bundle:nil];
+                controller.title = @"Open";
+                controller.token = self.tokenField.text;
+                controller.secret = self.secretField.text;
+                [self.navigationController pushViewController:controller animated:YES];
+                [controller release];
+            } else if (indexPath.row == 1){
+                PublisherContentViewController *controller = [[PublisherContentViewController alloc] initWithNibName:@"PublisherContentViewController" bundle:nil];
+                controller.title = @"Content";
+                controller.token = self.tokenField.text;
+                controller.secret = self.secretField.text;
+                [self.navigationController pushViewController:controller animated:YES];
+                [controller release];
+            }
+        } else if (indexPath.section == ADVERTISER_SECTION) {
+            if (indexPath.row == 0) {
+                AdvertiserOpenController *controller = [[AdvertiserOpenController alloc] initWithNibName:@"ExampleViewController" bundle:nil];
+                controller.title = @"Advertiser Open";
+                controller.token = self.tokenField.text;
+                controller.secret = self.secretField.text;
+                [self.navigationController pushViewController:controller animated:YES];
+                [controller release];
+            }
+        }
+
+    } else {
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Missing Credentials" message:@"You must supply a PlayHaven API token and secret to use this app. To get a token and secret, please visit http://playhaven.com on your computer and sign up." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+        [alert show];
+        [alert release];
     }
- } else {
-    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Missing Credentials" message:@"You must supply a PlayHaven API token and secret to use this app. To get a token and secret, please visit http://playhaven.com on your computer and sign up." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-    [alert show];
-    [alert release];
-  }
-  
+    
 }
 
 - (void)viewDidUnload {

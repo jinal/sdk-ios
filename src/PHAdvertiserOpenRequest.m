@@ -10,8 +10,6 @@
 #import "PHConstants.h"
 #import "PHStringUtil.h"
 
-#define PH_USE_OLD_ADVERTISER_API 1
-
 @implementation PHAdvertiserOpenRequest
 @synthesize isNewDevice = _isNewDevice;
 
