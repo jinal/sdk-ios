@@ -14,23 +14,20 @@
 
 
 
-#pragma mark PHAPIRequest Override
+#pragma mark PHAPIRequest
 -(NSString *)urlPath{
     return PH_URL(/v3/publisher/open/);
 }
 
 -(NSDictionary*)additionalParameters {
-    return ([PHStringUtil phid] ? [NSDictionary dictionaryWithObjectsAndKeys:[PHStringUtil phid], @"phid", nil] : nil);
+    return [NSDictionary dictionaryWithObjectsAndKeys:
+            [PHStringUtil phid], @"phid", 
+            nil];
 }
 
-
--(void)processRequestResponse:(NSDictionary *)responseData{
-    NSDictionary *response = [responseData objectForKey:@"response"];
-    NSString *phid = [response objectForKey:@"phid"];
-    
-    [PHStringUtil setPhid:phid];
-    
-    [self didSucceedWithResponse:nil];
+-(void)didSucceedWithResponse:(NSDictionary *)responseData{
+    [PHStringUtil setPhid:[responseData valueForKey:@"phid"]];
+    [super didSucceedWithResponse:responseData]; 
 }
 
 -(void)dealloc {

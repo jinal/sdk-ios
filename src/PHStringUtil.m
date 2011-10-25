@@ -228,22 +228,18 @@ static NSString *_phid;
     if (!_phid) {
         UIPasteboard *pasteboard = [UIPasteboard pasteboardWithName:PASTEBOARD_NAME create:YES];
         pasteboard.persistent = YES;
-        NSString *saved_id = pasteboard.string;
-        
-        _phid = [saved_id retain];
-        
-        return saved_id;
+        _phid = [pasteboard.string copy];
     }
     return _phid;
 }
 +(void)setPhid:(NSString*)phid {
-    if (_phid && _phid != phid) [phid release];
+    if (![_phid isEqualToString:phid]){
+        UIPasteboard *pasteboard = [UIPasteboard pasteboardWithName:PASTEBOARD_NAME create:YES];
+        pasteboard.persistent = YES;
+        pasteboard.string = phid;
     
-    UIPasteboard *pasteboard = [UIPasteboard pasteboardWithName:PASTEBOARD_NAME create:YES];
-    pasteboard.persistent = YES;
-    pasteboard.string = phid;
-    
-    _phid = [phid retain];
+        [_phid release], _phid = [phid retain];
+    }
 }
 +(NSString *)gid{
     CFUUIDRef uuid = CFUUIDCreate(kCFAllocatorDefault);

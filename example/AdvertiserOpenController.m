@@ -14,8 +14,7 @@
 - (void)startRequest {
     [super startRequest];
     
-    PHAdvertiserOpenRequest *request = [[PHAdvertiserOpenRequest alloc] initWithApp:PH_TOKEN secret:PH_SECRET];
-    request.game_token = PH_GAME_TOKEN;
+    PHAdvertiserOpenRequest *request = [[PHAdvertiserOpenRequest alloc] initWithApp:self.token secret:self.secret];
     request.delegate = self;
     
     [request send];

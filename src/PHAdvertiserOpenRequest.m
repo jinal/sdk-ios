@@ -9,57 +9,36 @@
 #import "PHAdvertiserOpenRequest.h"
 #import "PHConstants.h"
 #import "PHStringUtil.h"
-#import "PHPublisherOpenRequest.h"
 
-#define PH_USE_OLD_ADVERTISER_API 0
-
-//change PH_URL to old api..
-#ifdef PH_USE_OLD_ADVERTISER_API
-#undef PH_URL
-#define PH_URL(PATH) [[PH_BASE_URL  stringByReplacingOccurrencesOfString:@"2" withString:@""] stringByAppendingString:@#PATH] 
-#endif
+#define PH_USE_OLD_ADVERTISER_API 1
 
 @implementation PHAdvertiserOpenRequest
-@synthesize game_token=_game_token, new_device;
+@synthesize isNewDevice = _isNewDevice;
 
-+ (id)requestForApp:(NSString *)token secret:(NSString *)secret delegate:(id)delegate {
-    return [[[self class] alloc] initWithApp:token secret:secret];
-}
-- (id)initWithApp:(NSString *)token secret:(NSString *)secret delegate:(id)delegate {
-    if ((self = [super initWithApp:token secret:secret])) {
-        self.delegate = delegate;
-    }
-    
-    return self;
-}
-
-#pragma mark Override Methods
+#pragma mark PHAPIRequest
 - (NSDictionary*)additionalParameters {
-    //Request Required Params: device, token, signature, advertiser_token, new_device
-    NSMutableDictionary *params = [NSMutableDictionary dictionaryWithObjectsAndKeys:
-                                   (self.new_device ? @"1" : @"0"), @"new_device", 
-                                   self.game_token, @"advertiser_token", nil];
-    
-    if ([PHStringUtil phid]) [params setObject:[PHStringUtil phid] forKey:@"phid"];
-    
+    NSDictionary *params = [NSDictionary dictionaryWithObjectsAndKeys:
+                            (self.isNewDevice ? @"1" : @"0"), @"new_device", 
+                            self.token, @"advertiser_token", 
+                            [PHStringUtil phid], @"phid",
+                            nil];
     return params;
 }
 
--(void)processRequestResponse:(NSDictionary *)responseData{
-    NSDictionary *response = [responseData objectForKey:@"response"];
-    NSString *phid = [response objectForKey:@"phid"];
-    
-    [PHStringUtil setPhid:phid];
-    
-    [self didSucceedWithResponse:nil];
+-(void)didSucceedWithResponse:(NSDictionary *)responseData{
+    [PHStringUtil setPhid:[responseData valueForKey:@"phid"]];
+    [super didSucceedWithResponse:responseData]; 
 }
 
 - (NSString*)urlPath {
+#ifdef PH_USE_OLD_ADVERTISER_API
+    return [PH_URL(/v3/advertiser/open/) stringByReplacingOccurrencesOfString:@"2" withString:@""];
+#else
     return PH_URL(/v3/advertiser/open/);
+#endif
 }
 
 - (void)dealloc {
-    [_game_token release], _game_token = nil;
     [super dealloc];
 }
 @end
