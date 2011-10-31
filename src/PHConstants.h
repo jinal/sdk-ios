@@ -7,7 +7,7 @@
 //
 
 // Constants
-#define PH_SDK_VERSION @"1.3.8"
+#define PH_SDK_VERSION @"1.3.9"
 
 #ifndef PH_BASE_URL
 #define PH_BASE_URL @"http://api2.playhaven.com"
@@ -46,3 +46,12 @@ typedef enum{
 } PHErrorType;
 
 NSError *PHCreateError(PHErrorType errorType);
+
+
+// PHNetworkStatus
+// Determines the status of the device's connectivity. Returns:
+// 
+// 0: No connection
+// 1: Cellular data, 3G/EDGE
+// 2: WiFi
+int PHNetworkStatus();
