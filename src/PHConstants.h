@@ -7,7 +7,7 @@
 //
 
 // Constants
-#define PH_SDK_VERSION @"1.3.8"
+#define PH_SDK_VERSION @"1.3.9"
 
 #ifndef PH_BASE_URL
 #define PH_BASE_URL @"http://api2.playhaven.com"
@@ -47,6 +47,13 @@ typedef enum{
 
 NSError *PHCreateError(PHErrorType errorType);
 
+// PHNetworkStatus
+// Determines the status of the device's connectivity. Returns:
+// 
+// 0: No connection
+// 1: Cellular data, 3G/EDGE
+// 2: WiFi
+int PHNetworkStatus();
 
 // 1.4.0 DEBUG CONTSTANTS
 // Comment out this define to have the SDK start signing the SDK using a gid and sending advertiser open requests to PH_BASE_URL
@@ -56,3 +63,4 @@ NSError *PHCreateError(PHErrorType errorType);
 #define PH_USE_UDID_SIGNATURE 1
 #define PH_USE_OLD_ADVERTISER_API 1
 #endif
+

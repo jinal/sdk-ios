@@ -231,10 +231,10 @@
     
     [self activityView].center = _webView.center;
     
-    [self viewDidShow];
-    
     if (animated) {
-      [_webView bounceInWithTarget:nil action:nil];
+      [_webView bounceInWithTarget:self action:@selector(viewDidShow)];
+    } else {
+      [self viewDidShow];
     }
   }
   

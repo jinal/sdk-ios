@@ -15,7 +15,7 @@
 #define BOUNCE_MID CGAffineTransformMakeScale(1.1,1.1)
 #define BOUNCE_IN  CGAffineTransformIdentity
 
-#define DURATION_1 0.125
+#define DURATION_1 0.0625
 #define DURATION_2 0.125
 
 @interface PHContentWebView(Private)
@@ -40,7 +40,7 @@
     self.alpha = ALPHA_OUT;
     
     [UIView beginAnimations:nil context:nil];
-    [UIView setAnimationCurve:UIViewAnimationCurveEaseIn];
+    [UIView setAnimationCurve:UIViewAnimationCurveEaseOut];
     [UIView setAnimationDuration:DURATION_1];
     [UIView setAnimationDelegate:self];
     [UIView setAnimationDidStopSelector:@selector(continueBounceIn)];
@@ -85,7 +85,7 @@
     self.alpha = ALPHA_IN;
     
     [UIView beginAnimations:nil context:nil];
-    [UIView setAnimationCurve:UIViewAnimationCurveEaseIn];
+    [UIView setAnimationCurve:UIViewAnimationCurveEaseOut];
     [UIView setAnimationDuration:DURATION_1];
     [UIView setAnimationDelegate:self];
     [UIView setAnimationDidStopSelector:@selector(continueBounceOut)];

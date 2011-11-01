@@ -82,7 +82,9 @@
            [[UIDevice currentDevice] systemVersion]];
     if(!appVersion) appVersion = @"NA";
     
-    NSNumber *idiom = [NSNumber numberWithInt:(int)UI_USER_INTERFACE_IDIOM()];
+    NSNumber 
+    *idiom = [NSNumber numberWithInt:(int)UI_USER_INTERFACE_IDIOM()],
+    *connection = [NSNumber numberWithInt:PHNetworkStatus()];
     
     
     NSMutableDictionary *additionalParams = (!!self.additionalParameters)? [self.additionalParameters mutableCopy]: [[NSMutableDictionary alloc] init];  
@@ -97,6 +99,8 @@
                                      idiom,@"idiom",
                                      appVersion, @"app_version",
                                      self.gid, @"gid",
+                                     connection,@"connection",
+                                     PH_SDK_VERSION, @"sdk-ios",
                                      nil];
     
     [additionalParams addEntriesFromDictionary:signatureParams];
