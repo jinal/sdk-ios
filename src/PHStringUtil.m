@@ -249,7 +249,7 @@ static NSString *_phid;
 	NSString *result = [NSString stringWithString:(NSString *)uuidRef];
 	CFRelease(uuidRef);
     
-    return result;
+    return [[result stringByReplacingOccurrencesOfString:@"-" withString:@""] lowercaseString];
 }
 
 +(NSString *) uuid {
