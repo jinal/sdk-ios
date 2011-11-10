@@ -23,6 +23,11 @@
   [request send];
 }
 
+-(void)dealloc{
+    [PHAPIRequest cancelAllRequestsWithDelegate:self];
+    [super dealloc];
+}
+
 #pragma mark - PHAPIRequestDelegate
 -(void)request:(PHAPIRequest *)request didSucceedWithResponse:(NSDictionary *)responseData{
   NSString *message = [NSString stringWithFormat:@"✔ Success with response: %@",responseData];
