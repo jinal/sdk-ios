@@ -27,7 +27,10 @@
 }
 
 +(NSString *) base64SignatureWithString:(NSString *)string;
+
 +(id)requestForApp:(NSString *)token secret:(NSString *)secret;
++(void)cancelAllRequestsWithDelegate:(id) delegate;
+
 
 -(id)initWithApp:(NSString *)token secret:(NSString *)secret;
 
@@ -43,6 +46,7 @@
 -(NSString *)signedParameterString;
 
 -(void)send;
+-(void)cancel;
 
 -(void)processRequestResponse:(NSDictionary *)responseData;
 

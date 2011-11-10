@@ -10,22 +10,40 @@
 
 @implementation PublisherContentViewController
 @synthesize placementField = _placementField;
+@synthesize request = _request;
 
 -(void)dealloc{
-  [_notificationView release], _notificationView = nil;
-  [_placementField release], _placementField = nil;
-  [super dealloc];
+    [PHAPIRequest cancelAllRequestsWithDelegate:self];
+    
+    [_notificationView release], _notificationView = nil;
+    [_placementField release], _placementField = nil;
+    [_request release], _request = nil;
+    [super dealloc];
 }
 
 -(void)startRequest{
-  [super startRequest];
-  
-  [self.placementField resignFirstResponder];
-  
-  NSString *placement = (![self.placementField.text isEqualToString:@""])? self.placementField.text : @"more_games";
-  PHPublisherContentRequest * request = [PHPublisherContentRequest requestForApp:self.token secret:self.secret placement:placement delegate:self];
-  request.showsOverlayImmediately = YES;
-  [request send];
+    
+    if (self.request == nil) {
+        [super startRequest];
+        
+        [self.placementField resignFirstResponder];
+        
+        NSString *placement = (![self.placementField.text isEqualToString:@""])? self.placementField.text : @"more_games";
+        PHPublisherContentRequest * request = [PHPublisherContentRequest requestForApp:self.token secret:self.secret placement:placement delegate:self];
+        [request send];
+        
+        [self setRequest:request];
+
+        [self.navigationItem.rightBarButtonItem setTitle:@"Cancel"];
+    } else {
+        [self addMessage:@"Request canceled!"];
+        
+        [self.request cancel];
+        self.request = nil;
+        
+        
+        [self.navigationItem.rightBarButtonItem setTitle:@"Start"];
+    }
 }
 
 #pragma mark - PHPublisherContentRequestDelegate
@@ -47,18 +65,27 @@
 }
 
 -(void)requestContentDidDismiss:(PHPublisherContentRequest *)request{
-  NSString *message = [NSString stringWithFormat:@"✔ User dismissed request: %@",request];
-  [self addMessage:message];
+    NSString *message = [NSString stringWithFormat:@"✔ User dismissed request: %@",request];
+    [self addMessage:message];
+    
+    
+    //Cleaning up after a completed request
+    self.request = nil;
+    [self.navigationItem.rightBarButtonItem setTitle:@"Start"];    
 }
 
 -(void)request:(PHPublisherContentRequest *)request didFailWithError:(NSError *)error{
-  NSString *message = [NSString stringWithFormat:@"✖ Failed with error: %@", error];
-  [self addMessage:message];  
+    NSString *message = [NSString stringWithFormat:@"✖ Failed with error: %@", error];
+    [self addMessage:message];
+    
+    //Cleaning up after a completed request
+    self.request = nil;
+    [self.navigationItem.rightBarButtonItem setTitle:@"Start"];
 }
 
 -(void)request:(PHPublisherContentRequest *)request unlockedReward:(PHReward *)reward{
   NSString *message = [NSString stringWithFormat:@"☆ Unlocked reward: %dx %@", reward.quantity, reward.name];
-  [self addMessage:message]; 
+  [self addMessage:message];
 }
 
 #pragma - Notifications

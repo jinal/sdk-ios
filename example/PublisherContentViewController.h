@@ -13,7 +13,11 @@
 @interface PublisherContentViewController : ExampleViewController<PHPublisherContentRequestDelegate> {
   PHNotificationView *_notificationView;
   UITextField *_placementField;
+    
+  PHPublisherContentRequest *_request;
 }
+
 @property (nonatomic, retain) IBOutlet UITextField *placementField;
+@property (nonatomic, retain) PHPublisherContentRequest *request;
 
 @end
