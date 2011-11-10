@@ -7,7 +7,7 @@
 //
 
 // Constants
-#define PH_SDK_VERSION @"1.3.9"
+#define PH_SDK_VERSION @"1.3.10"
 
 #ifndef PH_BASE_URL
 #define PH_BASE_URL @"http://api2.playhaven.com"
