@@ -14,12 +14,41 @@
 #import "UIDevice+HardwareString.h"
 #import "PHConstants.h"
 
+@interface PHAPIRequest(Private)
++(NSMutableSet *)allRequests;
+-(void)finish;
+@end
+
 @implementation PHAPIRequest
+
++(NSMutableSet *)allRequests{
+    static NSMutableSet *allRequests = nil;
+    
+    if (allRequests == nil) {
+        allRequests = [[NSMutableSet alloc] init];
+    }
+    
+    return allRequests;
+}
+
++(void)cancelAllRequestsWithDelegate:(id)delegate{
+    NSEnumerator *allRequests = [[PHAPIRequest allRequests] objectEnumerator];
+    PHAPIRequest *request = nil;
+    
+    NSMutableSet *canceledRequests = [NSMutableSet set];
+    
+    while (request = [allRequests nextObject]){
+        if ([[request delegate] isEqual:delegate]) {
+            [canceledRequests addObject:request];
+        }
+    }
+    
+    [canceledRequests makeObjectsPerformSelector:@selector(cancel)];
+}
 
 +(NSString *) base64SignatureWithString:(NSString *)string{
   return [PHStringUtil b64DigestForString:string];
 }
-
 
 +(id) requestForApp:(NSString *)token secret:(NSString *)secret{
   return [[[[self class] alloc] initWithApp:token secret:secret] autorelease];
@@ -98,8 +127,6 @@
 }
 
 -(void) dealloc{
-  [_connection cancel];
-  
   [_token release], _token = nil;
   [_secret release], _secret = nil;
   [_URL release], _URL = nil;
@@ -124,8 +151,23 @@
     [_connection start];
     
     //REQUEST_RETAIN see REQUEST_RELEASE
-    [self retain];
+    [[PHAPIRequest allRequests] addObject:self];
   }
+}
+
+-(void)cancel{
+    PH_LOG(@"%@ canceled!", NSStringFromClass([self class]));
+    [self finish];
+}
+
+/*
+ * Internal cleanup method
+ */
+-(void)finish{
+    [_connection cancel];
+    
+    //REQUEST_RELEASE see REQUEST_RETAIN
+    [[PHAPIRequest allRequests] removeObject:self];
 }
 
 #pragma mark -
@@ -160,14 +202,15 @@
   }
   
   //REQUEST_RELEASE see REQUEST_RETAIN
-  [self release];
+  [self finish];
 }
 
 -(void) connection:(NSURLConnection *)connection didFailWithError:(NSError *)error{
   PH_LOG(@"Request failed with error: %@", [error localizedDescription]);
-  //REQUEST_RELEASE see REQUEST_RETAIN
   [self didFailWithError:error];
-  [self release];
+    
+  //REQUEST_RELEASE see REQUEST_RETAIN
+  [self finish];
 }
 
 #pragma mark -
