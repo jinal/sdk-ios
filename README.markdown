@@ -1,4 +1,4 @@
-PlayHaven SDK 1.3.9
+PlayHaven SDK 1.3.10
 ====================
 PlayHaven is a real-time mobile game marketing platform to help you take control of the business of your games.
 
@@ -6,8 +6,12 @@ Acquire, retain, re-engage, and monetize your players with the help of PlayHaven
 
 An API token and secret is required to use this SDK. These tokens uniquely identify your app to PlayHaven and prevent others from making requests to the API on your behalf. To get a token and secret, please visit the PlayHaven developer dashboard at https://dashboard.playhaven.com
 
-What's new in 1.3.9
+What's new in 1.3.10
 ===================
+* Adds the ability to cancel active content requests, or cancel all active content requests for a given delegate. See "Cancelling requests" in the API Reference section for more details
+
+1.3.9
+=====
 * The SDK now reports whether a user is on a cellular or wifi data connection. This will allow the API to tailor content units to available bandwidth. This feature requires *SystemConfiguration.framework* to be linked to your build targets.
 * Content unit open animations should now be much smoother.
 
@@ -15,12 +19,6 @@ What's new in 1.3.9
 =====
 * Removed unused PHURLLoaderView classes.
 * Prevents crashes caused by interrupting a PHURLLoader open operation (sometimes occurs during app store opens)
-
-1.3.7
-=====
-* API and content template requests now have a 10 second timeout, this should keep your users from getting stuck waiting for a request if they are experiencing network issues
-* The native close button should appear more reliably before content units are displayed
-
 
 Integration
 -----------
@@ -134,6 +132,13 @@ If for any reason the content request does not successfully return some content 
 	-(void)request:(PHPublisherContentRequest *)request didFailWithError:(NSError *)error;
 
 NOTE: -(void)request:contentDidFailWithError: is now deprecared in favor of request:didFailWithError: please update implementations accordingly.
+
+### *NEW* Cancelling requests
+You may now cancel any API request at any time using the -(void)cancel method. This will also cancel any open network connections and clean up any views in the case of content requests. Canceled requests will not send any more messages to their delegates.
+
+Additionally you may cancel all open API requests for a given delegate. This can be useful if you are not keeping references to API request instances you may have created. As with the -(void)cancel method, canceled requests will not send any more messages to delegates. To cancel all requests:
+
+    [PHAPIRequest cancelAllRequestsWithDelegate:(id)delegate];
 
 ### Customizing content display
 #### Replace close button graphics

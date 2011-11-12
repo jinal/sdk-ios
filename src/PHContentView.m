@@ -362,11 +362,15 @@
 }
 
 -(void)webViewDidFinishLoad:(UIWebView *)webView{
-  [[self activityView] stopAnimating]; 
-  
-  if ([self.delegate respondsToSelector:(@selector(contentViewDidLoad:))]) {
-    [self.delegate contentViewDidLoad:self];
-  }
+    //This is a fix that primarily affects iOS versions older than 4.1, it should prevent http requests
+    //from leaking memory from the webview. Newer iOS versions are unaffected by the bug or the fix.
+    [[NSUserDefaults standardUserDefaults] setInteger:0 forKey:@"WebKitCacheModelPreferenceKey"];
+    
+    [[self activityView] stopAnimating]; 
+    
+    if ([self.delegate respondsToSelector:(@selector(contentViewDidLoad:))]) {
+        [self.delegate contentViewDidLoad:self];
+    }
 }
 
 #pragma mark -

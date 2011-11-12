@@ -21,7 +21,11 @@ NSString *const PHPublisherContentRequestRewardSignatureKey = @"signature";
 
 #define MAX_MARGIN 20
 
-@interface PHPublisherContentRequest()
+@interface PHAPIRequest(Private)
+-(void)finish;
+@end
+
+@interface PHPublisherContentRequest(Private)
 -(CGAffineTransform) transformForOrientation:(UIInterfaceOrientation)orientation;
 -(void)placeCloseButton;
 -(void)hideCloseButton;
@@ -185,6 +189,7 @@ NSString *const PHPublisherContentRequestRewardSignatureKey = @"signature";
 }
 
 -(void)hideCloseButton{
+    
   [PHPublisherContentRequest cancelPreviousPerformRequestsWithTarget:self selector:@selector(showCloseButtonBecauseOfTimeout) object:nil];
   [[NSNotificationCenter defaultCenter] removeObserver:self name:UIDeviceOrientationDidChangeNotification object:nil];
   [_closeButton removeFromSuperview];
@@ -192,7 +197,6 @@ NSString *const PHPublisherContentRequestRewardSignatureKey = @"signature";
 
 -(BOOL)showOverlayWindow{
   if (![self.overlayWindow isKeyWindow]) {
-    //_previousKeyWindow = [[UIApplication sharedApplication] keyWindow];
     [self.overlayWindow makeKeyAndVisible];
     return YES;
   }
@@ -216,6 +220,31 @@ NSString *const PHPublisherContentRequestRewardSignatureKey = @"signature";
           nil];
 }
 
+-(void)finish{
+    [PHAPIRequest cancelAllRequestsWithDelegate:self];
+    
+    [self hideOverlayWindow];
+    [self hideCloseButton];
+    
+    [super finish];
+}
+
+-(void)connectionDidFinishLoading:(NSURLConnection *)connection{
+    PH_NOTE(@"Request finished!");
+    if (!!self.delegate) {
+        NSString *responseString = [[NSString alloc] initWithData:_connectionData encoding:NSUTF8StringEncoding];
+        
+        SBJsonParser *parser = [[SBJsonParser alloc] init];
+        NSDictionary* resultDictionary = [parser objectWithString:responseString];
+        [self processRequestResponse:resultDictionary];
+        
+        [parser release];
+        [responseString release];
+    }
+    
+    //NOTE: Content requests aren't released until the content unit session is over.
+}
+
 -(void)didSucceedWithResponse:(NSDictionary *)responseData{
   PHContent *content = [PHContent contentWithDictionary:responseData];
   if (!!content) {
@@ -223,13 +252,8 @@ NSString *const PHPublisherContentRequestRewardSignatureKey = @"signature";
       [self.delegate performSelector:@selector(request:contentWillDisplay:) withObject:self withObject:content];
     }
     
-    if([self showOverlayWindow] || self.showsOverlayImmediately){
-      [self pushContent:content];
-      [self retain]; 
-    } else {
-      [self didFailWithError:PHCreateError(PHWindowErrorType)];
-    }
-    
+    [self showOverlayWindow];
+    [self pushContent:content]; 
   } else {
     PH_NOTE(@"This request was successful but did not contain any displayable content. Dismissing now.");
     if ([self.delegate respondsToSelector:@selector(requestContentDidDismiss:)]) {
@@ -237,15 +261,8 @@ NSString *const PHPublisherContentRequestRewardSignatureKey = @"signature";
                           withObject:self];
     }
     
-    [self hideOverlayWindow];
-    [self hideCloseButton];    
+      [self finish];
   }
-}
-
--(void)didFailWithError:(NSError *)error{
-  [super didFailWithError:error];
-  [self hideOverlayWindow];
-  [self hideCloseButton];
 }
 
 -(void)send{
@@ -320,17 +337,12 @@ NSString *const PHPublisherContentRequestRewardSignatureKey = @"signature";
 }
 
 -(void)dismissFromButton{
-  [_connection cancel];
-  
-  
   if ([self.contentViews count] > 0) {
     for (PHContentView *contentView in self.contentViews) {
       [contentView dismissFromButton];
     }
   } else {
-    [self hideOverlayWindow];
-    [self hideCloseButton];
-    [self release];
+      [self finish];
   }
 }
 
@@ -370,9 +382,7 @@ NSString *const PHPublisherContentRequestRewardSignatureKey = @"signature";
                           withObject:self];
     }
     
-    [self hideOverlayWindow];
-    [self hideCloseButton];
-    [self release];
+    [self finish];
   }
 }
 
@@ -392,9 +402,7 @@ NSString *const PHPublisherContentRequestRewardSignatureKey = @"signature";
                           withObject:error];
     } 
     
-    [self hideOverlayWindow];
-    [self hideCloseButton];
-    [self release];
+    [self finish];
   }
 }
 
