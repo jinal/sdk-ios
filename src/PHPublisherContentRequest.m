@@ -196,12 +196,8 @@ NSString *const PHPublisherContentRequestRewardSignatureKey = @"signature";
 }
 
 -(BOOL)showOverlayWindow{
-  if (![self.overlayWindow isKeyWindow]) {
-    [self.overlayWindow makeKeyAndVisible];
+    self.overlayWindow.hidden = NO;
     return YES;
-  }
-  
-  return NO;
 }
 
 -(void)hideOverlayWindow{
