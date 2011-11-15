@@ -24,11 +24,13 @@
 }
 
 - (void)dealloc {
-  [_messages release], _messages = nil;
-  [_tableView release], _tableView = nil;
-  [_token release], _token = nil;
-  [_secret release], _secret = nil;
-  [super dealloc];
+    [_messages release], _messages = nil;
+    [_tableView release], _tableView = nil;
+    [_token release], _token = nil;
+    [_secret release], _secret = nil;
+    [_startRequestDate release], _startRequestDate = nil;
+    
+    [super dealloc];
 }
 
 #pragma mark -
@@ -37,9 +39,21 @@
   [self.tableView reloadData];
 }
 
+-(void)addElapsedTime{
+    NSTimeInterval delta = [[NSDate date] timeIntervalSinceDate:_startRequestDate];
+    NSString *message = [NSString stringWithFormat:@"🕑 %f seconds", delta];
+    [self addMessage:message];
+}
+
 -(void)startRequest{
-  [_messages removeAllObjects];
-  [self addMessage:@"Started request!"];
+    [_messages removeAllObjects];
+    [self addMessage:@"Started request!"];
+    
+    [_startRequestDate release], _startRequestDate = [[NSDate alloc] initWithTimeIntervalSinceNow:0];
+}
+
+-(void)finishRequest{
+    [self addElapsedTime];
 }
 
 #pragma mark - View lifecycle
