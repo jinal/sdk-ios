@@ -47,11 +47,6 @@ NSString *const PHPublisherContentRequestRewardSignatureKey = @"signature";
     if ((self = [self initWithApp:token secret:secret])) {
         self.placement = placement;
         self.delegate = delegate;
-        
-        [[NSNotificationCenter defaultCenter] addObserver:self 
-                                                 selector:@selector(handleAppBackgrounded:) 
-                                                     name:UIApplicationDidEnterBackgroundNotification 
-                                                   object:nil];
     }
     
     return self;
@@ -276,6 +271,15 @@ NSString *const PHPublisherContentRequestRewardSignatureKey = @"signature";
 }
 
 -(void)send{
+    if ([[UIDevice currentDevice] respondsToSelector:@selector(isMultitaskingSupported)] && 
+        [[UIDevice currentDevice] isMultitaskingSupported]) {
+        [[NSNotificationCenter defaultCenter] addObserver:self 
+                                                 selector:@selector(handleAppBackgrounded:) 
+                                                     name:UIApplicationDidEnterBackgroundNotification 
+                                                   object:nil];
+    }
+    
+    
     [super send];
     
     if ([self.delegate respondsToSelector:@selector(requestWillGetContent:)]) {
