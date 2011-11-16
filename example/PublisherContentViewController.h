@@ -15,7 +15,6 @@
   UITextField *_placementField;
     
   PHPublisherContentRequest *_request;
-    UIWindow *_keyWindow;
 }
 
 @property (nonatomic, retain) IBOutlet UITextField *placementField;
