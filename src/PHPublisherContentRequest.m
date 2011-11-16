@@ -32,7 +32,6 @@ NSString *const PHPublisherContentRequestRewardSignatureKey = @"signature";
 -(void)showCloseButtonBecauseOfTimeout;
 -(BOOL)showOverlayWindow;
 -(void)hideOverlayWindow;
--(void)handleAppBackgrounded:(NSNotification*)notification;
 -(void)dismissFromButton;
 @property (nonatomic, readonly) UIButton *closeButton;
 @end
@@ -114,9 +113,6 @@ NSString *const PHPublisherContentRequestRewardSignatureKey = @"signature";
 }
 
 #pragma mark - Internal UI management
-- (void)handleAppBackgrounded:(NSNotification *)notification {
-    [self dismissFromButton];
-}
 -(void)placeCloseButton{
     if ([_closeButton superview] == nil) {   
         //TRACK_ORIENTATION see STOP_TRACK_ORIENTATION
@@ -274,7 +270,7 @@ NSString *const PHPublisherContentRequestRewardSignatureKey = @"signature";
     if ([[UIDevice currentDevice] respondsToSelector:@selector(isMultitaskingSupported)] && 
         [[UIDevice currentDevice] isMultitaskingSupported]) {
         [[NSNotificationCenter defaultCenter] addObserver:self 
-                                                 selector:@selector(handleAppBackgrounded:) 
+                                                 selector:@selector(dismissFromButton) 
                                                      name:UIApplicationDidEnterBackgroundNotification 
                                                    object:nil];
     }
