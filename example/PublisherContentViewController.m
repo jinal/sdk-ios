@@ -22,6 +22,7 @@
 }
 
 -(void)startRequest{
+    _keyWindow = [[UIApplication sharedApplication] keyWindow];
     
     if (self.request == nil) {
         [super startRequest];
@@ -71,7 +72,9 @@
     
     //Cleaning up after a completed request
     self.request = nil;
-    [self.navigationItem.rightBarButtonItem setTitle:@"Start"];    
+    [self.navigationItem.rightBarButtonItem setTitle:@"Start"];
+    
+    [self performSelector:@selector(checkKeyWindow) withObject:nil afterDelay:10];
 }
 
 -(void)request:(PHPublisherContentRequest *)request didFailWithError:(NSError *)error{
@@ -81,11 +84,22 @@
     //Cleaning up after a completed request
     self.request = nil;
     [self.navigationItem.rightBarButtonItem setTitle:@"Start"];
+
+    [self performSelector:@selector(checkKeyWindow) withObject:nil afterDelay:10];
 }
 
 -(void)request:(PHPublisherContentRequest *)request unlockedReward:(PHReward *)reward{
   NSString *message = [NSString stringWithFormat:@"☆ Unlocked reward: %dx %@", reward.quantity, reward.name];
   [self addMessage:message];
+}
+
+#pragma - keyWindow
+-(void)checkKeyWindow{
+    if ([[UIApplication sharedApplication] keyWindow] == _keyWindow){
+        [self addMessage:@"Key window restored!"];
+    } else {
+        [self addMessage:@"Key window not restored!"];
+    }    
 }
 
 #pragma - Notifications

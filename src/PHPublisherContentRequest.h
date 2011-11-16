@@ -40,8 +40,7 @@
   BOOL _showsOverlayImmediately;
   UIButton *_closeButton;
   
-  UIWindow *_overlayWindow;
-  UIWindow *_previousKeyWindow;
+  UIView *_overlayWindow;
 }
 
 +(id)requestForApp:(NSString *)token secret:(NSString *)secret placement:(NSString *)placement delegate:(id)delegate;
@@ -52,7 +51,7 @@
 @property (nonatomic,assign) BOOL animated;
 @property (nonatomic,readonly) NSMutableArray *contentViews;
 @property (nonatomic, assign) BOOL showsOverlayImmediately;
-@property (nonatomic, readonly) UIWindow *overlayWindow;
+@property (nonatomic, readonly) UIView *overlayWindow;
 
 -(void)requestSubcontent:(NSDictionary *)queryParameters callback:(NSString *)callback source:(PHContentView *)source;
 -(void)pushContent:(PHContent *)content;
