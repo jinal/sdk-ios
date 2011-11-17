@@ -17,6 +17,7 @@
 @interface PHAPIRequest(Private)
 +(NSMutableSet *)allRequests;
 -(void)finish;
+-(void)afterConnectionDidFinishLoading;
 @end
 
 @implementation PHAPIRequest
@@ -189,20 +190,28 @@
 }
 
 -(void)connectionDidFinishLoading:(NSURLConnection *)connection{
-  PH_NOTE(@"Request finished!");
-  if (!!self.delegate) {
-    NSString *responseString = [[NSString alloc] initWithData:_connectionData encoding:NSUTF8StringEncoding];
+    PH_NOTE(@"Request finished!");
+    if (!!self.delegate) {
+        if ([self.delegate respondsToSelector:@selector(requestDidFinishLoading:)]) {
+            [self.delegate performSelector:@selector(requestDidFinishLoading:) withObject:self withObject:nil];
+        }
+        
+        NSString *responseString = [[NSString alloc] initWithData:_connectionData encoding:NSUTF8StringEncoding];
+        
+        SBJsonParser *parser = [[SBJsonParser alloc] init];
+        NSDictionary* resultDictionary = [parser objectWithString:responseString];
+        [self processRequestResponse:resultDictionary];
+        
+        [parser release];
+        [responseString release];
+    }
     
-    SBJsonParser *parser = [[SBJsonParser alloc] init];
-    NSDictionary* resultDictionary = [parser objectWithString:responseString];
-    [self processRequestResponse:resultDictionary];
-    
-    [parser release];
-    [responseString release];
-  }
-  
-  //REQUEST_RELEASE see REQUEST_RETAIN
-  [self finish];
+    //REQUEST_RELEASE see REQUEST_RETAIN
+    [self afterConnectionDidFinishLoading];
+}
+
+-(void)afterConnectionDidFinishLoading{
+    [self finish];
 }
 
 -(void) connection:(NSURLConnection *)connection didFailWithError:(NSError *)error{

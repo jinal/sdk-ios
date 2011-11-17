@@ -45,43 +45,54 @@
     }
 }
 
+-(void)finishRequest{
+    [super finishRequest];
+
+    //Cleaning up after a completed request
+    self.request = nil;
+    [self.navigationItem.rightBarButtonItem setTitle:@"Start"];      
+}
+
 #pragma mark - PHPublisherContentRequestDelegate
 -(void)requestWillGetContent:(PHPublisherContentRequest *)request{
   [self addMessage:@"Starting content request..."];
 }
 
+-(void)requestDidFinishLoading:(PHPublisherContentRequest *)request{
+    NSString *message = @"Completed API response!";
+    [self addMessage:message];
+    
+    [self addElapsedTime];
+}
+
 -(void)request:(PHPublisherContentRequest *)request contentWillDisplay:(PHContent *)content{
-  NSString *message = [NSString stringWithFormat:@"Recieved content: %@, preparing for display",content];
-  [self addMessage:message];
+    NSString *message = [NSString stringWithFormat:@"Recieved content: %@, preparing for display",content];
+    [self addMessage:message];
+    
+    [self addElapsedTime];
 }
 
 -(void)request:(PHPublisherContentRequest *)request contentDidDisplay:(PHContent *)content{
-  //This is a good place to clear any notification views attached to this request.
-  [_notificationView clear];
+    //This is a good place to clear any notification views attached to this request.
+    [_notificationView clear];
   
-  NSString *message = [NSString stringWithFormat:@"Displayed content: %@",content];
-  [self addMessage:message];
+    NSString *message = [NSString stringWithFormat:@"Displayed content: %@",content];
+    [self addMessage:message];
+    
+    [self addElapsedTime];
 }
 
 -(void)requestContentDidDismiss:(PHPublisherContentRequest *)request{
     NSString *message = [NSString stringWithFormat:@"✔ User dismissed request: %@",request];
     [self addMessage:message];
-    
-    
-    //Cleaning up after a completed request
-    self.request = nil;
-    [self.navigationItem.rightBarButtonItem setTitle:@"Start"];
-    
-    [self performSelector:@selector(checkKeyWindow) withObject:nil afterDelay:10];
+
+    [self finishRequest];
 }
 
 -(void)request:(PHPublisherContentRequest *)request didFailWithError:(NSError *)error{
     NSString *message = [NSString stringWithFormat:@"✖ Failed with error: %@", error];
     [self addMessage:message];
-    
-    //Cleaning up after a completed request
-    self.request = nil;
-    [self.navigationItem.rightBarButtonItem setTitle:@"Start"];
+    [self finishRequest];
 }
 
 -(void)request:(PHPublisherContentRequest *)request unlockedReward:(PHReward *)reward{
