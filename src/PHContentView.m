@@ -28,6 +28,8 @@
 -(void)handleLoadContext:(NSDictionary *)queryComponents callback:(NSString*)callback;
 -(UIActivityIndicatorView *)activityView;
 -(void)dismissWithError:(NSError *)error;
+
+@property (nonatomic, readonly) PHContentWebView *webView;
 @end
 
 @implementation PHContentView
@@ -57,6 +59,12 @@
         
         _content = [content retain];
         
+        _webView = [[PHContentWebView alloc] initWithFrame:CGRectZero];
+        _webView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
+        _webView.delegate = self;
+        
+        [self addSubview:_webView];
+        [self loadTemplate];
         
         UIWindow *window = ([[[UIApplication sharedApplication] windows] count] > 0)?[[[UIApplication sharedApplication] windows] objectAtIndex:0]: nil;
         _targetView = window;
@@ -71,6 +79,10 @@
 @synthesize content = _content;
 @synthesize delegate = _delegate;
 @synthesize targetView = _targetView;
+
+-(PHContentWebView *)webView{
+    return _webView;
+}
 
 -(UIActivityIndicatorView *)activityView{
     if (_activityView == nil){
@@ -106,7 +118,7 @@
         if (self.content.transition == PHContentTransitionDialog) {
             CGFloat barHeight = ([[UIApplication sharedApplication] isStatusBarHidden])? 0 : 20;
             CGRect contentFrame = CGRectOffset([self.content frameForOrientation:orientation], 0, barHeight);
-            _webView.frame = contentFrame;
+            self.webView.frame = contentFrame;
             
             [self sizeToFitOrientation:YES];
         }
@@ -115,7 +127,7 @@
         [UIView beginAnimations:nil context:nil];
         [UIView setAnimationDuration:duration];
         if (self.content.transition == PHContentTransitionDialog) {
-            _webView.transform = CGAffineTransformIdentity;
+            self.webView.transform = CGAffineTransformIdentity;
         } else{
             [self sizeToFitOrientation:YES];
         }
@@ -190,17 +202,9 @@
             width = self.frame.size.height;
             height = self.frame.size.width;
         }
-        
-        _webView = [[PHContentWebView alloc] initWithFrame:CGRectMake(0, barHeight, width, height-barHeight)];
-        _webView.delegate = self;
-        _webView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
-        _webView.layer.borderWidth = 0.0f;
-        
-        [self addSubview:_webView];
-        
-        [self loadTemplate];
-        
-        [self activityView].center = _webView.center;
+                
+        self.webView.frame = CGRectMake(0, barHeight, width, height-barHeight);
+        self.webView.layer.borderWidth = 0.0f;
         
         if (animated) {
             CGAffineTransform oldTransform = self.transform;
@@ -221,28 +225,23 @@
         
         UIInterfaceOrientation orientation = [UIApplication sharedApplication].statusBarOrientation;
         CGRect contentFrame = CGRectOffset([self.content frameForOrientation:orientation], 0, barHeight);
-        _webView = [[PHContentWebView alloc] initWithFrame:contentFrame];
-        _webView.layer.borderColor = [[UIColor blackColor] CGColor];
-        _webView.layer.borderWidth = 1.0f;
+        self.webView.frame = contentFrame;
+        self.webView.layer.borderColor = [[UIColor blackColor] CGColor];
+        self.webView.layer.borderWidth = 1.0f;
         
         if ([self.delegate respondsToSelector:@selector(borderColorForContentView:)]) {
-            _webView.layer.borderColor = [[self.delegate borderColorForContentView:self] CGColor];
+            self.webView.layer.borderColor = [[self.delegate borderColorForContentView:self] CGColor];
         }
         
-        [_webView setDelegate:self];
-        [self addSubview:_webView];
-        
-        [self loadTemplate];
-        
-        [self activityView].center = _webView.center;
-        
         if (animated) {
-            [_webView bounceInWithTarget:self action:@selector(viewDidShow)];
+            [self.webView bounceInWithTarget:self action:@selector(viewDidShow)];
         } else {
             [self viewDidShow];
         }
     }
     
+    
+    [self activityView].center = self.webView.center;
     [self addSubview:[self activityView]];
     
     //TRACK_ORIENTATION see STOP_TRACK_ORIENTATION
@@ -270,7 +269,7 @@
         }
     } else if (self.content.transition == PHContentTransitionDialog){
         if (animated) {
-            [_webView bounceOutWithTarget:self action:@selector(dismissView)];
+            [self.webView bounceOutWithTarget:self action:@selector(dismissView)];
         } else {
             [self dismissView];
         }
@@ -291,25 +290,24 @@
 
 -(void)dismissView{
     [self removeFromSuperview];
-    [_webView release], _webView = nil;
-    
     [self viewDidDismiss];
 }
 
 -(void)dismissWithError:(NSError *)error{
     [self removeFromSuperview];
-    [_webView release], _webView = nil;
     
     if ([self.delegate respondsToSelector:(@selector(contentView:didFailWithError:))]) {
         [self.delegate contentView:self didFailWithError:error];
     }
 }
+
 -(void)loadTemplate {
     PH_LOG(@"Loading content unit template: %@", self.content.URL);
-    [_webView loadRequest:[NSURLRequest requestWithURL:self.content.URL
+    [self.webView loadRequest:[NSURLRequest requestWithURL:self.content.URL
                                            cachePolicy:NSURLRequestReturnCacheDataElseLoad 
                                        timeoutInterval:PH_REQUEST_TIMEOUT]];
 }
+
 -(void) viewDidShow{
     if ([self.delegate respondsToSelector:(@selector(contentViewDidShow:))]) {
         [self.delegate contentViewDidShow:self];
