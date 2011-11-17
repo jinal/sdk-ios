@@ -229,20 +229,8 @@ NSString *const PHPublisherContentRequestRewardSignatureKey = @"signature";
     [super finish];
 }
 
--(void)connectionDidFinishLoading:(NSURLConnection *)connection{
-    PH_NOTE(@"Request finished!");
-    if (!!self.delegate) {
-        NSString *responseString = [[NSString alloc] initWithData:_connectionData encoding:NSUTF8StringEncoding];
-        
-        SBJsonParser *parser = [[SBJsonParser alloc] init];
-        NSDictionary* resultDictionary = [parser objectWithString:responseString];
-        [self processRequestResponse:resultDictionary];
-        
-        [parser release];
-        [responseString release];
-    }
-    
-    //NOTE: Content requests aren't released until the content unit session is over.
+-(void)afterConnectionDidFinishLoading{
+    // don't do anything
 }
 
 -(void)didSucceedWithResponse:(NSDictionary *)responseData{

@@ -16,6 +16,7 @@
     NSString *_token;
     NSString *_secret;
     NSDate *_startRequestDate;
+    NSDate *_deltaRequestDate;
 }
 @property (nonatomic, retain) IBOutlet UITableView *tableView;
 @property (nonatomic, copy) NSString *token;

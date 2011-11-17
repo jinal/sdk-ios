@@ -59,6 +59,13 @@
   [self addMessage:@"Starting content request..."];
 }
 
+-(void)requestDidFinishLoading:(PHPublisherContentRequest *)request{
+    NSString *message = @"Completed API response!";
+    [self addMessage:message];
+    
+    [self addElapsedTime];
+}
+
 -(void)request:(PHPublisherContentRequest *)request contentWillDisplay:(PHContent *)content{
     NSString *message = [NSString stringWithFormat:@"Recieved content: %@, preparing for display",content];
     [self addMessage:message];

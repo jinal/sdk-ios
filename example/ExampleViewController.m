@@ -29,7 +29,8 @@
     [_token release], _token = nil;
     [_secret release], _secret = nil;
     [_startRequestDate release], _startRequestDate = nil;
-    
+    [_deltaRequestDate release], _deltaRequestDate = nil;
+     
     [super dealloc];
 }
 
@@ -40,9 +41,13 @@
 }
 
 -(void)addElapsedTime{
-    NSTimeInterval delta = [[NSDate date] timeIntervalSinceDate:_startRequestDate];
-    NSString *message = [NSString stringWithFormat:@"🕑 %f seconds", delta];
+    NSDate *now = [[NSDate alloc] initWithTimeIntervalSinceNow:0];
+    NSTimeInterval totalDelta = [now timeIntervalSinceDate:_startRequestDate];
+    NSTimeInterval intervalDelta =[now timeIntervalSinceDate:_deltaRequestDate];
+    NSString *message = [NSString stringWithFormat:@"🕑 %f secs total (+ %f secs)", totalDelta, intervalDelta];
     [self addMessage:message];
+    
+    [_deltaRequestDate release], _deltaRequestDate = now;
 }
 
 -(void)startRequest{
@@ -50,6 +55,7 @@
     [self addMessage:@"Started request!"];
     
     [_startRequestDate release], _startRequestDate = [[NSDate alloc] initWithTimeIntervalSinceNow:0];
+    [_deltaRequestDate release], _deltaRequestDate = [[NSDate alloc] initWithTimeIntervalSinceNow:0];
 }
 
 -(void)finishRequest{
