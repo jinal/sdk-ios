@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		E41A5A241475A7000023BE5F /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EABAA6971450ED640040B937 /* SystemConfiguration.framework */; };
 		E4C631BF14756150009762B4 /* JSONKit.m in Sources */ = {isa = PBXBuildFile; fileRef = E4C631BE14756150009762B4 /* JSONKit.m */; };
 		E4C631C01475615B009762B4 /* JSONKit.m in Sources */ = {isa = PBXBuildFile; fileRef = E4C631BE14756150009762B4 /* JSONKit.m */; };
 		EA03810A13B25F4300A31FF7 /* PHPublisherMetadataRequestTest.m in Sources */ = {isa = PBXBuildFile; fileRef = EA03810913B25F4300A31FF7 /* PHPublisherMetadataRequestTest.m */; };
@@ -165,6 +166,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E41A5A241475A7000023BE5F /* SystemConfiguration.framework in Frameworks */,
 				EAB44397134554B3000DA3E9 /* Foundation.framework in Frameworks */,
 				EAB44398134554B3000DA3E9 /* UIKit.framework in Frameworks */,
 				EAB44399134554B3000DA3E9 /* CoreGraphics.framework in Frameworks */,

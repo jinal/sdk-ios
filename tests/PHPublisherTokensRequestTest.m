@@ -10,7 +10,7 @@
 #import <UIKit/UIKit.h>
 #import "PHAPIRequest.h"
 #import "PHPublisherPromosRequest.h"
-#import "JSON.h"
+#import "JSONKit.h"
 
 #define PUBLISHER_TOKEN @"PUBLISHER_TOKEN"
 #define PUBLISHER_SECRET @"PUBLISHER_SECRET"
@@ -30,9 +30,8 @@
 
 -(void)testRequestProcessing{
   NSString *responseData = @"{\"response\":{\"redeemed\":[\"TOKEN_0\",\"TOKEN_1\"]}}";
-  SBJsonParser *parser = [SBJsonParser new];
-  NSDictionary *responseDictionary = [parser objectWithString:responseData];
-  [parser release];
+
+  NSDictionary *responseDictionary = [responseData objectFromJSONString];
   
   [_request processRequestResponse:responseDictionary];
 }

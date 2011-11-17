@@ -38,12 +38,10 @@
     *keyword = @"{\"frame\":\"PH_FULLSCREEN\",\"url\":\"http://google.com\",\"transition\":\"PH_MODAL\",\"context\":{\"awesome\":\"awesome\"}}",
     *rect = @"{\"frame\":{\"PH_LANDSCAPE\":{\"x\":60,\"y\":40,\"w\":200,\"h\":400},\"PH_PORTRAIT\":{\"x\":40,\"y\":60,\"w\":240,\"h\":340}},\"url\":\"http://google.com\",\"transition\":\"PH_DIALOG\",\"context\":{\"awesome\":\"awesome\"}}";
   
-  JSONDecoder *decoder = [[JSONDecoder alloc] initWithParseOptions:JKParseOptionNone];
   NSDictionary
-    *emptyDict = [decoder objectFromJSONString:empty],
-    *keywordDict = [decoder objectFromJSONString:keyword],
-    *rectDict = [decoder objectFromJSONString:rect];
-  [decoder release];
+    *emptyDict = [empty objectFromJSONString],
+    *keywordDict = [keyword objectFromJSONString],
+    *rectDict = [rect objectFromJSONString];
   
   PHContent *emptyUnit = [PHContent contentWithDictionary:emptyDict];
   STAssertNil(emptyUnit, @"Empty definition should result in nil!");
@@ -82,9 +80,7 @@
   NSString
   *rect = @"{\"frame\":{\"x\":60,\"y\":40,\"w\":200,\"h\":400},\"url\":\"http://google.com\",\"transition\":\"PH_DIALOG\",\"context\":{\"awesome\":\"awesome\"},\"close_delay\":23}";
   
-  SBJsonParser *parser = [[SBJsonParser alloc] init];
-  NSDictionary *rectDict = [parser objectWithString:rect];
-  [parser release];
+  NSDictionary *rectDict = [rect objectFromJSONString];
   
   PHContent *rectUnit = [PHContent contentWithDictionary:rectDict];
   STAssertTrue(rectUnit.closeButtonDelay == 23.0f, @"Expected 23 got %f", content.closeButtonDelay);
@@ -99,9 +95,7 @@
   NSString
   *rect = @"{\"frame\":{\"x\":60,\"y\":40,\"w\":200,\"h\":400},\"url\":\"http://google.com\",\"transition\":\"PH_DIALOG\",\"context\":{\"awesome\":\"awesome\"},\"close_ping\":\"http://playhaven.com\"}";
   
-  SBJsonParser *parser = [[SBJsonParser alloc] init];
-  NSDictionary *rectDict = [parser objectWithString:rect];
-  [parser release];
+    NSDictionary *rectDict = [rect objectFromJSONString];
   
   PHContent *rectUnit = [PHContent contentWithDictionary:rectDict];
   STAssertTrue([rectUnit.closeButtonURLPath isEqualToString:@"http://playhaven.com"], @"Expected 'http://playhaven.com got %@", content.closeButtonURLPath);
