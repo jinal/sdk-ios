@@ -30,7 +30,7 @@ NSString *const PHPublisherContentRequestRewardSignatureKey = @"signature";
 -(void)placeCloseButton;
 -(void)hideCloseButton;
 -(void)showCloseButtonBecauseOfTimeout;
--(BOOL)showOverlayWindow;
+-(void)showOverlayWindow;
 -(void)hideOverlayWindow;
 
 @property (nonatomic, readonly) UIButton *closeButton;
@@ -71,9 +71,9 @@ NSString *const PHPublisherContentRequestRewardSignatureKey = @"signature";
   return _contentViews;
 }
 
--(UIWindow *)overlayWindow{
+-(UIView *)overlayWindow{
   if (_overlayWindow == nil){
-    _overlayWindow = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+    _overlayWindow = [[UIView alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     _overlayWindow.backgroundColor = [UIColor colorWithWhite:0.0 alpha:0.5];
   }
   
@@ -195,17 +195,13 @@ NSString *const PHPublisherContentRequestRewardSignatureKey = @"signature";
   [_closeButton removeFromSuperview];
 }
 
--(BOOL)showOverlayWindow{
-  if (![self.overlayWindow isKeyWindow]) {
-    [self.overlayWindow makeKeyAndVisible];
-    return YES;
-  }
-  
-  return NO;
+-(void)showOverlayWindow{
+    UIWindow *window = [[[UIApplication sharedApplication] windows] objectAtIndex:0];
+    [window addSubview:self.overlayWindow];
 }
 
 -(void)hideOverlayWindow{
-  self.overlayWindow.hidden = YES;
+    [self.overlayWindow removeFromSuperview];
 }
 
 #pragma mark - PHAPIRequest

@@ -22,7 +22,6 @@
 }
 
 -(void)startRequest{
-    
     if (self.request == nil) {
         [super startRequest];
         
@@ -71,7 +70,9 @@
     
     //Cleaning up after a completed request
     self.request = nil;
-    [self.navigationItem.rightBarButtonItem setTitle:@"Start"];    
+    [self.navigationItem.rightBarButtonItem setTitle:@"Start"];
+    
+    [self performSelector:@selector(checkKeyWindow) withObject:nil afterDelay:10];
 }
 
 -(void)request:(PHPublisherContentRequest *)request didFailWithError:(NSError *)error{
