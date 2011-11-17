@@ -23,16 +23,16 @@
 @end
 
 @interface PHContentView : UIView<UIWebViewDelegate, PHURLLoaderDelegate> {
-  PHContent *_content;
-  UIInterfaceOrientation _orientation;
-  NSObject<PHContentViewDelegate> *_delegate;
-  
-  PHContentWebView *_webView;
-  BOOL _willAnimate;
-  
-  NSMutableDictionary *_redirects;
-  UIActivityIndicatorView *_activityView;
-  UIView *_targetView;
+    PHContent *_content;
+    UIInterfaceOrientation _orientation;
+    NSObject<PHContentViewDelegate> *_delegate;
+    
+    PHContentWebView *_webView;
+    BOOL _willAnimate;
+    
+    NSMutableDictionary *_redirects;
+    UIActivityIndicatorView *_activityView;
+    UIView *_targetView;
 }
 
 -(id)initWithContent:(PHContent *)content;

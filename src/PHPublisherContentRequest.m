@@ -235,7 +235,7 @@ NSString *const PHPublisherContentRequestRewardSignatureKey = @"signature";
     if (!!self.delegate) {
         
         [self processRequestResponse:[_connectionData objectFromJSONData]];
-
+        
     }
     
     //NOTE: Content requests aren't released until the content unit session is over.

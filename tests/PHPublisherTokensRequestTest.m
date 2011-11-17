@@ -16,41 +16,41 @@
 #define PUBLISHER_SECRET @"PUBLISHER_SECRET"
 
 @interface PHPublisherPromosRequestTest: SenTestCase<PHAPIRequestDelegate>{
-  PHPublisherPromosRequest *_request;
-  BOOL _didHandleRequest;
+    PHPublisherPromosRequest *_request;
+    BOOL _didHandleRequest;
 }
 @end
 
 @implementation PHPublisherPromosRequestTest
 
 -(void)setUp{
-  _didHandleRequest = NO;
-  _request = [[PHPublisherPromosRequest alloc] initWithApp:PUBLISHER_TOKEN secret:PUBLISHER_SECRET delegate:self];
+    _didHandleRequest = NO;
+    _request = [[PHPublisherPromosRequest alloc] initWithApp:PUBLISHER_TOKEN secret:PUBLISHER_SECRET delegate:self];
 }
 
 -(void)testRequestProcessing{
-  NSString *responseData = @"{\"response\":{\"redeemed\":[\"TOKEN_0\",\"TOKEN_1\"]}}";
-  SBJsonParser *parser = [SBJsonParser new];
-  NSDictionary *responseDictionary = [parser objectWithString:responseData];
-  [parser release];
-  
-  [_request processRequestResponse:responseDictionary];
+    NSString *responseData = @"{\"response\":{\"redeemed\":[\"TOKEN_0\",\"TOKEN_1\"]}}";
+    SBJsonParser *parser = [SBJsonParser new];
+    NSDictionary *responseDictionary = [parser objectWithString:responseData];
+    [parser release];
+    
+    [_request processRequestResponse:responseDictionary];
 }
 
 -(void)request:(PHAPIRequest *)request didSucceedWithResponse:(NSDictionary *)responseData{
     _didHandleRequest = YES;
-  NSArray *redeemedTokens = [responseData valueForKey:@"redeemed"];
-  STAssertTrue([redeemedTokens isKindOfClass:[NSArray class]], @"Redeemed tokens array not an array!");
-  STAssertTrue([redeemedTokens containsObject:@"TOKEN_0"], @"Redeemed tokens does not contain expected value!");
+    NSArray *redeemedTokens = [responseData valueForKey:@"redeemed"];
+    STAssertTrue([redeemedTokens isKindOfClass:[NSArray class]], @"Redeemed tokens array not an array!");
+    STAssertTrue([redeemedTokens containsObject:@"TOKEN_0"], @"Redeemed tokens does not contain expected value!");
 }
 
 -(void)request:(PHAPIRequest *)request didFailWithError:(NSError *)error{
-  STFail(@"Was not expecting an error!");
+    STFail(@"Was not expecting an error!");
 }
 
 -(void)tearDown{
-  STAssertTrue(_didHandleRequest, @"Did not actually handle request!");
-  [_request release], _request = nil;
+    STAssertTrue(_didHandleRequest, @"Did not actually handle request!");
+    [_request release], _request = nil;
 }
 
 

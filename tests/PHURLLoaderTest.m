@@ -20,8 +20,8 @@
 @implementation PHURLLoaderTest
 
 -(void)testLoaderParameter{
-  PHURLLoader *loader = [[PHURLLoader alloc] init];
-  STAssertNoThrow(loader.opensFinalURLOnDevice = NO, @"Couldn't set opensFinalURLOnDevice property!");
+    PHURLLoader *loader = [[PHURLLoader alloc] init];
+    STAssertNoThrow(loader.opensFinalURLOnDevice = NO, @"Couldn't set opensFinalURLOnDevice property!");
 }
 
 @end

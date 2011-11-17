@@ -12,7 +12,7 @@
 @implementation PHPublisherOpenRequest
 
 -(NSString *)urlPath{
-  return PH_URL(/v3/publisher/open/);
+    return PH_URL(/v3/publisher/open/);
 }
 
 @end

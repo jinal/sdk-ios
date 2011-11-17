@@ -7,7 +7,7 @@
 //
 /*
  Base notification rendering class. This trivial implementation is used when the type of notification being rendered is unknown, which will result in no badge being rendered. See PHNotificationBadgeRenderer for a default badge implementation.
-*/
+ */
 
 #import <Foundation/Foundation.h>
 #import <CoreGraphics/CoreGraphics.h>

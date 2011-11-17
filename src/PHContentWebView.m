@@ -31,93 +31,93 @@
 @synthesize isAnimating = _isAnimating;
 
 -(void)bounceInWithTarget:(id)target action:(SEL)action{
-  if (!_isAnimating) {
-    _target = target;
-    _action = action;
-    _isAnimating = YES;
+    if (!_isAnimating) {
+        _target = target;
+        _action = action;
+        _isAnimating = YES;
+        
+        self.transform = BOUNCE_OUT;
+        self.alpha = ALPHA_OUT;
+        
+        [UIView beginAnimations:nil context:nil];
+        [UIView setAnimationCurve:UIViewAnimationCurveEaseOut];
+        [UIView setAnimationDuration:DURATION_1];
+        [UIView setAnimationDelegate:self];
+        [UIView setAnimationDidStopSelector:@selector(continueBounceIn)];
+        
+        self.transform = BOUNCE_MID;
+        self.alpha = ALPHA_IN;
+        
+        [UIView commitAnimations];
+    }
+}
+
+-(void)continueBounceIn{
+    self.transform = BOUNCE_MID;
+    self.alpha = ALPHA_IN;
+    
+    [UIView beginAnimations:nil context:nil];
+    [UIView setAnimationCurve:UIViewAnimationCurveEaseIn];
+    [UIView setAnimationDuration:DURATION_2];
+    [UIView setAnimationDelegate:self];
+    [UIView setAnimationDidStopSelector:@selector(finishBounceIn)];
+    
+    self.transform = BOUNCE_IN;
+    
+    [UIView commitAnimations];
+}
+
+-(void)finishBounceIn{
+    self.transform = BOUNCE_IN;
+    self.alpha = ALPHA_IN;
+    
+    [_target performSelector:_action];
+    _isAnimating = NO;
+}
+
+-(void)bounceOutWithTarget:(id)target action:(SEL)action{
+    if (!_isAnimating) {
+        _target = target;
+        _action = action;
+        _isAnimating = YES;
+        
+        self.transform = BOUNCE_IN;
+        self.alpha = ALPHA_IN;
+        
+        [UIView beginAnimations:nil context:nil];
+        [UIView setAnimationCurve:UIViewAnimationCurveEaseOut];
+        [UIView setAnimationDuration:DURATION_1];
+        [UIView setAnimationDelegate:self];
+        [UIView setAnimationDidStopSelector:@selector(continueBounceOut)];
+        
+        self.transform = BOUNCE_MID;
+        
+        [UIView commitAnimations];
+    }
+}
+
+-(void)continueBounceOut{
+    self.transform = BOUNCE_MID;
+    self.alpha = ALPHA_IN;
+    
+    [UIView beginAnimations:nil context:nil];
+    [UIView setAnimationCurve:UIViewAnimationCurveEaseIn];
+    [UIView setAnimationDuration:DURATION_2];
+    [UIView setAnimationDelegate:self];
+    [UIView setAnimationDidStopSelector:@selector(finishBounceOut)];
     
     self.transform = BOUNCE_OUT;
     self.alpha = ALPHA_OUT;
     
-    [UIView beginAnimations:nil context:nil];
-    [UIView setAnimationCurve:UIViewAnimationCurveEaseOut];
-    [UIView setAnimationDuration:DURATION_1];
-    [UIView setAnimationDelegate:self];
-    [UIView setAnimationDidStopSelector:@selector(continueBounceIn)];
-    
-    self.transform = BOUNCE_MID;
-    self.alpha = ALPHA_IN;
-    
     [UIView commitAnimations];
-  }
-}
-
--(void)continueBounceIn{
-  self.transform = BOUNCE_MID;
-  self.alpha = ALPHA_IN;
-  
-  [UIView beginAnimations:nil context:nil];
-  [UIView setAnimationCurve:UIViewAnimationCurveEaseIn];
-  [UIView setAnimationDuration:DURATION_2];
-  [UIView setAnimationDelegate:self];
-  [UIView setAnimationDidStopSelector:@selector(finishBounceIn)];
-  
-  self.transform = BOUNCE_IN;
-  
-  [UIView commitAnimations];
-}
-
--(void)finishBounceIn{
-  self.transform = BOUNCE_IN;
-  self.alpha = ALPHA_IN;
-  
-  [_target performSelector:_action];
-  _isAnimating = NO;
-}
-
--(void)bounceOutWithTarget:(id)target action:(SEL)action{
-  if (!_isAnimating) {
-    _target = target;
-    _action = action;
-    _isAnimating = YES;
-    
-    self.transform = BOUNCE_IN;
-    self.alpha = ALPHA_IN;
-    
-    [UIView beginAnimations:nil context:nil];
-    [UIView setAnimationCurve:UIViewAnimationCurveEaseOut];
-    [UIView setAnimationDuration:DURATION_1];
-    [UIView setAnimationDelegate:self];
-    [UIView setAnimationDidStopSelector:@selector(continueBounceOut)];
-    
-    self.transform = BOUNCE_MID;
-    
-    [UIView commitAnimations];
-  }
-}
-
--(void)continueBounceOut{
-  self.transform = BOUNCE_MID;
-  self.alpha = ALPHA_IN;
-  
-  [UIView beginAnimations:nil context:nil];
-  [UIView setAnimationCurve:UIViewAnimationCurveEaseIn];
-  [UIView setAnimationDuration:DURATION_2];
-  [UIView setAnimationDelegate:self];
-  [UIView setAnimationDidStopSelector:@selector(finishBounceOut)];
-  
-  self.transform = BOUNCE_OUT;
-  self.alpha = ALPHA_OUT;
-  
-  [UIView commitAnimations];
 }
 
 -(void)finishBounceOut{
-  self.transform = BOUNCE_OUT;
-  self.alpha = ALPHA_OUT;
-  
-  [_target performSelector:_action];
-  _isAnimating = NO;
+    self.transform = BOUNCE_OUT;
+    self.alpha = ALPHA_OUT;
+    
+    [_target performSelector:_action];
+    _isAnimating = NO;
 }
 
 @end

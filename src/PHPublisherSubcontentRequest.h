@@ -11,8 +11,8 @@
 @class PHContentView;
 
 @interface PHPublisherSubContentRequest : PHAPIRequest {
-  PHContentView *_source;
-  NSString *_callback;
+    PHContentView *_source;
+    NSString *_callback;
 }
 
 @property (nonatomic, assign) PHContentView *source;

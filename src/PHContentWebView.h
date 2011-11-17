@@ -10,9 +10,9 @@
 #import <UIKit/UIKit.h>
 
 @interface PHContentWebView : UIWebView {
-  SEL _action;
-  id _target;
-  BOOL _isAnimating;
+    SEL _action;
+    id _target;
+    BOOL _isAnimating;
 }
 
 @property (nonatomic, readonly) BOOL isAnimating;

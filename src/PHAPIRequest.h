@@ -14,16 +14,16 @@
 @end
 
 @interface PHAPIRequest : NSObject {
-  NSURL *_URL;
-  NSString *_token, *_secret;
-  NSURLConnection *_connection;
-  NSDictionary *_signedParameters;
-  id<NSObject> _delegate;
-  NSMutableData *_connectionData;
-  NSString *_urlPath;
-  NSDictionary *_additionalParameters;
-  NSURLResponse *_response;
-  int _hashCode;
+    NSURL *_URL;
+    NSString *_token, *_secret;
+    NSURLConnection *_connection;
+    NSDictionary *_signedParameters;
+    id<NSObject> _delegate;
+    NSMutableData *_connectionData;
+    NSString *_urlPath;
+    NSDictionary *_additionalParameters;
+    NSURLResponse *_response;
+    int _hashCode;
 }
 
 +(NSString *) base64SignatureWithString:(NSString *)string;

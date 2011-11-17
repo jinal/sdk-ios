@@ -10,11 +10,11 @@
 
 
 @interface ExampleViewController : UIViewController<UITableViewDelegate, UITableViewDataSource> {
-  NSMutableArray *_messages;
-  UITableView *_tableView;
-  
-  NSString *_token;
-  NSString *_secret;
+    NSMutableArray *_messages;
+    UITableView *_tableView;
+    
+    NSString *_token;
+    NSString *_secret;
 }
 @property (nonatomic, retain) IBOutlet UITableView *tableView;
 @property (nonatomic, copy) NSString *token;

@@ -9,7 +9,7 @@
 #import "PHAPIRequest.h"
 
 @interface PHPublisherOpenRequest : PHAPIRequest {
-
+    
 }
 
 @end

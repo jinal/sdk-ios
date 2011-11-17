@@ -34,14 +34,14 @@
 @end
 
 @interface PHPublisherContentRequest : PHAPIRequest<PHContentViewDelegate, PHAPIRequestDelegate> {
-  NSString *_placement;
-  BOOL _animated;
-  NSMutableArray *_contentViews;
-  BOOL _showsOverlayImmediately;
-  UIButton *_closeButton;
-  
-  UIWindow *_overlayWindow;
-  UIWindow *_previousKeyWindow;
+    NSString *_placement;
+    BOOL _animated;
+    NSMutableArray *_contentViews;
+    BOOL _showsOverlayImmediately;
+    UIButton *_closeButton;
+    
+    UIWindow *_overlayWindow;
+    UIWindow *_previousKeyWindow;
 }
 
 +(id)requestForApp:(NSString *)token secret:(NSString *)secret placement:(NSString *)placement delegate:(id)delegate;

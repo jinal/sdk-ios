@@ -10,10 +10,10 @@
 
 @implementation PHNotificationRenderer
 -(void)drawNotification:(NSDictionary *)notificationData inRect:(CGRect)rect{
-  //does nothing
+    //does nothing
 }
 
 -(CGSize)sizeForNotification:(NSDictionary *)notificationData{
-  return CGSizeZero;
+    return CGSizeZero;
 }
 @end

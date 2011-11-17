@@ -33,7 +33,7 @@
         [request send];
         
         [self setRequest:request];
-
+        
         [self.navigationItem.rightBarButtonItem setTitle:@"Cancel"];
     } else {
         [self addMessage:@"Request canceled!"];
@@ -48,20 +48,20 @@
 
 #pragma mark - PHPublisherContentRequestDelegate
 -(void)requestWillGetContent:(PHPublisherContentRequest *)request{
-  [self addMessage:@"Starting content request..."];
+    [self addMessage:@"Starting content request..."];
 }
 
 -(void)request:(PHPublisherContentRequest *)request contentWillDisplay:(PHContent *)content{
-  NSString *message = [NSString stringWithFormat:@"Recieved content: %@, preparing for display",content];
-  [self addMessage:message];
+    NSString *message = [NSString stringWithFormat:@"Recieved content: %@, preparing for display",content];
+    [self addMessage:message];
 }
 
 -(void)request:(PHPublisherContentRequest *)request contentDidDisplay:(PHContent *)content{
-  //This is a good place to clear any notification views attached to this request.
-  [_notificationView clear];
-  
-  NSString *message = [NSString stringWithFormat:@"Displayed content: %@",content];
-  [self addMessage:message];
+    //This is a good place to clear any notification views attached to this request.
+    [_notificationView clear];
+    
+    NSString *message = [NSString stringWithFormat:@"Displayed content: %@",content];
+    [self addMessage:message];
 }
 
 -(void)requestContentDidDismiss:(PHPublisherContentRequest *)request{
@@ -84,8 +84,8 @@
 }
 
 -(void)request:(PHPublisherContentRequest *)request unlockedReward:(PHReward *)reward{
-  NSString *message = [NSString stringWithFormat:@"☆ Unlocked reward: %dx %@", reward.quantity, reward.name];
-  [self addMessage:message];
+    NSString *message = [NSString stringWithFormat:@"☆ Unlocked reward: %dx %@", reward.quantity, reward.name];
+    [self addMessage:message];
 }
 
 #pragma - Notifications
@@ -96,28 +96,28 @@
  */
 
 -(void)viewDidLoad{
-  [super viewDidLoad];
-  _notificationView = [[PHNotificationView alloc] initWithApp:self.token secret:self.secret placement:@"more_games"];
-  _notificationView.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin;
+    [super viewDidLoad];
+    _notificationView = [[PHNotificationView alloc] initWithApp:self.token secret:self.secret placement:@"more_games"];
+    _notificationView.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin;
 }
 
 -(void)viewDidUnload{
     [self setPlacementField:nil];
-  [super viewDidUnload];
-  [_notificationView removeFromSuperview];
-  [_notificationView release], _notificationView = nil;
+    [super viewDidUnload];
+    [_notificationView removeFromSuperview];
+    [_notificationView release], _notificationView = nil;
 }
 
 -(void)viewDidAppear:(BOOL)animated{
-  [super viewDidAppear:animated];
-  [self.view addSubview:_notificationView];
-  [_notificationView setCenter:CGPointMake(self.view.frame.size.width - 22, 19)];
-  [_notificationView refresh];
+    [super viewDidAppear:animated];
+    [self.view addSubview:_notificationView];
+    [_notificationView setCenter:CGPointMake(self.view.frame.size.width - 22, 19)];
+    [_notificationView refresh];
 }
 
 -(void)viewDidDisappear:(BOOL)animated{
-  [super viewDidDisappear:animated];
-  [_notificationView removeFromSuperview];
+    [super viewDidDisappear:animated];
+    [_notificationView removeFromSuperview];
 }
 
 @end
