@@ -192,8 +192,9 @@
   PH_NOTE(@"Request finished!");
   if (!!self.delegate) {
 
-    [self processRequestResponse:[_connectionData objectFromJSONData]];
-
+    JSONDecoder *decoder = [[JSONDecoder alloc] initWithParseOptions:JKParseOptionNone];
+    [self processRequestResponse:[decoder objectWithUTF8String:[_connectionData bytes] length:[_connectionData length]]];
+    [decoder release];
   }
   
   //REQUEST_RELEASE see REQUEST_RETAIN

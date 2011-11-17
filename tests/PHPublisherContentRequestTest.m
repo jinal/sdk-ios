@@ -11,7 +11,7 @@
 #import <CoreGraphics/CoreGraphics.h>
 #import <QuartzCore/QuartzCore.h>
 
-#import "SBJsonParser.h"
+#import "JSONKit.h"
 #import "PHContent.h"
 #import "PHContentView.h"
 #import "PHPublisherContentRequest.h"
@@ -38,12 +38,12 @@
     *keyword = @"{\"frame\":\"PH_FULLSCREEN\",\"url\":\"http://google.com\",\"transition\":\"PH_MODAL\",\"context\":{\"awesome\":\"awesome\"}}",
     *rect = @"{\"frame\":{\"PH_LANDSCAPE\":{\"x\":60,\"y\":40,\"w\":200,\"h\":400},\"PH_PORTRAIT\":{\"x\":40,\"y\":60,\"w\":240,\"h\":340}},\"url\":\"http://google.com\",\"transition\":\"PH_DIALOG\",\"context\":{\"awesome\":\"awesome\"}}";
   
-  SBJsonParser *parser = [[SBJsonParser alloc] init];
+  JSONDecoder *decoder = [[JSONDecoder alloc] initWithParseOptions:JKParseOptionNone];
   NSDictionary
-    *emptyDict = [parser objectWithString:empty],
-    *keywordDict = [parser objectWithString:keyword],
-    *rectDict = [parser objectWithString:rect];
-  [parser release];
+    *emptyDict = [decoder objectFromJSONString:empty],
+    *keywordDict = [decoder objectFromJSONString:keyword],
+    *rectDict = [decoder objectFromJSONString:rect];
+  [decoder release];
   
   PHContent *emptyUnit = [PHContent contentWithDictionary:emptyDict];
   STAssertNil(emptyUnit, @"Empty definition should result in nil!");

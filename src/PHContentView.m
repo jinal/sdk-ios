@@ -334,7 +334,9 @@
         
         NSString *contextString = [queryComponents valueForKey:@"context"];
         
-        NSDictionary *context = [contextString objectFromJSONString];
+        JSONDecoder *decoder = [[JSONDecoder alloc] initWithParseOptions:JKParseOptionNone];
+        NSDictionary *context = [decoder objectWithUTF8String:(const unsigned char*)[contextString UTF8String] length:[contextString length]];
+        [decoder release];
         
         PH_LOG(@"Redirecting request with callback: %@ to dispatch %@", callback, urlPath);
         switch ([[redirect methodSignature] numberOfArguments]) {

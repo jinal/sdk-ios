@@ -233,9 +233,10 @@ NSString *const PHPublisherContentRequestRewardSignatureKey = @"signature";
 -(void)connectionDidFinishLoading:(NSURLConnection *)connection{
     PH_NOTE(@"Request finished!");
     if (!!self.delegate) {
-        
-        [self processRequestResponse:[_connectionData objectFromJSONData]];
-
+        JSONDecoder *decoder = [[JSONDecoder alloc] initWithParseOptions:JKParseOptionNone];
+        [self processRequestResponse:[decoder objectWithUTF8String:(const unsigned char*)[_connectionData bytes] 
+                                                            length:[_connectionData length]]];
+        [decoder release];
     }
     
     //NOTE: Content requests aren't released until the content unit session is over.
