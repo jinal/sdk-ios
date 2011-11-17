@@ -10,7 +10,7 @@
 #import "PHContent.h"
 #import "PHContentWebView.h"
 #import "NSObject+QueryComponents.h"
-#import "JSON.h"
+#import "JSONKit.h"
 #import "PHConstants.h"
 
 #define MAX_MARGIN 20
@@ -334,9 +334,7 @@
         
         NSString *contextString = [queryComponents valueForKey:@"context"];
         
-        SBJsonParser *parser = [SBJsonParser new];
-        NSDictionary *context = [parser objectWithString:contextString];
-        [parser release];
+        NSDictionary *context = [contextString objectFromJSONString];
         
         PH_LOG(@"Redirecting request with callback: %@ to dispatch %@", callback, urlPath);
         switch ([[redirect methodSignature] numberOfArguments]) {
@@ -428,15 +426,12 @@
 -(BOOL)sendCallback:(NSString *)callback withResponse:(id)response error:(id)error{
     NSString *_callback = @"null", *_response = @"null", *_error = @"null";
     if (!!callback) _callback = callback;
-    
-    SBJsonWriter *jsonWriter = [SBJsonWriter new];
     if (!!response) {
-        _response = [jsonWriter stringWithObject:response];
+        _response = [response JSONString];
     }
     if (!!error) {
-        _error = [jsonWriter stringWithObject:error];
+        _error = [error JSONString];
     }
-    [jsonWriter release];
     
     NSString *callbackCommand = [NSString stringWithFormat:@"var PlayHavenAPICallback = (window[\"PlayHavenAPICallback\"])? PlayHavenAPICallback : function(c,r,e){try{PlayHaven.nativeAPI.callback(c,r,e);return \"OK\";}catch(err){ return JSON.stringify(err);}}; PlayHavenAPICallback(\"%@\",%@,%@)", _callback, _response, _error];
     NSString *callbackResponse = [_webView stringByEvaluatingJavaScriptFromString:callbackCommand];

@@ -10,7 +10,7 @@
 
 #import "NSObject+QueryComponents.h"
 #import "PHStringUtil.h"
-#import "SBJsonParser.h"
+#import "JSONKit.h"
 #import "UIDevice+HardwareString.h"
 #import "PHConstants.h"
 
@@ -191,14 +191,9 @@
 -(void)connectionDidFinishLoading:(NSURLConnection *)connection{
   PH_NOTE(@"Request finished!");
   if (!!self.delegate) {
-    NSString *responseString = [[NSString alloc] initWithData:_connectionData encoding:NSUTF8StringEncoding];
-    
-    SBJsonParser *parser = [[SBJsonParser alloc] init];
-    NSDictionary* resultDictionary = [parser objectWithString:responseString];
-    [self processRequestResponse:resultDictionary];
-    
-    [parser release];
-    [responseString release];
+
+    [self processRequestResponse:[_connectionData objectFromJSONData]];
+
   }
   
   //REQUEST_RELEASE see REQUEST_RETAIN

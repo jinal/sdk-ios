@@ -12,7 +12,7 @@
 #import "PHConstants.h"
 #import "PHStringUtil.h"
 #import "PHReward.h"
-#import "JSON.h"
+#import "JSONKit.h"
 
 NSString *const PHPublisherContentRequestRewardIDKey = @"reward";
 NSString *const PHPublisherContentRequestRewardQuantityKey = @"quantity";
@@ -233,14 +233,9 @@ NSString *const PHPublisherContentRequestRewardSignatureKey = @"signature";
 -(void)connectionDidFinishLoading:(NSURLConnection *)connection{
     PH_NOTE(@"Request finished!");
     if (!!self.delegate) {
-        NSString *responseString = [[NSString alloc] initWithData:_connectionData encoding:NSUTF8StringEncoding];
         
-        SBJsonParser *parser = [[SBJsonParser alloc] init];
-        NSDictionary* resultDictionary = [parser objectWithString:responseString];
-        [self processRequestResponse:resultDictionary];
-        
-        [parser release];
-        [responseString release];
+        [self processRequestResponse:[_connectionData objectFromJSONData]];
+
     }
     
     //NOTE: Content requests aren't released until the content unit session is over.
