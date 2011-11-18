@@ -244,7 +244,10 @@ NSString *const PHPublisherContentRequestRewardSignatureKey = @"signature";
 }
 
 -(void)hideOverlayWindow{
-    [self.overlayWindow removeFromSuperview];
+    //lets avoid creating an overlay instance if we don't need to.
+    if (!!_overlayWindow) {
+        [self.overlayWindow removeFromSuperview];
+    }
 }
 
 #pragma mark - PHAPIRequest
