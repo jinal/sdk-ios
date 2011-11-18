@@ -58,15 +58,18 @@ static PHContentWebView *sharedWebView;
                       loadContextRedirect,@"ph://loadContext",
                       nil];
         
+#ifndef PH_UNIT_TESTING       
         if (!sharedWebView) 
             [PHContentView preloadWebView];
         
         _webView = sharedWebView; // only pointer, no retain
         _webView.transform = CGAffineTransformIdentity;
         
+        [self addSubview:_webView];
+#endif
+        
         _content = [content retain];
         
-        [self addSubview:_webView];
         [self loadTemplate];
         
         UIWindow *window = ([[[UIApplication sharedApplication] windows] count] > 0)?[[[UIApplication sharedApplication] windows] objectAtIndex:0]: nil;
@@ -436,7 +439,9 @@ static PHContentWebView *sharedWebView;
 }
 
 #pragma mark - callbacks
--(BOOL)sendCallback:(NSString *)callback withResponse:(id)response error:(id)error{
+-(BOOL)sendCallback:(NSString *)callback withResponse:(id)response error:(id)error {
+    _webView.delegate = self;
+    
     NSString *_callback = @"null", *_response = @"null", *_error = @"null";
     if (!!callback) _callback = callback;
     

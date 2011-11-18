@@ -54,12 +54,16 @@
     [_messages removeAllObjects];
     [self addMessage:@"Started request!"];
     
-    [_startRequestDate release], _startRequestDate = [[NSDate alloc] initWithTimeIntervalSinceNow:0];
-    [_deltaRequestDate release], _deltaRequestDate = [[NSDate alloc] initWithTimeIntervalSinceNow:0];
+    [self startTimers];
 }
 
 -(void)finishRequest{
     [self addElapsedTime];
+}
+
+-(void)startTimers{
+    [_startRequestDate release], _startRequestDate = [[NSDate alloc] initWithTimeIntervalSinceNow:0];
+    [_deltaRequestDate release], _deltaRequestDate = [[NSDate alloc] initWithTimeIntervalSinceNow:0];
 }
 
 #pragma mark - View lifecycle
