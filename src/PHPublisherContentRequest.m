@@ -401,16 +401,16 @@ NSString *const PHPublisherContentRequestRewardSignatureKey = @"signature";
 
 -(void)pushContent:(PHContent *)content{
     PHContentView *contentView = [PHContentView dequeueContentViewInstance];
-    if (contentView) {
-        contentView.content = content;
-    } else{
-        contentView = [[[PHContentView alloc] initWithContent:content] autorelease];
+    if (!contentView){
+        contentView = [[[PHContentView alloc] initWithContent:nil] autorelease];
     } 
     
     
     [contentView redirectRequest:@"ph://subcontent" toTarget:self action:@selector(requestSubcontent:callback:source:)];
     [contentView redirectRequest:@"ph://reward" toTarget:self action:@selector(requestRewards:callback:source:)];
     [contentView redirectRequest:@"ph://closeButton" toTarget:self action:@selector(requestCloseButton:callback:source:)];
+    
+    contentView.content = content;
     [contentView setDelegate:self];
     [contentView setTargetView:self.overlayWindow];
     [contentView show:self.animated];
@@ -421,8 +421,10 @@ NSString *const PHPublisherContentRequestRewardSignatureKey = @"signature";
 }
 
 -(void)removeContentView:(PHContentView *)contentView{
-    [PHContentView enqueueContentViewInstance:contentView];
+    [contentView retain];
     [self.contentViews removeObject:contentView];
+    [PHContentView enqueueContentViewInstance:contentView];
+    [contentView release];
 }
 
 -(void)dismissFromButton{
