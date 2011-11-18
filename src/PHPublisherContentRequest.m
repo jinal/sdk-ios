@@ -22,11 +22,13 @@ NSString *const PHPublisherContentRequestRewardSignatureKey = @"signature";
 #define MAX_MARGIN 20
 
 @interface PHAPIRequest(Private)
++(NSMutableSet *)allRequests;
 -(id)initWithApp:(NSString *)token secret:(NSString *)secret;
 -(void)finish;
 @end
 
 @interface PHPublisherContentRequest(Private)
++(PHPublisherContentRequest *)existingRequestForApp:(NSString *)token secret:(NSString *)secret placement:(NSString *)placement;
 -(id)initWithApp:(NSString *)token secret:(NSString *)secret placement:(NSString *)placement delegate:(id)delegate;
 -(CGAffineTransform) transformForOrientation:(UIInterfaceOrientation)orientation;
 -(void)placeCloseButton;
@@ -35,19 +37,46 @@ NSString *const PHPublisherContentRequestRewardSignatureKey = @"signature";
 -(void)showOverlayWindow;
 -(void)hideOverlayWindow;
 -(void)dismissFromButton;
+-(void)continueLoadingIfNeeded;
+-(void)getContent;
+-(void)showContentIfReady;
 @property (nonatomic, readonly) UIButton *closeButton;
+@property (nonatomic, assign) PHPublisherContentRequestState state;
 @end
 
 @implementation PHPublisherContentRequest
 
++(PHPublisherContentRequest *)existingRequestForApp:(NSString *)token secret:(NSString *)secret placement:(NSString *)placement{
+    NSEnumerator *allRequests = [[PHAPIRequest allRequests] objectEnumerator];
+    
+    PHAPIRequest *request = nil;
+    while (request = [allRequests nextObject]){
+        if ([request isKindOfClass:[PHPublisherContentRequest class]]) {
+            PHPublisherContentRequest *contentRequest = (PHPublisherContentRequest*) request;
+            if ([contentRequest.placement isEqualToString:placement] && [contentRequest.token isEqualToString:token] && [contentRequest.secret isEqualToString:secret]) {
+                return contentRequest;
+            }
+        }
+    }
+    
+    return nil;
+}
+
 +(id)requestForApp:(NSString *)token secret:(NSString *)secret placement:(NSString *)placement delegate:(id)delegate{
-    return [[[[self class] alloc] initWithApp:token secret:secret placement:placement delegate:delegate] autorelease];
+    PHPublisherContentRequest *request = [PHPublisherContentRequest existingRequestForApp:token secret:secret placement:placement];
+    if (!!request) {
+        request.delegate = delegate;
+        return request;
+    } else {
+        return [[[[self class] alloc] initWithApp:token secret:secret placement:placement delegate:delegate] autorelease];
+    }
 }
 
 -(id)initWithApp:(NSString *)token secret:(NSString *)secret placement:(NSString *)placement delegate:(id)delegate{
     if ((self = [self initWithApp:token secret:secret])) {
         self.placement = placement;
         self.delegate = delegate;
+        _state = PHPublisherContentRequestInitialized;
     }
     
     return self;
@@ -64,6 +93,17 @@ NSString *const PHPublisherContentRequestRewardSignatureKey = @"signature";
 @synthesize placement = _placement;
 @synthesize animated = _animated;
 @synthesize showsOverlayImmediately = _showsOverlayImmediately;
+
+-(PHPublisherContentRequestState)state{
+    return _state;
+}
+
+-(void)setState:(PHPublisherContentRequestState)state{
+    //state may only be set ahead!
+    if (_state < state) {
+        _state = state;
+    }
+}
 
 -(NSMutableArray *)contentViews{
     if (_contentViews == nil){
@@ -106,7 +146,7 @@ NSString *const PHPublisherContentRequestRewardSignatureKey = @"signature";
 
 -(void)dealloc{
     [[NSNotificationCenter defaultCenter] removeObserver:self];
-    
+    [_content release], _content = nil;
     [_placement release], _placement = nil;
     [_contentViews release], _contentViews = nil;
     [_closeButton release], _closeButton = nil;
@@ -220,6 +260,7 @@ NSString *const PHPublisherContentRequestRewardSignatureKey = @"signature";
 }
 
 -(void)finish{
+    self.state = PHPublisherContentRequestDone;
     [PHAPIRequest cancelAllRequestsWithDelegate:self];
     
     [self hideOverlayWindow];
@@ -233,14 +274,14 @@ NSString *const PHPublisherContentRequestRewardSignatureKey = @"signature";
 }
 
 -(void)didSucceedWithResponse:(NSDictionary *)responseData{
-    PHContent *content = [PHContent contentWithDictionary:responseData];
-    if (!!content) {
-        if ([self.delegate respondsToSelector:@selector(request:contentWillDisplay:)]) {
-            [self.delegate performSelector:@selector(request:contentWillDisplay:) withObject:self withObject:content];
+    [_content release], _content = [[PHContent contentWithDictionary:responseData] retain];
+    if (!!_content) {
+        if ([self.delegate respondsToSelector:@selector(requestDidGetContent:)]) {
+            [self.delegate performSelector:@selector(requestDidGetContent:) withObject:self];
         }
         
-        [self showOverlayWindow];
-        [self pushContent:content]; 
+        self.state = PHPublisherContentRequestPreloaded;
+        [self continueLoadingIfNeeded];
     } else {
         PH_NOTE(@"This request was successful but did not contain any displayable content. Dismissing now.");
         if ([self.delegate respondsToSelector:@selector(requestContentDidDismiss:)]) {
@@ -252,7 +293,32 @@ NSString *const PHPublisherContentRequestRewardSignatureKey = @"signature";
     }
 }
 
+-(void)preload{
+    _targetState = PHPublisherContentRequestPreloaded;
+    [self continueLoadingIfNeeded];
+}
+
 -(void)send{
+    _targetState = PHPublisherContentRequestDisplayingContent;
+    [self continueLoadingIfNeeded];
+}
+
+-(void)continueLoadingIfNeeded{
+    switch (self.state) {
+        case PHPublisherContentRequestInitialized:
+            [self getContent];
+            break;
+        case PHPublisherContentRequestPreloaded:
+            [self showContentIfReady];
+            break;
+        default:
+            break;
+    }
+}
+
+-(void)getContent{
+    self.state = PHPublisherContentRequestPreloading;
+    
     if ([[UIDevice currentDevice] respondsToSelector:@selector(isMultitaskingSupported)] && 
         [[UIDevice currentDevice] isMultitaskingSupported]) {
         [[NSNotificationCenter defaultCenter] addObserver:self 
@@ -275,6 +341,18 @@ NSString *const PHPublisherContentRequestRewardSignatureKey = @"signature";
     
     [self placeCloseButton];
     [self performSelector:@selector(showCloseButtonBecauseOfTimeout) withObject:nil afterDelay:4.0];
+}
+
+-(void)showContentIfReady{    
+    if (_targetState >= PHPublisherContentRequestDisplayingContent) {
+        if ([self.delegate respondsToSelector:@selector(request:contentWillDisplay:)]) {
+            [self.delegate performSelector:@selector(request:contentWillDisplay:) withObject:self withObject:_content];
+        }
+        
+        self.state = PHPublisherContentRequestDisplayingContent;
+        [self showOverlayWindow];
+        [self pushContent:_content];
+    }
 }
 
 #pragma mark -

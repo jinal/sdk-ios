@@ -54,8 +54,8 @@
 		EA523D9B1343EEDA0057DEA5 /* PHPublisherOpenRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = EA523D8E1343EE790057DEA5 /* PHPublisherOpenRequest.m */; };
 		EA523D9E1343EEED0057DEA5 /* PHStringUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = EA523D901343EE790057DEA5 /* PHStringUtil.m */; };
 		EA523DC51343F9740057DEA5 /* PHAPIRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = EA523DB21343F7BA0057DEA5 /* PHAPIRequest.m */; };
-		EA523DD6134403AF0057DEA5 /* PHPublisherContentRequestTest.m in Sources */ = {isa = PBXBuildFile; fileRef = EA523DD5134403AF0057DEA5 /* PHPublisherContentRequestTest.m */; };
 		EA6ADFC51475CF3A00DBE60B /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EABAA6971450ED640040B937 /* SystemConfiguration.framework */; };
+		EA6ADFC81475F22C00DBE60B /* PHPublisherContentRequestTest.m in Sources */ = {isa = PBXBuildFile; fileRef = EA6ADFC71475F22C00DBE60B /* PHPublisherContentRequestTest.m */; };
 		EA6EA1E8135F458E000123B0 /* PHPublisherTokensRequestTest.m in Sources */ = {isa = PBXBuildFile; fileRef = EA6EA1E7135F458E000123B0 /* PHPublisherTokensRequestTest.m */; };
 		EA6EA1EF135F6D77000123B0 /* PHPublisherPromosRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = EA6EA1ED135F6D77000123B0 /* PHPublisherPromosRequest.m */; };
 		EA7BC61A13537F8700B4518D /* PHURLLoaderTest.m in Sources */ = {isa = PBXBuildFile; fileRef = EA7BC61813537F8700B4518D /* PHURLLoaderTest.m */; };
@@ -126,8 +126,8 @@
 		EA523DA81343F1C50057DEA5 /* README.markdown */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README.markdown; sourceTree = "<group>"; };
 		EA523DB11343F7BA0057DEA5 /* PHAPIRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PHAPIRequest.h; sourceTree = "<group>"; };
 		EA523DB21343F7BA0057DEA5 /* PHAPIRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PHAPIRequest.m; sourceTree = "<group>"; };
-		EA523DD5134403AF0057DEA5 /* PHPublisherContentRequestTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = PHPublisherContentRequestTest.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		EA6031CD1361FFD6007B2BF5 /* PlayHavenSDK.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PlayHavenSDK.h; sourceTree = "<group>"; };
+		EA6ADFC71475F22C00DBE60B /* PHPublisherContentRequestTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PHPublisherContentRequestTest.m; sourceTree = "<group>"; };
 		EA6EA1E7135F458E000123B0 /* PHPublisherTokensRequestTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PHPublisherTokensRequestTest.m; sourceTree = "<group>"; };
 		EA6EA1EC135F6D77000123B0 /* PHPublisherPromosRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PHPublisherPromosRequest.h; sourceTree = "<group>"; };
 		EA6EA1ED135F6D77000123B0 /* PHPublisherPromosRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PHPublisherPromosRequest.m; sourceTree = "<group>"; };
@@ -270,10 +270,10 @@
 		EA523D891343EE670057DEA5 /* tests */ = {
 			isa = PBXGroup;
 			children = (
+				EA6ADFC71475F22C00DBE60B /* PHPublisherContentRequestTest.m */,
 				EA03811213B26FF500A31FF7 /* PHNotificationViewTest.m */,
 				EA7BC61813537F8700B4518D /* PHURLLoaderTest.m */,
 				EA523D8A1343EE670057DEA5 /* PHPublisherOpenRequestTest.m */,
-				EA523DD5134403AF0057DEA5 /* PHPublisherContentRequestTest.m */,
 				EAB4423213452026000DA3E9 /* PHAPIRequestTest.m */,
 				EA6EA1E7135F458E000123B0 /* PHPublisherTokensRequestTest.m */,
 				EA03810913B25F4300A31FF7 /* PHPublisherMetadataRequestTest.m */,
@@ -560,9 +560,9 @@
 				EA03811613B272C400A31FF7 /* PHNotificationView.m in Sources */,
 				EA03811B13B298AF00A31FF7 /* PHNotificationRenderer.m in Sources */,
 				EA03811F13B2A0F200A31FF7 /* PHNotificationBadgeRenderer.m in Sources */,
-				EA523DD6134403AF0057DEA5 /* PHPublisherContentRequestTest.m in Sources */,
 				EA21F69D14215EAD00A4177E /* PHConstants.m in Sources */,
 				EAB2B44713CBD172006D2391 /* PHReward.m in Sources */,
+				EA6ADFC81475F22C00DBE60B /* PHPublisherContentRequestTest.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

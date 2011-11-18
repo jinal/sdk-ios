@@ -14,9 +14,18 @@
 @class PHContent;
 @class PHReward;
 
+typedef enum {
+    PHPublisherContentRequestInitialized,
+    PHPublisherContentRequestPreloading,
+    PHPublisherContentRequestPreloaded,
+    PHPublisherContentRequestDisplayingContent,
+    PHPublisherContentRequestDone
+} PHPublisherContentRequestState;
+
 @protocol PHPublisherContentRequestDelegate <NSObject>
 @optional
 -(void)requestWillGetContent:(PHPublisherContentRequest *)request;
+-(void)requestDidGetContent:(PHPublisherContentRequest *)request;
 -(void)request:(PHPublisherContentRequest *)request contentWillDisplay:(PHContent *)content;
 -(void)request:(PHPublisherContentRequest *)request contentDidDisplay:(PHContent *)content;
 -(void)requestContentDidDismiss:(PHPublisherContentRequest *)request;
@@ -34,13 +43,17 @@
 @end
 
 @interface PHPublisherContentRequest : PHAPIRequest<PHContentViewDelegate, PHAPIRequestDelegate> {
-  NSString *_placement;
-  BOOL _animated;
-  NSMutableArray *_contentViews;
-  BOOL _showsOverlayImmediately;
-  UIButton *_closeButton;
-  
-  UIView *_overlayWindow;
+    NSString *_placement;
+    BOOL _animated;
+    NSMutableArray *_contentViews;
+    BOOL _showsOverlayImmediately;
+    UIButton *_closeButton;
+    
+    UIView *_overlayWindow;
+    PHContent *_content;
+    
+    PHPublisherContentRequestState _state;
+    PHPublisherContentRequestState _targetState;
 }
 
 +(id)requestForApp:(NSString *)token secret:(NSString *)secret placement:(NSString *)placement delegate:(id)delegate;
@@ -50,6 +63,8 @@
 @property (nonatomic,readonly) NSMutableArray *contentViews;
 @property (nonatomic, assign) BOOL showsOverlayImmediately;
 @property (nonatomic, readonly) UIView *overlayWindow;
+
+-(void)preload;
 
 -(void)requestSubcontent:(NSDictionary *)queryParameters callback:(NSString *)callback source:(PHContentView *)source;
 -(void)pushContent:(PHContent *)content;

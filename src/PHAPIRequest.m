@@ -57,12 +57,14 @@
 }
 
 -(id) initWithApp:(NSString *)token secret:(NSString *)secret{
-  if ((self = [super init])) {
-    _token = [token copy];
-    _secret = [secret copy];
-  }
-  
-  return self;
+    if ((self = [super init])) {
+        _token = [token copy];
+        _secret = [secret copy];
+    }
+    
+    [[PHAPIRequest allRequests] addObject:self];
+    
+    return self;
 }
 
 @synthesize token = _token, secret = _secret;
@@ -151,9 +153,6 @@
                                          timeoutInterval:PH_REQUEST_TIMEOUT];
     _connection = [[NSURLConnection alloc] initWithRequest:request delegate:self];
     [_connection start];
-    
-    //REQUEST_RETAIN see REQUEST_RELEASE
-    [[PHAPIRequest allRequests] addObject:self];
   }
 }
 
@@ -192,20 +191,18 @@
 
 -(void)connectionDidFinishLoading:(NSURLConnection *)connection{
     PH_NOTE(@"Request finished!");
-    if (!!self.delegate) {
-        if ([self.delegate respondsToSelector:@selector(requestDidFinishLoading:)]) {
-            [self.delegate performSelector:@selector(requestDidFinishLoading:) withObject:self withObject:nil];
-        }
-        
-        NSString *responseString = [[NSString alloc] initWithData:_connectionData encoding:NSUTF8StringEncoding];
-        
-        SBJsonParser *parser = [[SBJsonParser alloc] init];
-        NSDictionary* resultDictionary = [parser objectWithString:responseString];
-        [self processRequestResponse:resultDictionary];
-        
-        [parser release];
-        [responseString release];
+    if ([self.delegate respondsToSelector:@selector(requestDidFinishLoading:)]) {
+        [self.delegate performSelector:@selector(requestDidFinishLoading:) withObject:self withObject:nil];
     }
+    
+    NSString *responseString = [[NSString alloc] initWithData:_connectionData encoding:NSUTF8StringEncoding];
+    
+    SBJsonParser *parser = [[SBJsonParser alloc] init];
+    NSDictionary* resultDictionary = [parser objectWithString:responseString];
+    [self processRequestResponse:resultDictionary];
+    
+    [parser release];
+    [responseString release];
     
     //REQUEST_RELEASE see REQUEST_RETAIN
     [self afterConnectionDidFinishLoading];
