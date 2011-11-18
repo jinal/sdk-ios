@@ -34,6 +34,7 @@
   UIActivityIndicatorView *_activityView;
   UIView *_targetView;
 }
++(void)preloadWebView;
 
 -(id)initWithContent:(PHContent *)content;
 

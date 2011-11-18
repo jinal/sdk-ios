@@ -33,6 +33,7 @@
 @end
 
 @implementation PHContentView
+static PHContentWebView *sharedWebView;
 
 -(id) initWithContent:(PHContent *)content{
     if ((self = [super initWithFrame:[[UIScreen mainScreen] applicationFrame]])) {
@@ -57,11 +58,13 @@
                       loadContextRedirect,@"ph://loadContext",
                       nil];
         
-        _content = [content retain];
+        if (!sharedWebView) 
+            [PHContentView preloadWebView];
         
-        _webView = [[PHContentWebView alloc] initWithFrame:CGRectZero];
-        _webView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
-        _webView.delegate = self;
+        _webView = sharedWebView; // only pointer, no retain
+        _webView.transform = CGAffineTransformIdentity;
+        
+        _content = [content retain];
         
         [self addSubview:_webView];
         [self loadTemplate];
@@ -98,8 +101,9 @@
     [[NSNotificationCenter defaultCenter] removeObserver:self];
     [PHURLLoader invalidateAllLoadersWithDelegate:self];
     
+    [_webView removeFromSuperview];
+    
     [_content release], _content = nil;
-    [_webView release], _webView = nil;
     [_redirects release], _redirects = nil;
     [_activityView release] , _activityView = nil;
     [super dealloc];
@@ -176,6 +180,7 @@
 }
 
 -(void) show:(BOOL)animated{
+    _webView.delegate = self;
     
     _willAnimate = animated;
     [self.targetView addSubview: self];
@@ -303,6 +308,7 @@
 
 -(void)loadTemplate {
     PH_LOG(@"Loading content unit template: %@", self.content.URL);
+    _webView.delegate = self;
     [self.webView loadRequest:[NSURLRequest requestWithURL:self.content.URL
                                            cachePolicy:NSURLRequestReturnCacheDataElseLoad 
                                        timeoutInterval:PH_REQUEST_TIMEOUT]];
@@ -319,7 +325,14 @@
         [self.delegate contentViewDidDismiss:self];
     }
 }
-
+#pragma mark -
+#pragma mark Flyweight Methods
++(void)preloadWebView {
+    if (!sharedWebView) {
+        sharedWebView = [[PHContentWebView alloc] initWithFrame:CGRectZero];
+        sharedWebView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+    }
+}
 #pragma mark -
 #pragma mark UIWebViewDelegate
 -(BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType{  
