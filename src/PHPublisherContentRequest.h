@@ -67,7 +67,7 @@ typedef enum {
 -(void)preload;
 
 -(void)requestSubcontent:(NSDictionary *)queryParameters callback:(NSString *)callback source:(PHContentView *)source;
--(void)pushContent:(PHContent *)content;
+
 
 -(BOOL)isValidReward:(NSDictionary *)rewardData;
 -(void)requestRewards:(NSDictionary *)queryParameters callback:(NSString *)callback source:(PHContentView *)source;

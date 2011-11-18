@@ -16,6 +16,7 @@
 #define MAX_MARGIN 20
 
 @interface PHContentView(Private)
++(NSMutableSet *)allContentViews;
 - (void)sizeToFitOrientation:(BOOL)transform;
 -(CGAffineTransform)transformForOrientation:(UIInterfaceOrientation)orientation;
 -(void)orientationDidChange;
@@ -28,15 +29,85 @@
 -(void)handleLoadContext:(NSDictionary *)queryComponents callback:(NSString*)callback;
 -(UIActivityIndicatorView *)activityView;
 -(void)dismissWithError:(NSError *)error;
+-(void)clearRedirects;
 
 @property (nonatomic, readonly) PHContentWebView *webView;
+@property (nonatomic, readonly) NSMutableDictionary *redirects;
 @end
 
 @implementation PHContentView
 
+#pragma mark - Static Methods
+
++(NSMutableSet *)allContentViews{
+    static NSMutableSet *allContentViews = nil;
+    
+    if (allContentViews == nil) {
+        allContentViews = [[NSMutableSet alloc] init];
+    }
+    
+    return allContentViews;
+}
+
++(PHContentView *)dequeueContentViewInstance{
+    PHContentView *instance = [[PHContentView allContentViews] anyObject];
+    if (!!instance) {
+        [[PHContentView allContentViews] removeObject:instance];
+    }
+    
+    return instance;
+}
+
++(void)enqueueContentViewInstance:(PHContentView *)contentView{
+    //cleanup before enqueue
+    contentView.delegate = nil;
+    [contentView clearRedirects];
+    
+    [[self allContentViews] addObject:contentView];    
+}
+
+#pragma mark -
 -(id) initWithContent:(PHContent *)content{
     if ((self = [super initWithFrame:[[UIScreen mainScreen] applicationFrame]])) {
         
+#ifndef PH_UNIT_TESTING
+        _webView = [[PHContentWebView alloc] initWithFrame:CGRectZero];
+        _webView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
+        _webView.delegate = self;
+        
+        [self addSubview:_webView];
+#endif
+        
+        UIWindow *window = ([[[UIApplication sharedApplication] windows] count] > 0)?[[[UIApplication sharedApplication] windows] objectAtIndex:0]: nil;
+        _targetView = window;
+        
+        self.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+        
+        [self addObserver:self forKeyPath:@"content" options:NSKeyValueObservingOptionNew|NSKeyValueObservingOptionOld context:nil];
+        self.content = content;
+        
+    }
+    
+    return self;
+}
+
+-(void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context{
+    if ([keyPath isEqualToString:@"content"] && [[change valueForKey:NSKeyValueChangeKindKey] unsignedIntegerValue] ==  NSKeyValueChangeSetting) {
+        [self loadTemplate];
+        
+        if ([self superview]) {
+            //if we're showing a template then update the view;
+            [self orientationDidChange];
+        }
+    }
+}
+
+@synthesize content = _content;
+@synthesize delegate = _delegate;
+@synthesize targetView = _targetView;
+
+-(NSMutableDictionary *)redirects{
+    if (_redirects == nil) {
         NSInvocation
         *dismissRedirect = [NSInvocation invocationWithMethodSignature:[[self class] instanceMethodSignatureForSelector:@selector(handleDismiss:)]],
         *launchRedirect = [NSInvocation invocationWithMethodSignature:[[self class] instanceMethodSignatureForSelector:@selector(handleLaunch:callback:)]],
@@ -56,31 +127,14 @@
                       launchRedirect,@"ph://launch",
                       loadContextRedirect,@"ph://loadContext",
                       nil];
-        
-        _content = [content retain];
-        
-#ifndef PH_UNIT_TESTING
-        _webView = [[PHContentWebView alloc] initWithFrame:CGRectZero];
-        _webView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
-        _webView.delegate = self;
-        
-        [self addSubview:_webView];
-#endif
-        [self loadTemplate];
-        
-        UIWindow *window = ([[[UIApplication sharedApplication] windows] count] > 0)?[[[UIApplication sharedApplication] windows] objectAtIndex:0]: nil;
-        _targetView = window;
-        
-        self.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-        
     }
     
-    return self;
+    return _redirects;
 }
 
-@synthesize content = _content;
-@synthesize delegate = _delegate;
-@synthesize targetView = _targetView;
+-(void)clearRedirects{
+    [_redirects release], _redirects = nil;
+}
 
 -(PHContentWebView *)webView{
     return _webView;
@@ -97,6 +151,7 @@
 }
 
 - (void)dealloc {
+    [self removeObserver:self forKeyPath:@"content"];
     [[NSNotificationCenter defaultCenter] removeObserver:self];
     [PHURLLoader invalidateAllLoadersWithDelegate:self];
     
@@ -327,7 +382,7 @@
 -(BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType{  
     NSURL *url = request.URL;
     NSString *urlPath = [NSString stringWithFormat:@"%@://%@%@", [url scheme], [url host], [url path]];
-    NSInvocation *redirect = [_redirects valueForKey:urlPath];
+    NSInvocation *redirect = [self.redirects valueForKey:urlPath];
     if (redirect) {
         NSDictionary *queryComponents = [url queryComponents];
         NSString *callback = [queryComponents valueForKey:@"callback"];
@@ -387,9 +442,9 @@
         redirect.target = target;
         redirect.selector = action;
         
-        [_redirects setValue:redirect forKey:urlPath];
+        [self.redirects setValue:redirect forKey:urlPath];
     } else {
-        [_redirects setValue:nil forKey:urlPath];
+        [self.redirects setValue:nil forKey:urlPath];
     }
 }
 

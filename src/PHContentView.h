@@ -35,9 +35,12 @@
   UIView *_targetView;
 }
 
++(PHContentView *)dequeueContentViewInstance;
++(void)enqueueContentViewInstance:(PHContentView *)contentView;
+
 -(id)initWithContent:(PHContent *)content;
 
-@property(nonatomic, readonly) PHContent *content;
+@property(nonatomic, retain) PHContent *content;
 @property(nonatomic, assign) NSObject<PHContentViewDelegate> *delegate;
 @property(nonatomic, assign) UIView *targetView;
 
