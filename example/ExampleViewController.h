@@ -28,4 +28,6 @@
 -(void)startRequest;
 -(void)finishRequest;
 
+-(void)startTimers;
+
 @end

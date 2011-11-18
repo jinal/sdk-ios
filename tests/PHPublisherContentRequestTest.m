@@ -20,6 +20,18 @@
 #define PUBLISHER_TOKEN @"PUBLISHER_TOKEN"
 #define PUBLISHER_SECRET @"PUBLISHER_SECRET"
 
+@interface PHPublisherContentRequest(TestMethods)
+-(PHPublisherContentRequestState) state;
+@end
+
+@implementation PHPublisherContentRequest(TestMethods)
+-(PHPublisherContentRequestState)state{
+    return _state;
+}
+@end
+
+
+
 @interface PHContentTest : SenTestCase @end
 @interface PHContentViewTest : SenTestCase @end
 @interface PHContentViewRedirectTest : SenTestCase {
@@ -29,6 +41,13 @@
 }@end
 @interface PHPublisherContentRequestTest : SenTestCase @end
 @interface PHPublisherContentRewardsTest : SenTestCase @end
+@interface PHPublisherContentRequestPreservationTest : SenTestCase @end
+@interface PHPublisherContentPreloadTest : SenTestCase{
+    PHPublisherContentRequest *_request;
+    BOOL _didPreload;
+}
+@end
+
 
 @implementation PHContentTest
 
@@ -224,6 +243,51 @@
   
   STAssertTrue([request isValidReward:rewardDict], @"PHPublisherContentRequest could not validate valid reward.");
   STAssertFalse([request isValidReward:badRewardDict], @"PHPublisherContentRequest validated invalid reward.");
+}
+
+@end
+
+@implementation PHPublisherContentRequestPreservationTest
+
+-(void)testPreservation{
+    PHPublisherContentRequest *request = [PHPublisherContentRequest requestForApp:@"token1" secret:@"secret1" placement:@"placement1" delegate:nil];
+    PHPublisherContentRequest *requestIdentical = [PHPublisherContentRequest requestForApp:@"token1" secret:@"secret1" placement:@"placement1" delegate:nil];
+    PHPublisherContentRequest *requestDifferentToken = [PHPublisherContentRequest requestForApp:@"token2" secret:@"secret2" placement:@"placement1" delegate:nil];
+    PHPublisherContentRequest *requestDifferentPlacement = [PHPublisherContentRequest requestForApp:@"token1" secret:@"secret1" placement:@"placement2" delegate:nil];
+    
+    
+    STAssertTrue(request == requestIdentical, @"These requests should be the same instance!");
+    STAssertTrue(request != requestDifferentPlacement, @"These requests should be different!");
+    STAssertTrue(request != requestDifferentToken, @"These requests should be different!");
+    
+    NSString *newDelegate = @"DELEGATE";
+    PHPublisherContentRequest *requestNewDelegate = [PHPublisherContentRequest requestForApp:@"token1" secret:@"secret1" placement:@"placement1" delegate:newDelegate];
+    
+    STAssertTrue(requestNewDelegate.delegate == newDelegate, @"This request should have had its delegate reassigned!");
+}
+
+@end
+
+@implementation PHPublisherContentPreloadTest
+
+-(void)setUp{
+    _request = [[PHPublisherContentRequest requestForApp:@"zombie1" secret:@"haven1" placement:@"more_games" delegate:self] retain];
+    _didPreload = NO;
+}
+
+-(void)requestDidGetContent:(PHPublisherContentRequest *)request{
+    _didPreload = YES;
+}
+
+-(void)request:(PHPublisherContentRequest *)request contentWillDisplay:(PHContent *)content{
+    STAssertTrue(FALSE, @"This isn't supposed to happen!");
+}
+
+-(void)tearDown{
+    STAssertTrue(_didPreload, @"Preloading didn't happen!");
+    STAssertTrue([_request state] == PHPublisherContentRequestPreloaded,@"Request wasn't preloaded!");
+    
+    [_request release], _request = nil;
 }
 
 @end

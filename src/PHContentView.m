@@ -59,11 +59,13 @@
         
         _content = [content retain];
         
+#ifndef PH_UNIT_TESTING
         _webView = [[PHContentWebView alloc] initWithFrame:CGRectZero];
         _webView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
         _webView.delegate = self;
         
         [self addSubview:_webView];
+#endif
         [self loadTemplate];
         
         UIWindow *window = ([[[UIApplication sharedApplication] windows] count] > 0)?[[[UIApplication sharedApplication] windows] objectAtIndex:0]: nil;
