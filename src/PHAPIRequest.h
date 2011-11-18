@@ -31,9 +31,6 @@
 +(id)requestForApp:(NSString *)token secret:(NSString *)secret;
 +(void)cancelAllRequestsWithDelegate:(id) delegate;
 
-
--(id)initWithApp:(NSString *)token secret:(NSString *)secret;
-
 @property (nonatomic, copy) NSString *urlPath;
 @property (nonatomic, readonly) NSURL *URL;
 @property (nonatomic, readonly) NSString *token;

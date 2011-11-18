@@ -22,10 +22,12 @@ NSString *const PHPublisherContentRequestRewardSignatureKey = @"signature";
 #define MAX_MARGIN 20
 
 @interface PHAPIRequest(Private)
+-(id)initWithApp:(NSString *)token secret:(NSString *)secret;
 -(void)finish;
 @end
 
 @interface PHPublisherContentRequest(Private)
+-(id)initWithApp:(NSString *)token secret:(NSString *)secret placement:(NSString *)placement delegate:(id)delegate;
 -(CGAffineTransform) transformForOrientation:(UIInterfaceOrientation)orientation;
 -(void)placeCloseButton;
 -(void)hideCloseButton;

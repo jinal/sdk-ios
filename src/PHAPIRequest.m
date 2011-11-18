@@ -15,6 +15,7 @@
 #import "PHConstants.h"
 
 @interface PHAPIRequest(Private)
+-(id)initWithApp:(NSString *)token secret:(NSString *)secret;
 +(NSMutableSet *)allRequests;
 -(void)finish;
 -(void)afterConnectionDidFinishLoading;

@@ -45,8 +45,6 @@
 
 +(id)requestForApp:(NSString *)token secret:(NSString *)secret placement:(NSString *)placement delegate:(id)delegate;
 
--(id)initWithApp:(NSString *)token secret:(NSString *)secret placement:(NSString *)placement delegate:(id)delegate;
-
 @property (nonatomic,retain) NSString *placement;
 @property (nonatomic,assign) BOOL animated;
 @property (nonatomic,readonly) NSMutableArray *contentViews;
