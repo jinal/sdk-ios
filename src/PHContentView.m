@@ -16,6 +16,8 @@
 #define MAX_MARGIN 20
 
 @interface PHContentView(Private)
++(void)clearContentViews;
++(NSMutableSet *)allContentViews;
 - (void)sizeToFitOrientation:(BOOL)transform;
 -(CGAffineTransform)transformForOrientation:(UIInterfaceOrientation)orientation;
 -(void)orientationDidChange;
@@ -32,15 +34,58 @@
 @property (nonatomic, readonly) PHContentWebView *webView;
 @end
 
+static NSMutableSet *allContentViews = nil;
+
 @implementation PHContentView
 
+#pragma mark - Static Methods
+
++(void)initialize{
+    if  (self == [PHContentView class]){
+        [[NSNotificationCenter defaultCenter] addObserver:[PHContentView class] selector:@selector(clearContentViews) name:UIApplicationDidReceiveMemoryWarningNotification object:nil];
+    }
+}
+
++(NSMutableSet *)allContentViews{
+    @synchronized(allContentViews){
+        if (allContentViews == nil) {
+            allContentViews = [[NSMutableSet alloc] init];
+        }   
+    }
+    return allContentViews;
+}
+
++(void)clearContentViews{
+    @synchronized(allContentViews){
+        [allContentViews release], allContentViews = nil;
+    }
+}
+
++(PHContentView *)dequeueContentViewInstance{
+    PHContentView *instance = [[PHContentView allContentViews] anyObject];
+    if (!!instance) {
+        [instance retain];
+        [[PHContentView allContentViews] removeObject:instance];
+        [instance autorelease];
+    }
+    
+    return instance;
+}
+
++(void)enqueueContentViewInstance:(PHContentView *)contentView{
+    //cleanup before enqueue
+    contentView.delegate = nil;
+    
+    [[self allContentViews] addObject:contentView];    
+}
+
+#pragma mark -
 -(id) initWithContent:(PHContent *)content{
     if ((self = [super initWithFrame:[[UIScreen mainScreen] applicationFrame]])) {
-        
         NSInvocation
-        *dismissRedirect = [NSInvocation invocationWithMethodSignature:[[self class] instanceMethodSignatureForSelector:@selector(handleDismiss:)]],
-        *launchRedirect = [NSInvocation invocationWithMethodSignature:[[self class] instanceMethodSignatureForSelector:@selector(handleLaunch:callback:)]],
-        *loadContextRedirect = [NSInvocation invocationWithMethodSignature:[[self class] instanceMethodSignatureForSelector:@selector(handleLoadContext:callback:)]];
+        *dismissRedirect = [NSInvocation invocationWithMethodSignature:[[PHContentView class] instanceMethodSignatureForSelector:@selector(handleDismiss:)]],
+        *launchRedirect = [NSInvocation invocationWithMethodSignature:[[PHContentView class] instanceMethodSignatureForSelector:@selector(handleLaunch:callback:)]],
+        *loadContextRedirect = [NSInvocation invocationWithMethodSignature:[[PHContentView class] instanceMethodSignatureForSelector:@selector(handleLoadContext:callback:)]];
         
         dismissRedirect.target = self;
         dismissRedirect.selector = @selector(handleDismiss:);
@@ -56,9 +101,6 @@
                       launchRedirect,@"ph://launch",
                       loadContextRedirect,@"ph://loadContext",
                       nil];
-        
-        _content = [content retain];
-        
 #ifndef PH_UNIT_TESTING
         _webView = [[PHContentWebView alloc] initWithFrame:CGRectZero];
         _webView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
@@ -66,12 +108,13 @@
         
         [self addSubview:_webView];
 #endif
-        [self loadTemplate];
         
         UIWindow *window = ([[[UIApplication sharedApplication] windows] count] > 0)?[[[UIApplication sharedApplication] windows] objectAtIndex:0]: nil;
         _targetView = window;
         
         self.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+        
+        self.content = content;
         
     }
     
@@ -81,6 +124,19 @@
 @synthesize content = _content;
 @synthesize delegate = _delegate;
 @synthesize targetView = _targetView;
+
+-(void)setContent:(PHContent *)content{
+    if (_content != content) {
+        [_content release], _content = [content retain];
+        
+        [self loadTemplate];
+        
+        if ([self superview]) {
+            //if we're showing a template then update the view;
+            [self orientationDidChange];
+        }
+    }
+}
 
 -(PHContentWebView *)webView{
     return _webView;
@@ -335,7 +391,9 @@
         NSString *contextString = [queryComponents valueForKey:@"context"];
         
         SBJsonParser *parser = [SBJsonParser new];
-        NSDictionary *context = [parser objectWithString:contextString];
+        id parserObject = [parser objectWithString:contextString];
+        NSDictionary *context = ([parserObject isKindOfClass:[NSDictionary class]])?(NSDictionary*) parserObject: nil;
+        
         [parser release];
         
         PH_LOG(@"Redirecting request with callback: %@ to dispatch %@", callback, urlPath);
@@ -359,12 +417,6 @@
 
 -(void)webView:(UIWebView *)webView didFailLoadWithError:(NSError *)error{
     [self dismissWithError:error];
-}
-
--(void)webViewDidStartLoad:(UIWebView *)webView{
-    //update Webview with current PH_DISPATCH_PROTOCOL_VERSION
-    NSString *loadCommand = [NSString stringWithFormat:@"window.PlayHavenDispatchProtocolVersion = %d", PH_DISPATCH_PROTOCOL_VERSION];
-    [webView stringByEvaluatingJavaScriptFromString:loadCommand];
 }
 
 -(void)webViewDidFinishLoad:(UIWebView *)webView{
@@ -419,6 +471,9 @@
 }
 
 -(void)handleLoadContext:(NSDictionary *)queryComponents callback:(NSString*)callback{
+    NSString *loadCommand = [NSString stringWithFormat:@"window.PlayHavenDispatchProtocolVersion = %d", PH_DISPATCH_PROTOCOL_VERSION];
+    [self.webView stringByEvaluatingJavaScriptFromString:loadCommand];
+    
     if(![self sendCallback:callback withResponse:self.content.context error:nil]){
         [self dismissWithError:PHCreateError(PHLoadContextErrorType)];
     };

@@ -40,6 +40,8 @@ NSString *const PHPublisherContentRequestRewardSignatureKey = @"signature";
 -(void)continueLoadingIfNeeded;
 -(void)getContent;
 -(void)showContentIfReady;
+-(void)pushContent:(PHContent *)content;
+-(void)removeContentView:(PHContentView *)contentView;
 @property (nonatomic, readonly) UIButton *closeButton;
 @property (nonatomic, assign) PHPublisherContentRequestState state;
 @end
@@ -398,19 +400,31 @@ NSString *const PHPublisherContentRequestRewardSignatureKey = @"signature";
 }
 
 -(void)pushContent:(PHContent *)content{
-    PHContentView *contentView = [[PHContentView alloc] initWithContent:content];
+    PHContentView *contentView = [PHContentView dequeueContentViewInstance];
+    if (!contentView){
+        contentView = [[[PHContentView alloc] initWithContent:nil] autorelease];
+    } 
+    
+    
     [contentView redirectRequest:@"ph://subcontent" toTarget:self action:@selector(requestSubcontent:callback:source:)];
     [contentView redirectRequest:@"ph://reward" toTarget:self action:@selector(requestRewards:callback:source:)];
     [contentView redirectRequest:@"ph://closeButton" toTarget:self action:@selector(requestCloseButton:callback:source:)];
+    
+    contentView.content = content;
     [contentView setDelegate:self];
     [contentView setTargetView:self.overlayWindow];
     [contentView show:self.animated];
     
     [self.contentViews addObject:contentView];
     
-    [contentView release];
-    
     [self placeCloseButton];
+}
+
+-(void)removeContentView:(PHContentView *)contentView{
+    [contentView retain];
+    [self.contentViews removeObject:contentView];
+    [PHContentView enqueueContentViewInstance:contentView];
+    [contentView release];
 }
 
 -(void)dismissFromButton{
@@ -450,7 +464,7 @@ NSString *const PHPublisherContentRequestRewardSignatureKey = @"signature";
 }
 
 -(void)contentViewDidDismiss:(PHContentView *)contentView{
-    [self.contentViews removeObject:contentView];
+    [self removeContentView:contentView];
     
     if ([self.contentViews count] == 0) {
         //only passthrough the last contentView to dismiss
@@ -464,7 +478,7 @@ NSString *const PHPublisherContentRequestRewardSignatureKey = @"signature";
 }
 
 -(void)contentView:(PHContentView *)contentView didFailWithError:(NSError *)error{
-    [self.contentViews removeObject:contentView];
+    [self removeContentView:contentView];
     
     if ([self.contentViews count] == 0) {
         //only passthrough the last contentView to error
