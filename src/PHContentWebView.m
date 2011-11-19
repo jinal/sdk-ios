@@ -113,8 +113,8 @@
 }
 
 -(void)finishBounceOut{
-  self.transform = CGAffineTransformIdentity;
-  self.alpha = 1.0;
+  self.transform = BOUNCE_OUT;
+  self.alpha = ALPHA_OUT;
   
   [_target performSelector:_action];
   _isAnimating = NO;

@@ -75,7 +75,7 @@ static NSMutableSet *allContentViews = nil;
 +(void)enqueueContentViewInstance:(PHContentView *)contentView{
     //cleanup before enqueue
     contentView.delegate = nil;
-    [contentView.webView loadHTMLString:@"" baseURL:nil];
+    [contentView.webView stringByEvaluatingJavaScriptFromString:@"document.open();document.close()"];
     
     [[self allContentViews] addObject:contentView];    
 }
