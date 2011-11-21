@@ -110,8 +110,6 @@ static NSMutableSet *allContentViews = nil;
         
         [self addSubview:_webView];
         
-        //self.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-        
         self.content = content;
         
         
@@ -373,6 +371,9 @@ static NSMutableSet *allContentViews = nil;
 }
 
 -(void) viewDidDismiss{
+    //This prevents subsequent webviews from displaying old content.
+    [_webView stringByEvaluatingJavaScriptFromString:@"document.open();document.close();"];
+    
     if ([self.delegate respondsToSelector:(@selector(contentViewDidDismiss:))]) {
         [self.delegate contentViewDidDismiss:self];
     }
