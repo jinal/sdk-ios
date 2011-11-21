@@ -103,9 +103,17 @@ static NSMutableSet *allContentViews = nil;
         UIWindow *window = ([[[UIApplication sharedApplication] windows] count] > 0)?[[[UIApplication sharedApplication] windows] objectAtIndex:0]: nil;
         _targetView = window;
         
-        self.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+        _webView = [[PHContentWebView alloc] initWithFrame:CGRectZero];
+        _webView.delegate = self;
+        _webView.layer.borderWidth = 0.0f;
+        _webView.autoresizingMask = UIViewAutoresizingNone;
+        
+        [self addSubview:_webView];
+        
+        //self.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
         
         self.content = content;
+        
         
     }
     
@@ -121,7 +129,6 @@ static NSMutableSet *allContentViews = nil;
     if (_content != content) {
         [_content release], _content = [content retain];
         
-        [self loadTemplate];
         
         if ([self superview]) {
             //if we're showing a template then update the view;
@@ -166,17 +173,12 @@ static NSMutableSet *allContentViews = nil;
             CGRect contentFrame = CGRectOffset([self.content frameForOrientation:orientation], 0, barHeight);
             _webView.frame = contentFrame;
             
-            [self sizeToFitOrientation:YES];
         }
         
         
         [UIView beginAnimations:nil context:nil];
         [UIView setAnimationDuration:duration];
-        if (self.content.transition == PHContentTransitionDialog) {
-            _webView.transform = CGAffineTransformIdentity;
-        } else{
-            [self sizeToFitOrientation:YES];
-        }
+        [self sizeToFitOrientation:YES];
         [UIView commitAnimations];
     }
 }
@@ -202,6 +204,7 @@ static NSMutableSet *allContentViews = nil;
     } else {
         self.frame = CGRectMake(0, 0, width, height);
     }
+        
     self.center = center;
     
     if (transform) {
@@ -227,6 +230,10 @@ static NSMutableSet *allContentViews = nil;
     [self.targetView addSubview: self];
     [self sizeToFitOrientation:YES];
     
+    [_webView setDelegate:self];
+    _webView.transform = CGAffineTransformIdentity;
+    
+    [self loadTemplate];
     
     if (CGRectIsNull([self.content frameForOrientation:_orientation])) {
         //this is an invalid frame and we should dismiss immediately!
@@ -249,14 +256,7 @@ static NSMutableSet *allContentViews = nil;
             height = self.frame.size.width;
         }
         
-        _webView = [[PHContentWebView alloc] initWithFrame:CGRectMake(0, barHeight, width, height-barHeight)];
-        _webView.delegate = self;
-        _webView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
-        _webView.layer.borderWidth = 0.0f;
-        
-        [self addSubview:_webView];
-        
-        [self loadTemplate];
+        _webView.frame = CGRectMake(0, barHeight, width, height-barHeight);
         
         [self activityView].center = _webView.center;
         
@@ -279,19 +279,15 @@ static NSMutableSet *allContentViews = nil;
         
         UIInterfaceOrientation orientation = [UIApplication sharedApplication].statusBarOrientation;
         CGRect contentFrame = CGRectOffset([self.content frameForOrientation:orientation], 0, barHeight);
-        _webView = [[PHContentWebView alloc] initWithFrame:contentFrame];
+        
+        _webView.frame = contentFrame;
         _webView.layer.borderColor = [[UIColor blackColor] CGColor];
         _webView.layer.borderWidth = 1.0f;
         
         if ([self.delegate respondsToSelector:@selector(borderColorForContentView:)]) {
             _webView.layer.borderColor = [[self.delegate borderColorForContentView:self] CGColor];
         }
-        
-        [_webView setDelegate:self];
-        [self addSubview:_webView];
-        
-        [self loadTemplate];
-        
+                
         [self activityView].center = _webView.center;
         
         if (animated) {
@@ -349,14 +345,13 @@ static NSMutableSet *allContentViews = nil;
 
 -(void)dismissView{
     [self removeFromSuperview];
-    [_webView release], _webView = nil;
     
     [self viewDidDismiss];
 }
 
 -(void)dismissWithError:(NSError *)error{
+    PH_LOG(@"Error with content view: %@", [error localizedDescription]);
     [self removeFromSuperview];
-    [_webView release], _webView = nil;
     
     if ([self.delegate respondsToSelector:(@selector(contentView:didFailWithError:))]) {
         [self.delegate contentView:self didFailWithError:error];
@@ -364,9 +359,12 @@ static NSMutableSet *allContentViews = nil;
 }
 -(void)loadTemplate {
     PH_LOG(@"Loading content unit template: %@", self.content.URL);
+    [_webView stopLoading];
+    
     [_webView loadRequest:[NSURLRequest requestWithURL:self.content.URL
-                                           cachePolicy:NSURLRequestReturnCacheDataElseLoad 
-                                       timeoutInterval:PH_REQUEST_TIMEOUT]];
+                                               cachePolicy:NSURLRequestReturnCacheDataElseLoad 
+                                           timeoutInterval:PH_REQUEST_TIMEOUT]];
+    
 }
 -(void) viewDidShow{
     if ([self.delegate respondsToSelector:(@selector(contentViewDidShow:))]) {

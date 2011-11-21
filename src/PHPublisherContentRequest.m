@@ -260,8 +260,7 @@ NSString *const PHPublisherContentRequestRewardSignatureKey = @"signature";
 
 -(NSDictionary *)additionalParameters{
     return [NSDictionary dictionaryWithObjectsAndKeys:
-            self.placement, @"placement_id",
-            nil];
+            self.placement, @"placement_id", nil];
 }
 
 -(void)finish{
@@ -401,9 +400,8 @@ NSString *const PHPublisherContentRequestRewardSignatureKey = @"signature";
 
 -(void)pushContent:(PHContent *)content{
     PHContentView *contentView = [PHContentView dequeueContentViewInstance];
-    if (!contentView){
+    if (!contentView)
         contentView = [[[PHContentView alloc] initWithContent:nil] autorelease];
-    } 
     
     
     [contentView redirectRequest:@"ph://subcontent" toTarget:self action:@selector(requestSubcontent:callback:source:)];
