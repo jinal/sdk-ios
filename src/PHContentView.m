@@ -393,7 +393,7 @@ static NSMutableSet *allContentViews = nil;
         
         SBJsonParser *parser = [SBJsonParser new];
         id parserObject = [parser objectWithString:contextString];
-        NSDictionary *context = ([parserObject isKindOfClass:[NSDictionary class]])?(NSDictionary*) parserObject: nil;
+        NSDictionary *context = ([parserObject isKindOfClass:[NSDictionary class]])?(NSDictionary*) parserObject: [NSDictionary dictionary];
         
         [parser release];
         
