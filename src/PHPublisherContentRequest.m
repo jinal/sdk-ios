@@ -260,7 +260,8 @@ NSString *const PHPublisherContentRequestRewardSignatureKey = @"signature";
 
 -(NSDictionary *)additionalParameters{
     return [NSDictionary dictionaryWithObjectsAndKeys:
-            self.placement, @"placement_id", nil];
+            self.placement, @"placement_id",
+            nil];
 }
 
 -(void)finish{
@@ -485,7 +486,7 @@ NSString *const PHPublisherContentRequestRewardSignatureKey = @"signature";
             [self.delegate performSelector:@selector(request:contentDidFailWithError:) 
                                 withObject:self 
                                 withObject:error];
-        }else if ([self.delegate respondsToSelector:@selector(request:didFailWithError::)]) {
+        }else if ([self.delegate respondsToSelector:@selector(request:didFailWithError:)]) {
             [self.delegate performSelector:@selector(request:didFailWithError:) 
                                 withObject:self 
                                 withObject:error];
