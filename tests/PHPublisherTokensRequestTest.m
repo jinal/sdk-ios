@@ -25,7 +25,7 @@
 
 -(void)setUp{
   _didHandleRequest = NO;
-  _request = [[PHPublisherPromosRequest alloc] initWithApp:PUBLISHER_TOKEN secret:PUBLISHER_SECRET delegate:self];
+  _request = [[PHPublisherPromosRequest requestForApp:PUBLISHER_TOKEN secret:PUBLISHER_SECRET delegate:self] retain];
 }
 
 -(void)testRequestProcessing{
