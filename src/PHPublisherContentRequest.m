@@ -332,7 +332,6 @@ NSString *const PHPublisherContentRequestRewardSignatureKey = @"signature";
                                                    object:nil];
     }
     
-    
     [super send];
     
     if ([self.delegate respondsToSelector:@selector(requestWillGetContent:)]) {
