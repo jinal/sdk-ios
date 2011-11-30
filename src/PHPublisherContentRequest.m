@@ -305,6 +305,13 @@ NSString *const PHPublisherContentRequestRewardSignatureKey = @"signature";
 }
 
 -(void)send{
+    if (PH_MULTITASKING_SUPPORTED) {
+        [[NSNotificationCenter defaultCenter] addObserver:self 
+                                                 selector:@selector(dismissToBackground) 
+                                                     name:UIApplicationDidEnterBackgroundNotification 
+                                                   object:nil];
+    }
+    
     _targetState = PHPublisherContentRequestDisplayingContent;
     [self continueLoadingIfNeeded];
 }
@@ -324,13 +331,7 @@ NSString *const PHPublisherContentRequestRewardSignatureKey = @"signature";
 
 -(void)getContent{
     self.state = PHPublisherContentRequestPreloading;
-    
-    if (PH_MULTITASKING_SUPPORTED) {
-        [[NSNotificationCenter defaultCenter] addObserver:self 
-                                                 selector:@selector(dismissToBackground) 
-                                                     name:UIApplicationDidEnterBackgroundNotification 
-                                                   object:nil];
-    }
+
     [super send];
     
     if ([self.delegate respondsToSelector:@selector(requestWillGetContent:)]) {
