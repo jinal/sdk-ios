@@ -57,14 +57,22 @@
 }
 
 -(id) initWithApp:(NSString *)token secret:(NSString *)secret{
-    if ((self = [super init])) {
+    self = [self init];
+    if (self) {
         _token = [token copy];
         _secret = [secret copy];
     }
     
-    [[PHAPIRequest allRequests] addObject:self];
-    
     return self;
+}
+
+-(id)init{
+    self = [super init];
+    if (self) {
+        [[PHAPIRequest allRequests] addObject:self];
+    }
+    
+    return  self;
 }
 
 @synthesize token = _token, secret = _secret;

@@ -37,6 +37,7 @@ NSString *const PHPublisherContentRequestRewardSignatureKey = @"signature";
 -(void)showOverlayWindow;
 -(void)hideOverlayWindow;
 -(void)dismissFromButton;
+-(void)dismissToBackground;
 -(void)continueLoadingIfNeeded;
 -(void)getContent;
 -(void)showContentIfReady;
@@ -78,7 +79,6 @@ NSString *const PHPublisherContentRequestRewardSignatureKey = @"signature";
     if ((self = [self initWithApp:token secret:secret])) {
         self.placement = placement;
         self.delegate = delegate;
-        _state = PHPublisherContentRequestInitialized;
     }
     
     return self;
@@ -86,6 +86,7 @@ NSString *const PHPublisherContentRequestRewardSignatureKey = @"signature";
 
 -(id)initWithApp:(NSString *)token secret:(NSString *)secret{
     if ((self = [super initWithApp:token secret:secret])){
+        _state = PHPublisherContentRequestInitialized;
         _animated = YES;
     }
     
@@ -324,15 +325,12 @@ NSString *const PHPublisherContentRequestRewardSignatureKey = @"signature";
 -(void)getContent{
     self.state = PHPublisherContentRequestPreloading;
     
-    if ([[UIDevice currentDevice] respondsToSelector:@selector(isMultitaskingSupported)] && 
-        [[UIDevice currentDevice] isMultitaskingSupported]) {
+    if (PH_MULTITASKING_SUPPORTED) {
         [[NSNotificationCenter defaultCenter] addObserver:self 
-                                                 selector:@selector(dismissFromButton) 
+                                                 selector:@selector(dismissToBackground) 
                                                      name:UIApplicationDidEnterBackgroundNotification 
                                                    object:nil];
     }
-    
-    
     [super send];
     
     if ([self.delegate respondsToSelector:@selector(requestWillGetContent:)]) {
@@ -432,8 +430,26 @@ NSString *const PHPublisherContentRequestRewardSignatureKey = @"signature";
             [contentView dismissFromButton];
         }
     } else {
+        PH_NOTE(@"The content unit was dismissed by the user");
+        
+        if ([self.delegate respondsToSelector:@selector(requestContentDidDismiss:)]) {
+            [self.delegate performSelector:@selector(requestContentDidDismiss:) 
+                                withObject:self];
+        }
+        
         [self finish];
     }
+}
+
+-(void)dismissToBackground{
+    PH_NOTE(@"The content unit was dismissed because the app has been backgrounded.");
+    
+    if ([self.delegate respondsToSelector:@selector(requestContentDidDismiss:)]) {
+        [self.delegate performSelector:@selector(requestContentDidDismiss:) 
+                            withObject:self];
+    }
+    
+    [self finish];
 }
 
 -(CGAffineTransform) transformForOrientation:(UIInterfaceOrientation)orientation{

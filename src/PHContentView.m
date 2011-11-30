@@ -30,6 +30,8 @@
 -(void)handleLoadContext:(NSDictionary *)queryComponents callback:(NSString*)callback;
 -(UIActivityIndicatorView *)activityView;
 -(void)dismissWithError:(NSError *)error;
+-(void)resetRedirects;
+-(void)prepareForReuse;
 @end
 
 static NSMutableSet *allContentViews = nil;
@@ -70,36 +72,14 @@ static NSMutableSet *allContentViews = nil;
     return instance;
 }
 
-+(void)enqueueContentViewInstance:(PHContentView *)contentView{
-    //cleanup before enqueue
-    contentView.delegate = nil;
-    
++(void)enqueueContentViewInstance:(PHContentView *)contentView{    
+    [contentView prepareForReuse];
     [[self allContentViews] addObject:contentView];    
 }
 
 #pragma mark -
 -(id) initWithContent:(PHContent *)content{
     if ((self = [super initWithFrame:[[UIScreen mainScreen] applicationFrame]])) {
-        NSInvocation
-        *dismissRedirect = [NSInvocation invocationWithMethodSignature:[[PHContentView class] instanceMethodSignatureForSelector:@selector(handleDismiss:)]],
-        *launchRedirect = [NSInvocation invocationWithMethodSignature:[[PHContentView class] instanceMethodSignatureForSelector:@selector(handleLaunch:callback:)]],
-        *loadContextRedirect = [NSInvocation invocationWithMethodSignature:[[PHContentView class] instanceMethodSignatureForSelector:@selector(handleLoadContext:callback:)]];
-        
-        dismissRedirect.target = self;
-        dismissRedirect.selector = @selector(handleDismiss:);
-        
-        launchRedirect.target = self;
-        launchRedirect.selector = @selector(handleLaunch:callback:);
-        
-        loadContextRedirect.target = self;
-        loadContextRedirect.selector = @selector(handleLoadContext:callback:);
-        
-        _redirects = [[NSMutableDictionary alloc] initWithObjectsAndKeys:
-                      dismissRedirect,@"ph://dismiss",
-                      launchRedirect,@"ph://launch",
-                      loadContextRedirect,@"ph://loadContext",
-                      nil];
-
         UIWindow *window = ([[[UIApplication sharedApplication] windows] count] > 0)?[[[UIApplication sharedApplication] windows] objectAtIndex:0]: nil;
         _targetView = window;
         
@@ -109,10 +89,9 @@ static NSMutableSet *allContentViews = nil;
         _webView.autoresizingMask = UIViewAutoresizingNone;
         
         [self addSubview:_webView];
+        [self resetRedirects];
         
         self.content = content;
-        
-        
     }
     
     return self;
@@ -122,6 +101,34 @@ static NSMutableSet *allContentViews = nil;
 @synthesize delegate = _delegate;
 @synthesize targetView = _targetView;
 
+-(void)resetRedirects{
+    NSInvocation
+    *dismissRedirect = [NSInvocation invocationWithMethodSignature:[[PHContentView class] instanceMethodSignatureForSelector:@selector(handleDismiss:)]],
+    *launchRedirect = [NSInvocation invocationWithMethodSignature:[[PHContentView class] instanceMethodSignatureForSelector:@selector(handleLaunch:callback:)]],
+    *loadContextRedirect = [NSInvocation invocationWithMethodSignature:[[PHContentView class] instanceMethodSignatureForSelector:@selector(handleLoadContext:callback:)]];
+    
+    dismissRedirect.target = self;
+    dismissRedirect.selector = @selector(handleDismiss:);
+    
+    launchRedirect.target = self;
+    launchRedirect.selector = @selector(handleLaunch:callback:);
+    
+    loadContextRedirect.target = self;
+    loadContextRedirect.selector = @selector(handleLoadContext:callback:);
+    
+    [_redirects release],
+    _redirects = [[NSMutableDictionary alloc] initWithObjectsAndKeys:
+                  dismissRedirect,@"ph://dismiss",
+                  launchRedirect,@"ph://launch",
+                  loadContextRedirect,@"ph://loadContext",
+                  nil];
+}
+
+-(void)prepareForReuse{
+    self.delegate = nil;
+    [self resetRedirects];
+    [_webView stringByEvaluatingJavaScriptFromString:@"document.open();document.close();"];
+}
 
 -(void)setContent:(PHContent *)content{
     if (_content != content) {
@@ -371,9 +378,6 @@ static NSMutableSet *allContentViews = nil;
 }
 
 -(void) viewDidDismiss{
-    //This prevents subsequent webviews from displaying old content.
-    [_webView stringByEvaluatingJavaScriptFromString:@"document.open();document.close();"];
-    
     if ([self.delegate respondsToSelector:(@selector(contentViewDidDismiss:))]) {
         [self.delegate contentViewDidDismiss:self];
     }
