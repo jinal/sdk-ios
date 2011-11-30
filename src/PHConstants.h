@@ -6,6 +6,8 @@
 //  Copyright 2011 Playhaven. All rights reserved.
 //
 
+#import <UIKit/UIImage.h>
+
 // Constants
 #define PH_SDK_VERSION @"1.3.11"
 
@@ -55,3 +57,29 @@ NSError *PHCreateError(PHErrorType errorType);
 // 1: Cellular data, 3G/EDGE
 // 2: WiFi
 int PHNetworkStatus();
+
+
+//
+// Play Haven default images
+//
+typedef struct{
+  int width;
+  int height;
+  int length;
+  char data[];
+  
+} playHavenImage;
+
+//
+// Play Haven default image helper functions
+//
+UIImage *convertByteDataToUIImage(playHavenImage *phImage);
+
+// Return true if the device has a retina display, false otherwise. Use this to load @2x images
+#define IS_RETINA_DISPLAY() [[UIScreen mainScreen] respondsToSelector:@selector(scale)] && [[UIScreen mainScreen] scale] == 2.0f
+
+extern const playHavenImage badge_image;
+extern const playHavenImage badge_2x_image;
+extern const playHavenImage close_image;
+extern const playHavenImage close_active_image;
+

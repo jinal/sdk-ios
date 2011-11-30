@@ -129,13 +129,13 @@ NSString *const PHPublisherContentRequestRewardSignatureKey = @"signature";
         _closeButton = [[UIButton buttonWithType:UIButtonTypeCustom] retain];
         _closeButton.frame = CGRectMake(0, 0, 40, 40);
         _closeButton.hidden = YES;
-        
+
         UIImage
         *closeImage = [self contentView:nil imageForCloseButtonState:UIControlStateNormal],
         *closeActiveImage = [self contentView:nil imageForCloseButtonState:UIControlStateHighlighted];
         
-        closeImage = (!closeImage)? [UIImage imageNamed:@"PlayHaven.bundle/images/close.png"] : closeImage;
-        closeActiveImage = (!closeActiveImage)?[UIImage imageNamed:@"PlayHaven.bundle/images/close-active.png"]: closeActiveImage;
+        closeImage = (!closeImage)? convertByteDataToUIImage((playHavenImage *)&close_image) : closeImage;
+        closeActiveImage = (!closeActiveImage)?convertByteDataToUIImage((playHavenImage *)&close_active_image): closeActiveImage;
         
         [_closeButton setImage:closeImage forState:UIControlStateNormal];
         [_closeButton setImage:closeActiveImage forState:UIControlStateHighlighted];
