@@ -411,9 +411,9 @@ NSString *const PHPublisherContentRequestRewardSignatureKey = @"signature";
     contentView.content = content;
     [contentView setDelegate:self];
     [contentView setTargetView:self.overlayWindow];
-    [contentView show:self.animated];
     
     [self.contentViews addObject:contentView];
+    [contentView show:self.animated];
     
     [self placeCloseButton];
 }
@@ -427,9 +427,11 @@ NSString *const PHPublisherContentRequestRewardSignatureKey = @"signature";
 
 -(void)dismissFromButton{
     if ([self.contentViews count] > 0) {
-        for (PHContentView *contentView in self.contentViews) {
+        NSArray *contentViews = [self.contentViews copy];
+        for (PHContentView *contentView in contentViews) {
             [contentView dismissFromButton];
         }
+        [contentViews release];
     } else {
         PH_NOTE(@"The content unit was dismissed by the user");
         

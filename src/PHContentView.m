@@ -30,8 +30,11 @@
 -(void)handleLoadContext:(NSDictionary *)queryComponents callback:(NSString*)callback;
 -(UIActivityIndicatorView *)activityView;
 -(void)dismissWithError:(NSError *)error;
--(void)resetRedirects;
 -(void)prepareForReuse;
+
+-(NSMutableDictionary *)redirects;
+-(void)resetRedirects;
+
 @end
 
 static NSMutableSet *allContentViews = nil;
@@ -72,14 +75,34 @@ static NSMutableSet *allContentViews = nil;
     return instance;
 }
 
-+(void)enqueueContentViewInstance:(PHContentView *)contentView{    
-    [contentView prepareForReuse];
++(void)enqueueContentViewInstance:(PHContentView *)contentView{
     [[self allContentViews] addObject:contentView];    
 }
 
 #pragma mark -
 -(id) initWithContent:(PHContent *)content{
     if ((self = [super initWithFrame:[[UIScreen mainScreen] applicationFrame]])) {
+        NSInvocation
+        *dismissRedirect = [NSInvocation invocationWithMethodSignature:[[PHContentView class] instanceMethodSignatureForSelector:@selector(handleDismiss:)]],
+        *launchRedirect = [NSInvocation invocationWithMethodSignature:[[PHContentView class] instanceMethodSignatureForSelector:@selector(handleLaunch:callback:)]],
+        *loadContextRedirect = [NSInvocation invocationWithMethodSignature:[[PHContentView class] instanceMethodSignatureForSelector:@selector(handleLoadContext:callback:)]];
+        
+        dismissRedirect.target = self;
+        dismissRedirect.selector = @selector(handleDismiss:);
+        
+        launchRedirect.target = self;
+        launchRedirect.selector = @selector(handleLaunch:callback:);
+        
+        loadContextRedirect.target = self;
+        loadContextRedirect.selector = @selector(handleLoadContext:callback:);
+        
+        [_redirects release],
+        _redirects = [[NSMutableDictionary alloc] initWithObjectsAndKeys:
+                      dismissRedirect,@"ph://dismiss",
+                      launchRedirect,@"ph://launch",
+                      loadContextRedirect,@"ph://loadContext",
+                      nil];
+        
         UIWindow *window = ([[[UIApplication sharedApplication] windows] count] > 0)?[[[UIApplication sharedApplication] windows] objectAtIndex:0]: nil;
         _targetView = window;
         
@@ -101,45 +124,30 @@ static NSMutableSet *allContentViews = nil;
 @synthesize delegate = _delegate;
 @synthesize targetView = _targetView;
 
+-(NSMutableDictionary *)redirects{
+    @synchronized(_redirects){
+        return _redirects;
+    }
+}
+
 -(void)resetRedirects{
-    NSInvocation
-    *dismissRedirect = [NSInvocation invocationWithMethodSignature:[[PHContentView class] instanceMethodSignatureForSelector:@selector(handleDismiss:)]],
-    *launchRedirect = [NSInvocation invocationWithMethodSignature:[[PHContentView class] instanceMethodSignatureForSelector:@selector(handleLaunch:callback:)]],
-    *loadContextRedirect = [NSInvocation invocationWithMethodSignature:[[PHContentView class] instanceMethodSignatureForSelector:@selector(handleLoadContext:callback:)]];
-    
-    dismissRedirect.target = self;
-    dismissRedirect.selector = @selector(handleDismiss:);
-    
-    launchRedirect.target = self;
-    launchRedirect.selector = @selector(handleLaunch:callback:);
-    
-    loadContextRedirect.target = self;
-    loadContextRedirect.selector = @selector(handleLoadContext:callback:);
-    
-    [_redirects release],
-    _redirects = [[NSMutableDictionary alloc] initWithObjectsAndKeys:
-                  dismissRedirect,@"ph://dismiss",
-                  launchRedirect,@"ph://launch",
-                  loadContextRedirect,@"ph://loadContext",
-                  nil];
+    @synchronized(_redirects){
+        NSEnumerator *keyEnumerator = [[_redirects allKeys] objectEnumerator];
+        NSString *key;
+        while (key = [keyEnumerator nextObject]){
+            NSInvocation *invocation = [_redirects valueForKey:key];
+            if (invocation.target != self) {
+                [_redirects removeObjectForKey:key];
+            }
+        }
+    }
 }
 
 -(void)prepareForReuse{
+    self.content = nil;
     self.delegate = nil;
     [self resetRedirects];
     [_webView stringByEvaluatingJavaScriptFromString:@"document.open();document.close();"];
-}
-
--(void)setContent:(PHContent *)content{
-    if (_content != content) {
-        [_content release], _content = [content retain];
-        
-        
-        if ([self superview]) {
-            //if we're showing a template then update the view;
-            [self orientationDidChange];
-        }
-    }
 }
 
 -(UIActivityIndicatorView *)activityView{
@@ -313,6 +321,7 @@ static NSMutableSet *allContentViews = nil;
 }
 
 -(void) dismiss:(BOOL)animated{
+    [_webView stopLoading];
     _willAnimate = animated;
     if (self.content.transition == PHContentTransitionModal) {
         if (animated) {
@@ -362,15 +371,17 @@ static NSMutableSet *allContentViews = nil;
         [self.delegate contentView:self didFailWithError:error];
     }
 }
+
 -(void)loadTemplate {
     PH_LOG(@"Loading content unit template: %@", self.content.URL);
     [_webView stopLoading];
     
     [_webView loadRequest:[NSURLRequest requestWithURL:self.content.URL
-                                               cachePolicy:NSURLRequestReturnCacheDataElseLoad 
-                                           timeoutInterval:PH_REQUEST_TIMEOUT]];
+                                           cachePolicy:NSURLRequestReturnCacheDataElseLoad 
+                                       timeoutInterval:PH_REQUEST_TIMEOUT]];
     
 }
+
 -(void) viewDidShow{
     if ([self.delegate respondsToSelector:(@selector(contentViewDidShow:))]) {
         [self.delegate contentViewDidShow:self];
@@ -381,6 +392,8 @@ static NSMutableSet *allContentViews = nil;
     if ([self.delegate respondsToSelector:(@selector(contentViewDidDismiss:))]) {
         [self.delegate contentViewDidDismiss:self];
     }
+    
+    [self prepareForReuse];
 }
 
 #pragma mark -
@@ -388,7 +401,7 @@ static NSMutableSet *allContentViews = nil;
 -(BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType{  
     NSURL *url = request.URL;
     NSString *urlPath = [NSString stringWithFormat:@"%@://%@%@", [url scheme], [url host], [url path]];
-    NSInvocation *redirect = [_redirects valueForKey:urlPath];
+    NSInvocation *redirect = [[self redirects] valueForKey:urlPath];
     if (redirect) {
         NSDictionary *queryComponents = [url queryComponents];
         NSString *callback = [queryComponents valueForKey:@"callback"];
@@ -444,9 +457,9 @@ static NSMutableSet *allContentViews = nil;
         redirect.target = target;
         redirect.selector = action;
         
-        [_redirects setValue:redirect forKey:urlPath];
+        [[self redirects] setValue:redirect forKey:urlPath];
     } else {
-        [_redirects setValue:nil forKey:urlPath];
+        [[self redirects] setValue:nil forKey:urlPath];
     }
 }
 
