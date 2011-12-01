@@ -364,10 +364,10 @@ static NSMutableSet *allContentViews = nil;
 }
 
 -(void)dismissWithError:(NSError *)error{
-    PH_LOG(@"Error with content view: %@", [error localizedDescription]);
     [self removeFromSuperview];
     
     if ([self.delegate respondsToSelector:(@selector(contentView:didFailWithError:))]) {
+        PH_LOG(@"Error with content view: %@", [error localizedDescription]);
         [self.delegate contentView:self didFailWithError:error];
     }
 }

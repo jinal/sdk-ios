@@ -446,13 +446,20 @@ NSString *const PHPublisherContentRequestRewardSignatureKey = @"signature";
 
 -(void)dismissToBackground{
     PH_NOTE(@"The content unit was dismissed because the app has been backgrounded.");
-    
-    if ([self.delegate respondsToSelector:@selector(requestContentDidDismiss:)]) {
+    if ([self.contentViews count] > 0) {
+        NSArray *contentViews = [self.contentViews copy];
+        for (PHContentView *contentView in contentViews) {
+            [contentView dismiss:NO];
+        }
+        [contentViews release];
+    } else {
+        if ([self.delegate respondsToSelector:@selector(requestContentDidDismiss:)]) {
         [self.delegate performSelector:@selector(requestContentDidDismiss:) 
                             withObject:self];
-    }
+        }
     
-    [self finish];
+        [self finish];
+    }
 }
 
 -(CGAffineTransform) transformForOrientation:(UIInterfaceOrientation)orientation{
