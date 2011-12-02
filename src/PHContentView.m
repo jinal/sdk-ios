@@ -30,6 +30,11 @@
 -(void)handleLoadContext:(NSDictionary *)queryComponents callback:(NSString*)callback;
 -(UIActivityIndicatorView *)activityView;
 -(void)dismissWithError:(NSError *)error;
+-(void)prepareForReuse;
+
+-(NSMutableDictionary *)redirects;
+-(void)resetRedirects;
+
 @end
 
 static NSMutableSet *allContentViews = nil;
@@ -71,9 +76,6 @@ static NSMutableSet *allContentViews = nil;
 }
 
 +(void)enqueueContentViewInstance:(PHContentView *)contentView{
-    //cleanup before enqueue
-    contentView.delegate = nil;
-    
     [[self allContentViews] addObject:contentView];    
 }
 
@@ -94,12 +96,13 @@ static NSMutableSet *allContentViews = nil;
         loadContextRedirect.target = self;
         loadContextRedirect.selector = @selector(handleLoadContext:callback:);
         
+        [_redirects release],
         _redirects = [[NSMutableDictionary alloc] initWithObjectsAndKeys:
                       dismissRedirect,@"ph://dismiss",
                       launchRedirect,@"ph://launch",
                       loadContextRedirect,@"ph://loadContext",
                       nil];
-
+        
         UIWindow *window = ([[[UIApplication sharedApplication] windows] count] > 0)?[[[UIApplication sharedApplication] windows] objectAtIndex:0]: nil;
         _targetView = window;
         
@@ -109,10 +112,9 @@ static NSMutableSet *allContentViews = nil;
         _webView.autoresizingMask = UIViewAutoresizingNone;
         
         [self addSubview:_webView];
+        [self resetRedirects];
         
         self.content = content;
-        
-        
     }
     
     return self;
@@ -122,17 +124,30 @@ static NSMutableSet *allContentViews = nil;
 @synthesize delegate = _delegate;
 @synthesize targetView = _targetView;
 
+-(NSMutableDictionary *)redirects{
+    @synchronized(_redirects){
+        return _redirects;
+    }
+}
 
--(void)setContent:(PHContent *)content{
-    if (_content != content) {
-        [_content release], _content = [content retain];
-        
-        
-        if ([self superview]) {
-            //if we're showing a template then update the view;
-            [self orientationDidChange];
+-(void)resetRedirects{
+    @synchronized(_redirects){
+        NSEnumerator *keyEnumerator = [[_redirects allKeys] objectEnumerator];
+        NSString *key;
+        while (key = [keyEnumerator nextObject]){
+            NSInvocation *invocation = [_redirects valueForKey:key];
+            if (invocation.target != self) {
+                [_redirects removeObjectForKey:key];
+            }
         }
     }
+}
+
+-(void)prepareForReuse{
+    self.content = nil;
+    self.delegate = nil;
+    [self resetRedirects];
+    [_webView stringByEvaluatingJavaScriptFromString:@"document.open();document.close();"];
 }
 
 -(UIActivityIndicatorView *)activityView{
@@ -306,6 +321,7 @@ static NSMutableSet *allContentViews = nil;
 }
 
 -(void) dismiss:(BOOL)animated{
+    [_webView stopLoading];
     _willAnimate = animated;
     if (self.content.transition == PHContentTransitionModal) {
         if (animated) {
@@ -348,22 +364,24 @@ static NSMutableSet *allContentViews = nil;
 }
 
 -(void)dismissWithError:(NSError *)error{
-    PH_LOG(@"Error with content view: %@", [error localizedDescription]);
     [self removeFromSuperview];
     
     if ([self.delegate respondsToSelector:(@selector(contentView:didFailWithError:))]) {
+        PH_LOG(@"Error with content view: %@", [error localizedDescription]);
         [self.delegate contentView:self didFailWithError:error];
     }
 }
+
 -(void)loadTemplate {
     PH_LOG(@"Loading content unit template: %@", self.content.URL);
     [_webView stopLoading];
     
     [_webView loadRequest:[NSURLRequest requestWithURL:self.content.URL
-                                               cachePolicy:NSURLRequestReturnCacheDataElseLoad 
-                                           timeoutInterval:PH_REQUEST_TIMEOUT]];
+                                           cachePolicy:NSURLRequestReturnCacheDataElseLoad 
+                                       timeoutInterval:PH_REQUEST_TIMEOUT]];
     
 }
+
 -(void) viewDidShow{
     if ([self.delegate respondsToSelector:(@selector(contentViewDidShow:))]) {
         [self.delegate contentViewDidShow:self];
@@ -371,12 +389,11 @@ static NSMutableSet *allContentViews = nil;
 }
 
 -(void) viewDidDismiss{
-    //This prevents subsequent webviews from displaying old content.
-    [_webView stringByEvaluatingJavaScriptFromString:@"document.open();document.close();"];
-    
     if ([self.delegate respondsToSelector:(@selector(contentViewDidDismiss:))]) {
         [self.delegate contentViewDidDismiss:self];
     }
+    
+    [self prepareForReuse];
 }
 
 #pragma mark -
@@ -384,7 +401,7 @@ static NSMutableSet *allContentViews = nil;
 -(BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType{  
     NSURL *url = request.URL;
     NSString *urlPath = [NSString stringWithFormat:@"%@://%@%@", [url scheme], [url host], [url path]];
-    NSInvocation *redirect = [_redirects valueForKey:urlPath];
+    NSInvocation *redirect = [[self redirects] valueForKey:urlPath];
     if (redirect) {
         NSDictionary *queryComponents = [url queryComponents];
         NSString *callback = [queryComponents valueForKey:@"callback"];
@@ -440,9 +457,9 @@ static NSMutableSet *allContentViews = nil;
         redirect.target = target;
         redirect.selector = action;
         
-        [_redirects setValue:redirect forKey:urlPath];
+        [[self redirects] setValue:redirect forKey:urlPath];
     } else {
-        [_redirects setValue:nil forKey:urlPath];
+        [[self redirects] setValue:nil forKey:urlPath];
     }
 }
 
