@@ -305,6 +305,11 @@ NSString *const PHPublisherContentRequestRewardSignatureKey = @"signature";
 
 -(void)send{
     _targetState = PHPublisherContentRequestDisplayingContent;
+    
+    if (self.showsOverlayImmediately) {
+        [self showOverlayWindow];
+    }
+    
     [self continueLoadingIfNeeded];
 }
 
@@ -332,16 +337,10 @@ NSString *const PHPublisherContentRequestRewardSignatureKey = @"signature";
                                                    object:nil];
     }
     
-    
     [super send];
     
     if ([self.delegate respondsToSelector:@selector(requestWillGetContent:)]) {
         [self.delegate performSelector:@selector(requestWillGetContent:) withObject:self];
-    }
-    
-    
-    if (self.showsOverlayImmediately) {
-        [self showOverlayWindow];
     }
     
     [self placeCloseButton];
