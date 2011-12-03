@@ -19,6 +19,11 @@ NSString *const PHPublisherContentRequestRewardQuantityKey = @"quantity";
 NSString *const PHPublisherContentRequestRewardReceiptKey = @"receipt";
 NSString *const PHPublisherContentRequestRewardSignatureKey = @"signature";
 
+PHPublisherContentDismissType * const PHPublisherContentUnitTriggeredDismiss = @"PHPublisherContentUnitTriggeredDismiss";
+PHPublisherContentDismissType * const PHPublisherNativeCloseButtonTriggeredDismiss = @"PHPublisherNativeCloseButtonTriggeredDismiss";
+PHPublisherContentDismissType * const PHPublisherApplicationBackgroundTriggeredDismiss = @"PHPublisherApplicationBackgroundTriggeredDismiss";
+PHPublisherContentDismissType * const PHPublisherNoContentTriggeredDismiss = @"PHPublisherNoContentTriggeredDismiss";
+
 #define MAX_MARGIN 20
 
 @interface PHAPIRequest(Private)
@@ -290,11 +295,14 @@ NSString *const PHPublisherContentRequestRewardSignatureKey = @"signature";
         [self continueLoadingIfNeeded];
     } else {
         PH_NOTE(@"This request was successful but did not contain any displayable content. Dismissing now.");
-        if ([self.delegate respondsToSelector:@selector(requestContentDidDismiss:)]) {
+        if ([self.delegate respondsToSelector:@selector(requestContentDidDismissWithType:)]) {
+            [self.delegate performSelector:@selector(requestContentDidDismissWithType:) 
+                                withObject:self
+                                withObject:PHPublisherNoContentTriggeredDismiss];
+        } else if ([self.delegate respondsToSelector:@selector(requestContentDidDismiss:)]) {
             [self.delegate performSelector:@selector(requestContentDidDismiss:) 
                                 withObject:self];
         }
-        
         [self finish];
     }
 }
@@ -434,9 +442,15 @@ NSString *const PHPublisherContentRequestRewardSignatureKey = @"signature";
     } else {
         PH_NOTE(@"The content unit was dismissed by the user");
         
-        if ([self.delegate respondsToSelector:@selector(requestContentDidDismiss:)]) {
-            [self.delegate performSelector:@selector(requestContentDidDismiss:) 
-                                withObject:self];
+        if ([self.delegate respondsToSelector:@selector(requestContentDidDismissWithType:)]) {
+            [self.delegate performSelector:@selector(requestContentDidDismissWithType:) 
+                                withObject:self 
+                                withObject:PHPublisherNativeCloseButtonTriggeredDismiss];
+        } else {
+            if ([self.delegate respondsToSelector:@selector(requestContentDidDismiss:)]) {
+                [self.delegate performSelector:@selector(requestContentDidDismiss:) 
+                                    withObject:self];
+            }
         }
         
         [self finish];
@@ -452,9 +466,15 @@ NSString *const PHPublisherContentRequestRewardSignatureKey = @"signature";
         }
         [contentViews release];
     } else {
-        if ([self.delegate respondsToSelector:@selector(requestContentDidDismiss:)]) {
-        [self.delegate performSelector:@selector(requestContentDidDismiss:) 
-                            withObject:self];
+        if ([self.delegate respondsToSelector:@selector(requestContentDidDismissWithType:)]) {
+            [self.delegate performSelector:@selector(requestContentDidDismissWithType:) 
+                                withObject:self 
+                                withObject:PHPublisherApplicationBackgroundTriggeredDismiss];
+        } else {
+            if ([self.delegate respondsToSelector:@selector(requestContentDidDismiss:)]) {
+            [self.delegate performSelector:@selector(requestContentDidDismiss:) 
+                                withObject:self];
+            }
         }
     
         [self finish];
@@ -492,11 +512,15 @@ NSString *const PHPublisherContentRequestRewardSignatureKey = @"signature";
     
     if ([self.contentViews count] == 0) {
         //only passthrough the last contentView to dismiss
-        if ([self.delegate respondsToSelector:@selector(requestContentDidDismiss:)]) {
+        if ([self.delegate respondsToSelector:@selector(requestContentDidDismissWithType:)]) {
+            [self.delegate performSelector:@selector(requestContentDidDismissWithType:) 
+                                withObject:self 
+                                withObject:PHPublisherContentUnitTriggeredDismiss];
+        } else if ([self.delegate respondsToSelector:@selector(requestContentDidDismiss:)]) {
             [self.delegate performSelector:@selector(requestContentDidDismiss:) 
                                 withObject:self];
         }
-        
+
         [self finish];
     }
 }
