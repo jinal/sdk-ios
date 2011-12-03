@@ -1,4 +1,4 @@
-PlayHaven SDK 1.3.11
+PlayHaven SDK 1.3.12
 ====================
 PlayHaven is a real-time mobile game marketing platform to help you take control of the business of your games.
 
@@ -6,8 +6,11 @@ Acquire, retain, re-engage, and monetize your players with the help of PlayHaven
 
 An API token and secret is required to use this SDK. These tokens uniquely identify your app to PlayHaven and prevent others from making requests to the API on your behalf. To get a token and secret, please visit the PlayHaven developer dashboard at https://dashboard.playhaven.com
 
-What's new in 1.3.11
+What's new in 1.3.12
 ====================
+* Resolutions for crashes and other bugs.
+* PlayHaven.bundle is no longer required, all image assets are baked into the SDK
+
 1.3.11
 ======
 * PHPublisherContentRequests may be preloaded. See "Preloading requests" in the API Reference section for more details
@@ -16,11 +19,6 @@ What's new in 1.3.11
 1.3.10
 ======
 * Adds the ability to cancel active content requests, or cancel all active content requests for a given delegate. See "Cancelling requests" in the API Reference section for more details
-
-1.3.9
-=====
-* The SDK now reports whether a user is on a cellular or wifi data connection. This will allow the API to tailor content units to available bandwidth. This feature requires *SystemConfiguration.framework* to be linked to your build targets.
-* Content unit open animations should now be much smoother.
 
 Integration
 -----------
