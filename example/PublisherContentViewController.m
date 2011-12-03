@@ -11,6 +11,9 @@
 @implementation PublisherContentViewController
 @synthesize placementField = _placementField;
 @synthesize request = _request;
+@synthesize showsOverlaySwitch;
+@synthesize animateSwitch;
+
 
 -(void)dealloc{
     [PHAPIRequest cancelAllRequestsWithDelegate:self];
@@ -28,7 +31,7 @@
         [self.placementField resignFirstResponder];
         
         NSString *placement = (![self.placementField.text isEqualToString:@""])? self.placementField.text : @"more_games";
-        PHPublisherContentRequest * request = [PHPublisherContentRequest requestForApp:self.token secret:self.secret placement:placement delegate:self];
+        PHPublisherContentRequest * request = [PHPublisherContentRequest requestForApp:self.token secret:self.secret placement:placement delegate:self animated:[animateSwitch isOn] showsOverlayImmediately:[showsOverlaySwitch isOn]];
         [request send];
         
         [self setRequest:request];
@@ -111,7 +114,7 @@
   [super viewDidLoad];
     
     [self startTimers];
-    [[PHPublisherContentRequest requestForApp:self.token secret:self.secret placement:@"more_games" delegate:self] preload];
+    [[PHPublisherContentRequest requestForApp:self.token secret:self.secret placement:@"more_games" delegate:self animated:[animateSwitch isOn] showsOverlayImmediately:[showsOverlaySwitch isOn]] preload];
     
   _notificationView = [[PHNotificationView alloc] initWithApp:self.token secret:self.secret placement:@"more_games"];
   _notificationView.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin;
