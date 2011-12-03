@@ -41,7 +41,6 @@
 		EA12AC231365DE1300CB2F24 /* PHContentWebView.m in Sources */ = {isa = PBXBuildFile; fileRef = EA7EE5FE134D458A00A0ADE6 /* PHContentWebView.m */; };
 		EA12AC241365DE1300CB2F24 /* PHPublisherPromosRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = EA6EA1ED135F6D77000123B0 /* PHPublisherPromosRequest.m */; };
 		EA12AC251365DE1300CB2F24 /* PHPublisherOpenRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = EA523D8E1343EE790057DEA5 /* PHPublisherOpenRequest.m */; };
-		EA12AC281365DE7F00CB2F24 /* PlayHaven.bundle in Resources */ = {isa = PBXBuildFile; fileRef = EAC90957135E2FCB00375013 /* PlayHaven.bundle */; };
 		EA12AC3C13662AD700CB2F24 /* ExampleViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EA12AC3B13662AD700CB2F24 /* ExampleViewController.m */; };
 		EA12AC3F13662DC400CB2F24 /* PublisherOpenViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EA12AC3E13662DC400CB2F24 /* PublisherOpenViewController.m */; };
 		EA12AC451366339D00CB2F24 /* PublisherContentViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EA12AC441366339D00CB2F24 /* PublisherContentViewController.m */; };
@@ -152,7 +151,6 @@
 		EABC1CE6143A770000638B09 /* ExampleViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ExampleViewController.xib; sourceTree = "<group>"; };
 		EAC53A91134E5F7A00F2F956 /* NSObject+QueryComponents.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSObject+QueryComponents.h"; sourceTree = "<group>"; };
 		EAC53A92134E5F7A00F2F956 /* NSObject+QueryComponents.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSObject+QueryComponents.m"; sourceTree = "<group>"; };
-		EAC90957135E2FCB00375013 /* PlayHaven.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = PlayHaven.bundle; sourceTree = "<group>"; };
 		EAE0F5FA1385D1120062B950 /* PHPublisherSubContentRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PHPublisherSubContentRequest.h; sourceTree = "<group>"; };
 		EAE0F5FB1385D1120062B950 /* PHPublisherSubContentRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PHPublisherSubContentRequest.m; sourceTree = "<group>"; };
 		EAED519D134B949D00D0DCB6 /* PHPublisherContentRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PHPublisherContentRequest.h; sourceTree = "<group>"; };
@@ -330,7 +328,6 @@
 		EA6031CC1361FEE7007B2BF5 /* PlayHaven SDK */ = {
 			isa = PBXGroup;
 			children = (
-				EAC90957135E2FCB00375013 /* PlayHaven.bundle */,
 				EAB4425D134539F4000DA3E9 /* JSON */,
 				EA523D8C1343EE790057DEA5 /* src */,
 			);
@@ -462,7 +459,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				EA12AC281365DE7F00CB2F24 /* PlayHaven.bundle in Resources */,
 				EA12ABDD1365DBB700CB2F24 /* InfoPlist.strings in Resources */,
 				EA12ABE61365DBB700CB2F24 /* MainWindow.xib in Resources */,
 				EA12ABEC1365DBB700CB2F24 /* RootViewController.xib in Resources */,
