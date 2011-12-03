@@ -28,8 +28,8 @@ NSString *const PHPublisherContentRequestRewardSignatureKey = @"signature";
 @end
 
 @interface PHPublisherContentRequest(Private)
-+(PHPublisherContentRequest *)existingRequestForApp:(NSString *)token secret:(NSString *)secret placement:(NSString *)placement animated:(BOOL)animated showsOverlayImmediately:(BOOL)showsOverlayImmediately;
--(id)initWithApp:(NSString *)token secret:(NSString *)secret placement:(NSString *)placement delegate:(id)delegate animated:(BOOL)animated showsOverlayImmediately:(BOOL)showsOverlayImmediately;
++(PHPublisherContentRequest *)existingRequestForApp:(NSString *)token secret:(NSString *)secret placement:(NSString *)placement;
+-(id)initWithApp:(NSString *)token secret:(NSString *)secret placement:(NSString *)placement delegate:(id)delegate;
 -(CGAffineTransform) transformForOrientation:(UIInterfaceOrientation)orientation;
 -(void)placeCloseButton;
 -(void)hideCloseButton;
@@ -48,7 +48,7 @@ NSString *const PHPublisherContentRequestRewardSignatureKey = @"signature";
 
 @implementation PHPublisherContentRequest
 
-+(PHPublisherContentRequest *)existingRequestForApp:(NSString *)token secret:(NSString *)secret placement:(NSString *)placement animated:(BOOL)animated showsOverlayImmediately:(BOOL)showsOverlayImmediately{
++(PHPublisherContentRequest *)existingRequestForApp:(NSString *)token secret:(NSString *)secret placement:(NSString *)placement{
     NSEnumerator *allRequests = [[PHAPIRequest allRequests] objectEnumerator];
     
     PHAPIRequest *request = nil;
@@ -56,8 +56,6 @@ NSString *const PHPublisherContentRequestRewardSignatureKey = @"signature";
         if ([request isKindOfClass:[PHPublisherContentRequest class]]) {
             PHPublisherContentRequest *contentRequest = (PHPublisherContentRequest*) request;
             if ([contentRequest.placement isEqualToString:placement] && [contentRequest.token isEqualToString:token] && [contentRequest.secret isEqualToString:secret]) {
-                [contentRequest setShowsOverlayImmediately:showsOverlayImmediately];
-                [contentRequest setAnimated:animated];
                 return contentRequest;
             }
         }
@@ -66,23 +64,21 @@ NSString *const PHPublisherContentRequestRewardSignatureKey = @"signature";
     return nil;
 }
 
-+(id)requestForApp:(NSString *)token secret:(NSString *)secret placement:(NSString *)placement delegate:(id)delegate animated:(BOOL)animated showsOverlayImmediately:(BOOL)showsOverlayImmediately{
-    PHPublisherContentRequest *request = [PHPublisherContentRequest existingRequestForApp:token secret:secret placement:placement animated:animated showsOverlayImmediately:showsOverlayImmediately];
++(id)requestForApp:(NSString *)token secret:(NSString *)secret placement:(NSString *)placement delegate:(id)delegate{
+    PHPublisherContentRequest *request = [PHPublisherContentRequest existingRequestForApp:token secret:secret placement:placement];
     if (!!request) {
         request.delegate = delegate;
         return request;
     } else {
-        return [[[[self class] alloc] initWithApp:token secret:secret placement:placement delegate:delegate animated:animated showsOverlayImmediately:showsOverlayImmediately] autorelease];
+        return [[[[self class] alloc] initWithApp:token secret:secret placement:placement delegate:delegate] autorelease];
     }
 }
 
--(id)initWithApp:(NSString *)token secret:(NSString *)secret placement:(NSString *)placement delegate:(id)delegate animated:(BOOL)animated showsOverlayImmediately:(BOOL)showsOverlayImmediately{
+-(id)initWithApp:(NSString *)token secret:(NSString *)secret placement:(NSString *)placement delegate:(id)delegate{
     if ((self = [self initWithApp:token secret:secret])) {
         self.placement = placement;
         self.delegate = delegate;
         _state = PHPublisherContentRequestInitialized;
-        _animated = animated;
-        _showsOverlayImmediately = showsOverlayImmediately;
     }
     
     return self;
@@ -336,11 +332,13 @@ NSString *const PHPublisherContentRequestRewardSignatureKey = @"signature";
                                                    object:nil];
     }
     
+    
     [super send];
     
     if ([self.delegate respondsToSelector:@selector(requestWillGetContent:)]) {
         [self.delegate performSelector:@selector(requestWillGetContent:) withObject:self];
     }
+    
     
     if (self.showsOverlayImmediately) {
         [self showOverlayWindow];

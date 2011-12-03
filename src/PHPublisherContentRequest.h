@@ -56,7 +56,7 @@ typedef enum {
     PHPublisherContentRequestState _targetState;
 }
 
-+(id)requestForApp:(NSString *)token secret:(NSString *)secret placement:(NSString *)placement delegate:(id)delegate animated:(BOOL)animated showsOverlayImmediately:(BOOL)showsOverlayImmediately;
++(id)requestForApp:(NSString *)token secret:(NSString *)secret placement:(NSString *)placement delegate:(id)delegate;
 
 @property (nonatomic,retain) NSString *placement;
 @property (nonatomic,assign) BOOL animated;

@@ -31,7 +31,9 @@
         [self.placementField resignFirstResponder];
         
         NSString *placement = (![self.placementField.text isEqualToString:@""])? self.placementField.text : @"more_games";
-        PHPublisherContentRequest * request = [PHPublisherContentRequest requestForApp:self.token secret:self.secret placement:placement delegate:self animated:[animateSwitch isOn] showsOverlayImmediately:[showsOverlaySwitch isOn]];
+        PHPublisherContentRequest * request = [PHPublisherContentRequest requestForApp:self.token secret:self.secret placement:placement delegate:self];
+        [request setShowsOverlayImmediately:[showsOverlaySwitch isOn]];
+        [request setAnimated:[animateSwitch isOn]];
         [request send];
         
         [self setRequest:request];
@@ -114,7 +116,7 @@
   [super viewDidLoad];
     
     [self startTimers];
-    [[PHPublisherContentRequest requestForApp:self.token secret:self.secret placement:@"more_games" delegate:self animated:[animateSwitch isOn] showsOverlayImmediately:[showsOverlaySwitch isOn]] preload];
+    [[PHPublisherContentRequest requestForApp:self.token secret:self.secret placement:@"more_games" delegate:self] preload];
     
   _notificationView = [[PHNotificationView alloc] initWithApp:self.token secret:self.secret placement:@"more_games"];
   _notificationView.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin;
