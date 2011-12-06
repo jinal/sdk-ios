@@ -93,7 +93,7 @@
 @implementation PHAPIRequestResponseTest
 
 -(void)setUp{
-  _request = [[PHAPIRequest requestForApp:PUBLISHER_TOKEN secret:PUBLISHER_SECRET] retain];
+  _request = [[PHAPIRequest alloc] initWithApp:PUBLISHER_TOKEN secret:PUBLISHER_SECRET];
   _request.delegate = self;
   _didProcess = NO;
 }
@@ -137,7 +137,7 @@
 @implementation PHAPIRequestErrorTest
 
 -(void)setUp{
-  _request = [[PHAPIRequest requestForApp:PUBLISHER_TOKEN secret:PUBLISHER_SECRET] retain];
+  _request = [[PHAPIRequest alloc] initWithApp:PUBLISHER_TOKEN secret:PUBLISHER_SECRET];
   _request.delegate = self;
   _didProcess = NO;
 }
