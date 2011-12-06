@@ -30,6 +30,7 @@
 -(void)handleLoadContext:(NSDictionary *)queryComponents callback:(NSString*)callback;
 -(UIActivityIndicatorView *)activityView;
 -(void)dismissWithError:(NSError *)error;
+-(void) closeView:(BOOL)animated;
 -(void)prepareForReuse;
 
 -(NSMutableDictionary *)redirects;
@@ -160,7 +161,7 @@ static NSMutableSet *allContentViews = nil;
     return _activityView;
 }
 
-- (void)dealloc {
+- (void)dealloc{
     [[NSNotificationCenter defaultCenter] removeObserver:self];
     [PHURLLoader invalidateAllLoadersWithDelegate:self];
     
@@ -225,7 +226,7 @@ static NSMutableSet *allContentViews = nil;
     }
 }
 
--(CGAffineTransform) transformForOrientation:(UIInterfaceOrientation)orientation{
+-(CGAffineTransform)transformForOrientation:(UIInterfaceOrientation)orientation{
     if (orientation == UIInterfaceOrientationLandscapeLeft) {
         return CGAffineTransformMakeRotation(-M_PI/2);
     } else if (orientation == UIInterfaceOrientationLandscapeRight) {
@@ -237,7 +238,7 @@ static NSMutableSet *allContentViews = nil;
     }
 }
 
--(void) show:(BOOL)animated{
+-(void)show:(BOOL)animated{
     
     _willAnimate = animated;
     [self.targetView addSubview: self];
@@ -321,35 +322,9 @@ static NSMutableSet *allContentViews = nil;
      object:nil];
 }
 
--(void) dismiss:(BOOL)animated{
-    [_webView stopLoading];
-    _willAnimate = animated;
-    if (self.content.transition == PHContentTransitionModal) {
-        if (animated) {
-            CGAffineTransform oldTransform = self.transform;
-            [UIView beginAnimations:nil context:nil];
-            [UIView setAnimationCurve:UIViewAnimationCurveEaseIn];
-            [UIView setAnimationDuration:0.25];
-            [UIView setAnimationDelegate:self];
-            [UIView setAnimationDidStopSelector:@selector(dismissView)];
-            self.transform = CGAffineTransformTranslate(oldTransform, 0, self.frame.size.height);
-            [UIView commitAnimations];
-        } else {
-            [self dismissView];
-        }
-    } else if (self.content.transition == PHContentTransitionDialog){
-        if (animated) {
-            [_webView bounceOutWithTarget:self action:@selector(dismissView)];
-        } else {
-            [self dismissView];
-        }
-    }
-    
-    //STOP_TRACK_ORIENTATION see TRACK_ORIENTATION
-    [[NSNotificationCenter defaultCenter] 
-     removeObserver:self 
-     name:UIDeviceOrientationDidChangeNotification 
-     object:nil];
+-(void)dismiss:(BOOL)animated{
+
+    [self closeView:animated];
 }
 
 -(void)dismissFromButton{
@@ -365,12 +340,55 @@ static NSMutableSet *allContentViews = nil;
 }
 
 -(void)dismissWithError:(NSError *)error{
+
+    // This is here because get called 2x
+    // first from handleLoadContext:
+    // second from webView:didFailLoadWithError:
+    // Only need to handle once
+    if (self.delegate == nil)
+        return;
+
     [self removeFromSuperview];
-    
+
     if ([self.delegate respondsToSelector:(@selector(contentView:didFailWithError:))]) {
         PH_LOG(@"Error with content view: %@", [error localizedDescription]);
         [self.delegate contentView:self didFailWithError:error];
     }
+
+    self.delegate = nil;
+    [self closeView:_willAnimate];
+}
+
+-(void)closeView:(BOOL)animated
+{
+    [_webView stopLoading];
+    _willAnimate = animated;    
+    if (self.content.transition == PHContentTransitionModal) {
+        if (animated) {
+            CGAffineTransform oldTransform = self.transform;
+            [UIView beginAnimations:nil context:nil];
+            [UIView setAnimationCurve:UIViewAnimationCurveEaseIn];
+            [UIView setAnimationDuration:0.25];
+            [UIView setAnimationDelegate:self];
+            [UIView setAnimationDidStopSelector:@selector(dismissView)];
+            self.transform = CGAffineTransformTranslate(oldTransform, 0, self.frame.size.height);
+            [UIView commitAnimations];
+        } else {
+            [self dismissView];
+        }
+    } else if (self.content.transition == PHContentTransitionDialog){
+        if (_willAnimate) {
+            [_webView bounceOutWithTarget:self action:@selector(dismissView)];
+        } else {
+            [self dismissView];
+        }
+    }
+    
+    //STOP_TRACK_ORIENTATION see TRACK_ORIENTATION
+    [[NSNotificationCenter defaultCenter] 
+     removeObserver:self 
+     name:UIDeviceOrientationDidChangeNotification 
+     object:nil];
 }
 
 -(void)loadTemplate {
@@ -383,13 +401,13 @@ static NSMutableSet *allContentViews = nil;
     
 }
 
--(void) viewDidShow{
+-(void)viewDidShow{
     if ([self.delegate respondsToSelector:(@selector(contentViewDidShow:))]) {
         [self.delegate contentViewDidShow:self];
     }
 }
 
--(void) viewDidDismiss{
+-(void)viewDidDismiss{
     if ([self.delegate respondsToSelector:(@selector(contentViewDidDismiss:))]) {
         [self.delegate contentViewDidDismiss:self];
     }
