@@ -66,6 +66,7 @@ static NSMutableSet *allContentViews = nil;
 }
 
 +(PHContentView *)dequeueContentViewInstance{
+#ifdef PH_USE_CONTENT_VIEW_RECYCLING
     PHContentView *instance = [[PHContentView allContentViews] anyObject];
     if (!!instance) {
         [instance retain];
@@ -74,10 +75,15 @@ static NSMutableSet *allContentViews = nil;
     }
     
     return instance;
+#else
+    return nil;
+#endif
 }
 
 +(void)enqueueContentViewInstance:(PHContentView *)contentView{
+#ifdef PH_USE_CONTENT_VIEW_RECYCLING
     [[self allContentViews] addObject:contentView];    
+#endif
 }
 
 #pragma mark -
@@ -145,12 +151,14 @@ static NSMutableSet *allContentViews = nil;
 }
 
 -(void)prepareForReuse{
+#ifdef PH_USE_CONTENT_VIEW_RECYCLING
     self.content = nil;
     self.delegate = nil;
     [self resetRedirects];
     [[NSNotificationCenter defaultCenter] removeObserver:self];
     [PHURLLoader invalidateAllLoadersWithDelegate:self];
     [_webView stringByEvaluatingJavaScriptFromString:@"document.open();document.close();"];
+#endif
 }
 
 -(UIActivityIndicatorView *)activityView{
@@ -349,9 +357,7 @@ static NSMutableSet *allContentViews = nil;
     // Only need to handle once
     if (self.delegate == nil)
         return;
-
-    [self removeFromSuperview];
-
+    
     if ([self.delegate respondsToSelector:(@selector(contentView:didFailWithError:))]) {
         PH_LOG(@"Error with content view: %@", [error localizedDescription]);
         [self.delegate contentView:self didFailWithError:error];
@@ -413,8 +419,10 @@ static NSMutableSet *allContentViews = nil;
     if ([self.delegate respondsToSelector:(@selector(contentViewDidDismiss:))]) {
         [self.delegate contentViewDidDismiss:self];
     }
-    
+
+#ifdef PH_USE_CONTENT_VIEW_RECYCLING
     [self prepareForReuse];
+#endif
 }
 
 #pragma mark -
