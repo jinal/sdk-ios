@@ -326,6 +326,8 @@ PHPublisherContentDismissType * const PHPublisherNoContentTriggeredDismiss = @"P
         [self showOverlayWindow];
     }
     
+    [self performSelector:@selector(showCloseButtonBecauseOfTimeout) withObject:nil afterDelay:4.0];
+    
     [self continueLoadingIfNeeded];
 }
 
@@ -351,7 +353,6 @@ PHPublisherContentDismissType * const PHPublisherNoContentTriggeredDismiss = @"P
     }
     
     [self placeCloseButton];
-    [self performSelector:@selector(showCloseButtonBecauseOfTimeout) withObject:nil afterDelay:4.0];
 }
 
 -(void)showContentIfReady{    

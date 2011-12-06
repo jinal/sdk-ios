@@ -110,16 +110,8 @@ static NSMutableSet *allContentViews = nil;
                       loadContextRedirect,@"ph://loadContext",
                       nil];
         
-        UIWindow *window = ([[[UIApplication sharedApplication] windows] count] > 0)?[[[UIApplication sharedApplication] windows] objectAtIndex:0]: nil;
-        _targetView = window;
-        
         _webView = [[PHContentWebView alloc] initWithFrame:CGRectZero];
-        _webView.delegate = self;
-        _webView.layer.borderWidth = 0.0f;
-        _webView.autoresizingMask = UIViewAutoresizingNone;
-        
         [self addSubview:_webView];
-        [self resetRedirects];
         
         self.content = content;
     }
@@ -333,7 +325,6 @@ static NSMutableSet *allContentViews = nil;
 }
 
 -(void)dismiss:(BOOL)animated{
-
     [self closeView:animated];
 }
 
@@ -341,12 +332,6 @@ static NSMutableSet *allContentViews = nil;
     NSDictionary *queryComponents = [NSDictionary dictionaryWithObjectsAndKeys:
                                      self.content.closeButtonURLPath, @"ping", nil];
     [self handleDismiss:queryComponents];
-}
-
--(void)dismissView{
-    [self removeFromSuperview];
-    
-    [self viewDidDismiss];
 }
 
 -(void)dismissWithError:(NSError *)error{
@@ -358,18 +343,21 @@ static NSMutableSet *allContentViews = nil;
     if (self.delegate == nil)
         return;
     
-    if ([self.delegate respondsToSelector:(@selector(contentView:didFailWithError:))]) {
-        PH_LOG(@"Error with content view: %@", [error localizedDescription]);
-        [self.delegate contentView:self didFailWithError:error];
-    }
-
+    id oldDelegate = self.delegate;
     self.delegate = nil;
     [self closeView:_willAnimate];
+    
+    if ([oldDelegate respondsToSelector:(@selector(contentView:didFailWithError:))]) {
+        PH_LOG(@"Error with content view: %@", [error localizedDescription]);
+        [oldDelegate contentView:self didFailWithError:error];
+    }
 }
 
 -(void)closeView:(BOOL)animated
 {
     [_webView stopLoading];
+    [_webView setDelegate:nil];
+    
     _willAnimate = animated;    
     if (self.content.transition == PHContentTransitionModal) {
         if (animated) {
@@ -378,17 +366,17 @@ static NSMutableSet *allContentViews = nil;
             [UIView setAnimationCurve:UIViewAnimationCurveEaseIn];
             [UIView setAnimationDuration:0.25];
             [UIView setAnimationDelegate:self];
-            [UIView setAnimationDidStopSelector:@selector(dismissView)];
+            [UIView setAnimationDidStopSelector:@selector(viewDidDismiss)];
             self.transform = CGAffineTransformTranslate(oldTransform, 0, self.frame.size.height);
             [UIView commitAnimations];
         } else {
-            [self dismissView];
+            [self viewDidDismiss];
         }
     } else if (self.content.transition == PHContentTransitionDialog){
         if (_willAnimate) {
-            [_webView bounceOutWithTarget:self action:@selector(dismissView)];
+            [_webView bounceOutWithTarget:self action:@selector(viewDidDismiss)];
         } else {
-            [self dismissView];
+            [self viewDidDismiss];
         }
     }
     
@@ -416,13 +404,12 @@ static NSMutableSet *allContentViews = nil;
 }
 
 -(void)viewDidDismiss{
+    [self removeFromSuperview];
+    [self prepareForReuse];
+    
     if ([self.delegate respondsToSelector:(@selector(contentViewDidDismiss:))]) {
         [self.delegate contentViewDidDismiss:self];
     }
-
-#ifdef PH_USE_CONTENT_VIEW_RECYCLING
-    [self prepareForReuse];
-#endif
 }
 
 #pragma mark -
