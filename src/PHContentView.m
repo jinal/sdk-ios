@@ -148,6 +148,8 @@ static NSMutableSet *allContentViews = nil;
     self.content = nil;
     self.delegate = nil;
     [self resetRedirects];
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+    [PHURLLoader invalidateAllLoadersWithDelegate:self];
     [_webView stringByEvaluatingJavaScriptFromString:@"document.open();document.close();"];
 }
 

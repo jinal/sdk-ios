@@ -153,6 +153,7 @@ PHPublisherContentDismissType * const PHPublisherNoContentTriggeredDismiss = @"P
 }
 
 -(void)dealloc{
+    [PHPublisherContentRequest cancelPreviousPerformRequestsWithTarget:self selector:@selector(showCloseButtonBecauseOfTimeout) object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self];
     [_content release], _content = nil;
     [_placement release], _placement = nil;
@@ -240,7 +241,6 @@ PHPublisherContentDismissType * const PHPublisherNoContentTriggeredDismiss = @"P
 }
 
 -(void)hideCloseButton{
-    
     [PHPublisherContentRequest cancelPreviousPerformRequestsWithTarget:self selector:@selector(showCloseButtonBecauseOfTimeout) object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIDeviceOrientationDidChangeNotification object:nil];
     [_closeButton removeFromSuperview];
@@ -436,25 +436,27 @@ PHPublisherContentDismissType * const PHPublisherNoContentTriggeredDismiss = @"P
     if ([self.contentViews count] > 0) {
         NSArray *contentViews = [self.contentViews copy];
         for (PHContentView *contentView in contentViews) {
+            //WARNING: This causes instances to not be recycled.
+            contentView.delegate = nil;
             [contentView dismissFromButton];
         }
         [contentViews release];
-    } else {
-        PH_NOTE(@"The content unit was dismissed by the user");
-        
-        if ([self.delegate respondsToSelector:@selector(requestContentDidDismissWithType:)]) {
-            [self.delegate performSelector:@selector(requestContentDidDismissWithType:) 
-                                withObject:self 
-                                withObject:PHPublisherNativeCloseButtonTriggeredDismiss];
-        } else {
-            if ([self.delegate respondsToSelector:@selector(requestContentDidDismiss:)]) {
-                [self.delegate performSelector:@selector(requestContentDidDismiss:) 
-                                    withObject:self];
-            }
-        }
-        
-        [self finish];
     }
+    
+    PH_NOTE(@"The content unit was dismissed by the user");
+        
+    if ([self.delegate respondsToSelector:@selector(requestContentDidDismissWithType:)]) {
+        [self.delegate performSelector:@selector(requestContentDidDismissWithType:) 
+                            withObject:self 
+                            withObject:PHPublisherNativeCloseButtonTriggeredDismiss];
+    } else {
+        if ([self.delegate respondsToSelector:@selector(requestContentDidDismiss:)]) {
+            [self.delegate performSelector:@selector(requestContentDidDismiss:) 
+                                withObject:self];
+        }
+    }
+    
+    [self finish];
 }
 
 -(void)dismissToBackground{
@@ -462,23 +464,26 @@ PHPublisherContentDismissType * const PHPublisherNoContentTriggeredDismiss = @"P
     if ([self.contentViews count] > 0) {
         NSArray *contentViews = [self.contentViews copy];
         for (PHContentView *contentView in contentViews) {
+            contentView.delegate = nil;
             [contentView dismiss:NO];
+            
+            [self removeContentView:contentView];
         }
         [contentViews release];
-    } else {
-        if ([self.delegate respondsToSelector:@selector(requestContentDidDismissWithType:)]) {
-            [self.delegate performSelector:@selector(requestContentDidDismissWithType:) 
-                                withObject:self 
-                                withObject:PHPublisherApplicationBackgroundTriggeredDismiss];
-        } else {
-            if ([self.delegate respondsToSelector:@selector(requestContentDidDismiss:)]) {
-            [self.delegate performSelector:@selector(requestContentDidDismiss:) 
-                                withObject:self];
-            }
-        }
-    
-        [self finish];
     }
+    
+    if ([self.delegate respondsToSelector:@selector(requestContentDidDismissWithType:)]) {
+        [self.delegate performSelector:@selector(requestContentDidDismissWithType:) 
+                            withObject:self 
+                            withObject:PHPublisherApplicationBackgroundTriggeredDismiss];
+    } else {
+        if ([self.delegate respondsToSelector:@selector(requestContentDidDismiss:)]) {
+        [self.delegate performSelector:@selector(requestContentDidDismiss:) 
+                            withObject:self];
+        }
+    }
+
+    [self finish];
 }
 
 -(CGAffineTransform) transformForOrientation:(UIInterfaceOrientation)orientation{
