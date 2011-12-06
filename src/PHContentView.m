@@ -103,7 +103,6 @@ static NSMutableSet *allContentViews = nil;
         loadContextRedirect.target = self;
         loadContextRedirect.selector = @selector(handleLoadContext:callback:);
         
-        [_redirects release],
         _redirects = [[NSMutableDictionary alloc] initWithObjectsAndKeys:
                       dismissRedirect,@"ph://dismiss",
                       launchRedirect,@"ph://launch",
@@ -124,33 +123,32 @@ static NSMutableSet *allContentViews = nil;
 @synthesize targetView = _targetView;
 
 -(NSMutableDictionary *)redirects{
-    @synchronized(_redirects){
-        return _redirects;
-    }
+    return _redirects;
 }
 
 -(void)resetRedirects{
-    @synchronized(_redirects){
-        NSEnumerator *keyEnumerator = [[_redirects allKeys] objectEnumerator];
-        NSString *key;
-        while (key = [keyEnumerator nextObject]){
-            NSInvocation *invocation = [_redirects valueForKey:key];
-            if (invocation.target != self) {
-                [_redirects removeObjectForKey:key];
-            }
+#ifdef PH_USE_CONTENT_VIEW_RECYCLING
+    NSEnumerator *keyEnumerator = [[_redirects allKeys] objectEnumerator];
+    NSString *key;
+    while (key = [keyEnumerator nextObject]){
+        NSInvocation *invocation = [_redirects valueForKey:key];
+        if (invocation.target != self) {
+            [_redirects removeObjectForKey:key];
         }
     }
+#else
+        [_redirects release], _redirects = nil;
+#endif
+    
 }
 
 -(void)prepareForReuse{
-#ifdef PH_USE_CONTENT_VIEW_RECYCLING
     self.content = nil;
     self.delegate = nil;
     [self resetRedirects];
+    [_webView stringByEvaluatingJavaScriptFromString:@"document.open();document.close();"];
     [[NSNotificationCenter defaultCenter] removeObserver:self];
     [PHURLLoader invalidateAllLoadersWithDelegate:self];
-    [_webView stringByEvaluatingJavaScriptFromString:@"document.open();document.close();"];
-#endif
 }
 
 -(UIActivityIndicatorView *)activityView{
@@ -165,8 +163,7 @@ static NSMutableSet *allContentViews = nil;
 
 - (void)dealloc{
     [[NSNotificationCenter defaultCenter] removeObserver:self];
-    [PHURLLoader invalidateAllLoadersWithDelegate:self];
-    
+    [PHURLLoader invalidateAllLoadersWithDelegate:self];    
     [_content release], _content = nil;
     [_webView release], _webView = nil;
     [_redirects release], _redirects = nil;
@@ -355,8 +352,8 @@ static NSMutableSet *allContentViews = nil;
 
 -(void)closeView:(BOOL)animated
 {
-    [_webView stopLoading];
     [_webView setDelegate:nil];
+    [_webView stopLoading];
     
     _willAnimate = animated;    
     if (self.content.transition == PHContentTransitionModal) {
@@ -404,11 +401,11 @@ static NSMutableSet *allContentViews = nil;
 }
 
 -(void)viewDidDismiss{
-    [self removeFromSuperview];
+    id oldDelegate = self.delegate;
     [self prepareForReuse];
     
-    if ([self.delegate respondsToSelector:(@selector(contentViewDidDismiss:))]) {
-        [self.delegate contentViewDidDismiss:self];
+    if ([oldDelegate respondsToSelector:(@selector(contentViewDidDismiss:))]) {
+        [oldDelegate contentViewDidDismiss:self];
     }
 }
 
