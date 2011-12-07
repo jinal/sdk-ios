@@ -15,8 +15,10 @@
 #import "PHConstants.h"
 
 @interface PHAPIRequest(Private)
+-(id)initWithApp:(NSString *)token secret:(NSString *)secret;
 +(NSMutableSet *)allRequests;
 -(void)finish;
+-(void)afterConnectionDidFinishLoading;
 @end
 
 @implementation PHAPIRequest
@@ -55,12 +57,14 @@
 }
 
 -(id) initWithApp:(NSString *)token secret:(NSString *)secret{
-  if ((self = [super init])) {
-    _token = [token copy];
-    _secret = [secret copy];
-  }
-  
-  return self;
+    if ((self = [super init])) {
+        _token = [token copy];
+        _secret = [secret copy];
+    }
+    
+    [[PHAPIRequest allRequests] addObject:self];
+    
+    return self;
 }
 
 @synthesize token = _token, secret = _secret;
@@ -149,9 +153,6 @@
                                          timeoutInterval:PH_REQUEST_TIMEOUT];
     _connection = [[NSURLConnection alloc] initWithRequest:request delegate:self];
     [_connection start];
-    
-    //REQUEST_RETAIN see REQUEST_RELEASE
-    [[PHAPIRequest allRequests] addObject:self];
   }
 }
 
@@ -189,8 +190,11 @@
 }
 
 -(void)connectionDidFinishLoading:(NSURLConnection *)connection{
-  PH_NOTE(@"Request finished!");
-  if (!!self.delegate) {
+    PH_NOTE(@"Request finished!");
+    if ([self.delegate respondsToSelector:@selector(requestDidFinishLoading:)]) {
+        [self.delegate performSelector:@selector(requestDidFinishLoading:) withObject:self withObject:nil];
+    }
+    
     NSString *responseString = [[NSString alloc] initWithData:_connectionData encoding:NSUTF8StringEncoding];
     
     SBJsonParser *parser = [[SBJsonParser alloc] init];
@@ -199,10 +203,13 @@
     
     [parser release];
     [responseString release];
-  }
-  
-  //REQUEST_RELEASE see REQUEST_RETAIN
-  [self finish];
+    
+    //REQUEST_RELEASE see REQUEST_RETAIN
+    [self afterConnectionDidFinishLoading];
+}
+
+-(void)afterConnectionDidFinishLoading{
+    [self finish];
 }
 
 -(void) connection:(NSURLConnection *)connection didFailWithError:(NSError *)error{

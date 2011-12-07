@@ -9,6 +9,14 @@
 #import "PHPublisherPromosRequest.h"
 #import "PHConstants.h"
 
+@interface PHAPIRequest(Private)
+-(id)initWithApp:(NSString *)token secret:(NSString *)secret;
+@end
+
+@interface PHPublisherPromosRequest(Private)
+-(id)initWithApp:(NSString *)token secret:(NSString *)secret delegate:(id)delegate;
+@end
+
 @implementation PHPublisherPromosRequest
 
 +(id)requestForApp:(NSString *)token secret:(NSString *)secret delegate:(id)delegate{

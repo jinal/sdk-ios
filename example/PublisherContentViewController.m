@@ -22,7 +22,6 @@
 }
 
 -(void)startRequest{
-    
     if (self.request == nil) {
         [super startRequest];
         
@@ -46,41 +45,54 @@
     }
 }
 
+-(void)finishRequest{
+    [super finishRequest];
+
+    //Cleaning up after a completed request
+    self.request = nil;
+    [self.navigationItem.rightBarButtonItem setTitle:@"Start"];      
+}
+
 #pragma mark - PHPublisherContentRequestDelegate
 -(void)requestWillGetContent:(PHPublisherContentRequest *)request{
-  [self addMessage:@"Starting content request..."];
+    NSString *message = [NSString stringWithFormat:@"Getting content for placement: %@", request.placement];
+    [self addMessage:message];
+}
+
+-(void)requestDidGetContent:(PHPublisherContentRequest *)request{
+    NSString *message = [NSString stringWithFormat:@"Got content for placement: %@", request.placement];
+    [self addMessage:message];
+    [self addElapsedTime];
 }
 
 -(void)request:(PHPublisherContentRequest *)request contentWillDisplay:(PHContent *)content{
-  NSString *message = [NSString stringWithFormat:@"Recieved content: %@, preparing for display",content];
-  [self addMessage:message];
+    NSString *message = [NSString stringWithFormat:@"Preparing to display content: %@",content];
+    [self addMessage:message];
+    
+    [self addElapsedTime];
 }
 
 -(void)request:(PHPublisherContentRequest *)request contentDidDisplay:(PHContent *)content{
-  //This is a good place to clear any notification views attached to this request.
-  [_notificationView clear];
+    //This is a good place to clear any notification views attached to this request.
+    [_notificationView clear];
   
-  NSString *message = [NSString stringWithFormat:@"Displayed content: %@",content];
-  [self addMessage:message];
+    NSString *message = [NSString stringWithFormat:@"Displayed content: %@",content];
+    [self addMessage:message];
+    
+    [self addElapsedTime];
 }
 
 -(void)requestContentDidDismiss:(PHPublisherContentRequest *)request{
     NSString *message = [NSString stringWithFormat:@"✔ User dismissed request: %@",request];
     [self addMessage:message];
-    
-    
-    //Cleaning up after a completed request
-    self.request = nil;
-    [self.navigationItem.rightBarButtonItem setTitle:@"Start"];    
+
+    [self finishRequest];
 }
 
 -(void)request:(PHPublisherContentRequest *)request didFailWithError:(NSError *)error{
     NSString *message = [NSString stringWithFormat:@"✖ Failed with error: %@", error];
     [self addMessage:message];
-    
-    //Cleaning up after a completed request
-    self.request = nil;
-    [self.navigationItem.rightBarButtonItem setTitle:@"Start"];
+    [self finishRequest];
 }
 
 -(void)request:(PHPublisherContentRequest *)request unlockedReward:(PHReward *)reward{
@@ -97,6 +109,10 @@
 
 -(void)viewDidLoad{
   [super viewDidLoad];
+    
+    [self startTimers];
+    [[PHPublisherContentRequest requestForApp:self.token secret:self.secret placement:@"more_games" delegate:self] preload];
+    
   _notificationView = [[PHNotificationView alloc] initWithApp:self.token secret:self.secret placement:@"more_games"];
   _notificationView.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin;
 }
