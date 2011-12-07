@@ -12,7 +12,6 @@ What's new in 1.3.12
 * PlayHaven.bundle is no longer required, PlayHaven now includes all image assets into the SDK
 * New dismiss delegate for content unit requests that indicates the reason the view was dismissed. The old dismiss delegate will continue to work but has been deprecated.
 
-
 1.3.11
 ======
 * PHPublisherContentRequests may be preloaded. See "Preloading requests" in the API Reference section for more details

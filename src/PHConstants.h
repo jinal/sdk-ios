@@ -27,11 +27,21 @@
 #define PH_DISPATCH_PROTOCOL_VERSION 4
 
 // PH_REQUEST_TIMEOUT
+// Defines the maximum amount of time that an API request will wait for a 
+// response from the server.
 #define PH_REQUEST_TIMEOUT 10
 
 // PH_USE_CONTENT_VIEW_RECYCLING
-#define PH_USE_CONTENT_VIEW_RECYCLING 1
+// Recycles content view instances to reduce the number of allocations.
+// Behavior of the SDK without this define has not been tested. 
+#define PH_USE_CONTENT_VIEW_RECYCLING
 
+// PH_DISMISS_CONTENT_REQUEST_WHEN_BACKGROUNDED
+// By default, content requests are dismissed when the app is backgrounded.
+// Set PH_DONT_DISMISS_WHEN_BACKGROUNDED as a preprocessor macro to disable this behavior.
+#ifndef PH_DONT_DISMISS_WHEN_BACKGROUNDED
+#define PH_DISMISS_WHEN_BACKGROUNDED
+#endif
 
 // Macros
 #define PH_URL(PATH) [PH_BASE_URL stringByAppendingString:@#PATH]

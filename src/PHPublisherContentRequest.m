@@ -313,12 +313,14 @@ PHPublisherContentDismissType * const PHPublisherNoContentTriggeredDismiss = @"P
 }
 
 -(void)send{
+#ifdef PH_DISMISS_WHEN_BACKGROUNDED
     if (PH_MULTITASKING_SUPPORTED) {
         [[NSNotificationCenter defaultCenter] addObserver:self 
                                                  selector:@selector(dismissToBackground) 
                                                      name:UIApplicationDidEnterBackgroundNotification 
                                                    object:nil];
     }
+#endif
     
     _targetState = PHPublisherContentRequestDisplayingContent;
     
