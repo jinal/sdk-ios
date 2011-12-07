@@ -90,7 +90,7 @@
 							<object class="IBUISwitch" id="142644444">
 								<reference key="NSNextResponder" ref="463470073"/>
 								<int key="NSvFlags">292</int>
-								<string key="NSFrame">{{-10, 48}, {94, 27}}</string>
+								<string key="NSFrame">{{5, 47}, {94, 27}}</string>
 								<reference key="NSSuperview" ref="463470073"/>
 								<reference key="NSWindow"/>
 								<reference key="NSNextKeyView" ref="260540058"/>
@@ -100,26 +100,24 @@
 									<string key="IBUIAccessibilityLabel">Animated</string>
 								</object>
 								<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
-								<int key="IBUIContentHorizontalAlignment">0</int>
-								<int key="IBUIContentVerticalAlignment">0</int>
+								<bool key="IBUIOn">YES</bool>
 							</object>
 							<object class="IBUISwitch" id="737122634">
 								<reference key="NSNextResponder" ref="463470073"/>
 								<int key="NSvFlags">292</int>
-								<string key="NSFrame">{{-10, 83}, {94, 27}}</string>
+								<string key="NSFrame">{{5, 82}, {94, 27}}</string>
 								<reference key="NSSuperview" ref="463470073"/>
 								<reference key="NSWindow"/>
 								<reference key="NSNextKeyView" ref="36602865"/>
 								<string key="NSReuseIdentifierKey">_NS:606</string>
 								<bool key="IBUIOpaque">NO</bool>
 								<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
-								<int key="IBUIContentHorizontalAlignment">0</int>
-								<int key="IBUIContentVerticalAlignment">0</int>
+								<bool key="IBUIOn">YES</bool>
 							</object>
 							<object class="IBUILabel" id="260540058">
 								<reference key="NSNextResponder" ref="463470073"/>
 								<int key="NSvFlags">292</int>
-								<string key="NSFrame">{{92, 51}, {197, 21}}</string>
+								<string key="NSFrame">{{107, 50}, {197, 21}}</string>
 								<reference key="NSSuperview" ref="463470073"/>
 								<reference key="NSWindow"/>
 								<reference key="NSNextKeyView" ref="737122634"/>
@@ -150,7 +148,7 @@
 							<object class="IBUILabel" id="36602865">
 								<reference key="NSNextResponder" ref="463470073"/>
 								<int key="NSvFlags">292</int>
-								<string key="NSFrame">{{92, 86}, {197, 21}}</string>
+								<string key="NSFrame">{{107, 85}, {197, 21}}</string>
 								<reference key="NSSuperview" ref="463470073"/>
 								<reference key="NSWindow"/>
 								<reference key="NSNextKeyView"/>

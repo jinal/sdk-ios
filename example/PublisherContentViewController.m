@@ -87,14 +87,7 @@
     [self addElapsedTime];
 }
 
--(void)requestContentDidDismiss:(PHPublisherContentRequest *)request{
-    NSString *message = [NSString stringWithFormat:@"✔ User dismissed request: %@",request];
-    [self addMessage:message];
-
-    [self finishRequest];
-}
-
--(void)requestContentDidDismissWithType:(PHPublisherContentRequest *)request contentDismissedWithType:(PHPublisherContentDismissType *)type{
+-(void)request:(PHPublisherContentRequest *)request contentDidDismissWithType:(PHPublisherContentDismissType *)type{
     NSString *message = [NSString stringWithFormat:@"✔ User dismissed request: %@ of type %@",request, type];
     [self addMessage:message];
     

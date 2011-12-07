@@ -295,8 +295,8 @@ PHPublisherContentDismissType * const PHPublisherNoContentTriggeredDismiss = @"P
         [self continueLoadingIfNeeded];
     } else {
         PH_NOTE(@"This request was successful but did not contain any displayable content. Dismissing now.");
-        if ([self.delegate respondsToSelector:@selector(requestContentDidDismissWithType:)]) {
-            [self.delegate performSelector:@selector(requestContentDidDismissWithType:) 
+        if ([self.delegate respondsToSelector:@selector(request:contentDidDismissWithType:)]) {
+            [self.delegate performSelector:@selector(request:contentDidDismissWithType:) 
                                 withObject:self
                                 withObject:PHPublisherNoContentTriggeredDismiss];
         } else if ([self.delegate respondsToSelector:@selector(requestContentDidDismiss:)]) {
@@ -446,8 +446,8 @@ PHPublisherContentDismissType * const PHPublisherNoContentTriggeredDismiss = @"P
     
     PH_NOTE(@"The content unit was dismissed by the user");
         
-    if ([self.delegate respondsToSelector:@selector(requestContentDidDismissWithType:)]) {
-        [self.delegate performSelector:@selector(requestContentDidDismissWithType:) 
+    if ([self.delegate respondsToSelector:@selector(request:contentDidDismissWithType:)]) {
+        [self.delegate performSelector:@selector(request:contentDidDismissWithType:) 
                             withObject:self 
                             withObject:PHPublisherNativeCloseButtonTriggeredDismiss];
     } else {
@@ -473,8 +473,8 @@ PHPublisherContentDismissType * const PHPublisherNoContentTriggeredDismiss = @"P
         [contentViews release];
     }
     
-    if ([self.delegate respondsToSelector:@selector(requestContentDidDismissWithType:)]) {
-        [self.delegate performSelector:@selector(requestContentDidDismissWithType:) 
+    if ([self.delegate respondsToSelector:@selector(request:contentDidDismissWithType:)]) {
+        [self.delegate performSelector:@selector(request:contentDidDismissWithType:) 
                             withObject:self 
                             withObject:PHPublisherApplicationBackgroundTriggeredDismiss];
     } else {
@@ -518,8 +518,8 @@ PHPublisherContentDismissType * const PHPublisherNoContentTriggeredDismiss = @"P
     
     if ([self.contentViews count] == 0) {
         //only passthrough the last contentView to dismiss
-        if ([self.delegate respondsToSelector:@selector(requestContentDidDismissWithType:)]) {
-            [self.delegate performSelector:@selector(requestContentDidDismissWithType:) 
+        if ([self.delegate respondsToSelector:@selector(request:contentDidDismissWithType:)]) {
+            [self.delegate performSelector:@selector(request:contentDidDismissWithType:) 
                                 withObject:self 
                                 withObject:PHPublisherContentUnitTriggeredDismiss];
         } else if ([self.delegate respondsToSelector:@selector(requestContentDidDismiss:)]) {

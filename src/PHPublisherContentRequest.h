@@ -34,8 +34,8 @@ extern PHPublisherContentDismissType * const PHPublisherNoContentTriggeredDismis
 -(void)requestDidGetContent:(PHPublisherContentRequest *)request;
 -(void)request:(PHPublisherContentRequest *)request contentWillDisplay:(PHContent *)content;
 -(void)request:(PHPublisherContentRequest *)request contentDidDisplay:(PHContent *)content;
--(void)requestContentDidDismiss:(PHPublisherContentRequest *)request;
--(void)requestContentDidDismissWithType:(PHPublisherContentRequest *)request contentDismissedWithType:(PHPublisherContentDismissType *)type;
+-(void)requestContentDidDismiss:(PHPublisherContentRequest *)request DEPRECATED_ATTRIBUTE;
+-(void)request:(PHPublisherContentRequest *)request contentDidDismissWithType:(PHPublisherContentDismissType *)type;
 
 -(void)request:(PHPublisherContentRequest *)request didFailWithError:(NSError *)error;
 -(void)request:(PHPublisherContentRequest *)request contentDidFailWithError:(NSError *)error DEPRECATED_ATTRIBUTE;
