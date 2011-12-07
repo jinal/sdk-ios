@@ -19,6 +19,11 @@ NSString *const PHPublisherContentRequestRewardQuantityKey = @"quantity";
 NSString *const PHPublisherContentRequestRewardReceiptKey = @"receipt";
 NSString *const PHPublisherContentRequestRewardSignatureKey = @"signature";
 
+PHPublisherContentDismissType * const PHPublisherContentUnitTriggeredDismiss = @"PHPublisherContentUnitTriggeredDismiss";
+PHPublisherContentDismissType * const PHPublisherNativeCloseButtonTriggeredDismiss = @"PHPublisherNativeCloseButtonTriggeredDismiss";
+PHPublisherContentDismissType * const PHPublisherApplicationBackgroundTriggeredDismiss = @"PHPublisherApplicationBackgroundTriggeredDismiss";
+PHPublisherContentDismissType * const PHPublisherNoContentTriggeredDismiss = @"PHPublisherNoContentTriggeredDismiss";
+
 #define MAX_MARGIN 20
 
 @interface PHAPIRequest(Private)
@@ -37,6 +42,7 @@ NSString *const PHPublisherContentRequestRewardSignatureKey = @"signature";
 -(void)showOverlayWindow;
 -(void)hideOverlayWindow;
 -(void)dismissFromButton;
+-(void)dismissToBackground;
 -(void)continueLoadingIfNeeded;
 -(void)getContent;
 -(void)showContentIfReady;
@@ -78,7 +84,6 @@ NSString *const PHPublisherContentRequestRewardSignatureKey = @"signature";
     if ((self = [self initWithApp:token secret:secret])) {
         self.placement = placement;
         self.delegate = delegate;
-        _state = PHPublisherContentRequestInitialized;
     }
     
     return self;
@@ -86,6 +91,7 @@ NSString *const PHPublisherContentRequestRewardSignatureKey = @"signature";
 
 -(id)initWithApp:(NSString *)token secret:(NSString *)secret{
     if ((self = [super initWithApp:token secret:secret])){
+        _state = PHPublisherContentRequestInitialized;
         _animated = YES;
     }
     
@@ -129,13 +135,13 @@ NSString *const PHPublisherContentRequestRewardSignatureKey = @"signature";
         _closeButton = [[UIButton buttonWithType:UIButtonTypeCustom] retain];
         _closeButton.frame = CGRectMake(0, 0, 40, 40);
         _closeButton.hidden = YES;
-        
+
         UIImage
         *closeImage = [self contentView:nil imageForCloseButtonState:UIControlStateNormal],
         *closeActiveImage = [self contentView:nil imageForCloseButtonState:UIControlStateHighlighted];
         
-        closeImage = (!closeImage)? [UIImage imageNamed:@"PlayHaven.bundle/images/close.png"] : closeImage;
-        closeActiveImage = (!closeActiveImage)?[UIImage imageNamed:@"PlayHaven.bundle/images/close-active.png"]: closeActiveImage;
+        closeImage = (!closeImage)? convertByteDataToUIImage((playHavenImage *)&close_image) : closeImage;
+        closeActiveImage = (!closeActiveImage)?convertByteDataToUIImage((playHavenImage *)&close_active_image): closeActiveImage;
         
         [_closeButton setImage:closeImage forState:UIControlStateNormal];
         [_closeButton setImage:closeActiveImage forState:UIControlStateHighlighted];
@@ -147,6 +153,7 @@ NSString *const PHPublisherContentRequestRewardSignatureKey = @"signature";
 }
 
 -(void)dealloc{
+    [PHPublisherContentRequest cancelPreviousPerformRequestsWithTarget:self selector:@selector(showCloseButtonBecauseOfTimeout) object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self];
     [_content release], _content = nil;
     [_placement release], _placement = nil;
@@ -234,7 +241,6 @@ NSString *const PHPublisherContentRequestRewardSignatureKey = @"signature";
 }
 
 -(void)hideCloseButton{
-    
     [PHPublisherContentRequest cancelPreviousPerformRequestsWithTarget:self selector:@selector(showCloseButtonBecauseOfTimeout) object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIDeviceOrientationDidChangeNotification object:nil];
     [_closeButton removeFromSuperview];
@@ -289,11 +295,14 @@ NSString *const PHPublisherContentRequestRewardSignatureKey = @"signature";
         [self continueLoadingIfNeeded];
     } else {
         PH_NOTE(@"This request was successful but did not contain any displayable content. Dismissing now.");
-        if ([self.delegate respondsToSelector:@selector(requestContentDidDismiss:)]) {
+        if ([self.delegate respondsToSelector:@selector(request:contentDidDismissWithType:)]) {
+            [self.delegate performSelector:@selector(request:contentDidDismissWithType:) 
+                                withObject:self
+                                withObject:PHPublisherNoContentTriggeredDismiss];
+        } else if ([self.delegate respondsToSelector:@selector(requestContentDidDismiss:)]) {
             [self.delegate performSelector:@selector(requestContentDidDismiss:) 
                                 withObject:self];
         }
-        
         [self finish];
     }
 }
@@ -304,7 +313,23 @@ NSString *const PHPublisherContentRequestRewardSignatureKey = @"signature";
 }
 
 -(void)send{
+#ifdef PH_DISMISS_WHEN_BACKGROUNDED
+    if (PH_MULTITASKING_SUPPORTED) {
+        [[NSNotificationCenter defaultCenter] addObserver:self 
+                                                 selector:@selector(dismissToBackground) 
+                                                     name:UIApplicationDidEnterBackgroundNotification 
+                                                   object:nil];
+    }
+#endif
+    
     _targetState = PHPublisherContentRequestDisplayingContent;
+    
+    if (self.showsOverlayImmediately) {
+        [self showOverlayWindow];
+    }
+    
+    [self performSelector:@selector(showCloseButtonBecauseOfTimeout) withObject:nil afterDelay:4.0];
+    
     [self continueLoadingIfNeeded];
 }
 
@@ -323,29 +348,13 @@ NSString *const PHPublisherContentRequestRewardSignatureKey = @"signature";
 
 -(void)getContent{
     self.state = PHPublisherContentRequestPreloading;
-    
-    if ([[UIDevice currentDevice] respondsToSelector:@selector(isMultitaskingSupported)] && 
-        [[UIDevice currentDevice] isMultitaskingSupported]) {
-        [[NSNotificationCenter defaultCenter] addObserver:self 
-                                                 selector:@selector(dismissFromButton) 
-                                                     name:UIApplicationDidEnterBackgroundNotification 
-                                                   object:nil];
-    }
-    
-    
     [super send];
     
     if ([self.delegate respondsToSelector:@selector(requestWillGetContent:)]) {
         [self.delegate performSelector:@selector(requestWillGetContent:) withObject:self];
     }
     
-    
-    if (self.showsOverlayImmediately) {
-        [self showOverlayWindow];
-    }
-    
     [self placeCloseButton];
-    [self performSelector:@selector(showCloseButtonBecauseOfTimeout) withObject:nil afterDelay:4.0];
 }
 
 -(void)showContentIfReady{    
@@ -412,9 +421,9 @@ NSString *const PHPublisherContentRequestRewardSignatureKey = @"signature";
     contentView.content = content;
     [contentView setDelegate:self];
     [contentView setTargetView:self.overlayWindow];
-    [contentView show:self.animated];
     
     [self.contentViews addObject:contentView];
+    [contentView show:self.animated];
     
     [self placeCloseButton];
 }
@@ -428,12 +437,56 @@ NSString *const PHPublisherContentRequestRewardSignatureKey = @"signature";
 
 -(void)dismissFromButton{
     if ([self.contentViews count] > 0) {
-        for (PHContentView *contentView in self.contentViews) {
+        NSArray *contentViews = [self.contentViews copy];
+        for (PHContentView *contentView in contentViews) {
+            //WARNING: This causes instances to not be recycled.
+            contentView.delegate = nil;
             [contentView dismissFromButton];
         }
-    } else {
-        [self finish];
+        [contentViews release];
     }
+    
+    PH_NOTE(@"The content unit was dismissed by the user");
+        
+    if ([self.delegate respondsToSelector:@selector(request:contentDidDismissWithType:)]) {
+        [self.delegate performSelector:@selector(request:contentDidDismissWithType:) 
+                            withObject:self 
+                            withObject:PHPublisherNativeCloseButtonTriggeredDismiss];
+    } else {
+        if ([self.delegate respondsToSelector:@selector(requestContentDidDismiss:)]) {
+            [self.delegate performSelector:@selector(requestContentDidDismiss:) 
+                                withObject:self];
+        }
+    }
+    
+    [self finish];
+}
+
+-(void)dismissToBackground{
+    PH_NOTE(@"The content unit was dismissed because the app has been backgrounded.");
+    if ([self.contentViews count] > 0) {
+        NSArray *contentViews = [self.contentViews copy];
+        for (PHContentView *contentView in contentViews) {
+            contentView.delegate = nil;
+            [contentView dismiss:NO];
+            
+            [self removeContentView:contentView];
+        }
+        [contentViews release];
+    }
+    
+    if ([self.delegate respondsToSelector:@selector(request:contentDidDismissWithType:)]) {
+        [self.delegate performSelector:@selector(request:contentDidDismissWithType:) 
+                            withObject:self 
+                            withObject:PHPublisherApplicationBackgroundTriggeredDismiss];
+    } else {
+        if ([self.delegate respondsToSelector:@selector(requestContentDidDismiss:)]) {
+        [self.delegate performSelector:@selector(requestContentDidDismiss:) 
+                            withObject:self];
+        }
+    }
+
+    [self finish];
 }
 
 -(CGAffineTransform) transformForOrientation:(UIInterfaceOrientation)orientation{
@@ -467,11 +520,15 @@ NSString *const PHPublisherContentRequestRewardSignatureKey = @"signature";
     
     if ([self.contentViews count] == 0) {
         //only passthrough the last contentView to dismiss
-        if ([self.delegate respondsToSelector:@selector(requestContentDidDismiss:)]) {
+        if ([self.delegate respondsToSelector:@selector(request:contentDidDismissWithType:)]) {
+            [self.delegate performSelector:@selector(request:contentDidDismissWithType:) 
+                                withObject:self 
+                                withObject:PHPublisherContentUnitTriggeredDismiss];
+        } else if ([self.delegate respondsToSelector:@selector(requestContentDidDismiss:)]) {
             [self.delegate performSelector:@selector(requestContentDidDismiss:) 
                                 withObject:self];
         }
-        
+
         [self finish];
     }
 }

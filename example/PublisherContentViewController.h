@@ -18,6 +18,8 @@
 }
 
 @property (nonatomic, retain) IBOutlet UITextField *placementField;
+@property (nonatomic, retain) IBOutlet UISwitch *showsOverlaySwitch;
+@property (nonatomic, retain) IBOutlet UISwitch *animateSwitch;
 @property (nonatomic, retain) PHPublisherContentRequest *request;
 
 @end

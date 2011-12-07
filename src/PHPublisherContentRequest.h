@@ -22,13 +22,20 @@ typedef enum {
     PHPublisherContentRequestDone
 } PHPublisherContentRequestState;
 
+typedef NSString PHPublisherContentDismissType;
+extern PHPublisherContentDismissType * const PHPublisherContentUnitTriggeredDismiss;
+extern PHPublisherContentDismissType * const PHPublisherNativeCloseButtonTriggeredDismiss;
+extern PHPublisherContentDismissType * const PHPublisherApplicationBackgroundTriggeredDismiss;
+extern PHPublisherContentDismissType * const PHPublisherNoContentTriggeredDismiss;
+
 @protocol PHPublisherContentRequestDelegate <NSObject>
 @optional
 -(void)requestWillGetContent:(PHPublisherContentRequest *)request;
 -(void)requestDidGetContent:(PHPublisherContentRequest *)request;
 -(void)request:(PHPublisherContentRequest *)request contentWillDisplay:(PHContent *)content;
 -(void)request:(PHPublisherContentRequest *)request contentDidDisplay:(PHContent *)content;
--(void)requestContentDidDismiss:(PHPublisherContentRequest *)request;
+-(void)requestContentDidDismiss:(PHPublisherContentRequest *)request DEPRECATED_ATTRIBUTE;
+-(void)request:(PHPublisherContentRequest *)request contentDidDismissWithType:(PHPublisherContentDismissType *)type;
 
 -(void)request:(PHPublisherContentRequest *)request didFailWithError:(NSError *)error;
 -(void)request:(PHPublisherContentRequest *)request contentDidFailWithError:(NSError *)error DEPRECATED_ATTRIBUTE;

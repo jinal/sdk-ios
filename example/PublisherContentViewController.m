@@ -11,6 +11,9 @@
 @implementation PublisherContentViewController
 @synthesize placementField = _placementField;
 @synthesize request = _request;
+@synthesize showsOverlaySwitch;
+@synthesize animateSwitch;
+
 
 -(void)dealloc{
     [PHAPIRequest cancelAllRequestsWithDelegate:self];
@@ -29,6 +32,8 @@
         
         NSString *placement = (![self.placementField.text isEqualToString:@""])? self.placementField.text : @"more_games";
         PHPublisherContentRequest * request = [PHPublisherContentRequest requestForApp:self.token secret:self.secret placement:placement delegate:self];
+        [request setShowsOverlayImmediately:[showsOverlaySwitch isOn]];
+        [request setAnimated:[animateSwitch isOn]];
         [request send];
         
         [self setRequest:request];
@@ -82,10 +87,10 @@
     [self addElapsedTime];
 }
 
--(void)requestContentDidDismiss:(PHPublisherContentRequest *)request{
-    NSString *message = [NSString stringWithFormat:@"✔ User dismissed request: %@",request];
+-(void)request:(PHPublisherContentRequest *)request contentDidDismissWithType:(PHPublisherContentDismissType *)type{
+    NSString *message = [NSString stringWithFormat:@"✔ User dismissed request: %@ of type %@",request, type];
     [self addMessage:message];
-
+    
     [self finishRequest];
 }
 

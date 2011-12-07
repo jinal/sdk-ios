@@ -1,4 +1,4 @@
-PlayHaven SDK 1.3.11
+PlayHaven SDK 1.3.12
 ====================
 PlayHaven is a real-time mobile game marketing platform to help you take control of the business of your games.
 
@@ -6,8 +6,12 @@ Acquire, retain, re-engage, and monetize your players with the help of PlayHaven
 
 An API token and secret is required to use this SDK. These tokens uniquely identify your app to PlayHaven and prevent others from making requests to the API on your behalf. To get a token and secret, please visit the PlayHaven developer dashboard at https://dashboard.playhaven.com
 
-What's new in 1.3.11
+What's new in 1.3.12
 ====================
+* Content units will no longer crash the app during a dismiss.
+* PlayHaven.bundle is no longer required, PlayHaven now includes all image assets into the SDK
+* New dismiss delegate for content unit requests that indicates the reason the view was dismissed. The old dismiss delegate will continue to work but has been deprecated.
+
 1.3.11
 ======
 * PHPublisherContentRequests may be preloaded. See "Preloading requests" in the API Reference section for more details
@@ -16,11 +20,6 @@ What's new in 1.3.11
 1.3.10
 ======
 * Adds the ability to cancel active content requests, or cancel all active content requests for a given delegate. See "Cancelling requests" in the API Reference section for more details
-
-1.3.9
-=====
-* The SDK now reports whether a user is on a cellular or wifi data connection. This will allow the API to tailor content units to available bandwidth. This feature requires *SystemConfiguration.framework* to be linked to your build targets.
-* Content unit open animations should now be much smoother.
 
 Integration
 -----------
@@ -136,12 +135,17 @@ The content has been successfully loaded and the user is now interacting with th
 
 	-(void)request:(PHPublisherContentRequest *)request contentDidDisplay:(PHContent *)content;
 
-#### Content view dismissing
+#### *NEW* Content view dismissing
 The content has successfully dismissed and control is being returned to your app. This can happen as a result of the user clicking on the close button or clicking on a link that will open outside of the app. You may restore sounds and animations at this point.
 
-As of 1.3.3, this delegate method will also be called if a content request returns no content to display.
+	-(void)request:(PHPublisherContentRequest *)request contentDidDismissWithType:(PHPublisherContentDismissType *)type;
 
-	-(void)requestContentDidDismiss:(PHPublisherContentRequest *)request;
+Type may be one of the following constants:
+
+1. PHPublisherContentUnitTriggeredDismiss: a user or a content unit dismissed the content request
+1. PHPublisherNativeCloseButtonTriggeredDismiss: the user used the native close button to dismiss the view
+1. PHPublisherApplicationBackgroundTriggeredDismiss: iOS 4.0+ only, the content unit was dismissed because the app was sent to the background
+1. PHPublisherNoContentTriggeredDismiss: the content unit was dismissed because there was no content assigned to this placement id
 
 #### Content request failing
 If for any reason the content request does not successfully return some content to display or fails to load after the overlay view has appears, the request will stop any any visible overlays will be removed.
