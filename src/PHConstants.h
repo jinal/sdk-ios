@@ -15,7 +15,6 @@
 #define PH_BASE_URL @"http://api2.playhaven.com"
 #endif
 
-
 // PH_DISPATCH_PROTOCOL_VERSION
 // Defines characteristics of the requests that get sent from content units to
 // native code. See content-templates:src/js/playhaven.js for template impl.
@@ -29,6 +28,10 @@
 
 // PH_REQUEST_TIMEOUT
 #define PH_REQUEST_TIMEOUT 10
+
+// PH_USE_CONTENT_VIEW_RECYCLING
+#define PH_USE_CONTENT_VIEW_RECYCLING 1
+
 
 // Macros
 #define PH_URL(PATH) [PH_BASE_URL stringByAppendingString:@#PATH]
