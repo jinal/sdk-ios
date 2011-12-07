@@ -124,20 +124,16 @@ static NSMutableSet *allContentViews = nil;
 @synthesize targetView = _targetView;
 
 -(NSMutableDictionary *)redirects{
-    @synchronized(_redirects){
-        return _redirects;
-    }
+    return _redirects;
 }
 
 -(void)resetRedirects{
-    @synchronized(_redirects){
-        NSEnumerator *keyEnumerator = [[_redirects allKeys] objectEnumerator];
-        NSString *key;
-        while (key = [keyEnumerator nextObject]){
-            NSInvocation *invocation = [_redirects valueForKey:key];
-            if (invocation.target != self) {
-                [_redirects removeObjectForKey:key];
-            }
+    NSEnumerator *keyEnumerator = [[_redirects allKeys] objectEnumerator];
+    NSString *key;
+    while (key = [keyEnumerator nextObject]){
+        NSInvocation *invocation = [_redirects valueForKey:key];
+        if (invocation.target != self) {
+            [_redirects removeObjectForKey:key];
         }
     }
 }
@@ -355,8 +351,8 @@ static NSMutableSet *allContentViews = nil;
 
 -(void)closeView:(BOOL)animated
 {
-    [_webView stopLoading];
     [_webView setDelegate:nil];
+    [_webView stopLoading];
     
     _willAnimate = animated;    
     if (self.content.transition == PHContentTransitionModal) {
@@ -417,7 +413,8 @@ static NSMutableSet *allContentViews = nil;
 -(BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType{  
     NSURL *url = request.URL;
     NSString *urlPath = [NSString stringWithFormat:@"%@://%@%@", [url scheme], [url host], [url path]];
-    NSInvocation *redirect = [[self redirects] valueForKey:urlPath];
+    NSInvocation *redirect = [_redirects valueForKey:urlPath];
+
     if (redirect) {
         NSDictionary *queryComponents = [url queryComponents];
         NSString *callback = [queryComponents valueForKey:@"callback"];
@@ -442,7 +439,10 @@ static NSMutableSet *allContentViews = nil;
                 break;
         }
         
+        [redirect retain];
         [redirect invoke];
+        [redirect release];
+        
         return NO;
     }
     
@@ -473,9 +473,9 @@ static NSMutableSet *allContentViews = nil;
         redirect.target = target;
         redirect.selector = action;
         
-        [[self redirects] setValue:redirect forKey:urlPath];
+        [_redirects setValue:redirect forKey:urlPath];
     } else {
-        [[self redirects] setValue:nil forKey:urlPath];
+        [_redirects setValue:nil forKey:urlPath];
     }
 }
 
