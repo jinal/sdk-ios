@@ -32,10 +32,7 @@
 -(void)dismissWithError:(NSError *)error;
 -(void) closeView:(BOOL)animated;
 -(void)prepareForReuse;
-
--(NSMutableDictionary *)redirects;
 -(void)resetRedirects;
-
 @end
 
 static NSMutableSet *allContentViews = nil;
@@ -122,10 +119,6 @@ static NSMutableSet *allContentViews = nil;
 @synthesize delegate = _delegate;
 @synthesize targetView = _targetView;
 
--(NSMutableDictionary *)redirects{
-    return _redirects;
-}
-
 -(void)resetRedirects{
 #ifdef PH_USE_CONTENT_VIEW_RECYCLING
     NSEnumerator *keyEnumerator = [[_redirects allKeys] objectEnumerator];
@@ -136,10 +129,7 @@ static NSMutableSet *allContentViews = nil;
             [_redirects removeObjectForKey:key];
         }
     }
-#else
-        [_redirects release], _redirects = nil;
 #endif
-    
 }
 
 -(void)prepareForReuse{
@@ -414,7 +404,8 @@ static NSMutableSet *allContentViews = nil;
 -(BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType{  
     NSURL *url = request.URL;
     NSString *urlPath = [NSString stringWithFormat:@"%@://%@%@", [url scheme], [url host], [url path]];
-    NSInvocation *redirect = [[self redirects] valueForKey:urlPath];
+    NSInvocation *redirect = [_redirects valueForKey:urlPath];
+
     if (redirect) {
         NSDictionary *queryComponents = [url queryComponents];
         NSString *callback = [queryComponents valueForKey:@"callback"];
@@ -439,7 +430,11 @@ static NSMutableSet *allContentViews = nil;
                 break;
         }
         
+        //NOTE: It's important to keep the invocation object around while we're invoking. This will prevent occasional EXC_BAD_ACCESS errors.
+        [redirect retain];
         [redirect invoke];
+        [redirect release];
+        
         return NO;
     }
     
@@ -470,9 +465,9 @@ static NSMutableSet *allContentViews = nil;
         redirect.target = target;
         redirect.selector = action;
         
-        [[self redirects] setValue:redirect forKey:urlPath];
+        [_redirects setValue:redirect forKey:urlPath];
     } else {
-        [[self redirects] setValue:nil forKey:urlPath];
+        [_redirects setValue:nil forKey:urlPath];
     }
 }
 
