@@ -30,17 +30,13 @@
 
 #pragma mark - PHAPIRequestDelegate
 -(void)request:(PHAPIRequest *)request didSucceedWithResponse:(NSDictionary *)responseData{
-    NSString *message = [NSString stringWithFormat:@"✔ Success with response: %@",responseData];
-    [self addMessage:message];
-    
-    [self finishRequest];
+  NSString *message = [NSString stringWithFormat:@"✔ Success with response: %@",responseData];
+  [self addMessage:message];
 }
 
 -(void)request:(PHAPIRequest *)request didFailWithError:(NSError *)error{
-    NSString *message = [NSString stringWithFormat:@"✖ Failed with error: %@", error];
-    [self addMessage:message];
-    
-    [self finishRequest];
+  NSString *message = [NSString stringWithFormat:@"✖ Failed with error: %@", error];
+  [self addMessage:message];  
 }
 
 @end

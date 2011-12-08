@@ -14,28 +14,12 @@
 @class PHContent;
 @class PHReward;
 
-typedef enum {
-    PHPublisherContentRequestInitialized,
-    PHPublisherContentRequestPreloading,
-    PHPublisherContentRequestPreloaded,
-    PHPublisherContentRequestDisplayingContent,
-    PHPublisherContentRequestDone
-} PHPublisherContentRequestState;
-
-typedef NSString PHPublisherContentDismissType;
-extern PHPublisherContentDismissType * const PHPublisherContentUnitTriggeredDismiss;
-extern PHPublisherContentDismissType * const PHPublisherNativeCloseButtonTriggeredDismiss;
-extern PHPublisherContentDismissType * const PHPublisherApplicationBackgroundTriggeredDismiss;
-extern PHPublisherContentDismissType * const PHPublisherNoContentTriggeredDismiss;
-
 @protocol PHPublisherContentRequestDelegate <NSObject>
 @optional
 -(void)requestWillGetContent:(PHPublisherContentRequest *)request;
--(void)requestDidGetContent:(PHPublisherContentRequest *)request;
 -(void)request:(PHPublisherContentRequest *)request contentWillDisplay:(PHContent *)content;
 -(void)request:(PHPublisherContentRequest *)request contentDidDisplay:(PHContent *)content;
--(void)requestContentDidDismiss:(PHPublisherContentRequest *)request DEPRECATED_ATTRIBUTE;
--(void)request:(PHPublisherContentRequest *)request contentDidDismissWithType:(PHPublisherContentDismissType *)type;
+-(void)requestContentDidDismiss:(PHPublisherContentRequest *)request;
 
 -(void)request:(PHPublisherContentRequest *)request didFailWithError:(NSError *)error;
 -(void)request:(PHPublisherContentRequest *)request contentDidFailWithError:(NSError *)error DEPRECATED_ATTRIBUTE;
@@ -50,31 +34,28 @@ extern PHPublisherContentDismissType * const PHPublisherNoContentTriggeredDismis
 @end
 
 @interface PHPublisherContentRequest : PHAPIRequest<PHContentViewDelegate, PHAPIRequestDelegate> {
-    NSString *_placement;
-    BOOL _animated;
-    NSMutableArray *_contentViews;
-    BOOL _showsOverlayImmediately;
-    UIButton *_closeButton;
-    
-    UIView *_overlayWindow;
-    PHContent *_content;
-    
-    PHPublisherContentRequestState _state;
-    PHPublisherContentRequestState _targetState;
+  NSString *_placement;
+  BOOL _animated;
+  NSMutableArray *_contentViews;
+  BOOL _showsOverlayImmediately;
+  UIButton *_closeButton;
+  
+  UIWindow *_overlayWindow;
+  UIWindow *_previousKeyWindow;
 }
 
 +(id)requestForApp:(NSString *)token secret:(NSString *)secret placement:(NSString *)placement delegate:(id)delegate;
+
+-(id)initWithApp:(NSString *)token secret:(NSString *)secret placement:(NSString *)placement delegate:(id)delegate;
 
 @property (nonatomic,retain) NSString *placement;
 @property (nonatomic,assign) BOOL animated;
 @property (nonatomic,readonly) NSMutableArray *contentViews;
 @property (nonatomic, assign) BOOL showsOverlayImmediately;
-@property (nonatomic, readonly) UIView *overlayWindow;
-
--(void)preload;
+@property (nonatomic, readonly) UIWindow *overlayWindow;
 
 -(void)requestSubcontent:(NSDictionary *)queryParameters callback:(NSString *)callback source:(PHContentView *)source;
-
+-(void)pushContent:(PHContent *)content;
 
 -(BOOL)isValidReward:(NSDictionary *)rewardData;
 -(void)requestRewards:(NSDictionary *)queryParameters callback:(NSString *)callback source:(PHContentView *)source;

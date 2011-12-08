@@ -7,7 +7,6 @@
 //
 
 #import "PHNotificationBadgeRenderer.h"
-#import "PHConstants.h"
 
 static UIImage *BadgeImage;
 
@@ -15,12 +14,7 @@ static UIImage *BadgeImage;
 
 +(void)initialize{
   if (self == [PHNotificationBadgeRenderer class]) {
-    UIImage *badge;
-    if (IS_RETINA_DISPLAY())
-      badge = convertByteDataToUIImage((playHavenImage *)&badge_2x_image);
-    else
-      badge = convertByteDataToUIImage((playHavenImage *)&badge_image);
-
+    UIImage *badge = [UIImage imageNamed:@"PlayHaven.bundle/images/badge.png"];
     BadgeImage = [[badge stretchableImageWithLeftCapWidth:14 topCapHeight:0] retain];
   }
 }

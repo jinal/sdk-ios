@@ -1,4 +1,4 @@
-PlayHaven SDK 1.3.12
+PlayHaven SDK 1.3.10
 ====================
 PlayHaven is a real-time mobile game marketing platform to help you take control of the business of your games.
 
@@ -6,20 +6,19 @@ Acquire, retain, re-engage, and monetize your players with the help of PlayHaven
 
 An API token and secret is required to use this SDK. These tokens uniquely identify your app to PlayHaven and prevent others from making requests to the API on your behalf. To get a token and secret, please visit the PlayHaven developer dashboard at https://dashboard.playhaven.com
 
-What's new in 1.3.12
-====================
-* Content units will no longer crash the app during a dismiss.
-* PlayHaven.bundle is no longer required, PlayHaven now includes all image assets into the SDK
-* New dismiss delegate for content unit requests that indicates the reason the view was dismissed. The old dismiss delegate will continue to work but has been deprecated.
-
-1.3.11
-======
-* PHPublisherContentRequests may be preloaded. See "Preloading requests" in the API Reference section for more details
-* *WARNING:* if you have been creating API request class instances directly using -(id)initWithApp... methods, you must now use the static +(id)requestForApp... methods instead. Content request instances created using -(id)initWithApp... may not work as expected for preloading requests.
-
-1.3.10
-======
+What's new in 1.3.10
+===================
 * Adds the ability to cancel active content requests, or cancel all active content requests for a given delegate. See "Cancelling requests" in the API Reference section for more details
+
+1.3.9
+=====
+* The SDK now reports whether a user is on a cellular or wifi data connection. This will allow the API to tailor content units to available bandwidth. This feature requires *SystemConfiguration.framework* to be linked to your build targets.
+* Content unit open animations should now be much smoother.
+
+1.3.8
+=====
+* Removed unused PHURLLoaderView classes.
+* Prevents crashes caused by interrupting a PHURLLoader open operation (sometimes occurs during app store opens)
 
 Integration
 -----------
@@ -90,7 +89,7 @@ See "Notifications with PHNotificationView" in the API Reference section for mor
 API Reference
 -------------
 ### Recording game opens
-Asynchronously reports a game open to PlayHaven. A delegate is not needed for this request, but if you would like to receive a callback when this request succeeds or fails refer to the implementation found in *example/PublisherOpenViewController.m*.
+ Asynchronously reports a game open to PlayHaven. A delegate is not needed for this request, but if you would like to receive a callback when this request succeeds or fails refer to the implementation found in *example/PublisherOpenViewController.m*.
 
 	[[PHPublisherOpenRequest requestForApp:(NSString *)token secret:(NSString *)secret] send]
 
@@ -105,25 +104,10 @@ You may request content for your app using your API token, secret, as well as a 
 
 Optionally, you may choose to show the loading overlay immediately by setting the request object's *showsOverlayImmediately* property to YES. This is useful if you would like keep users from interacting with your UI while the content is loading.
 
-#### *NEW* Preloading requests (optional)
-To make content requests more responsive, you may choose to preload a content unit for a given placement. This will start a request for a content unit without displaying it, preserving the content unit until you call -(void)send on a  content request for the same placement in your app.
-
-    [[PHPublisherContentRequest requestForApp:(NSString *)token secret:(NSString *)secret placement:(NSString *)placement delegate:(id)delegate] preload];
-
-You may set a delegate for your preload if you would like to be informed when a content request is ready to display. See the sections below for more details.
-
-*NOTE:* Preloading only affects the next content request for a given placement. If you are showing the same placement multiple times in your app, you will need to make additional preload requests after displaying that placement's content unit for the first time.
-
 #### Starting a content request
 The request is about to attempt to get content from the PlayHaven API. 
 
 	-(void)requestWillGetContent:(PHPublisherContentRequest *)request;
-
-#### Receiving content
-The request received some valid content from the PlayHaven API. This will be the last delegate method a preloading request will receive, unless there is an error.
-
-	-(void)requestDidGetContent:(PHPublisherContentRequest *)request;
-
 
 #### Preparing to show a content view
 If there is content for this placement, it will be loaded at this point. An overlay view will appear over your app and a spinner will indicate that the content is loading. Depending on the transition type for your content your view may or may not be visible at this time. If you haven't before, you should mute any sounds and pause any animations in your app. 
@@ -135,17 +119,12 @@ The content has been successfully loaded and the user is now interacting with th
 
 	-(void)request:(PHPublisherContentRequest *)request contentDidDisplay:(PHContent *)content;
 
-#### *NEW* Content view dismissing
+#### Content view dismissing
 The content has successfully dismissed and control is being returned to your app. This can happen as a result of the user clicking on the close button or clicking on a link that will open outside of the app. You may restore sounds and animations at this point.
 
-	-(void)request:(PHPublisherContentRequest *)request contentDidDismissWithType:(PHPublisherContentDismissType *)type;
+As of 1.3.3, this delegate method will also be called if a content request returns no content to display.
 
-Type may be one of the following constants:
-
-1. PHPublisherContentUnitTriggeredDismiss: a user or a content unit dismissed the content request
-1. PHPublisherNativeCloseButtonTriggeredDismiss: the user used the native close button to dismiss the view
-1. PHPublisherApplicationBackgroundTriggeredDismiss: iOS 4.0+ only, the content unit was dismissed because the app was sent to the background
-1. PHPublisherNoContentTriggeredDismiss: the content unit was dismissed because there was no content assigned to this placement id
+	-(void)requestContentDidDismiss:(PHPublisherContentRequest *)request;
 
 #### Content request failing
 If for any reason the content request does not successfully return some content to display or fails to load after the overlay view has appears, the request will stop any any visible overlays will be removed.
