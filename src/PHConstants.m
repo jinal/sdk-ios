@@ -114,18 +114,21 @@ int PHNetworkStatus(){
 // Play Haven default image helper function
 //
 UIImage *convertByteDataToUIImage(playHavenImage *phImage){
-  UInt32 width = phImage->width;
-  UInt32 height = phImage->height;
-  UInt32 length = phImage->length;
-  NSData *data = [NSData dataWithBytes:phImage->data length:length];
-
-  CGDataProviderRef provider = CGDataProviderCreateWithCFData((CFDataRef)data);
-  CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
-  CGBitmapInfo bitmapInfo = kCGImageAlphaPremultipliedLast;
-  CGImageRef cgImage = CGImageCreate(width, height, 8, 32, 4 * width, colorSpace, bitmapInfo, provider, NULL, NO, kCGRenderingIntentDefault);
-  CGDataProviderRelease(provider);
-  CGColorSpaceRelease(colorSpace);
-  return [UIImage imageWithCGImage:cgImage];
+    UInt32 width = phImage->width;
+    UInt32 height = phImage->height;
+    UInt32 length = phImage->length;
+    NSData *data = [NSData dataWithBytes:phImage->data length:length];
+    
+    CGDataProviderRef provider = CGDataProviderCreateWithCFData((CFDataRef)data);
+    CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
+    CGBitmapInfo bitmapInfo = kCGImageAlphaPremultipliedLast;
+    CGImageRef cgImage = CGImageCreate(width, height, 8, 32, 4 * width, colorSpace, bitmapInfo, provider, NULL, NO, kCGRenderingIntentDefault);
+    CGDataProviderRelease(provider);
+    CGColorSpaceRelease(colorSpace);
+    
+    UIImage *result = [UIImage imageWithCGImage:cgImage];
+    CGImageRelease(cgImage);
+    return result;
 }
 
 //

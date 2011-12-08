@@ -71,7 +71,8 @@ NSError *PHCreateError(PHErrorType errorType);
 // 0: No connection
 // 1: Cellular data, 3G/EDGE
 // 2: WiFi
-int PHNetworkStatus();
+NSString *_getWiFiIPAddress(void);
+int PHNetworkStatus(void);
 
 
 //
