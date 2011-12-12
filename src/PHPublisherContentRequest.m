@@ -234,7 +234,7 @@ NSString *const PHPublisherContentRequestRewardSignatureKey = @"signature";
     if (!!self.delegate) {
         NSString *responseString = [[NSString alloc] initWithData:_connectionData encoding:NSUTF8StringEncoding];
         
-        SBJsonParser *parser = [[SBJsonParser alloc] init];
+        SBJsonParserPH *parser = [[SBJsonParserPH alloc] init];
         NSDictionary* resultDictionary = [parser objectWithString:responseString];
         [self processRequestResponse:resultDictionary];
         

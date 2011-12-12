@@ -328,7 +328,7 @@
     
     NSString *contextString = [queryComponents valueForKey:@"context"];
    
-    SBJsonParser *parser = [SBJsonParser new];
+    SBJsonParserPH *parser = [SBJsonParserPH new];
     NSDictionary *context = [parser objectWithString:contextString];
     [parser release];
     
@@ -423,7 +423,7 @@
   NSString *_callback = @"null", *_response = @"null", *_error = @"null";
   if (!!callback) _callback = callback;
   
-  SBJsonWriter *jsonWriter = [SBJsonWriter new];
+  SBJsonWriterPH *jsonWriter = [SBJsonWriterPH new];
   if (!!response) {
     _response = [jsonWriter stringWithObject:response];
   }
