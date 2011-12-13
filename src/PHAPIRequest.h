@@ -50,4 +50,6 @@
 -(void)didSucceedWithResponse:(NSDictionary *)responseData;
 -(void)didFailWithError:(NSError *)error;
 
+-(void) checkDNSResolution;
+
 @end

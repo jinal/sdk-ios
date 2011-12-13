@@ -15,6 +15,10 @@
 #define PH_BASE_URL @"http://api2.playhaven.com"
 #endif
 
+#ifndef PH_CONTENT_ADDRESS
+#define PH_CONTENT_ADDRESS @"media.playhaven.com"
+#endif
+
 // PH_DISPATCH_PROTOCOL_VERSION
 // Defines characteristics of the requests that get sent from content units to
 // native code. See content-templates:src/js/playhaven.js for template impl.
