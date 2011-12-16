@@ -157,7 +157,7 @@
   if (_connection == nil) {
     PH_LOG(@"Sending request: %@", [self.URL absoluteString]);
     NSURLRequest *request = [NSURLRequest requestWithURL:self.URL 
-                                             cachePolicy:NSURLRequestReturnCacheDataElseLoad 
+                                             cachePolicy:NSURLRequestReloadIgnoringLocalCacheData//NSURLRequestReturnCacheDataElseLoad 
                                          timeoutInterval:PH_REQUEST_TIMEOUT];
     _connection = [[NSURLConnection alloc] initWithRequest:request delegate:self];
     [_connection start];
@@ -195,6 +195,7 @@
 
 -(void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data{
   [_connectionData appendData:data];
+  //_connectionData = [[NSMutableData alloc] initWithData:[@"{ \"errobj\": null, \"response\": { \"id\": \"e690da767f7487e82a072446843e675e97acc5d1\", \"annoucement\": \"http://media.playhaven.com/content-templates/e690da767f7487e82a072446843e675e97acc5d1/html/announcement.html.gz\", \"more_games\": \"http://media.playhaven.com/content-templates/e690da767f7487e82a072446843e675e97acc5d1/html/more-games.html.gz\", \"gow\": \"http://media.playhaven.com/content-templates/e690da767f7487e82a072446843e675e97acc5d1/html/gow.html.gz\", \"promo\": \"http://media.playhaven.com/content-templates/e690da767f7487e82a072446843e675e97acc5d1/html/promo.html.gz\" }, \"error\": null }" dataUsingEncoding:NSUTF8StringEncoding]];
 }
 
 -(void)connectionDidFinishLoading:(NSURLConnection *)connection{
@@ -204,7 +205,7 @@
     }
     
     NSString *responseString = [[NSString alloc] initWithData:_connectionData encoding:NSUTF8StringEncoding];
-    
+
     SBJsonParser *parser = [[SBJsonParser alloc] init];
     NSDictionary* resultDictionary = [parser objectWithString:responseString];
     [self processRequestResponse:resultDictionary];

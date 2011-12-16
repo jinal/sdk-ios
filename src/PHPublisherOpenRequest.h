@@ -12,4 +12,6 @@
 
 }
 
++(void)phCacheInitialize;
+
 @end

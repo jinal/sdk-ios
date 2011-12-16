@@ -377,11 +377,29 @@ static NSMutableSet *allContentViews = nil;
 -(void)loadTemplate {
     PH_LOG(@"Loading content unit template: %@", self.content.URL);
     [_webView stopLoading];
-    
-    [_webView loadRequest:[NSURLRequest requestWithURL:self.content.URL
-                                           cachePolicy:NSURLRequestReturnCacheDataElseLoad 
-                                       timeoutInterval:PH_REQUEST_TIMEOUT]];
-    
+
+    NSFileManager *fileManager = [[NSFileManager alloc] init];
+    NSString *filename = [[self.content.URL path] lastPathComponent];
+    NSLog(@"file name = %@", [filename stringByDeletingPathExtension]);
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
+    NSString *cacheDirectory = [paths objectAtIndex:0];  
+    NSString *filePath = [NSString stringWithFormat:@"%@/%@", cacheDirectory, [filename stringByDeletingPathExtension]];
+    NSLog(@"local file path = %@", filePath);
+    if (![fileManager fileExistsAtPath:filePath]){
+        [_webView loadRequest:[NSURLRequest requestWithURL:self.content.URL
+                                               cachePolicy:NSURLRequestUseProtocolCachePolicy 
+                                           timeoutInterval:PH_REQUEST_TIMEOUT]];
+    }
+    else{
+        NSURL *url = [NSURL fileURLWithPath:filePath];
+        NSMutableURLRequest *reqUrl = [NSMutableURLRequest requestWithURL:url];
+        [reqUrl setTimeoutInterval:PH_REQUEST_TIMEOUT];
+        [reqUrl setCachePolicy:NSURLRequestUseProtocolCachePolicy];
+        [_webView loadRequest:reqUrl];
+        // If this fails, we should go to network. Have a variable and if error returned
+        // redo using network URL (self.content.URL)
+    }
+    [fileManager release];
 }
 
 -(void)viewDidShow{
@@ -403,8 +421,17 @@ static NSMutableSet *allContentViews = nil;
 #pragma mark UIWebViewDelegate
 -(BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType{  
     NSURL *url = request.URL;
-    NSString *urlPath = [NSString stringWithFormat:@"%@://%@%@", [url scheme], [url host], [url path]];
+    NSString *urlPath;
+    if ([url host] == nil) {
+        urlPath = [NSString stringWithFormat:@"%@://%@", [url scheme], [url path]];
+        return YES;
+    }
+    else
+        urlPath = [NSString stringWithFormat:@"%@://%@%@", [url scheme], [url host], [url path]];
+    
     NSInvocation *redirect = [_redirects valueForKey:urlPath];
+
+    NSLog(@"urlPath = %@", urlPath);
 
     if (redirect) {
         NSDictionary *queryComponents = [url queryComponents];

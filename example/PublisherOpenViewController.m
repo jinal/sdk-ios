@@ -17,7 +17,10 @@
    * This is an alternate implementation which allows you you get response 
    * data from API requests. This isn't necessary for most developers.
    */
-  
+
+  // Initializes pre-fetching and webview caching
+  [PHPublisherOpenRequest phCacheInitialize];
+    
   PHPublisherOpenRequest * request = [PHPublisherOpenRequest requestForApp:self.token secret:self.secret];
   request.delegate = self;
   [request send];
@@ -32,6 +35,8 @@
 -(void)request:(PHAPIRequest *)request didSucceedWithResponse:(NSDictionary *)responseData{
     NSString *message = [NSString stringWithFormat:@"✔ Success with response: %@",responseData];
     [self addMessage:message];
+    
+    NSLog(@"%@", message);
     
     [self finishRequest];
 }

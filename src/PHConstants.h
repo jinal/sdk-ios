@@ -13,6 +13,7 @@
 
 #ifndef PH_BASE_URL
 #define PH_BASE_URL @"http://api2.playhaven.com"
+//#define PH_BASE_URL @"http://api2.betahaven.com"
 #endif
 
 // PH_DISPATCH_PROTOCOL_VERSION
