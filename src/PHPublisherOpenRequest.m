@@ -31,7 +31,7 @@ static BOOL initialized = NO;
                                                diskCapacity:1024*1024*5                     // 5MB disk cache
                                                diskPath:[SDURLCache defaultCachePath]];
     [NSURLCache setSharedURLCache:urlCache];
-    //[urlCache release]; // NOTE: Move to property and release in dealloc? or just release here?
+    [urlCache release];
 }
 
 -(void)storePrefetchUrls:(NSDictionary *)urls directory:(NSString *)cacheDirectory
@@ -81,9 +81,7 @@ static BOOL initialized = NO;
         [fileManager release];
     }
 
-    if ([self.delegate respondsToSelector:@selector(request:didSucceedWithResponse:)]) {
-        [self.delegate performSelector:@selector(request:didSucceedWithResponse:) withObject:self withObject:responseData];
-    }
+    [super didSucceedWithResponse:responseData];
 }
 
 @end
