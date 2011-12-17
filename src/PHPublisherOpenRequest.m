@@ -31,57 +31,18 @@ static BOOL initialized = NO;
                                                diskCapacity:1024*1024*5                     // 5MB disk cache
                                                diskPath:[SDURLCache defaultCachePath]];
     [NSURLCache setSharedURLCache:urlCache];
-    //[urlCache release];
-/*
-    NSString *announcementURL = @"http://media.playhaven.com/content-templates/e690da767f7487e82a072446843e675e97acc5d1/html/announcement.html.gz";
-    NSURL  *url = [NSURL URLWithString:announcementURL];
-    NSData *urlData = [NSData dataWithContentsOfURL:url];
-    if (urlData)
-    {
-        NSArray *paths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
-        NSString *cacheDirectory = [paths objectAtIndex:0];  
-        
-        NSString *filePath = [NSString stringWithFormat:@"%@/%@", cacheDirectory, @"announcement.html"];
-        [urlData writeToFile:filePath atomically:YES];
-    }
-    NSString *gowURL = @"http://media.playhaven.com/content-templates/e690da767f7487e82a072446843e675e97acc5d1/html/gow.html.gz";
-    url = [NSURL URLWithString:gowURL];
-    urlData = [NSData dataWithContentsOfURL:url];
-    if (urlData)
-    {
-        NSArray *paths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
-        NSString *cacheDirectory = [paths objectAtIndex:0];  
-        
-        NSString *filePath = [NSString stringWithFormat:@"%@/%@", cacheDirectory, @"gow.html"];
-        [urlData writeToFile:filePath atomically:YES];
-    }
-*/
+    //[urlCache release]; // NOTE: Move to property and release in dealloc? or just release here?
 }
 
--(void)didSucceedWithResponse:(NSDictionary *)responseData{
-    NSLog(@"%@", responseData);
-
-    NSString *message = [NSString stringWithFormat:@"open response: %@",responseData];    
-    NSLog(@"%@", message);
-
-    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
-    NSString *cacheDirectory = [paths objectAtIndex:0];  
-
-    // Move file name for caches (SDURLCAChe too) into PHConstants.h - Allows publishers to customize in case of conflicts
-    NSString *cacheInfoPath = [NSString stringWithFormat:@"%@/%@", cacheDirectory, @"prefetchCache.plist"];
-    NSLog(@"Writing pre-fetch cache plist = %@", cacheInfoPath);
-    [responseData writeToFile:cacheInfoPath atomically:YES];
-    
-    // Check id for what is currently in cache to see if need update
-
-    // Download cache files and store this dictionary off in cache
-    NSEnumerator *keyEnum = [responseData keyEnumerator];
+-(void)storePrefetchUrls:(NSDictionary *)urls directory:(NSString *)cacheDirectory
+{
+    NSEnumerator *keyEnum = [urls keyEnumerator];
     id key;
     while ((key = [keyEnum nextObject]))
     {
         if (![(NSString *)key isEqualToString:@"id"])
         {
-            NSString *urlString = [responseData objectForKey:key];
+            NSString *urlString = [urls objectForKey:key];
             NSLog(@"Downloading url = %@", urlString);
             NSURL *url = [NSURL URLWithString:urlString];
             NSData *urlData = [NSData dataWithContentsOfURL:url];
@@ -93,6 +54,31 @@ static BOOL initialized = NO;
                 [urlData writeToFile:filePath atomically:YES];
             }
         }
+    }
+}
+
+-(void)didSucceedWithResponse:(NSDictionary *)responseData{
+
+    if ([responseData count] > 0){
+        NSArray *paths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
+        NSString *cacheDirectory = [paths objectAtIndex:0];  
+
+        NSString *cacheInfoPath = [NSString stringWithFormat:@"%@/%@", cacheDirectory, @"prefetchCache.plist"];
+        NSLog(@"Writing pre-fetch cache plist = %@", cacheInfoPath);
+
+        NSFileManager *fileManager = [[NSFileManager alloc] init];
+        if (![fileManager fileExistsAtPath:cacheInfoPath]){
+            [responseData writeToFile:cacheInfoPath atomically:YES];
+            [self storePrefetchUrls:responseData directory:cacheDirectory];
+        }
+        else{
+            NSDictionary *localPrefetchInfo = [[NSDictionary alloc] initWithContentsOfFile:cacheInfoPath];
+            NSString *localId = [localPrefetchInfo objectForKey:@"id"];
+            NSString *networkId = [responseData objectForKey:@"id"];
+            if (![localId isEqualToString:networkId])
+                [self storePrefetchUrls:responseData directory:cacheDirectory];
+        }
+        [fileManager release];
     }
 
     if ([self.delegate respondsToSelector:@selector(request:didSucceedWithResponse:)]) {
