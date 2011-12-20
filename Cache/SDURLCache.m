@@ -7,6 +7,7 @@
 //
 
 #import "SDURLCache.h"
+#import "PHConstants.h"
 #import <CommonCrypto/CommonDigest.h>
 
 static NSTimeInterval const kSDURLCacheInfoDefaultMinCacheInterval = 5 * 60; // 5 minute
@@ -392,7 +393,7 @@ static NSDateFormatter* CreateDateFormatter(NSString *format)
 
 - (void)periodicMaintenance
 {
-    // If another same maintenance operation is already sceduled, cancel it so this new operation will be executed after other
+    // If another same maintenance operation is already scheduled, cancel it so this new operation will be executed after other
     // operations of the queue, so we can group more work together
     [periodicMaintenanceOperation cancel];
     self.periodicMaintenanceOperation = nil;
@@ -471,12 +472,10 @@ static NSDateFormatter* CreateDateFormatter(NSString *format)
             }
         }
 
-        [ioQueue addOperation:[[[NSInvocationOperation alloc] initWithTarget:self
-                                                                    selector:@selector(storeToDisk:)
+        [ioQueue addOperation:[[[NSInvocationOperation alloc] initWithTarget:self selector:@selector(storeToDisk:)
                                                                       object:[NSDictionary dictionaryWithObjectsAndKeys:
-                                                                              cachedResponse, @"cachedResponse",
-                                                                              request, @"request",
-                                                                              nil]] autorelease]];
+                                                                            cachedResponse, @"cachedResponse",
+                                                                            request, @"request", nil]] autorelease]];
     }
 }
 
@@ -518,6 +517,7 @@ static NSDateFormatter* CreateDateFormatter(NSString *format)
 
                 if (diskResponse)
                 {
+                    PH_LOG(@"Loading URL from cache: %@", request.URL);
                     return diskResponse;
                 }
             }

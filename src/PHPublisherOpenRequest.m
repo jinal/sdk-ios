@@ -26,7 +26,7 @@ static BOOL initialized = NO;
 
     initialized = YES;
 
-    [[NSURLCache sharedURLCache] removeAllCachedResponses];
+    //[[NSURLCache sharedURLCache] removeAllCachedResponses];
     SDURLCache *urlCache = [[SDURLCache alloc] initWithMemoryCapacity:1024*1024             // 1MB mem cache
                                                diskCapacity:1024*1024*5                     // 5MB disk cache
                                                diskPath:[SDURLCache defaultCachePath]];
@@ -38,18 +38,16 @@ static BOOL initialized = NO;
 {
     NSEnumerator *keyEnum = [urls keyEnumerator];
     id key;
-    while ((key = [keyEnum nextObject]))
-    {
-        if (![(NSString *)key isEqualToString:@"id"])
-        {
+    while ((key = [keyEnum nextObject])){
+
+        if ([(NSString *)key isEqualToString:@"precache"])
+            return;
+        if (![(NSString *)key isEqualToString:@"id"]){
             NSString *urlString = [urls objectForKey:key];
-            NSLog(@"Downloading url = %@", urlString);
             NSURL *url = [NSURL URLWithString:urlString];
             NSData *urlData = [NSData dataWithContentsOfURL:url];
-            if (urlData)
-            {
+            if (urlData){
                 NSString *filename = [[url path] lastPathComponent];
-                NSLog(@"file name = %@", [filename stringByDeletingPathExtension]);
                 NSString *filePath = [NSString stringWithFormat:@"%@/%@", cacheDirectory, [filename stringByDeletingPathExtension]];
                 [urlData writeToFile:filePath atomically:YES];
             }
@@ -64,8 +62,6 @@ static BOOL initialized = NO;
         NSString *cacheDirectory = [paths objectAtIndex:0];  
 
         NSString *cacheInfoPath = [NSString stringWithFormat:@"%@/%@", cacheDirectory, @"prefetchCache.plist"];
-        NSLog(@"Writing pre-fetch cache plist = %@", cacheInfoPath);
-
         NSFileManager *fileManager = [[NSFileManager alloc] init];
         if (![fileManager fileExistsAtPath:cacheInfoPath]){
             [responseData writeToFile:cacheInfoPath atomically:YES];

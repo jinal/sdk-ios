@@ -380,15 +380,13 @@ static NSMutableSet *allContentViews = nil;
 
     NSFileManager *fileManager = [[NSFileManager alloc] init];
     NSString *filename = [[self.content.URL path] lastPathComponent];
-    NSLog(@"file name = %@", [filename stringByDeletingPathExtension]);
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
     NSString *cacheDirectory = [paths objectAtIndex:0];  
     NSString *filePath = [NSString stringWithFormat:@"%@/%@", cacheDirectory, [filename stringByDeletingPathExtension]];
-    NSLog(@"local file path = %@", filePath);
     if (![fileManager fileExistsAtPath:filePath]){
         [_webView loadRequest:[NSURLRequest requestWithURL:self.content.URL
-                                               cachePolicy:NSURLRequestUseProtocolCachePolicy 
-                                           timeoutInterval:PH_REQUEST_TIMEOUT]];
+                                            cachePolicy:NSURLRequestUseProtocolCachePolicy//NSURLRequestReturnCacheDataElseLoad
+                                            timeoutInterval:PH_REQUEST_TIMEOUT]];
     }
     else{
         NSURL *url = [NSURL fileURLWithPath:filePath];
@@ -430,8 +428,6 @@ static NSMutableSet *allContentViews = nil;
         urlPath = [NSString stringWithFormat:@"%@://%@%@", [url scheme], [url host], [url path]];
     
     NSInvocation *redirect = [_redirects valueForKey:urlPath];
-
-    NSLog(@"urlPath = %@", urlPath);
 
     if (redirect) {
         NSDictionary *queryComponents = [url queryComponents];
