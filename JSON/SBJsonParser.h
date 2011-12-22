@@ -28,7 +28,7 @@
  */
 
 #import <Foundation/Foundation.h>
-#import "SBJsonBasePH.h"
+#import "SBJsonBase.h"
 
 /**
  @brief The JSON parser class.

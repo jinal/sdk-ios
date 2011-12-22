@@ -27,7 +27,7 @@
  OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#import "SBJsonBasePH.h"
+#import "SBJsonBase.h"
 NSString * SBJSONErrorDomain = @"org.brautaset.JSON.ErrorDomain";
 
 

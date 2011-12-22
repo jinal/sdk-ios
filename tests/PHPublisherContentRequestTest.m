@@ -11,7 +11,7 @@
 #import <CoreGraphics/CoreGraphics.h>
 #import <QuartzCore/QuartzCore.h>
 
-#import "SBJsonParserPH.h"
+#import "SBJsonParser.h"
 #import "PHContent.h"
 #import "PHContentView.h"
 #import "PHPublisherContentRequest.h"

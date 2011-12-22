@@ -10,7 +10,7 @@
 
 #import "NSObject+QueryComponents.h"
 #import "PHStringUtil.h"
-#import "SBJsonParserPH.h"
+#import "SBJsonParser.h"
 #import "UIDevice+HardwareString.h"
 #import "PHConstants.h"
 
