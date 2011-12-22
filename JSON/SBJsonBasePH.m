@@ -1,5 +1,5 @@
 /*
- Copyright (C) 2009-2010 Stig Brautaset. All rights reserved.
+ Copyright (C) 2009 Stig Brautaset. All rights reserved.
  
  Redistribution and use in source and binary forms, with or without
  modification, are permitted provided that the following conditions are met:
@@ -27,26 +27,52 @@
  OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-/**
- @mainpage A strict JSON parser and generator for Objective-C
-
- JSON (JavaScript Object Notation) is a lightweight data-interchange
- format. This framework provides two apis for parsing and generating
- JSON. One standard object-based and a higher level api consisting of
- categories added to existing Objective-C classes.
-
- This framework does its best to be as strict as possible, both in what it accepts and what it generates. For example, it does not support trailing commas in arrays or objects. Nor does it support embedded comments, or anything else not in the JSON specification. This is considered a feature. 
-  
- @section Links
-
- @li <a href="http://stig.github.com/json-framework">Project home page</a>.
- @li Online version of the <a href="http://stig.github.com/json-framework/api">API documentation</a>. 
- 
-*/
+#import "SBJsonBasePH.h"
+NSString * SBJSONErrorDomain = @"org.brautaset.JSON.ErrorDomain";
 
 
-// This setting of 1 is best if you copy the source into your project. 
-// The build transforms the 1 to a 0 when building the framework and static lib.
+@implementation SBJsonBasePH
 
-#import "SBJsonParserPH.h"
-#import "SBJsonWriterPH.h"
+@synthesize errorTrace;
+@synthesize maxDepth;
+
+- (id)init {
+    self = [super init];
+    if (self)
+        self.maxDepth = 512;
+    return self;
+}
+
+- (void)dealloc {
+    [errorTrace release];
+    [super dealloc];
+}
+
+- (void)addErrorWithCode:(NSUInteger)code description:(NSString*)str {
+    NSDictionary *userInfo;
+    if (!errorTrace) {
+        errorTrace = [NSMutableArray new];
+        userInfo = [NSDictionary dictionaryWithObject:str forKey:NSLocalizedDescriptionKey];
+        
+    } else {
+        userInfo = [NSDictionary dictionaryWithObjectsAndKeys:
+                    str, NSLocalizedDescriptionKey,
+                    [errorTrace lastObject], NSUnderlyingErrorKey,
+                    nil];
+    }
+    
+    NSError *error = [NSError errorWithDomain:SBJSONErrorDomain code:code userInfo:userInfo];
+
+    [self willChangeValueForKey:@"errorTrace"];
+    [errorTrace addObject:error];
+    [self didChangeValueForKey:@"errorTrace"];
+}
+
+- (void)clearErrorTrace {
+    [self willChangeValueForKey:@"errorTrace"];
+    [errorTrace release];
+    errorTrace = nil;
+    [self didChangeValueForKey:@"errorTrace"];
+}
+
+@end

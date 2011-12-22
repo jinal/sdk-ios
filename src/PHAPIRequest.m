@@ -10,7 +10,7 @@
 
 #import "NSObject+QueryComponents.h"
 #import "PHStringUtil.h"
-#import "SBJsonParser.h"
+#import "SBJsonParserPH.h"
 #import "UIDevice+HardwareString.h"
 #import "PHConstants.h"
 
@@ -205,7 +205,7 @@
     
     NSString *responseString = [[NSString alloc] initWithData:_connectionData encoding:NSUTF8StringEncoding];
     
-    SBJsonParser *parser = [[SBJsonParser alloc] init];
+    SBJsonParserPH *parser = [[SBJsonParserPH alloc] init];
     NSDictionary* resultDictionary = [parser objectWithString:responseString];
     [parser release];
     [responseString release];

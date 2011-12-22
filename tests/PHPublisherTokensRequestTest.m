@@ -30,7 +30,7 @@
 
 -(void)testRequestProcessing{
   NSString *responseData = @"{\"response\":{\"redeemed\":[\"TOKEN_0\",\"TOKEN_1\"]}}";
-  SBJsonParser *parser = [SBJsonParser new];
+  SBJsonParserPH *parser = [SBJsonParserPH new];
   NSDictionary *responseDictionary = [parser objectWithString:responseData];
   [parser release];
   
