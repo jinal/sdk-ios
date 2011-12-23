@@ -384,12 +384,15 @@ static NSMutableSet *allContentViews = nil;
     NSString *cacheDirectory = [paths objectAtIndex:0];  
     NSString *filePath = [NSString stringWithFormat:@"%@/%@", cacheDirectory, [filename stringByDeletingPathExtension]];
     if (![fileManager fileExistsAtPath:filePath]){
+
         [_webView loadRequest:[NSURLRequest requestWithURL:self.content.URL
                                             cachePolicy:NSURLRequestUseProtocolCachePolicy//NSURLRequestReturnCacheDataElseLoad
                                             timeoutInterval:PH_REQUEST_TIMEOUT]];
     }
     else{
+
         NSURL *url = [NSURL fileURLWithPath:filePath];
+        PH_LOG(@"Loading URL from pre-fetch cache: %@", url);
         NSMutableURLRequest *reqUrl = [NSMutableURLRequest requestWithURL:url];
         [reqUrl setTimeoutInterval:PH_REQUEST_TIMEOUT];
         [reqUrl setCachePolicy:NSURLRequestUseProtocolCachePolicy];
