@@ -23,6 +23,12 @@
 
 @implementation PHAPIRequest
 
++(void)initialize{
+    if  (self == [PHAPIRequest class]){
+        [PHAPIRequest checkDNSResolution];
+    }
+}
+
 +(NSMutableSet *)allRequests{
     static NSMutableSet *allRequests = nil;
     
@@ -74,7 +80,7 @@ static void cfHostClientCallBack(CFHostRef host, CFHostInfoType typeInfo, const 
     CFRunLoopStop(CFRunLoopGetCurrent());
 }
 
--(void) checkDNSResolution{
++(void) checkDNSResolution{
     // api2.playhaven.com
     NSString *server_address  = [PH_BASE_URL substringFromIndex:7];
     CFHostClientContext api_context = { 0, (void *)(CFStringRef)server_address, CFRetain, CFRelease, NULL };
@@ -115,15 +121,9 @@ static void cfHostClientCallBack(CFHostRef host, CFHostInfoType typeInfo, const 
     }
 }
 
-static bool doneInitDNSLookup = NO;
 -(id)init{
     self = [super init];
     if (self) {
-        if (doneInitDNSLookup == NO)
-        {
-            doneInitDNSLookup = YES;
-            [self checkDNSResolution];
-        }
         [[PHAPIRequest allRequests] addObject:self];
     }
     
