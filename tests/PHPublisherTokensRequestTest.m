@@ -25,12 +25,12 @@
 
 -(void)setUp{
   _didHandleRequest = NO;
-  _request = [[PHPublisherPromosRequest alloc] initWithApp:PUBLISHER_TOKEN secret:PUBLISHER_SECRET delegate:self];
+  _request = [[PHPublisherPromosRequest requestForApp:PUBLISHER_TOKEN secret:PUBLISHER_SECRET delegate:self] retain];
 }
 
 -(void)testRequestProcessing{
   NSString *responseData = @"{\"response\":{\"redeemed\":[\"TOKEN_0\",\"TOKEN_1\"]}}";
-  SBJsonParser *parser = [SBJsonParser new];
+  SBJsonParserPH *parser = [SBJsonParserPH new];
   NSDictionary *responseDictionary = [parser objectWithString:responseData];
   [parser release];
   

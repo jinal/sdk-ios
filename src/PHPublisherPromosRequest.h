@@ -15,6 +15,5 @@
 
 +(id)requestForApp:(NSString *)token secret:(NSString *)secret delegate:(id)delegate;
 
--(id)initWithApp:(NSString *)token secret:(NSString *)secret delegate:(id)delegate;
 
 @end

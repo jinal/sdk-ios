@@ -15,8 +15,10 @@
 #import "PHConstants.h"
 
 @interface PHAPIRequest(Private)
+-(id)initWithApp:(NSString *)token secret:(NSString *)secret;
 +(NSMutableSet *)allRequests;
 -(void)finish;
+-(void)afterConnectionDidFinishLoading;
 @end
 
 @implementation PHAPIRequest
@@ -55,12 +57,22 @@
 }
 
 -(id) initWithApp:(NSString *)token secret:(NSString *)secret{
-  if ((self = [super init])) {
-    _token = [token copy];
-    _secret = [secret copy];
-  }
-  
-  return self;
+    self = [self init];
+    if (self) {
+        _token = [token copy];
+        _secret = [secret copy];
+    }
+    
+    return self;
+}
+
+-(id)init{
+    self = [super init];
+    if (self) {
+        [[PHAPIRequest allRequests] addObject:self];
+    }
+    
+    return  self;
 }
 
 @synthesize token = _token, secret = _secret;
@@ -149,9 +161,6 @@
                                          timeoutInterval:PH_REQUEST_TIMEOUT];
     _connection = [[NSURLConnection alloc] initWithRequest:request delegate:self];
     [_connection start];
-    
-    //REQUEST_RETAIN see REQUEST_RELEASE
-    [[PHAPIRequest allRequests] addObject:self];
   }
 }
 
@@ -189,20 +198,22 @@
 }
 
 -(void)connectionDidFinishLoading:(NSURLConnection *)connection{
-  PH_NOTE(@"Request finished!");
-  if (!!self.delegate) {
+    PH_NOTE(@"Request finished!");
+    if ([self.delegate respondsToSelector:@selector(requestDidFinishLoading:)]) {
+        [self.delegate performSelector:@selector(requestDidFinishLoading:) withObject:self withObject:nil];
+    }
+    
     NSString *responseString = [[NSString alloc] initWithData:_connectionData encoding:NSUTF8StringEncoding];
     
-    SBJsonParser *parser = [[SBJsonParser alloc] init];
+    SBJsonParserPH *parser = [[SBJsonParserPH alloc] init];
     NSDictionary* resultDictionary = [parser objectWithString:responseString];
-    [self processRequestResponse:resultDictionary];
-    
     [parser release];
     [responseString release];
-  }
-  
-  //REQUEST_RELEASE see REQUEST_RETAIN
-  [self finish];
+
+    [self processRequestResponse:resultDictionary];
+}
+
+-(void)afterConnectionDidFinishLoading{
 }
 
 -(void) connection:(NSURLConnection *)connection didFailWithError:(NSError *)error{
@@ -229,15 +240,18 @@
 }
 
 -(void)didSucceedWithResponse:(NSDictionary *)responseData{
-  if ([self.delegate respondsToSelector:@selector(request:didSucceedWithResponse:)]) {
-    [self.delegate performSelector:@selector(request:didSucceedWithResponse:) withObject:self withObject:responseData];
-  }
+    if ([self.delegate respondsToSelector:@selector(request:didSucceedWithResponse:)]) {
+        [self.delegate performSelector:@selector(request:didSucceedWithResponse:) withObject:self withObject:responseData];
+    }
+    
+    [self finish];
 }
 
 -(void)didFailWithError:(NSError *)error{
-  if ([self.delegate respondsToSelector:@selector(request:didFailWithError:)]) {
-    [self.delegate performSelector:@selector(request:didFailWithError:) withObject:self withObject:error];
-  }
+    if ([self.delegate respondsToSelector:@selector(request:didFailWithError:)]) {
+        [self.delegate performSelector:@selector(request:didFailWithError:) withObject:self withObject:error];
+    }
+    [self finish];
 }
 
 @end

@@ -9,6 +9,14 @@
 #import "PHPublisherMetadataRequest.h"
 #import "PHConstants.h"
 
+@interface PHAPIRequest(Private)
+-(id)initWithApp:(NSString *)token secret:(NSString *)secret;
+@end
+
+@interface PHPublisherMetadataRequest(Private)
+-(id)initWithApp:(NSString *)token secret:(NSString *)secret placement:(NSString *)placement delegate:(id)delegate;
+@end
+
 @implementation PHPublisherMetadataRequest
 
 +(id)requestForApp:(NSString *)token secret:(NSString *)secret placement:(NSString *)placement delegate:(id)delegate{

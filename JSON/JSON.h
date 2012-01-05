@@ -48,14 +48,5 @@
 // This setting of 1 is best if you copy the source into your project. 
 // The build transforms the 1 to a 0 when building the framework and static lib.
 
-#if 1
-
 #import "SBJsonParser.h"
 #import "SBJsonWriter.h"
-
-#else
-
-#import <JSON/SBJsonParser.h>
-#import <JSON/SBJsonWriter.h>
-
-#endif
