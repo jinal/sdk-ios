@@ -194,8 +194,14 @@
 }
 
 -(void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data{
-  [_connectionData appendData:data];
-  //_connectionData = [[NSMutableData alloc] initWithData:[@"{ \"errobj\": null, \"response\": { \"id\": \"e690da767f7487e82a072446843e675e97acc5d1\", \"annoucement\": \"http://media.playhaven.com/content-templates/e690da767f7487e82a072446843e675e97acc5d1/html/announcement.html.gz\", \"more_games\": \"http://media.playhaven.com/content-templates/e690da767f7487e82a072446843e675e97acc5d1/html/more-games.html.gz\", \"gow\": \"http://media.playhaven.com/content-templates/e690da767f7487e82a072446843e675e97acc5d1/html/gow.html.gz\", \"promo\": \"http://media.playhaven.com/content-templates/e690da767f7487e82a072446843e675e97acc5d1/html/promo.html.gz\" }, \"error\": null }" dataUsingEncoding:NSUTF8StringEncoding]];
+    
+    [_connectionData appendData:data];
+    
+    //_connectionData = [[NSMutableData alloc] initWithData:[@"{ \"errobj\": null, \"response\": { \"precache\": [ \"http://media.playhaven.com/content-templates/e690da767f7487e82a072446843e675e97acc5d1/html/announcement.html.gz\", \"http://media.playhaven.com/content-templates/e690da767f7487e82a072446843e675e97acc5d1/html/more-games.html.gz\", \"http://media.playhaven.com/content-templates/e690da767f7487e82a072446843e675e97acc5d1/html/gow.html.gz\", \"http://media.playhaven.com/content-templates/e690da767f7487e82a072446843e675e97acc5d1/html/promo.html.gz\" ] }, \"error\": null }" dataUsingEncoding:NSUTF8StringEncoding]];
+
+    // Not also need away for the developer to control when the pre-cached URL selector is called.
+    // The array of URL strings will be returned in the open request. Have a selector the developer
+    // can call to start the background task of caching these URLs'?
 }
 
 -(void)connectionDidFinishLoading:(NSURLConnection *)connection{

@@ -378,6 +378,8 @@ static NSMutableSet *allContentViews = nil;
     PH_LOG(@"Loading content unit template: %@", self.content.URL);
     [_webView stopLoading];
 
+    // NOTE: Update this code to work with hash key file names
+
     NSFileManager *fileManager = [[NSFileManager alloc] init];
     NSString *filename = [[self.content.URL path] lastPathComponent];
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
@@ -424,7 +426,7 @@ static NSMutableSet *allContentViews = nil;
     NSURL *url = request.URL;
     NSString *urlPath;
     if ([url host] == nil) {
-        urlPath = [NSString stringWithFormat:@"%@://%@", [url scheme], [url path]];
+        //urlPath = [NSString stringWithFormat:@"%@://%@", [url scheme], [url path]];
         return YES;
     }
     else

@@ -17,9 +17,6 @@
    * This is an alternate implementation which allows you you get response 
    * data from API requests. This isn't necessary for most developers.
    */
-
-  // Initializes pre-fetching and webview caching
-  [PHPublisherOpenRequest phCacheInitialize];
     
   PHPublisherOpenRequest * request = [PHPublisherOpenRequest requestForApp:self.token secret:self.secret];
   request.delegate = self;

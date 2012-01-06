@@ -75,6 +75,15 @@ NSError *PHCreateError(PHErrorType errorType);
 int PHNetworkStatus(void);
 
 
+// Caching constant definitions
+//
+#define PH_PREFETCH_URL_PLIST @"prefetchCache.plist"
+
+#define PH_MAX_CONCURRENT_OPERATIONS    2
+
+#define PH_MAX_SIZE_MEMORY_CACHE        1024*1024          // 1MB mem cache
+#define PH_MAX_SIZE_FILESYSTEM_CACHE    1024*1024*10       // 10MB disk cache
+
 //
 // Play Haven default images
 //

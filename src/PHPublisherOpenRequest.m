@@ -9,9 +9,8 @@
 #import "PHPublisherOpenRequest.h"
 #import "PHConstants.h"
 #import "SDURLCache.h"
-#import "SBJsonParser.h"
-
-static BOOL initialized = NO;
+#import "PHUrlPrefetchOperation.h"
+#import "SDURLCache.h"
 
 @implementation PHPublisherOpenRequest
 
@@ -19,68 +18,117 @@ static BOOL initialized = NO;
   return PH_URL(/v3/publisher/open/);
 }
 
-+(void)phCacheInitialize
-{
-    if (initialized)
-        return;
-
-    initialized = YES;
-    SDURLCache *urlCache = [[SDURLCache alloc] initWithMemoryCapacity:0//1024*1024          // 1MB mem cache
-                                               diskCapacity:1024*1024*10                    // 10MB disk cache
-                                               diskPath:[SDURLCache defaultCachePath]];
-    [NSURLCache setSharedURLCache:urlCache];
-    //[[NSURLCache sharedURLCache] removeAllCachedResponses];
-    [urlCache release];
-}
-
--(void)storePrefetchUrls:(NSDictionary *)urls directory:(NSString *)cacheDirectory
-{
-    NSEnumerator *keyEnum = [urls keyEnumerator];
-    id key;
-    while ((key = [keyEnum nextObject])){
-
-        if ([(NSString *)key isEqualToString:@"precache"])
-            return;
-        if (![(NSString *)key isEqualToString:@"id"]){
-            
-            NSString *urlString = [urls objectForKey:key];
-            NSURL *url = [NSURL URLWithString:urlString];
-            NSData *urlData = [NSData dataWithContentsOfURL:url];
-            if (urlData){
-
-                NSString *filename = [[url path] lastPathComponent];
-                NSString *filePath = [NSString stringWithFormat:@"%@/%@", cacheDirectory, [filename stringByDeletingPathExtension]];
-                [urlData writeToFile:filePath atomically:YES];
-            }
-        }
++(void)initialize{
+    if  (self == [PHPublisherOpenRequest class]){
+        // Initializes pre-fetching and webview caching
+        SDURLCache *urlCache = [[SDURLCache alloc] initWithMemoryCapacity:PH_MAX_SIZE_MEMORY_CACHE
+                                                        diskCapacity:PH_MAX_SIZE_FILESYSTEM_CACHE
+                                                        diskPath:[SDURLCache defaultCachePath]];
+        [NSURLCache setSharedURLCache:urlCache];
+        //[[NSURLCache sharedURLCache] removeAllCachedResponses];
+        [urlCache release];
     }
 }
+
+-(id)init{
+    self = [super init];
+    if (self) {
+        prefetchQueue = [[NSOperationQueue alloc] init];
+        [prefetchQueue setMaxConcurrentOperationCount:PH_MAX_CONCURRENT_OPERATIONS];
+    }
+    
+    return  self;
+}
+
+-(NSString *)getCacheDirectory{
+    
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
+    return [paths objectAtIndex:0];
+}
+
+-(NSString *)getCachePlistFile{
+    
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
+    NSString *cacheDirectory = [paths objectAtIndex:0];
+    return [NSString stringWithFormat:@"%@/%@", cacheDirectory, PH_PREFETCH_URL_PLIST];
+}
+
+-(void)prefetchUrls:(NSDictionary *)urls directory:(NSString *)cacheDirectory{
+    
+    NSArray *urlArray = (NSArray *)[urls objectForKey:@"precache"];
+    for (NSString *urlString in urlArray){
+
+        NSURL *url = [NSURL URLWithString:urlString];
+        PHUrlPrefetchOperation *urlpo = [[PHUrlPrefetchOperation alloc] initWithURL:url];
+        [prefetchQueue addOperation:urlpo];
+        [urlpo release];
+    }
+}
+
+#pragma mark - PHAPIRequest response delegate
 
 -(void)didSucceedWithResponse:(NSDictionary *)responseData{
 
     if ([responseData count] > 0){
-        
-        NSArray *paths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
-        NSString *cacheDirectory = [paths objectAtIndex:0];
-        NSString *cacheInfoPath = [NSString stringWithFormat:@"%@/%@", cacheDirectory, @"prefetchCache.plist"];
-        NSFileManager *fileManager = [[NSFileManager alloc] init];
-        if (![fileManager fileExistsAtPath:cacheInfoPath]){
-            
-            [responseData writeToFile:cacheInfoPath atomically:YES];
-            [self storePrefetchUrls:responseData directory:cacheDirectory];
-        }
-        else{
 
-            NSDictionary *localPrefetchInfo = [[NSDictionary alloc] initWithContentsOfFile:cacheInfoPath];
-            NSString *localId = [localPrefetchInfo objectForKey:@"id"];
-            NSString *networkId = [responseData objectForKey:@"id"];
-            if (![localId isEqualToString:networkId])
-                [self storePrefetchUrls:responseData directory:cacheDirectory];
+        NSString *cachePlist = [self getCachePlistFile];
+        NSFileManager *fileManager = [[NSFileManager alloc] init];
+        if ([fileManager fileExistsAtPath:cachePlist]){
+
+            [fileManager removeItemAtPath:cachePlist error:NULL];
         }
+        [responseData writeToFile:cachePlist atomically:YES];
+        [self prefetchUrls:responseData directory:cachePlist];
         [fileManager release];
     }
 
     [super didSucceedWithResponse:responseData];
+}
+
+#pragma mark - Download precache URL selectors
+
+-(void) downloadPrefetchURLs{
+    
+    NSString *cachePlist = [self getCachePlistFile];
+    NSMutableDictionary *prefetchUrlDictionary = [[[NSMutableDictionary alloc] initWithContentsOfFile:cachePlist] autorelease];
+    NSArray *urlArray = (NSArray *)[prefetchUrlDictionary objectForKey:@"precache"];
+    for (NSString *urlString in urlArray){
+        
+        NSURL *url = [NSURL URLWithString:urlString];
+        PHUrlPrefetchOperation *urlpo = [[PHUrlPrefetchOperation alloc] initWithURL:url];
+        [prefetchQueue addOperation:urlpo];
+        [urlpo release];
+    }
+}
+
+-(void) cancelPrefetchDownload{
+    [prefetchQueue cancelAllOperations];
+}
+
+-(void) clearPrefetchCache{
+
+    NSString *cachePlist = [self getCachePlistFile];
+    NSMutableDictionary *prefetchUrlDictionary = [[[NSMutableDictionary alloc] initWithContentsOfFile:cachePlist] autorelease];
+    NSArray *urlArray = (NSArray *)[prefetchUrlDictionary objectForKey:@"precache"];
+    NSFileManager *fileManager = [[[NSFileManager alloc] init] autorelease];
+    for (NSString *urlString in urlArray){
+
+        NSURL *url = [NSURL URLWithString:urlString];
+        NSString *cacheKey = [SDURLCache cacheKeyForURL:url];
+        NSString *cacheFilePath = [[self getCacheDirectory] stringByAppendingPathComponent:cacheKey];
+        if ([fileManager fileExistsAtPath:cacheFilePath]){
+            
+            [fileManager removeItemAtPath:cacheFilePath error:NULL];
+        }
+    }
+}
+
+#pragma mark - NSObject
+
+- (void)dealloc{
+    
+    [prefetchQueue release], prefetchQueue = nil;
+    [super dealloc];
 }
 
 @end

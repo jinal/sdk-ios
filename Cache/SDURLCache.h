@@ -50,4 +50,9 @@
  */
 - (BOOL)isCached:(NSURL *)url;
 
+/*
+ * Returns the hash key for the url
+*/
++ (NSString *)cacheKeyForURL:(NSURL *)url;
+
 @end
