@@ -15,12 +15,6 @@
 @synthesize prefetchURL;
 @synthesize cacheDirectory;
 
-+(NSString *)getCacheDirectory{
-    
-    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
-    return [paths objectAtIndex:0];
-}
-
 +(NSString *)getCachePlistFile{
     
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
@@ -55,7 +49,7 @@
 
         NSFileManager *fileManager = [[[NSFileManager alloc] init] autorelease];
         NSString *cacheKey = [SDURLCache cacheKeyForURL:prefetchURL];
-        NSString *cacheFilePath = [[PHUrlPrefetchOperation getCacheDirectory] stringByAppendingPathComponent:cacheKey];
+        NSString *cacheFilePath = [[SDURLCache defaultCachePath] stringByAppendingPathComponent:cacheKey];
         if ([fileManager fileExistsAtPath:cacheFilePath]){
             
             [fileManager removeItemAtPath:cacheFilePath error:NULL];

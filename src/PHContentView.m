@@ -382,7 +382,7 @@ static NSMutableSet *allContentViews = nil;
 
     NSFileManager *fileManager = [[NSFileManager alloc] init];
     NSString *cacheKey = [SDURLCache cacheKeyForURL:self.content.URL];
-    NSString *cacheFilePath = [[PHUrlPrefetchOperation getCacheDirectory] stringByAppendingPathComponent:cacheKey];
+    NSString *cacheFilePath = [[SDURLCache defaultCachePath] stringByAppendingPathComponent:cacheKey];
     if (![fileManager fileExistsAtPath:cacheFilePath]){
 
         [_webView loadRequest:[NSURLRequest requestWithURL:self.content.URL

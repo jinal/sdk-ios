@@ -102,7 +102,7 @@
 
         NSURL *url = [NSURL URLWithString:urlString];
         NSString *cacheKey = [SDURLCache cacheKeyForURL:url];
-        NSString *cacheFilePath = [[PHUrlPrefetchOperation getCacheDirectory] stringByAppendingPathComponent:cacheKey];
+        NSString *cacheFilePath = [[SDURLCache defaultCachePath] stringByAppendingPathComponent:cacheKey];
         if ([fileManager fileExistsAtPath:cacheFilePath]){
             
             [fileManager removeItemAtPath:cacheFilePath error:NULL];
