@@ -17,9 +17,7 @@
 
 +(NSString *)getCachePlistFile{
     
-    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
-    NSString *cacheDirectory = [paths objectAtIndex:0];
-    return [NSString stringWithFormat:@"%@/%@", cacheDirectory, PH_PREFETCH_URL_PLIST];
+    return [[SDURLCache defaultCachePath] stringByAppendingPathComponent:PH_PREFETCH_URL_PLIST];
 }
 
 - (id)initWithURL:(NSURL*)url{
