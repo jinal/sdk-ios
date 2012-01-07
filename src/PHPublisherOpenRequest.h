@@ -12,9 +12,6 @@
     NSOperationQueue *prefetchQueue;
 }
 
--(NSString *)getCacheDirectory;
--(NSString *)getCachePlistFile;
-
 -(void) downloadPrefetchURLs;
 -(void) cancelPrefetchDownload;
 

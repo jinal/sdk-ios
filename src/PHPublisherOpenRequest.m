@@ -40,19 +40,6 @@
     return  self;
 }
 
--(NSString *)getCacheDirectory{
-    
-    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
-    return [paths objectAtIndex:0];
-}
-
--(NSString *)getCachePlistFile{
-    
-    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
-    NSString *cacheDirectory = [paths objectAtIndex:0];
-    return [NSString stringWithFormat:@"%@/%@", cacheDirectory, PH_PREFETCH_URL_PLIST];
-}
-
 -(void)prefetchUrls:(NSDictionary *)urls directory:(NSString *)cacheDirectory{
     
     NSArray *urlArray = (NSArray *)[urls objectForKey:@"precache"];
@@ -71,7 +58,7 @@
 
     if ([responseData count] > 0){
 
-        NSString *cachePlist = [self getCachePlistFile];
+        NSString *cachePlist = [PHUrlPrefetchOperation getCachePlistFile];
         NSFileManager *fileManager = [[NSFileManager alloc] init];
         if ([fileManager fileExistsAtPath:cachePlist]){
 
@@ -89,7 +76,7 @@
 
 -(void) downloadPrefetchURLs{
     
-    NSString *cachePlist = [self getCachePlistFile];
+    NSString *cachePlist = [PHUrlPrefetchOperation getCachePlistFile];
     NSMutableDictionary *prefetchUrlDictionary = [[[NSMutableDictionary alloc] initWithContentsOfFile:cachePlist] autorelease];
     NSArray *urlArray = (NSArray *)[prefetchUrlDictionary objectForKey:@"precache"];
     for (NSString *urlString in urlArray){
@@ -107,7 +94,7 @@
 
 -(void) clearPrefetchCache{
 
-    NSString *cachePlist = [self getCachePlistFile];
+    NSString *cachePlist = [PHUrlPrefetchOperation getCachePlistFile];
     NSMutableDictionary *prefetchUrlDictionary = [[[NSMutableDictionary alloc] initWithContentsOfFile:cachePlist] autorelease];
     NSArray *urlArray = (NSArray *)[prefetchUrlDictionary objectForKey:@"precache"];
     NSFileManager *fileManager = [[[NSFileManager alloc] init] autorelease];
@@ -115,7 +102,7 @@
 
         NSURL *url = [NSURL URLWithString:urlString];
         NSString *cacheKey = [SDURLCache cacheKeyForURL:url];
-        NSString *cacheFilePath = [[self getCacheDirectory] stringByAppendingPathComponent:cacheKey];
+        NSString *cacheFilePath = [[PHUrlPrefetchOperation getCacheDirectory] stringByAppendingPathComponent:cacheKey];
         if ([fileManager fileExistsAtPath:cacheFilePath]){
             
             [fileManager removeItemAtPath:cacheFilePath error:NULL];

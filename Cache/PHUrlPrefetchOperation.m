@@ -8,17 +8,33 @@
 
 #import "PHUrlPrefetchOperation.h"
 #import "PHConstants.h"
+#import "SDURLCache.h"
 
 @implementation PHUrlPrefetchOperation
 
 @synthesize prefetchURL;
 @synthesize cacheDirectory;
 
++(NSString *)getCacheDirectory{
+    
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
+    return [paths objectAtIndex:0];
+}
+
++(NSString *)getCachePlistFile{
+    
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
+    NSString *cacheDirectory = [paths objectAtIndex:0];
+    return [NSString stringWithFormat:@"%@/%@", cacheDirectory, PH_PREFETCH_URL_PLIST];
+}
+
 - (id)initWithURL:(NSURL*)url{
 
-    if (![super init]) return nil;
-    [self setPrefetchURL:url];
-    return self;
+    if ((self = [super init])) {
+        [self setPrefetchURL:url];
+    }
+    
+    return  self;
 }
 
 - (void)dealloc{
@@ -37,11 +53,14 @@
     NSData *urlData = [NSData dataWithContentsOfURL:prefetchURL];
     if (urlData){
 
-        // NOTE: Make the filename the URL hash value so can find eay in SDURLCache when looking for it.
-        // Same when do content URL. See loadTemplate in PHContentView.m
-        NSString *filename = [[prefetchURL path] lastPathComponent];
-        NSString *filePath = [NSString stringWithFormat:@"%@/%@", cacheDirectory, [filename stringByDeletingPathExtension]];
-        [urlData writeToFile:filePath atomically:YES];
+        NSFileManager *fileManager = [[[NSFileManager alloc] init] autorelease];
+        NSString *cacheKey = [SDURLCache cacheKeyForURL:prefetchURL];
+        NSString *cacheFilePath = [[PHUrlPrefetchOperation getCacheDirectory] stringByAppendingPathComponent:cacheKey];
+        if ([fileManager fileExistsAtPath:cacheFilePath]){
+            
+            [fileManager removeItemAtPath:cacheFilePath error:NULL];
+        }
+        [urlData writeToFile:cacheFilePath atomically:YES];
     }
 }
 

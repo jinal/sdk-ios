@@ -19,4 +19,7 @@
 
 - (id)initWithURL:(NSURL*)url;
 
++(NSString *)getCacheDirectory;
++(NSString *)getCachePlistFile;
+
 @end

@@ -12,6 +12,8 @@
 #import "NSObject+QueryComponents.h"
 #import "JSON.h"
 #import "PHConstants.h"
+#import "SDURLCache.h"
+#import "PHUrlPrefetchOperation.h"
 
 #define MAX_MARGIN 20
 
@@ -378,14 +380,10 @@ static NSMutableSet *allContentViews = nil;
     PH_LOG(@"Loading content unit template: %@", self.content.URL);
     [_webView stopLoading];
 
-    // NOTE: Update this code to work with hash key file names
-
     NSFileManager *fileManager = [[NSFileManager alloc] init];
-    NSString *filename = [[self.content.URL path] lastPathComponent];
-    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
-    NSString *cacheDirectory = [paths objectAtIndex:0];  
-    NSString *filePath = [NSString stringWithFormat:@"%@/%@", cacheDirectory, [filename stringByDeletingPathExtension]];
-    if (![fileManager fileExistsAtPath:filePath]){
+    NSString *cacheKey = [SDURLCache cacheKeyForURL:self.content.URL];
+    NSString *cacheFilePath = [[PHUrlPrefetchOperation getCacheDirectory] stringByAppendingPathComponent:cacheKey];
+    if (![fileManager fileExistsAtPath:cacheFilePath]){
 
         [_webView loadRequest:[NSURLRequest requestWithURL:self.content.URL
                                             cachePolicy:NSURLRequestUseProtocolCachePolicy//NSURLRequestReturnCacheDataElseLoad
@@ -393,7 +391,7 @@ static NSMutableSet *allContentViews = nil;
     }
     else{
 
-        NSURL *url = [NSURL fileURLWithPath:filePath];
+        NSURL *url = [NSURL fileURLWithPath:cacheFilePath];
         PH_LOG(@"Loading URL from pre-fetch cache: %@", url);
         NSMutableURLRequest *reqUrl = [NSMutableURLRequest requestWithURL:url];
         [reqUrl setTimeoutInterval:PH_REQUEST_TIMEOUT];
