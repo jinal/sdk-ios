@@ -31,6 +31,8 @@
 +(id)requestForApp:(NSString *)token secret:(NSString *)secret;
 +(void)cancelAllRequestsWithDelegate:(id) delegate;
 
++(void) checkDNSResolution;
+
 @property (nonatomic, copy) NSString *urlPath;
 @property (nonatomic, readonly) NSURL *URL;
 @property (nonatomic, readonly) NSString *token;
