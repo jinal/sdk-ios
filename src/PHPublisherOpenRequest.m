@@ -151,8 +151,6 @@
         
         if ([[PHPublisherOpenRequest prefetchOperations].operations count] == 0){
 
-            NSLog(@"queue has completed");
-
             [[PHPublisherOpenRequest prefetchOperations] release];
 
             //REQUEST_RELEASE see REQUEST_RETAIN

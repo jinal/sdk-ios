@@ -16,7 +16,18 @@
 @synthesize cacheDirectory;
 
 +(NSString *)getCachePlistFile{
-    
+
+    // Make sure directory exists
+    NSFileManager *fileManager = [[NSFileManager alloc] init];
+    if (![fileManager fileExistsAtPath:[SDURLCachePH defaultCachePath]])
+    {
+        [fileManager createDirectoryAtPath:[SDURLCachePH defaultCachePath]
+               withIntermediateDirectories:YES
+                                attributes:nil
+                                     error:NULL];
+    }
+    [fileManager release];
+
     return [[SDURLCachePH defaultCachePath] stringByAppendingPathComponent:PH_PREFETCH_URL_PLIST];
 }
 
@@ -50,11 +61,13 @@
         NSFileManager *fileManager = [[[NSFileManager alloc] init] autorelease];
         NSString *cacheKey = [SDURLCachePH cacheKeyForURL:prefetchURL];
         NSString *cacheFilePath = [[SDURLCachePH defaultCachePath] stringByAppendingPathComponent:cacheKey];
-        if ([fileManager fileExistsAtPath:cacheFilePath]){
+        NSString *htmlAppendedUrlString = [cacheFilePath stringByAppendingString:@".html"];
+        if ([fileManager fileExistsAtPath:htmlAppendedUrlString]){
             
-            [fileManager removeItemAtPath:cacheFilePath error:NULL];
+            [fileManager removeItemAtPath:htmlAppendedUrlString error:NULL];
         }
-        [urlData writeToFile:cacheFilePath atomically:YES];
+        PH_LOG(@"Writing prefetch to file: %@", htmlAppendedUrlString);
+        [urlData writeToFile:htmlAppendedUrlString atomically:YES];
     }
 
     [pool drain];
