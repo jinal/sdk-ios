@@ -11,6 +11,11 @@
 #import "SDURLCache.h"
 #import "PHURLPrefetchOperation.h"
 
+@interface PHPublisherOpenRequest(Private)
++(NSOperationQueue *)prefetchOperations;
++(NSMutableSet *)allPrefetchs;
+@end
+
 @implementation PHPublisherOpenRequest
 
 -(NSString *)urlPath{
@@ -95,14 +100,17 @@
 +(void) downloadPrefetchURLs{
     
     NSString *cachePlist = [PHURLPrefetchOperation getCachePlistFile];
-    NSMutableDictionary *prefetchUrlDictionary = [[[NSMutableDictionary alloc] initWithContentsOfFile:cachePlist] autorelease];
-    NSArray *urlArray = (NSArray *)[prefetchUrlDictionary objectForKey:@"precache"];
-    for (NSString *urlString in urlArray){
+    if ([[[[NSFileManager alloc] init] autorelease] fileExistsAtPath:cachePlist]){
         
-        NSURL *url = [NSURL URLWithString:urlString];
-        PHURLPrefetchOperation *urlpo = [[PHURLPrefetchOperation alloc] initWithURL:url];
-        [[PHPublisherOpenRequest prefetchOperations] addOperation:urlpo];
-        [urlpo release];
+        NSMutableDictionary *prefetchUrlDictionary = [[[NSMutableDictionary alloc] initWithContentsOfFile:cachePlist] autorelease];
+        NSArray *urlArray = (NSArray *)[prefetchUrlDictionary objectForKey:@"precache"];
+        for (NSString *urlString in urlArray){
+            
+            NSURL *url = [NSURL URLWithString:urlString];
+            PHURLPrefetchOperation *urlpo = [[PHURLPrefetchOperation alloc] initWithURL:url];
+            [[PHPublisherOpenRequest prefetchOperations] addOperation:urlpo];
+            [urlpo release];
+        }
     }
 }
 

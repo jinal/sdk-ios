@@ -12,8 +12,6 @@
 
 }
 
-+(NSOperationQueue *)prefetchOperations;
-
 +(void) downloadPrefetchURLs;
 +(void) cancelPrefetchDownload;
 +(void) clearPrefetchCache;
