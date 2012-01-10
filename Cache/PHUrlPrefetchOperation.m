@@ -6,18 +6,18 @@
 //  Copyright (c) 2012 Play Haven. All rights reserved.
 //
 
-#import "PHUrlPrefetchOperation.h"
+#import "PHURLPrefetchOperation.h"
 #import "PHConstants.h"
 #import "SDURLCache.h"
 
-@implementation PHUrlPrefetchOperation
+@implementation PHURLPrefetchOperation
 
 @synthesize prefetchURL;
 @synthesize cacheDirectory;
 
 +(NSString *)getCachePlistFile{
     
-    return [[SDURLCache defaultCachePath] stringByAppendingPathComponent:PH_PREFETCH_URL_PLIST];
+    return [[SDURLCachePH defaultCachePath] stringByAppendingPathComponent:PH_PREFETCH_URL_PLIST];
 }
 
 - (id)initWithURL:(NSURL*)url{
@@ -37,6 +37,8 @@
 
 - (void)main{
 
+    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+
     if (cacheDirectory == nil){
         NSArray *paths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
         cacheDirectory = [paths objectAtIndex:0];
@@ -46,14 +48,16 @@
     if (urlData){
 
         NSFileManager *fileManager = [[[NSFileManager alloc] init] autorelease];
-        NSString *cacheKey = [SDURLCache cacheKeyForURL:prefetchURL];
-        NSString *cacheFilePath = [[SDURLCache defaultCachePath] stringByAppendingPathComponent:cacheKey];
+        NSString *cacheKey = [SDURLCachePH cacheKeyForURL:prefetchURL];
+        NSString *cacheFilePath = [[SDURLCachePH defaultCachePath] stringByAppendingPathComponent:cacheKey];
         if ([fileManager fileExistsAtPath:cacheFilePath]){
             
             [fileManager removeItemAtPath:cacheFilePath error:NULL];
         }
         [urlData writeToFile:cacheFilePath atomically:YES];
     }
+
+    [pool drain];
 }
 
 @end

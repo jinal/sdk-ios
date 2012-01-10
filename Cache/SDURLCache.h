@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-@interface SDURLCache : NSURLCache
+@interface SDURLCachePH : NSURLCache
 {
     @private
     NSString *diskCachePath;

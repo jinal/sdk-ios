@@ -32,9 +32,7 @@
 -(void)request:(PHAPIRequest *)request didSucceedWithResponse:(NSDictionary *)responseData{
     NSString *message = [NSString stringWithFormat:@"✔ Success with response: %@",responseData];
     [self addMessage:message];
-    
-    NSLog(@"%@", message);
-    
+
     [self finishRequest];
 }
 

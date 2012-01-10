@@ -381,12 +381,12 @@ static NSMutableSet *allContentViews = nil;
     [_webView stopLoading];
 
     NSFileManager *fileManager = [[NSFileManager alloc] init];
-    NSString *cacheKey = [SDURLCache cacheKeyForURL:self.content.URL];
-    NSString *cacheFilePath = [[SDURLCache defaultCachePath] stringByAppendingPathComponent:cacheKey];
+    NSString *cacheKey = [SDURLCachePH cacheKeyForURL:self.content.URL];
+    NSString *cacheFilePath = [[SDURLCachePH defaultCachePath] stringByAppendingPathComponent:cacheKey];
     if (![fileManager fileExistsAtPath:cacheFilePath]){
 
         [_webView loadRequest:[NSURLRequest requestWithURL:self.content.URL
-                                            cachePolicy:NSURLRequestUseProtocolCachePolicy//NSURLRequestReturnCacheDataElseLoad
+                                            cachePolicy:NSURLRequestUseProtocolCachePolicy
                                             timeoutInterval:PH_REQUEST_TIMEOUT]];
     }
     else{
@@ -397,8 +397,6 @@ static NSMutableSet *allContentViews = nil;
         [reqUrl setTimeoutInterval:PH_REQUEST_TIMEOUT];
         [reqUrl setCachePolicy:NSURLRequestUseProtocolCachePolicy];
         [_webView loadRequest:reqUrl];
-        // If this fails, we should go to network. Have a variable and if error returned
-        // redo using network URL (self.content.URL)
     }
     [fileManager release];
 }
@@ -424,7 +422,8 @@ static NSMutableSet *allContentViews = nil;
     NSURL *url = request.URL;
     NSString *urlPath;
     if ([url host] == nil) {
-        //urlPath = [NSString stringWithFormat:@"%@://%@", [url scheme], [url path]];
+        // This can be nil if loading files from the local cache. The url host being nil caused the urlPath
+        // not to be generated properly and the UIWebview load to fail.
         return YES;
     }
     else

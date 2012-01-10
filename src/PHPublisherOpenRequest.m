@@ -9,8 +9,7 @@
 #import "PHPublisherOpenRequest.h"
 #import "PHConstants.h"
 #import "SDURLCache.h"
-#import "PHUrlPrefetchOperation.h"
-#import "SDURLCache.h"
+#import "PHURLPrefetchOperation.h"
 
 @implementation PHPublisherOpenRequest
 
@@ -18,14 +17,36 @@
   return PH_URL(/v3/publisher/open/);
 }
 
++(NSOperationQueue *)prefetchOperations{
+    static NSOperationQueue *prefetchQueue = nil;
+
+    if (prefetchQueue == nil) {
+        prefetchQueue = [[NSOperationQueue alloc] init];
+        [prefetchQueue setMaxConcurrentOperationCount:PH_MAX_CONCURRENT_OPERATIONS];
+    }
+
+    return prefetchQueue;
+}
+
++(NSMutableSet *)allPrefetchs{
+    static NSMutableSet *allPrefetchs = nil;
+    
+    if (allPrefetchs == nil) {
+        allPrefetchs = [[NSMutableSet alloc] init];
+    }
+    
+    return allPrefetchs;
+}
+
+
 +(void)initialize{
+
     if  (self == [PHPublisherOpenRequest class]){
         // Initializes pre-fetching and webview caching
-        SDURLCache *urlCache = [[SDURLCache alloc] initWithMemoryCapacity:PH_MAX_SIZE_MEMORY_CACHE
+        SDURLCachePH *urlCache = [[SDURLCachePH alloc] initWithMemoryCapacity:PH_MAX_SIZE_MEMORY_CACHE
                                                         diskCapacity:PH_MAX_SIZE_FILESYSTEM_CACHE
-                                                        diskPath:[SDURLCache defaultCachePath]];
+                                                        diskPath:[SDURLCachePH defaultCachePath]];
         [NSURLCache setSharedURLCache:urlCache];
-        //[[NSURLCache sharedURLCache] removeAllCachedResponses];
         [urlCache release];
     }
 }
@@ -33,23 +54,11 @@
 -(id)init{
     self = [super init];
     if (self) {
-        prefetchQueue = [[NSOperationQueue alloc] init];
-        [prefetchQueue setMaxConcurrentOperationCount:PH_MAX_CONCURRENT_OPERATIONS];
+        [[PHPublisherOpenRequest allPrefetchs] addObject:self];
+        [[PHPublisherOpenRequest allPrefetchs] addObserver:self forKeyPath:@"operations" options:0 context:NULL];
     }
     
     return  self;
-}
-
--(void)prefetchUrls:(NSDictionary *)urls directory:(NSString *)cacheDirectory{
-    
-    NSArray *urlArray = (NSArray *)[urls objectForKey:@"precache"];
-    for (NSString *urlString in urlArray){
-
-        NSURL *url = [NSURL URLWithString:urlString];
-        PHUrlPrefetchOperation *urlpo = [[PHUrlPrefetchOperation alloc] initWithURL:url];
-        [prefetchQueue addOperation:urlpo];
-        [urlpo release];
-    }
 }
 
 #pragma mark - PHAPIRequest response delegate
@@ -58,51 +67,60 @@
 
     if ([responseData count] > 0){
 
-        NSString *cachePlist = [PHUrlPrefetchOperation getCachePlistFile];
+        NSString *cachePlist = [PHURLPrefetchOperation getCachePlistFile];
         NSFileManager *fileManager = [[NSFileManager alloc] init];
         if ([fileManager fileExistsAtPath:cachePlist]){
 
             [fileManager removeItemAtPath:cachePlist error:NULL];
         }
         [responseData writeToFile:cachePlist atomically:YES];
-        [self prefetchUrls:responseData directory:cachePlist];
+
+        NSArray *urlArray = (NSArray *)[responseData objectForKey:@"precache"];
+        for (NSString *urlString in urlArray){
+            
+            NSURL *url = [NSURL URLWithString:urlString];
+            PHURLPrefetchOperation *urlpo = [[PHURLPrefetchOperation alloc] initWithURL:url];
+            [[PHPublisherOpenRequest prefetchOperations] addOperation:urlpo];
+            [urlpo release];
+        }
+
         [fileManager release];
     }
 
     [super didSucceedWithResponse:responseData];
 }
 
-#pragma mark - Download precache URL selectors
+#pragma mark - Precache URL selectors
 
--(void) downloadPrefetchURLs{
++(void) downloadPrefetchURLs{
     
-    NSString *cachePlist = [PHUrlPrefetchOperation getCachePlistFile];
+    NSString *cachePlist = [PHURLPrefetchOperation getCachePlistFile];
     NSMutableDictionary *prefetchUrlDictionary = [[[NSMutableDictionary alloc] initWithContentsOfFile:cachePlist] autorelease];
     NSArray *urlArray = (NSArray *)[prefetchUrlDictionary objectForKey:@"precache"];
     for (NSString *urlString in urlArray){
         
         NSURL *url = [NSURL URLWithString:urlString];
-        PHUrlPrefetchOperation *urlpo = [[PHUrlPrefetchOperation alloc] initWithURL:url];
-        [prefetchQueue addOperation:urlpo];
+        PHURLPrefetchOperation *urlpo = [[PHURLPrefetchOperation alloc] initWithURL:url];
+        [[PHPublisherOpenRequest prefetchOperations] addOperation:urlpo];
         [urlpo release];
     }
 }
 
--(void) cancelPrefetchDownload{
-    [prefetchQueue cancelAllOperations];
++(void) cancelPrefetchDownload{
+    [[PHPublisherOpenRequest prefetchOperations] cancelAllOperations];
 }
 
--(void) clearPrefetchCache{
++(void) clearPrefetchCache{
 
-    NSString *cachePlist = [PHUrlPrefetchOperation getCachePlistFile];
+    NSString *cachePlist = [PHURLPrefetchOperation getCachePlistFile];
     NSMutableDictionary *prefetchUrlDictionary = [[[NSMutableDictionary alloc] initWithContentsOfFile:cachePlist] autorelease];
     NSArray *urlArray = (NSArray *)[prefetchUrlDictionary objectForKey:@"precache"];
     NSFileManager *fileManager = [[[NSFileManager alloc] init] autorelease];
     for (NSString *urlString in urlArray){
 
         NSURL *url = [NSURL URLWithString:urlString];
-        NSString *cacheKey = [SDURLCache cacheKeyForURL:url];
-        NSString *cacheFilePath = [[SDURLCache defaultCachePath] stringByAppendingPathComponent:cacheKey];
+        NSString *cacheKey = [SDURLCachePH cacheKeyForURL:url];
+        NSString *cacheFilePath = [[SDURLCachePH defaultCachePath] stringByAppendingPathComponent:cacheKey];
         if ([fileManager fileExistsAtPath:cacheFilePath]){
             
             [fileManager removeItemAtPath:cacheFilePath error:NULL];
@@ -113,9 +131,28 @@
 #pragma mark - NSObject
 
 - (void)dealloc{
-    
-    [prefetchQueue release], prefetchQueue = nil;
+  
     [super dealloc];
 }
 
+#pragma mark - NSOperationQueue observer
+
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)operation change:(NSDictionary *)change context:(void *)context{
+    
+    if (operation == [PHPublisherOpenRequest prefetchOperations] && [keyPath isEqualToString:@"operations"]){
+        
+        if ([[PHPublisherOpenRequest prefetchOperations].operations count] == 0){
+
+            NSLog(@"queue has completed");
+
+            [[PHPublisherOpenRequest prefetchOperations] release];
+
+            //REQUEST_RELEASE see REQUEST_RETAIN
+            [[PHPublisherOpenRequest allPrefetchs] removeObject:self];
+        }
+    }
+    else{
+        [super observeValueForKeyPath:keyPath ofObject:operation change:change context:context];
+    }
+}
 @end

@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-@interface PHUrlPrefetchOperation : NSOperation{
+@interface PHURLPrefetchOperation : NSOperation{
 
     NSURL *prefetchURL;
     NSString *cacheDirectory;
