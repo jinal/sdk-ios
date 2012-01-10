@@ -55,7 +55,7 @@
     self = [super init];
     if (self) {
         [[PHPublisherOpenRequest allPrefetchs] addObject:self];
-        [[PHPublisherOpenRequest allPrefetchs] addObserver:self forKeyPath:@"operations" options:0 context:NULL];
+        [[PHPublisherOpenRequest prefetchOperations] addObserver:self forKeyPath:@"operations" options:0 context:NULL];
     }
     
     return  self;
