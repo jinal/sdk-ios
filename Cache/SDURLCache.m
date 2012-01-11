@@ -517,13 +517,13 @@ static NSDateFormatter* CreateDateFormatter(NSString *format)
 
                 if (diskResponse)
                 {
-                    PH_LOG(@"Loading URL from cache: %@", request.URL);
+                    PH_LOG(@"Cache hit: %@", cacheKey);
                     return diskResponse;
                 }
             }
         }
     }
-
+    
     return nil;
 }
 
