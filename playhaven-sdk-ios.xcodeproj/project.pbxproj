@@ -63,6 +63,51 @@
 		EA6EA1EF135F6D77000123B0 /* PHPublisherPromosRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = EA6EA1ED135F6D77000123B0 /* PHPublisherPromosRequest.m */; };
 		EA7BC61A13537F8700B4518D /* PHURLLoaderTest.m in Sources */ = {isa = PBXBuildFile; fileRef = EA7BC61813537F8700B4518D /* PHURLLoaderTest.m */; };
 		EA7EE600134D458B00A0ADE6 /* PHContentWebView.m in Sources */ = {isa = PBXBuildFile; fileRef = EA7EE5FE134D458A00A0ADE6 /* PHContentWebView.m */; };
+		EA9AB62014A3B0AA00079704 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D30AB110D05D00D00671497 /* Foundation.framework */; };
+		EA9AB62B14A3B0D500079704 /* SBJsonBase.m in Sources */ = {isa = PBXBuildFile; fileRef = EAB44264134539F4000DA3E9 /* SBJsonBase.m */; };
+		EA9AB62D14A3B0D500079704 /* SBJsonParser.m in Sources */ = {isa = PBXBuildFile; fileRef = EAB44266134539F4000DA3E9 /* SBJsonParser.m */; };
+		EA9AB62F14A3B0D500079704 /* SBJsonWriter.m in Sources */ = {isa = PBXBuildFile; fileRef = EAB44268134539F4000DA3E9 /* SBJsonWriter.m */; };
+		EA9AB63114A3B0D500079704 /* NSObject+QueryComponents.m in Sources */ = {isa = PBXBuildFile; fileRef = EAC53A92134E5F7A00F2F956 /* NSObject+QueryComponents.m */; };
+		EA9AB63314A3B0D500079704 /* UIDevice+HardwareString.m in Sources */ = {isa = PBXBuildFile; fileRef = EA4ABA0F135F859D0062AE77 /* UIDevice+HardwareString.m */; };
+		EA9AB63514A3B0D500079704 /* PHURLLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = EA4C1910134E84D300755983 /* PHURLLoader.m */; };
+		EA9AB63714A3B0D500079704 /* PHAPIRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = EA523DB21343F7BA0057DEA5 /* PHAPIRequest.m */; };
+		EA9AB63914A3B0D500079704 /* PHStringUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = EA523D901343EE790057DEA5 /* PHStringUtil.m */; };
+		EA9AB63B14A3B0D500079704 /* PHConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = EA1799DF14200FAE005F286F /* PHConstants.m */; };
+		EA9AB63E14A3B0D500079704 /* PHPublisherMetadataRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = EA03810E13B26A1A00A31FF7 /* PHPublisherMetadataRequest.m */; };
+		EA9AB64014A3B0D500079704 /* PHNotificationView.m in Sources */ = {isa = PBXBuildFile; fileRef = EA03811513B272C400A31FF7 /* PHNotificationView.m */; };
+		EA9AB64214A3B0D500079704 /* PHNotificationRenderer.m in Sources */ = {isa = PBXBuildFile; fileRef = EA03811A13B298AF00A31FF7 /* PHNotificationRenderer.m */; };
+		EA9AB64414A3B0D500079704 /* PHNotificationBadgeRenderer.m in Sources */ = {isa = PBXBuildFile; fileRef = EA03811E13B2A0F200A31FF7 /* PHNotificationBadgeRenderer.m */; };
+		EA9AB64614A3B0D500079704 /* PHPublisherSubContentRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = EAE0F5FB1385D1120062B950 /* PHPublisherSubContentRequest.m */; };
+		EA9AB64814A3B0D500079704 /* PHContent.m in Sources */ = {isa = PBXBuildFile; fileRef = EAB4429513454F34000DA3E9 /* PHContent.m */; };
+		EA9AB64A14A3B0D500079704 /* PHContentView.m in Sources */ = {isa = PBXBuildFile; fileRef = EA0BB5DD13463C00007F95FA /* PHContentView.m */; };
+		EA9AB64C14A3B0D500079704 /* PHPublisherContentRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = EAED519E134B949D00D0DCB6 /* PHPublisherContentRequest.m */; };
+		EA9AB64E14A3B0D500079704 /* PHContentWebView.m in Sources */ = {isa = PBXBuildFile; fileRef = EA7EE5FE134D458A00A0ADE6 /* PHContentWebView.m */; };
+		EA9AB65014A3B0D500079704 /* PHReward.m in Sources */ = {isa = PBXBuildFile; fileRef = EAB2B44613CBD172006D2391 /* PHReward.m */; };
+		EA9AB65214A3B0D500079704 /* PHPublisherPromosRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = EA6EA1ED135F6D77000123B0 /* PHPublisherPromosRequest.m */; };
+		EA9AB65414A3B0D500079704 /* PHPublisherOpenRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = EA523D8E1343EE790057DEA5 /* PHPublisherOpenRequest.m */; };
+		EA9AB65514A3B2ED00079704 /* JSON.h in Headers */ = {isa = PBXBuildFile; fileRef = EAB4425E134539F4000DA3E9 /* JSON.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		EA9AB65614A3B2ED00079704 /* SBJsonBase.h in Headers */ = {isa = PBXBuildFile; fileRef = EAB44263134539F4000DA3E9 /* SBJsonBase.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		EA9AB65714A3B2ED00079704 /* SBJsonParser.h in Headers */ = {isa = PBXBuildFile; fileRef = EAB44265134539F4000DA3E9 /* SBJsonParser.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		EA9AB65814A3B2ED00079704 /* SBJsonWriter.h in Headers */ = {isa = PBXBuildFile; fileRef = EAB44267134539F4000DA3E9 /* SBJsonWriter.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		EA9AB65914A3B2ED00079704 /* NSObject+QueryComponents.h in Headers */ = {isa = PBXBuildFile; fileRef = EAC53A91134E5F7A00F2F956 /* NSObject+QueryComponents.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		EA9AB65A14A3B2ED00079704 /* UIDevice+HardwareString.h in Headers */ = {isa = PBXBuildFile; fileRef = EA4ABA0E135F859D0062AE77 /* UIDevice+HardwareString.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		EA9AB65B14A3B2ED00079704 /* PHURLLoader.h in Headers */ = {isa = PBXBuildFile; fileRef = EA4C190F134E84D300755983 /* PHURLLoader.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		EA9AB65C14A3B2ED00079704 /* PHAPIRequest.h in Headers */ = {isa = PBXBuildFile; fileRef = EA523DB11343F7BA0057DEA5 /* PHAPIRequest.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		EA9AB65D14A3B2ED00079704 /* PHStringUtil.h in Headers */ = {isa = PBXBuildFile; fileRef = EA523D8F1343EE790057DEA5 /* PHStringUtil.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		EA9AB65E14A3B2ED00079704 /* PHConstants.h in Headers */ = {isa = PBXBuildFile; fileRef = EAB19C8C1357BA390067F27A /* PHConstants.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		EA9AB65F14A3B2ED00079704 /* PlayHavenSDK.h in Headers */ = {isa = PBXBuildFile; fileRef = EA6031CD1361FFD6007B2BF5 /* PlayHavenSDK.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		EA9AB66014A3B2ED00079704 /* PHPublisherMetadataRequest.h in Headers */ = {isa = PBXBuildFile; fileRef = EA03810D13B26A1A00A31FF7 /* PHPublisherMetadataRequest.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		EA9AB66114A3B2ED00079704 /* PHNotificationView.h in Headers */ = {isa = PBXBuildFile; fileRef = EA03811413B272C400A31FF7 /* PHNotificationView.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		EA9AB66214A3B2ED00079704 /* PHNotificationRenderer.h in Headers */ = {isa = PBXBuildFile; fileRef = EA03811913B298AF00A31FF7 /* PHNotificationRenderer.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		EA9AB66314A3B2ED00079704 /* PHNotificationBadgeRenderer.h in Headers */ = {isa = PBXBuildFile; fileRef = EA03811D13B2A0F200A31FF7 /* PHNotificationBadgeRenderer.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		EA9AB66414A3B2ED00079704 /* PHPublisherSubContentRequest.h in Headers */ = {isa = PBXBuildFile; fileRef = EAE0F5FA1385D1120062B950 /* PHPublisherSubContentRequest.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		EA9AB66514A3B2ED00079704 /* PHContent.h in Headers */ = {isa = PBXBuildFile; fileRef = EAB4429413454F34000DA3E9 /* PHContent.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		EA9AB66614A3B2ED00079704 /* PHContentView.h in Headers */ = {isa = PBXBuildFile; fileRef = EA0BB5DC13463C00007F95FA /* PHContentView.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		EA9AB66714A3B2ED00079704 /* PHPublisherContentRequest.h in Headers */ = {isa = PBXBuildFile; fileRef = EAED519D134B949D00D0DCB6 /* PHPublisherContentRequest.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		EA9AB66814A3B2EE00079704 /* PHContentWebView.h in Headers */ = {isa = PBXBuildFile; fileRef = EA7EE5FD134D458A00A0ADE6 /* PHContentWebView.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		EA9AB66914A3B2EE00079704 /* PHReward.h in Headers */ = {isa = PBXBuildFile; fileRef = EAB2B44513CBD172006D2391 /* PHReward.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		EA9AB66A14A3B2EE00079704 /* PHPublisherPromosRequest.h in Headers */ = {isa = PBXBuildFile; fileRef = EA6EA1EC135F6D77000123B0 /* PHPublisherPromosRequest.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		EA9AB66B14A3B2EE00079704 /* PHPublisherOpenRequest.h in Headers */ = {isa = PBXBuildFile; fileRef = EA523D8D1343EE790057DEA5 /* PHPublisherOpenRequest.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		EAB2B44713CBD172006D2391 /* PHReward.m in Sources */ = {isa = PBXBuildFile; fileRef = EAB2B44613CBD172006D2391 /* PHReward.m */; };
 		EAB2B44813CBD172006D2391 /* PHReward.m in Sources */ = {isa = PBXBuildFile; fileRef = EAB2B44613CBD172006D2391 /* PHReward.m */; };
 		EAB4423313452026000DA3E9 /* PHAPIRequestTest.m in Sources */ = {isa = PBXBuildFile; fileRef = EAB4423213452026000DA3E9 /* PHAPIRequestTest.m */; };
@@ -141,6 +186,7 @@
 		EA7BC61813537F8700B4518D /* PHURLLoaderTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PHURLLoaderTest.m; sourceTree = "<group>"; };
 		EA7EE5FD134D458A00A0ADE6 /* PHContentWebView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PHContentWebView.h; sourceTree = "<group>"; };
 		EA7EE5FE134D458A00A0ADE6 /* PHContentWebView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PHContentWebView.m; sourceTree = "<group>"; };
+		EA9AB61F14A3B0AA00079704 /* libPlayHaven.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPlayHaven.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		EAB19C8C1357BA390067F27A /* PHConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PHConstants.h; sourceTree = "<group>"; };
 		EAB2B44513CBD172006D2391 /* PHReward.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PHReward.h; sourceTree = "<group>"; };
 		EAB2B44613CBD172006D2391 /* PHReward.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PHReward.m; sourceTree = "<group>"; };
@@ -189,6 +235,14 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		EA9AB61C14A3B0AA00079704 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				EA9AB62014A3B0AA00079704 /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -197,6 +251,7 @@
 			children = (
 				EA14C6611342604000E228E0 /* Unit Tests.octest */,
 				EA12ABD31365DBB700CB2F24 /* Example.app */,
+				EA9AB61F14A3B0AA00079704 /* libPlayHaven.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -409,6 +464,39 @@
 		};
 /* End PBXGroup section */
 
+/* Begin PBXHeadersBuildPhase section */
+		EA9AB61D14A3B0AA00079704 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				EA9AB65514A3B2ED00079704 /* JSON.h in Headers */,
+				EA9AB65614A3B2ED00079704 /* SBJsonBase.h in Headers */,
+				EA9AB65714A3B2ED00079704 /* SBJsonParser.h in Headers */,
+				EA9AB65814A3B2ED00079704 /* SBJsonWriter.h in Headers */,
+				EA9AB65914A3B2ED00079704 /* NSObject+QueryComponents.h in Headers */,
+				EA9AB65A14A3B2ED00079704 /* UIDevice+HardwareString.h in Headers */,
+				EA9AB65B14A3B2ED00079704 /* PHURLLoader.h in Headers */,
+				EA9AB65C14A3B2ED00079704 /* PHAPIRequest.h in Headers */,
+				EA9AB65D14A3B2ED00079704 /* PHStringUtil.h in Headers */,
+				EA9AB65E14A3B2ED00079704 /* PHConstants.h in Headers */,
+				EA9AB65F14A3B2ED00079704 /* PlayHavenSDK.h in Headers */,
+				EA9AB66014A3B2ED00079704 /* PHPublisherMetadataRequest.h in Headers */,
+				EA9AB66114A3B2ED00079704 /* PHNotificationView.h in Headers */,
+				EA9AB66214A3B2ED00079704 /* PHNotificationRenderer.h in Headers */,
+				EA9AB66314A3B2ED00079704 /* PHNotificationBadgeRenderer.h in Headers */,
+				EA9AB66414A3B2ED00079704 /* PHPublisherSubContentRequest.h in Headers */,
+				EA9AB66514A3B2ED00079704 /* PHContent.h in Headers */,
+				EA9AB66614A3B2ED00079704 /* PHContentView.h in Headers */,
+				EA9AB66714A3B2ED00079704 /* PHPublisherContentRequest.h in Headers */,
+				EA9AB66814A3B2EE00079704 /* PHContentWebView.h in Headers */,
+				EA9AB66914A3B2EE00079704 /* PHReward.h in Headers */,
+				EA9AB66A14A3B2EE00079704 /* PHPublisherPromosRequest.h in Headers */,
+				EA9AB66B14A3B2EE00079704 /* PHPublisherOpenRequest.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
 /* Begin PBXNativeTarget section */
 		EA12ABD21365DBB700CB2F24 /* Example */ = {
 			isa = PBXNativeTarget;
@@ -445,6 +533,23 @@
 			productReference = EA14C6611342604000E228E0 /* Unit Tests.octest */;
 			productType = "com.apple.product-type.bundle";
 		};
+		EA9AB61E14A3B0AA00079704 /* PlayHaven */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = EA9AB62714A3B0AA00079704 /* Build configuration list for PBXNativeTarget "PlayHaven" */;
+			buildPhases = (
+				EA9AB61B14A3B0AA00079704 /* Sources */,
+				EA9AB61C14A3B0AA00079704 /* Frameworks */,
+				EA9AB61D14A3B0AA00079704 /* Headers */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = PlayHaven;
+			productName = PlayHaven;
+			productReference = EA9AB61F14A3B0AA00079704 /* libPlayHaven.a */;
+			productType = "com.apple.product-type.library.static";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -470,6 +575,7 @@
 			targets = (
 				EA14C6601342604000E228E0 /* Unit Tests */,
 				EA12ABD21365DBB700CB2F24 /* Example */,
+				EA9AB61E14A3B0AA00079704 /* PlayHaven */,
 			);
 		};
 /* End PBXProject section */
@@ -583,6 +689,34 @@
 				EA6ADFC81475F22C00DBE60B /* PHPublisherContentRequestTest.m in Sources */,
 				D1E15B7C14981C39001241EE /* SDURLCache.m in Sources */,
 				D118AE5D14B78C3C00C76E2C /* PHUrlPrefetchOperation.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		EA9AB61B14A3B0AA00079704 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				EA9AB62B14A3B0D500079704 /* SBJsonBase.m in Sources */,
+				EA9AB62D14A3B0D500079704 /* SBJsonParser.m in Sources */,
+				EA9AB62F14A3B0D500079704 /* SBJsonWriter.m in Sources */,
+				EA9AB63114A3B0D500079704 /* NSObject+QueryComponents.m in Sources */,
+				EA9AB63314A3B0D500079704 /* UIDevice+HardwareString.m in Sources */,
+				EA9AB63514A3B0D500079704 /* PHURLLoader.m in Sources */,
+				EA9AB63714A3B0D500079704 /* PHAPIRequest.m in Sources */,
+				EA9AB63914A3B0D500079704 /* PHStringUtil.m in Sources */,
+				EA9AB63B14A3B0D500079704 /* PHConstants.m in Sources */,
+				EA9AB63E14A3B0D500079704 /* PHPublisherMetadataRequest.m in Sources */,
+				EA9AB64014A3B0D500079704 /* PHNotificationView.m in Sources */,
+				EA9AB64214A3B0D500079704 /* PHNotificationRenderer.m in Sources */,
+				EA9AB64414A3B0D500079704 /* PHNotificationBadgeRenderer.m in Sources */,
+				EA9AB64614A3B0D500079704 /* PHPublisherSubContentRequest.m in Sources */,
+				EA9AB64814A3B0D500079704 /* PHContent.m in Sources */,
+				EA9AB64A14A3B0D500079704 /* PHContentView.m in Sources */,
+				EA9AB64C14A3B0D500079704 /* PHPublisherContentRequest.m in Sources */,
+				EA9AB64E14A3B0D500079704 /* PHContentWebView.m in Sources */,
+				EA9AB65014A3B0D500079704 /* PHReward.m in Sources */,
+				EA9AB65214A3B0D500079704 /* PHPublisherPromosRequest.m in Sources */,
+				EA9AB65414A3B0D500079704 /* PHPublisherOpenRequest.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -749,6 +883,45 @@
 			};
 			name = Release;
 		};
+		EA9AB62814A3B0AA00079704 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COPY_PHASE_STRIP = NO;
+				DSTROOT = /tmp/PlayHaven.dst;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "PlayHaven/PlayHaven-Prefix.pch";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
+				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+			};
+			name = Debug;
+		};
+		EA9AB62914A3B0AA00079704 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COPY_PHASE_STRIP = YES;
+				DSTROOT = /tmp/PlayHaven.dst;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "PlayHaven/PlayHaven-Prefix.pch";
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
+				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -778,6 +951,14 @@
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
+		};
+		EA9AB62714A3B0AA00079704 /* Build configuration list for PBXNativeTarget "PlayHaven" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				EA9AB62814A3B0AA00079704 /* Debug */,
+				EA9AB62914A3B0AA00079704 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
 		};
 /* End XCConfigurationList section */
 	};

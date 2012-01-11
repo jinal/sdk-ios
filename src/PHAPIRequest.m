@@ -204,21 +204,16 @@
         [self.delegate performSelector:@selector(requestDidFinishLoading:) withObject:self withObject:nil];
     }
     
-    NSString *responseString = [[NSString alloc] initWithData:_connectionData encoding:NSUTF8StringEncoding];
-
-    SBJsonParser *parser = [[SBJsonParser alloc] init];
+    NSString *responseString = [[NSString alloc] initWithData:_connectionData encoding:NSUTF8StringEncoding];    
+    SBJsonParserPH *parser = [[SBJsonParserPH alloc] init];
     NSDictionary* resultDictionary = [parser objectWithString:responseString];
-    [self processRequestResponse:resultDictionary];
-    
     [parser release];
     [responseString release];
-    
-    //REQUEST_RELEASE see REQUEST_RETAIN
-    [self afterConnectionDidFinishLoading];
+
+    [self processRequestResponse:resultDictionary];
 }
 
 -(void)afterConnectionDidFinishLoading{
-    [self finish];
 }
 
 -(void) connection:(NSURLConnection *)connection didFailWithError:(NSError *)error{
@@ -245,15 +240,18 @@
 }
 
 -(void)didSucceedWithResponse:(NSDictionary *)responseData{
-  if ([self.delegate respondsToSelector:@selector(request:didSucceedWithResponse:)]) {
-    [self.delegate performSelector:@selector(request:didSucceedWithResponse:) withObject:self withObject:responseData];
-  }
+    if ([self.delegate respondsToSelector:@selector(request:didSucceedWithResponse:)]) {
+        [self.delegate performSelector:@selector(request:didSucceedWithResponse:) withObject:self withObject:responseData];
+    }
+    
+    [self finish];
 }
 
 -(void)didFailWithError:(NSError *)error{
-  if ([self.delegate respondsToSelector:@selector(request:didFailWithError:)]) {
-    [self.delegate performSelector:@selector(request:didFailWithError:) withObject:self withObject:error];
-  }
+    if ([self.delegate respondsToSelector:@selector(request:didFailWithError:)]) {
+        [self.delegate performSelector:@selector(request:didFailWithError:) withObject:self withObject:error];
+    }
+    [self finish];
 }
 
 @end

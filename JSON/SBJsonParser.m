@@ -29,7 +29,7 @@
 
 #import "SBJsonParser.h"
 
-@interface SBJsonParser ()
+@interface SBJsonParserPH ()
 
 - (BOOL)scanValue:(NSObject **)o;
 
@@ -54,7 +54,7 @@
 #define skipDigits(c) while (isdigit(*c)) c++
 
 
-@implementation SBJsonParser
+@implementation SBJsonParserPH
 
 static char ctrl[0x22];
 

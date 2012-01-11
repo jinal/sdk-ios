@@ -436,17 +436,17 @@ PHPublisherContentDismissType * const PHPublisherNoContentTriggeredDismiss = @"P
 }
 
 -(void)dismissFromButton{
+    PH_NOTE(@"The content unit was dismissed by the user");
     if ([self.contentViews count] > 0) {
         NSArray *contentViews = [self.contentViews copy];
         for (PHContentView *contentView in contentViews) {
-            //WARNING: This causes instances to not be recycled.
             contentView.delegate = nil;
-            [contentView dismissFromButton];
+            [contentView dismiss:NO];
+            
+            [self removeContentView:contentView];
         }
         [contentViews release];
     }
-    
-    PH_NOTE(@"The content unit was dismissed by the user");
         
     if ([self.delegate respondsToSelector:@selector(request:contentDidDismissWithType:)]) {
         [self.delegate performSelector:@selector(request:contentDidDismissWithType:) 
