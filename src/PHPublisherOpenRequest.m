@@ -11,38 +11,11 @@
 #import "SDURLCache.h"
 #import "PHURLPrefetchOperation.h"
 
-@interface PHPublisherOpenRequest(Private)
-+(NSOperationQueue *)prefetchOperations;
-+(NSMutableSet *)allPrefetchs;
+@interface PHAPIRequest(Private)
+-(void)finish;
 @end
 
 @implementation PHPublisherOpenRequest
-
--(NSString *)urlPath{
-  return PH_URL(/v3/publisher/open/);
-}
-
-+(NSOperationQueue *)prefetchOperations{
-    static NSOperationQueue *prefetchQueue = nil;
-
-    if (prefetchQueue == nil) {
-        prefetchQueue = [[NSOperationQueue alloc] init];
-        [prefetchQueue setMaxConcurrentOperationCount:PH_MAX_CONCURRENT_OPERATIONS];
-    }
-
-    return prefetchQueue;
-}
-
-+(NSMutableSet *)allPrefetchs{
-    static NSMutableSet *allPrefetchs = nil;
-    
-    if (allPrefetchs == nil) {
-        allPrefetchs = [[NSMutableSet alloc] init];
-    }
-    
-    return allPrefetchs;
-}
-
 
 +(void)initialize{
 
@@ -59,11 +32,23 @@
 -(id)init{
     self = [super init];
     if (self) {
-        [[PHPublisherOpenRequest allPrefetchs] addObject:self];
-        [[PHPublisherOpenRequest prefetchOperations] addObserver:self forKeyPath:@"operations" options:0 context:NULL];
+        [self.prefetchOperations addObserver:self forKeyPath:@"operations" options:0 context:NULL];
     }
     
     return  self;
+}
+
+-(NSString *)urlPath{
+    return PH_URL(/v3/publisher/open/);
+}
+
+-(NSOperationQueue *)prefetchOperations{
+    if (_prefetchOperations == nil) {
+        _prefetchOperations = [[NSOperationQueue alloc] init];
+        [_prefetchOperations setMaxConcurrentOperationCount:PH_MAX_CONCURRENT_OPERATIONS];
+    }
+    
+    return _prefetchOperations;
 }
 
 #pragma mark - PHAPIRequest response delegate
@@ -85,19 +70,22 @@
             
             NSURL *url = [NSURL URLWithString:urlString];
             PHURLPrefetchOperation *urlpo = [[PHURLPrefetchOperation alloc] initWithURL:url];
-            [[PHPublisherOpenRequest prefetchOperations] addOperation:urlpo];
+            [self.prefetchOperations addOperation:urlpo];
             [urlpo release];
         }
 
         [fileManager release];
     }
 
-    [super didSucceedWithResponse:responseData];
+    // Don't finish the request before prefetching has completed!
+    if ([self.delegate respondsToSelector:@selector(request:didSucceedWithResponse:)]) {
+        [self.delegate performSelector:@selector(request:didSucceedWithResponse:) withObject:self withObject:responseData];
+    }
 }
 
 #pragma mark - Precache URL selectors
 
-+(void) downloadPrefetchURLs{
+-(void) downloadPrefetchURLs{
     
     NSString *cachePlist = [PHURLPrefetchOperation getCachePlistFile];
     if ([[[[NSFileManager alloc] init] autorelease] fileExistsAtPath:cachePlist]){
@@ -108,17 +96,17 @@
             
             NSURL *url = [NSURL URLWithString:urlString];
             PHURLPrefetchOperation *urlpo = [[PHURLPrefetchOperation alloc] initWithURL:url];
-            [[PHPublisherOpenRequest prefetchOperations] addOperation:urlpo];
+            [self.prefetchOperations addOperation:urlpo];
             [urlpo release];
         }
     }
 }
 
-+(void) cancelPrefetchDownload{
-    [[PHPublisherOpenRequest prefetchOperations] cancelAllOperations];
+-(void) cancelPrefetchDownload{
+    [self.prefetchOperations cancelAllOperations];
 }
 
-+(void) clearPrefetchCache{
+-(void) clearPrefetchCache{
 
     NSString *cachePlist = [PHURLPrefetchOperation getCachePlistFile];
     NSMutableDictionary *prefetchUrlDictionary = [[[NSMutableDictionary alloc] initWithContentsOfFile:cachePlist] autorelease];
@@ -139,7 +127,7 @@
 #pragma mark - NSObject
 
 - (void)dealloc{
-  
+    [_prefetchOperations release], _prefetchOperations = nil;
     [super dealloc];
 }
 
@@ -147,18 +135,12 @@
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)operation change:(NSDictionary *)change context:(void *)context{
     
-    if (operation == [PHPublisherOpenRequest prefetchOperations] && [keyPath isEqualToString:@"operations"]){
+    if ([keyPath isEqualToString:@"operations"]){
         
-        if ([[PHPublisherOpenRequest prefetchOperations].operations count] == 0){
-
-            [[PHPublisherOpenRequest prefetchOperations] release];
-
+        if ([self.prefetchOperations.operations count] == 0){
             //REQUEST_RELEASE see REQUEST_RETAIN
-            [[PHPublisherOpenRequest allPrefetchs] removeObject:self];
+            [self finish];
         }
-    }
-    else{
-        [super observeValueForKeyPath:keyPath ofObject:operation change:change context:context];
     }
 }
 @end

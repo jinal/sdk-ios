@@ -9,11 +9,13 @@
 #import "PHAPIRequest.h"
 
 @interface PHPublisherOpenRequest : PHAPIRequest{
-
+    NSOperationQueue *_prefetchOperations;
 }
 
-+(void) downloadPrefetchURLs;
-+(void) cancelPrefetchDownload;
-+(void) clearPrefetchCache;
+@property (nonatomic, readonly) NSOperationQueue *prefetchOperations;
+
+-(void) downloadPrefetchURLs;
+-(void) cancelPrefetchDownload;
+-(void) clearPrefetchCache;
 
 @end
