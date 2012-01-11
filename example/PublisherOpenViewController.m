@@ -43,4 +43,9 @@
     [self finishRequest];
 }
 
+-(void)requestFinishedPrefetching:(PHAPIRequest *)request{
+    [self addMessage:@"Finished prefetching!"];
+    [self addElapsedTime];
+}
+
 @end
