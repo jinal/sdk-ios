@@ -212,7 +212,7 @@ static void cfHostClientCallBack(CFHostRef host, CFHostInfoType typeInfo, const 
   if (_connection == nil) {
     PH_LOG(@"Sending request: %@", [self.URL absoluteString]);
     NSURLRequest *request = [NSURLRequest requestWithURL:self.URL 
-                                             cachePolicy:NSURLRequestReturnCacheDataElseLoad 
+                                             cachePolicy:NSURLRequestReloadIgnoringLocalCacheData 
                                          timeoutInterval:PH_REQUEST_TIMEOUT];
     _connection = [[NSURLConnection alloc] initWithRequest:request delegate:self];
     [_connection start];
@@ -249,7 +249,8 @@ static void cfHostClientCallBack(CFHostRef host, CFHostInfoType typeInfo, const 
 }
 
 -(void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data{
-  [_connectionData appendData:data];
+    
+    [_connectionData appendData:data];
 }
 
 -(void)connectionDidFinishLoading:(NSURLConnection *)connection{
@@ -258,8 +259,7 @@ static void cfHostClientCallBack(CFHostRef host, CFHostInfoType typeInfo, const 
         [self.delegate performSelector:@selector(requestDidFinishLoading:) withObject:self withObject:nil];
     }
     
-    NSString *responseString = [[NSString alloc] initWithData:_connectionData encoding:NSUTF8StringEncoding];
-    
+    NSString *responseString = [[NSString alloc] initWithData:_connectionData encoding:NSUTF8StringEncoding];    
     SBJsonParserPH *parser = [[SBJsonParserPH alloc] init];
     NSDictionary* resultDictionary = [parser objectWithString:responseString];
     [parser release];

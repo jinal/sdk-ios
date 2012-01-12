@@ -12,6 +12,8 @@
 #import "NSObject+QueryComponents.h"
 #import "JSON.h"
 #import "PHConstants.h"
+#import "SDURLCache.h"
+#import "PHUrlPrefetchOperation.h"
 
 #define MAX_MARGIN 20
 
@@ -105,10 +107,10 @@ static NSMutableSet *allContentViews = nil;
                       launchRedirect,@"ph://launch",
                       loadContextRedirect,@"ph://loadContext",
                       nil];
-        
+#ifndef PH_UNIT_TESTING         
         _webView = [[PHContentWebView alloc] initWithFrame:CGRectZero];
         [self addSubview:_webView];
-        
+#endif
         self.content = content;
     }
     
@@ -375,13 +377,23 @@ static NSMutableSet *allContentViews = nil;
 }
 
 -(void)loadTemplate {
-    PH_LOG(@"Loading content unit template: %@", self.content.URL);
     [_webView stopLoading];
-    
-    [_webView loadRequest:[NSURLRequest requestWithURL:self.content.URL
-                                           cachePolicy:NSURLRequestReturnCacheDataElseLoad 
-                                       timeoutInterval:PH_REQUEST_TIMEOUT]];
-    
+
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    NSString *cacheKey = [SDURLCachePH cacheKeyForURL:self.content.URL];
+    NSString *cacheFilePath = [[SDURLCachePH defaultCachePath] stringByAppendingPathComponent:cacheKey];
+    if (![fileManager fileExistsAtPath:cacheFilePath]){
+        PH_NOTE(@"Loading content unit template from network.");
+        [_webView loadRequest:[NSURLRequest requestWithURL:self.content.URL
+                                            cachePolicy:NSURLRequestUseProtocolCachePolicy
+                                            timeoutInterval:PH_REQUEST_TIMEOUT]];
+    }
+    else{
+        NSData *templateData = [fileManager contentsAtPath:cacheFilePath];
+        
+        PH_NOTE(@"Loading content unit template from prefetch cache.");
+        [_webView loadData:templateData MIMEType:@"text/html" textEncodingName:@"UTF-8" baseURL:self.content.URL];
+    }
 }
 
 -(void)viewDidShow{
@@ -403,7 +415,15 @@ static NSMutableSet *allContentViews = nil;
 #pragma mark UIWebViewDelegate
 -(BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType{  
     NSURL *url = request.URL;
-    NSString *urlPath = [NSString stringWithFormat:@"%@://%@%@", [url scheme], [url host], [url path]];
+    NSString *urlPath;
+    if ([url host] == nil) {
+        // This can be nil if loading files from the local cache. The url host being nil caused the urlPath
+        // not to be generated properly and the UIWebview load to fail.
+        return YES;
+    }
+    else
+        urlPath = [NSString stringWithFormat:@"%@://%@%@", [url scheme], [url host], [url path]];
+    
     NSInvocation *redirect = [_redirects valueForKey:urlPath];
 
     if (redirect) {
@@ -414,7 +434,7 @@ static NSMutableSet *allContentViews = nil;
         
         SBJsonParserPH *parser = [SBJsonParserPH new];
         id parserObject = [parser objectWithString:contextString];
-        NSDictionary *context = ([parserObject isKindOfClass:[NSDictionary class]])?(NSDictionary*) parserObject: [NSDictionary dictionary];
+        NSDictionary *context = ([parserObject isKindOfClass:[NSDictionary class]])?(NSDictionary*) parserObject: nil;
         
         [parser release];
         

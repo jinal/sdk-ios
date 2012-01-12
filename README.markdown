@@ -203,3 +203,14 @@ This method will be called inside of the PHNotificationView instance -(void)draw
 
 This method will be called to calculate an appropriate frame for the notification badge each time the notification data changes. Using specific keys inside of notificationData, you will need to calculate an appropriate size.
 
+#### *NEW* Caching with prefetching of URLs in background
+
+To use caching and prefetching of URL's a publisher only needs to make a PHPublisherOpenRequest. The Play Haven SDK is currently set up to managed the cache and prefetch the URL's automatically in the background. The publisher has more control over the caching defaults using the information provided below.
+
+PHPublisherOpenRequest now returns an array of URL's that can be prefetched. When the response is received from the server the prefetch URL's are stored locally in a plist file and a queue of NSOperation's are created to downoad the data in concurrent background tasks. The PHConstants.h define PH_MAX_CONCURRENT_OPERATIONS is used for setting the max concurrent operations and PH_PREFETCH_URL_PLIST is the name of the plist file for storing the prefetch URL list in the cache applications directory. The Publisher can use the following methods to force a redownload of the prefetch URL list if a plist file exists, cancel any operations currently being run and clear the prefetch cache files.
+
+    -(void) downloadPrefetchURLs;
+    -(void) cancelPrefetchDownload;
+    -(void) clearPrefetchCache;
+
+When the PHPublisherOpenRequest is initialized it will create a subclass of NSURLCache called SDURLCache. This is used for caching the UIWebview data to memory and/or the file system. The setting for the size (in bytes) of the memory cache and file system cache can be found in PHConstants.h - PH_MAX_SIZE_MEMORY_CACHE and PH_MAX_SIZE_FILESYSTEM_CACHE. The current defaults are 1MB for the memory cache and 10MB for the file system cache. The class SDURLCache has methods for clearing the cache if you need more file system space in the applications cache directory. SDURLCache has several background tasks that manages the cache size. The cache data files are stored in the application cache directory.
