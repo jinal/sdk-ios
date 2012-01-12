@@ -23,6 +23,12 @@
 
 @implementation PHAPIRequest
 
++(void)initialize{
+    if  (self == [PHAPIRequest class]){
+        [PHAPIRequest checkDNSResolution];
+    }
+}
+
 +(NSMutableSet *)allRequests{
     static NSMutableSet *allRequests = nil;
     
@@ -64,6 +70,55 @@
     }
     
     return self;
+}
+
+static void cfHostClientCallBack(CFHostRef host, CFHostInfoType typeInfo, const CFStreamError *error, void *info){
+    // Do nothing but cleanup
+    CFHostUnscheduleFromRunLoop(host, CFRunLoopGetCurrent(), kCFRunLoopCommonModes);
+    CFHostSetClient(host, NULL, NULL);
+    CFRelease(host);
+    CFRunLoopStop(CFRunLoopGetCurrent());
+}
+
++(void) checkDNSResolution{
+    // api2.playhaven.com
+    NSString *server_address  = [PH_BASE_URL substringFromIndex:7];
+    CFHostClientContext api_context = { 0, (void *)(CFStringRef)server_address, CFRetain, CFRelease, NULL };
+    CFHostRef api_host = CFHostCreateWithName(kCFAllocatorDefault, (CFStringRef)server_address);
+    if (!CFHostSetClient(api_host, cfHostClientCallBack, &api_context))
+    {
+        CFRelease(api_host);
+        return;
+    }
+    
+    CFHostScheduleWithRunLoop(api_host, CFRunLoopGetCurrent(), kCFRunLoopCommonModes);
+    if (!CFHostStartInfoResolution(api_host, kCFHostReachability, nil)){
+        CFHostUnscheduleFromRunLoop(api_host, CFRunLoopGetCurrent(), kCFRunLoopCommonModes);
+        CFHostSetClient(api_host, NULL, NULL);
+        CFRelease(api_host);
+    }
+
+    // media.playhaven.com
+    CFHostClientContext media_context = { 0, (void *)(CFStringRef)PH_CONTENT_ADDRESS, CFRetain, CFRelease, NULL };
+    CFHostRef media_host = CFHostCreateWithName(kCFAllocatorDefault, (CFStringRef)server_address);
+    if (!CFHostSetClient(media_host, cfHostClientCallBack, &media_context))
+    {
+        CFHostUnscheduleFromRunLoop(api_host, CFRunLoopGetCurrent(), kCFRunLoopCommonModes);
+        CFHostSetClient(api_host, NULL, NULL);
+        CFRelease(api_host);
+        CFRelease(media_host);
+        return;
+    }
+    
+    CFHostScheduleWithRunLoop(media_host, CFRunLoopGetCurrent(), kCFRunLoopCommonModes);
+    if (!CFHostStartInfoResolution(media_host, kCFHostReachability, nil)){
+        CFHostUnscheduleFromRunLoop(media_host, CFRunLoopGetCurrent(), kCFRunLoopCommonModes);
+        CFHostSetClient(media_host, NULL, NULL);
+        CFRelease(media_host);
+        CFHostUnscheduleFromRunLoop(api_host, CFRunLoopGetCurrent(), kCFRunLoopCommonModes);
+        CFHostSetClient(api_host, NULL, NULL);
+        CFRelease(api_host);
+    }
 }
 
 -(id)init{

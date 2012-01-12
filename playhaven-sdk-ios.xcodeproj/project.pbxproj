@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		D118AE5D14B78C3C00C76E2C /* PHUrlPrefetchOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = D118AE5C14B78C3C00C76E2C /* PHUrlPrefetchOperation.m */; };
 		D118AE5F14B7A7FD00C76E2C /* PHUrlPrefetchOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = D118AE5C14B78C3C00C76E2C /* PHUrlPrefetchOperation.m */; };
+		D175008E149193790037A036 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D175008D149193790037A036 /* CFNetwork.framework */; };
 		D1E15B7C14981C39001241EE /* SDURLCache.m in Sources */ = {isa = PBXBuildFile; fileRef = D1E15B7B14981C39001241EE /* SDURLCache.m */; };
 		D1E15B7D14981E90001241EE /* SDURLCache.m in Sources */ = {isa = PBXBuildFile; fileRef = D1E15B7B14981C39001241EE /* SDURLCache.m */; };
 		EA03810A13B25F4300A31FF7 /* PHPublisherMetadataRequestTest.m in Sources */ = {isa = PBXBuildFile; fileRef = EA03810913B25F4300A31FF7 /* PHPublisherMetadataRequestTest.m */; };
@@ -108,6 +109,7 @@
 		EA9AB66914A3B2EE00079704 /* PHReward.h in Headers */ = {isa = PBXBuildFile; fileRef = EAB2B44513CBD172006D2391 /* PHReward.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		EA9AB66A14A3B2EE00079704 /* PHPublisherPromosRequest.h in Headers */ = {isa = PBXBuildFile; fileRef = EA6EA1EC135F6D77000123B0 /* PHPublisherPromosRequest.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		EA9AB66B14A3B2EE00079704 /* PHPublisherOpenRequest.h in Headers */ = {isa = PBXBuildFile; fileRef = EA523D8D1343EE790057DEA5 /* PHPublisherOpenRequest.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		EAA547D714BF62AC00254A54 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D175008D149193790037A036 /* CFNetwork.framework */; };
 		EAB2B44713CBD172006D2391 /* PHReward.m in Sources */ = {isa = PBXBuildFile; fileRef = EAB2B44613CBD172006D2391 /* PHReward.m */; };
 		EAB2B44813CBD172006D2391 /* PHReward.m in Sources */ = {isa = PBXBuildFile; fileRef = EAB2B44613CBD172006D2391 /* PHReward.m */; };
 		EAB4423313452026000DA3E9 /* PHAPIRequestTest.m in Sources */ = {isa = PBXBuildFile; fileRef = EAB4423213452026000DA3E9 /* PHAPIRequestTest.m */; };
@@ -118,7 +120,6 @@
 		EAB44397134554B3000DA3E9 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D30AB110D05D00D00671497 /* Foundation.framework */; };
 		EAB44398134554B3000DA3E9 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DF5F4DF0D08C38300B7A737 /* UIKit.framework */; };
 		EAB44399134554B3000DA3E9 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 288765FC0DF74451002DB57D /* CoreGraphics.framework */; };
-		EAB4439A134554B3000DA3E9 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EAB442A113455467000DA3E9 /* QuartzCore.framework */; };
 		EABAA6981450ED640040B937 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EABAA6971450ED640040B937 /* SystemConfiguration.framework */; };
 		EABC1CE7143A770000638B09 /* ExampleViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = EABC1CE6143A770000638B09 /* ExampleViewController.xib */; };
 		EAC53A94134E5F7A00F2F956 /* NSObject+QueryComponents.m in Sources */ = {isa = PBXBuildFile; fileRef = EAC53A92134E5F7A00F2F956 /* NSObject+QueryComponents.m */; };
@@ -134,6 +135,7 @@
 		D111108F14BBC54D0035B39E /* SDURLCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SDURLCache.h; sourceTree = "<group>"; };
 		D118AE5B14B78C3C00C76E2C /* PHUrlPrefetchOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PHUrlPrefetchOperation.h; sourceTree = "<group>"; };
 		D118AE5C14B78C3C00C76E2C /* PHUrlPrefetchOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PHUrlPrefetchOperation.m; sourceTree = "<group>"; };
+		D175008D149193790037A036 /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
 		D1E15B7B14981C39001241EE /* SDURLCache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SDURLCache.m; sourceTree = "<group>"; };
 		EA03810913B25F4300A31FF7 /* PHPublisherMetadataRequestTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PHPublisherMetadataRequestTest.m; sourceTree = "<group>"; };
 		EA03810D13B26A1A00A31FF7 /* PHPublisherMetadataRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PHPublisherMetadataRequest.h; sourceTree = "<group>"; };
@@ -216,6 +218,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D175008E149193790037A036 /* CFNetwork.framework in Frameworks */,
 				EABAA6981450ED640040B937 /* SystemConfiguration.framework in Frameworks */,
 				EA12ABD51365DBB700CB2F24 /* UIKit.framework in Frameworks */,
 				EA12ABD61365DBB700CB2F24 /* Foundation.framework in Frameworks */,
@@ -227,11 +230,11 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				EAA547D714BF62AC00254A54 /* CFNetwork.framework in Frameworks */,
 				EA6ADFC51475CF3A00DBE60B /* SystemConfiguration.framework in Frameworks */,
 				EAB44397134554B3000DA3E9 /* Foundation.framework in Frameworks */,
 				EAB44398134554B3000DA3E9 /* UIKit.framework in Frameworks */,
 				EAB44399134554B3000DA3E9 /* CoreGraphics.framework in Frameworks */,
-				EAB4439A134554B3000DA3E9 /* QuartzCore.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -272,6 +275,7 @@
 		29B97323FDCFA39411CA2CEA /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				D175008D149193790037A036 /* CFNetwork.framework */,
 				EABAA6971450ED640040B937 /* SystemConfiguration.framework */,
 				1DF5F4DF0D08C38300B7A737 /* UIKit.framework */,
 				1D30AB110D05D00D00671497 /* Foundation.framework */,
@@ -959,6 +963,7 @@
 				EA9AB62914A3B0AA00079704 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

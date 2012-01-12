@@ -15,6 +15,10 @@
 #define PH_BASE_URL @"http://api2.playhaven.com"
 #endif
 
+#ifndef PH_CONTENT_ADDRESS
+#define PH_CONTENT_ADDRESS @"media.playhaven.com"
+#endif
+
 // PH_DISPATCH_PROTOCOL_VERSION
 // Defines characteristics of the requests that get sent from content units to
 // native code. See content-templates:src/js/playhaven.js for template impl.
@@ -47,9 +51,13 @@
 #define PH_URL(PATH) [PH_BASE_URL stringByAppendingString:@#PATH]
 #define PH_URL_FMT(PATH,FMT) [PH_BASE_URL stringByAppendingFormat:@#PATH, FMT]
 
+#ifndef PH_LOG
 #define PH_LOG(COMMENT,...) NSLog(@"[PlayHaven-%@] %@",PH_SDK_VERSION, [NSString stringWithFormat:COMMENT,__VA_ARGS__])
+#endif
 
+#ifndef PH_NOTE
 #define PH_NOTE(COMMENT) NSLog(@"[PlayHaven-%@] %@",PH_SDK_VERSION, COMMENT)
+#endif
 
 #define PH_MULTITASKING_SUPPORTED [[UIDevice currentDevice] respondsToSelector:@selector(isMultitaskingSupported)] && [[UIDevice currentDevice] isMultitaskingSupported]
 

@@ -55,18 +55,20 @@
         cacheDirectory = [paths objectAtIndex:0];
     }
 
-    NSData *urlData = [NSData dataWithContentsOfURL:prefetchURL];
-    if (urlData){
-
-        NSFileManager *fileManager = [[[NSFileManager alloc] init] autorelease];
-        NSString *cacheKey = [SDURLCachePH cacheKeyForURL:prefetchURL];
-        NSString *cacheFilePath = [[SDURLCachePH defaultCachePath] stringByAppendingPathComponent:cacheKey];
-        if ([fileManager fileExistsAtPath:cacheFilePath]){
-            
-            [fileManager removeItemAtPath:cacheFilePath error:NULL];
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    NSString *cacheKey = [SDURLCachePH cacheKeyForURL:prefetchURL];
+    NSString *cacheFilePath = [[SDURLCachePH defaultCachePath] stringByAppendingPathComponent:cacheKey];
+    if ([fileManager fileExistsAtPath:cacheFilePath]){
+        PH_NOTE(@"Skipping precached file");
+    } else {
+        NSData *urlData = [NSData dataWithContentsOfURL:prefetchURL];
+        if (urlData){
+            if ([fileManager fileExistsAtPath:cacheFilePath]){
+                
+            }
+            PH_LOG(@"Writing prefetch to file: %@", cacheFilePath);
+            [urlData writeToFile:cacheFilePath atomically:YES];
         }
-        PH_LOG(@"Writing prefetch to file: %@", cacheFilePath);
-        [urlData writeToFile:cacheFilePath atomically:YES];
     }
 
     [pool drain];

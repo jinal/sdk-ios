@@ -107,10 +107,10 @@ static NSMutableSet *allContentViews = nil;
                       launchRedirect,@"ph://launch",
                       loadContextRedirect,@"ph://loadContext",
                       nil];
-        
+#ifndef PH_UNIT_TESTING         
         _webView = [[PHContentWebView alloc] initWithFrame:CGRectZero];
         [self addSubview:_webView];
-        
+#endif
         self.content = content;
     }
     
@@ -377,25 +377,23 @@ static NSMutableSet *allContentViews = nil;
 }
 
 -(void)loadTemplate {
-    PH_LOG(@"Loading content unit template: %@", self.content.URL);
     [_webView stopLoading];
 
-    NSFileManager *fileManager = [[NSFileManager alloc] init];
+    NSFileManager *fileManager = [NSFileManager defaultManager];
     NSString *cacheKey = [SDURLCachePH cacheKeyForURL:self.content.URL];
     NSString *cacheFilePath = [[SDURLCachePH defaultCachePath] stringByAppendingPathComponent:cacheKey];
     if (![fileManager fileExistsAtPath:cacheFilePath]){
-
+        PH_NOTE(@"Loading content unit template from network.");
         [_webView loadRequest:[NSURLRequest requestWithURL:self.content.URL
                                             cachePolicy:NSURLRequestUseProtocolCachePolicy
                                             timeoutInterval:PH_REQUEST_TIMEOUT]];
     }
     else{
-
-        NSData *htmlData = [NSData dataWithContentsOfFile:cacheFilePath];
-        PH_LOG(@"Loading content unit template from prefetch cache: %@", cacheFilePath);
-        [_webView loadData:htmlData MIMEType:@"text/html" textEncodingName:@"UTF-8" baseURL:[NSURL URLWithString:@""]];        
+        NSData *templateData = [fileManager contentsAtPath:cacheFilePath];
+        
+        PH_NOTE(@"Loading content unit template from prefetch cache.");
+        [_webView loadData:templateData MIMEType:@"text/html" textEncodingName:@"UTF-8" baseURL:self.content.URL];
     }
-    [fileManager release];
 }
 
 -(void)viewDidShow{
@@ -436,7 +434,7 @@ static NSMutableSet *allContentViews = nil;
         
         SBJsonParserPH *parser = [SBJsonParserPH new];
         id parserObject = [parser objectWithString:contextString];
-        NSDictionary *context = ([parserObject isKindOfClass:[NSDictionary class]])?(NSDictionary*) parserObject: [NSDictionary dictionary];
+        NSDictionary *context = ([parserObject isKindOfClass:[NSDictionary class]])?(NSDictionary*) parserObject: nil;
         
         [parser release];
         
