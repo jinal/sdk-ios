@@ -383,8 +383,7 @@ static NSMutableSet *allContentViews = nil;
     NSFileManager *fileManager = [[NSFileManager alloc] init];
     NSString *cacheKey = [SDURLCachePH cacheKeyForURL:self.content.URL];
     NSString *cacheFilePath = [[SDURLCachePH defaultCachePath] stringByAppendingPathComponent:cacheKey];
-    NSString *htmlAppendedUrlString = [cacheFilePath stringByAppendingString:@".html"];
-    if (![fileManager fileExistsAtPath:htmlAppendedUrlString]){
+    if (![fileManager fileExistsAtPath:cacheFilePath]){
 
         [_webView loadRequest:[NSURLRequest requestWithURL:self.content.URL
                                             cachePolicy:NSURLRequestUseProtocolCachePolicy
@@ -392,12 +391,9 @@ static NSMutableSet *allContentViews = nil;
     }
     else{
 
-        NSURL *url = [NSURL fileURLWithPath:htmlAppendedUrlString];
-        PH_LOG(@"Loading content unit template from prefetch cache: %@", url);
-        NSMutableURLRequest *reqUrl = [NSMutableURLRequest requestWithURL:url];
-        [reqUrl setTimeoutInterval:PH_REQUEST_TIMEOUT];
-        [reqUrl setCachePolicy:NSURLRequestUseProtocolCachePolicy];
-        [_webView loadRequest:reqUrl];
+        NSData *htmlData = [NSData dataWithContentsOfFile:cacheFilePath];
+        PH_LOG(@"Loading content unit template from prefetch cache: %@", cacheFilePath);
+        [_webView loadData:htmlData MIMEType:@"text/html" textEncodingName:@"UTF-8" baseURL:[NSURL URLWithString:@""]];        
     }
     [fileManager release];
 }

@@ -61,13 +61,12 @@
         NSFileManager *fileManager = [[[NSFileManager alloc] init] autorelease];
         NSString *cacheKey = [SDURLCachePH cacheKeyForURL:prefetchURL];
         NSString *cacheFilePath = [[SDURLCachePH defaultCachePath] stringByAppendingPathComponent:cacheKey];
-        NSString *htmlAppendedUrlString = [cacheFilePath stringByAppendingString:@".html"];
-        if ([fileManager fileExistsAtPath:htmlAppendedUrlString]){
+        if ([fileManager fileExistsAtPath:cacheFilePath]){
             
-            [fileManager removeItemAtPath:htmlAppendedUrlString error:NULL];
+            [fileManager removeItemAtPath:cacheFilePath error:NULL];
         }
-        PH_LOG(@"Writing prefetch to file: %@", htmlAppendedUrlString);
-        [urlData writeToFile:htmlAppendedUrlString atomically:YES];
+        PH_LOG(@"Writing prefetch to file: %@", cacheFilePath);
+        [urlData writeToFile:cacheFilePath atomically:YES];
     }
 
     [pool drain];
