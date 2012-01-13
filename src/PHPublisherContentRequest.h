@@ -13,6 +13,7 @@
 @class PHPublisherContentRequest;
 @class PHContent;
 @class PHReward;
+@class PHPurchase;
 
 typedef enum {
     PHPublisherContentRequestInitialized,
@@ -47,6 +48,9 @@ extern PHPublisherContentDismissType * const PHPublisherNoContentTriggeredDismis
 #pragma mark - Reward unlocking methods
 -(void)request:(PHPublisherContentRequest *)request unlockedReward:(PHReward *)reward;
 
+#pragma mark - Purchase unlocking methods
+-(void)request:(PHPublisherContentRequest *)request unlockedPurchase:(PHPurchase *)purchase;
+
 @end
 
 @interface PHPublisherContentRequest : PHAPIRequest<PHContentViewDelegate, PHAPIRequestDelegate> {
@@ -78,6 +82,9 @@ extern PHPublisherContentDismissType * const PHPublisherNoContentTriggeredDismis
 
 -(BOOL)isValidReward:(NSDictionary *)rewardData;
 -(void)requestRewards:(NSDictionary *)queryParameters callback:(NSString *)callback source:(PHContentView *)source;
+
+-(BOOL)isValidPurchase:(NSDictionary *)purchaseData;
+-(void)requestPurchases:(NSDictionary *)queryParameters callback:(NSString *)callback source:(PHContentView *)source;
 
 -(void)requestCloseButton:(NSDictionary *)queryParameters callback:(NSString *)callback source:(PHContentView *)source;
 
