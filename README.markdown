@@ -31,6 +31,7 @@ If you are using Unity for your game, please integrate the Unity SDK located her
   * CoreGraphics.framework
   * QuartzCore.framework
   * SystemConfiguration.framework
+  * CFNetwork.framework
 1. Include the PlayHavenSDK headers in your code wherever you will be using PlayHaven request classes.
 
     \#import "PlayHavenSDK.h"

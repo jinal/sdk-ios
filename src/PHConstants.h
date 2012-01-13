@@ -16,7 +16,7 @@
 #endif
 
 #ifndef PH_CONTENT_ADDRESS
-#define PH_CONTENT_ADDRESS @"media.playhaven.com"
+#define PH_CONTENT_ADDRESS @"http://media.playhaven.com"
 #endif
 
 // PH_DISPATCH_PROTOCOL_VERSION
