@@ -49,7 +49,7 @@ extern PHPublisherContentDismissType * const PHPublisherNoContentTriggeredDismis
 -(void)request:(PHPublisherContentRequest *)request unlockedReward:(PHReward *)reward;
 
 #pragma mark - Purchase unlocking methods
--(void)request:(PHPublisherContentRequest *)request unlockedPurchase:(PHPurchase *)purchase;
+-(void)request:(PHPublisherContentRequest *)request makePurchase:(PHPurchase *)purchase;
 
 @end
 

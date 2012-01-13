@@ -643,13 +643,13 @@ PHPublisherContentDismissType * const PHPublisherNoContentTriggeredDismiss = @"P
             purchase.quantity = [[purchaseData valueForKey:PHPublisherContentRequestPurchaseQuantityKey] integerValue];
             purchase.receipt = [[purchaseData valueForKey:PHPublisherContentRequestPurchaseReceiptKey] stringValue];
             
-            if ([self.delegate respondsToSelector:@selector(request:unlockedPurchase:)]) {
-                [(id <PHPublisherContentRequestDelegate>)self.delegate request:self unlockedPurchase:purchase];
+            if ([self.delegate respondsToSelector:@selector(request:makePurchase:)]) {
+                [(id <PHPublisherContentRequestDelegate>)self.delegate request:self makePurchase:purchase];
             }
         }
     }
     
-    [source sendCallback:callback withResponse:nil error:nil];
+    //[source sendCallback:callback withResponse:nil error:nil];
 }
 
 #pragma mark - Close button control

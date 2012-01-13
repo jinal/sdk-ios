@@ -10,7 +10,7 @@
 		D118AE5D14B78C3C00C76E2C /* PHUrlPrefetchOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = D118AE5C14B78C3C00C76E2C /* PHUrlPrefetchOperation.m */; };
 		D118AE5F14B7A7FD00C76E2C /* PHUrlPrefetchOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = D118AE5C14B78C3C00C76E2C /* PHUrlPrefetchOperation.m */; };
 		D175008E149193790037A036 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D175008D149193790037A036 /* CFNetwork.framework */; };
-		D1BD481614C0CA2800EE8A5A /* PHPurchase.m in Sources */ = {isa = PBXBuildFile; fileRef = D1BD481514C0CA2800EE8A5A /* PHPurchase.m */; };
+		D1BD481A14C0CC6400EE8A5A /* PHPurchase.m in Sources */ = {isa = PBXBuildFile; fileRef = D1BD481914C0CC6300EE8A5A /* PHPurchase.m */; };
 		D1E15B7C14981C39001241EE /* SDURLCache.m in Sources */ = {isa = PBXBuildFile; fileRef = D1E15B7B14981C39001241EE /* SDURLCache.m */; };
 		D1E15B7D14981E90001241EE /* SDURLCache.m in Sources */ = {isa = PBXBuildFile; fileRef = D1E15B7B14981C39001241EE /* SDURLCache.m */; };
 		EA03810A13B25F4300A31FF7 /* PHPublisherMetadataRequestTest.m in Sources */ = {isa = PBXBuildFile; fileRef = EA03810913B25F4300A31FF7 /* PHPublisherMetadataRequestTest.m */; };
@@ -137,8 +137,8 @@
 		D118AE5B14B78C3C00C76E2C /* PHUrlPrefetchOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PHUrlPrefetchOperation.h; sourceTree = "<group>"; };
 		D118AE5C14B78C3C00C76E2C /* PHUrlPrefetchOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PHUrlPrefetchOperation.m; sourceTree = "<group>"; };
 		D175008D149193790037A036 /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
-		D1BD481414C0CA2800EE8A5A /* PHPurchase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PHPurchase.h; path = "../../../sdk-ios/src/PHPurchase.h"; sourceTree = "<group>"; };
-		D1BD481514C0CA2800EE8A5A /* PHPurchase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PHPurchase.m; path = "../../../sdk-ios/src/PHPurchase.m"; sourceTree = "<group>"; };
+		D1BD481814C0CC6300EE8A5A /* PHPurchase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PHPurchase.h; sourceTree = "<group>"; };
+		D1BD481914C0CC6300EE8A5A /* PHPurchase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PHPurchase.m; sourceTree = "<group>"; };
 		D1E15B7B14981C39001241EE /* SDURLCache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SDURLCache.m; sourceTree = "<group>"; };
 		EA03810913B25F4300A31FF7 /* PHPublisherMetadataRequestTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PHPublisherMetadataRequestTest.m; sourceTree = "<group>"; };
 		EA03810D13B26A1A00A31FF7 /* PHPublisherMetadataRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PHPublisherMetadataRequest.h; sourceTree = "<group>"; };
@@ -454,8 +454,8 @@
 				EA7EE5FE134D458A00A0ADE6 /* PHContentWebView.m */,
 				EAB2B44513CBD172006D2391 /* PHReward.h */,
 				EAB2B44613CBD172006D2391 /* PHReward.m */,
-				D1BD481414C0CA2800EE8A5A /* PHPurchase.h */,
-				D1BD481514C0CA2800EE8A5A /* PHPurchase.m */,
+				D1BD481814C0CC6300EE8A5A /* PHPurchase.h */,
+				D1BD481914C0CC6300EE8A5A /* PHPurchase.m */,
 			);
 			name = Content;
 			sourceTree = "<group>";
@@ -698,7 +698,7 @@
 				EA6ADFC81475F22C00DBE60B /* PHPublisherContentRequestTest.m in Sources */,
 				D1E15B7C14981C39001241EE /* SDURLCache.m in Sources */,
 				D118AE5D14B78C3C00C76E2C /* PHUrlPrefetchOperation.m in Sources */,
-				D1BD481614C0CA2800EE8A5A /* PHPurchase.m in Sources */,
+				D1BD481A14C0CC6400EE8A5A /* PHPurchase.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
