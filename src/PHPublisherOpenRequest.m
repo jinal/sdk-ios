@@ -127,6 +127,8 @@
 #pragma mark - NSObject
 
 - (void)dealloc{
+    [self.prefetchOperations removeObserver:self forKeyPath:@"operations"];
+    
     [_prefetchOperations release], _prefetchOperations = nil;
     [super dealloc];
 }

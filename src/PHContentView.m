@@ -379,21 +379,10 @@ static NSMutableSet *allContentViews = nil;
 -(void)loadTemplate {
     [_webView stopLoading];
 
-    NSFileManager *fileManager = [NSFileManager defaultManager];
-    NSString *cacheKey = [SDURLCachePH cacheKeyForURL:self.content.URL];
-    NSString *cacheFilePath = [[SDURLCachePH defaultCachePath] stringByAppendingPathComponent:cacheKey];
-    if (![fileManager fileExistsAtPath:cacheFilePath]){
-        PH_NOTE(@"Loading content unit template from network.");
-        [_webView loadRequest:[NSURLRequest requestWithURL:self.content.URL
-                                            cachePolicy:NSURLRequestUseProtocolCachePolicy
-                                            timeoutInterval:PH_REQUEST_TIMEOUT]];
-    }
-    else{
-        NSData *templateData = [fileManager contentsAtPath:cacheFilePath];
-        
-        PH_NOTE(@"Loading content unit template from prefetch cache.");
-        [_webView loadData:templateData MIMEType:@"text/html" textEncodingName:@"UTF-8" baseURL:self.content.URL];
-    }
+    PH_LOG(@"Loading content unit template: %@", self.content.URL);
+    [_webView loadRequest:[NSURLRequest requestWithURL:self.content.URL
+                                        cachePolicy:NSURLRequestUseProtocolCachePolicy
+                                        timeoutInterval:PH_REQUEST_TIMEOUT]];
 }
 
 -(void)viewDidShow{

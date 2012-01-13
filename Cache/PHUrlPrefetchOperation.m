@@ -50,26 +50,8 @@
 
     NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
 
-    if (cacheDirectory == nil){
-        NSArray *paths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
-        cacheDirectory = [paths objectAtIndex:0];
-    }
-
-    NSFileManager *fileManager = [NSFileManager defaultManager];
-    NSString *cacheKey = [SDURLCachePH cacheKeyForURL:prefetchURL];
-    NSString *cacheFilePath = [[SDURLCachePH defaultCachePath] stringByAppendingPathComponent:cacheKey];
-    if ([fileManager fileExistsAtPath:cacheFilePath]){
-        PH_NOTE(@"Skipping precached file");
-    } else {
-        NSData *urlData = [NSData dataWithContentsOfURL:prefetchURL];
-        if (urlData){
-            if ([fileManager fileExistsAtPath:cacheFilePath]){
-                
-            }
-            PH_LOG(@"Writing prefetch to file: %@", cacheFilePath);
-            [urlData writeToFile:cacheFilePath atomically:YES];
-        }
-    }
+    NSURLRequest *request = [NSURLRequest requestWithURL:self.prefetchURL cachePolicy:NSURLRequestReturnCacheDataElseLoad timeoutInterval:PH_REQUEST_TIMEOUT];
+    [NSURLConnection sendSynchronousRequest:request returningResponse:nil error:nil];
 
     [pool drain];
 }
