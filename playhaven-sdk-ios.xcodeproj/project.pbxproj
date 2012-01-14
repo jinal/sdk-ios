@@ -15,6 +15,11 @@
 		D1BD481D14C0EDD100EE8A5A /* PHPurchase.m in Sources */ = {isa = PBXBuildFile; fileRef = D1BD481914C0CC6300EE8A5A /* PHPurchase.m */; };
 		D1E15B7C14981C39001241EE /* SDURLCache.m in Sources */ = {isa = PBXBuildFile; fileRef = D1E15B7B14981C39001241EE /* SDURLCache.m */; };
 		D1E15B7D14981E90001241EE /* SDURLCache.m in Sources */ = {isa = PBXBuildFile; fileRef = D1E15B7B14981C39001241EE /* SDURLCache.m */; };
+		EA019C8114C0FCE5008FBCB1 /* PHPublisherIAPTrackingRequest.h in Headers */ = {isa = PBXBuildFile; fileRef = EA019C7F14C0FCE5008FBCB1 /* PHPublisherIAPTrackingRequest.h */; };
+		EA019C8214C0FCE5008FBCB1 /* PHPublisherIAPTrackingRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = EA019C8014C0FCE5008FBCB1 /* PHPublisherIAPTrackingRequest.m */; };
+		EA019C8314C0FCE5008FBCB1 /* PHPublisherIAPTrackingRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = EA019C8014C0FCE5008FBCB1 /* PHPublisherIAPTrackingRequest.m */; };
+		EA019C8414C0FCE5008FBCB1 /* PHPublisherIAPTrackingRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = EA019C8014C0FCE5008FBCB1 /* PHPublisherIAPTrackingRequest.m */; };
+		EA019C8614C102D4008FBCB1 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EA019C8514C102D4008FBCB1 /* StoreKit.framework */; };
 		EA03810A13B25F4300A31FF7 /* PHPublisherMetadataRequestTest.m in Sources */ = {isa = PBXBuildFile; fileRef = EA03810913B25F4300A31FF7 /* PHPublisherMetadataRequestTest.m */; };
 		EA03810F13B26A1A00A31FF7 /* PHPublisherMetadataRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = EA03810E13B26A1A00A31FF7 /* PHPublisherMetadataRequest.m */; };
 		EA03811313B26FF500A31FF7 /* PHNotificationViewTest.m in Sources */ = {isa = PBXBuildFile; fileRef = EA03811213B26FF500A31FF7 /* PHNotificationViewTest.m */; };
@@ -142,6 +147,9 @@
 		D1BD481814C0CC6300EE8A5A /* PHPurchase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PHPurchase.h; sourceTree = "<group>"; };
 		D1BD481914C0CC6300EE8A5A /* PHPurchase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PHPurchase.m; sourceTree = "<group>"; };
 		D1E15B7B14981C39001241EE /* SDURLCache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SDURLCache.m; sourceTree = "<group>"; };
+		EA019C7F14C0FCE5008FBCB1 /* PHPublisherIAPTrackingRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PHPublisherIAPTrackingRequest.h; sourceTree = "<group>"; };
+		EA019C8014C0FCE5008FBCB1 /* PHPublisherIAPTrackingRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PHPublisherIAPTrackingRequest.m; sourceTree = "<group>"; };
+		EA019C8514C102D4008FBCB1 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
 		EA03810913B25F4300A31FF7 /* PHPublisherMetadataRequestTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PHPublisherMetadataRequestTest.m; sourceTree = "<group>"; };
 		EA03810D13B26A1A00A31FF7 /* PHPublisherMetadataRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PHPublisherMetadataRequest.h; sourceTree = "<group>"; };
 		EA03810E13B26A1A00A31FF7 /* PHPublisherMetadataRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PHPublisherMetadataRequest.m; sourceTree = "<group>"; };
@@ -223,6 +231,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				EA019C8614C102D4008FBCB1 /* StoreKit.framework in Frameworks */,
 				D175008E149193790037A036 /* CFNetwork.framework in Frameworks */,
 				EABAA6981450ED640040B937 /* SystemConfiguration.framework in Frameworks */,
 				EA12ABD51365DBB700CB2F24 /* UIKit.framework in Frameworks */,
@@ -280,6 +289,7 @@
 		29B97323FDCFA39411CA2CEA /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				EA019C8514C102D4008FBCB1 /* StoreKit.framework */,
 				D175008D149193790037A036 /* CFNetwork.framework */,
 				EABAA6971450ED640040B937 /* SystemConfiguration.framework */,
 				1DF5F4DF0D08C38300B7A737 /* UIKit.framework */,
@@ -299,6 +309,15 @@
 				D118AE5C14B78C3C00C76E2C /* PHUrlPrefetchOperation.m */,
 			);
 			path = Cache;
+			sourceTree = "<group>";
+		};
+		EA019C7E14C0FC16008FBCB1 /* Purchases */ = {
+			isa = PBXGroup;
+			children = (
+				EA019C7F14C0FCE5008FBCB1 /* PHPublisherIAPTrackingRequest.h */,
+				EA019C8014C0FCE5008FBCB1 /* PHPublisherIAPTrackingRequest.m */,
+			);
+			name = Purchases;
 			sourceTree = "<group>";
 		};
 		EA03810C13B2630200A31FF7 /* Metadata */ = {
@@ -391,6 +410,7 @@
 		EA523D941343EE9D0057DEA5 /* Publisher SDK */ = {
 			isa = PBXGroup;
 			children = (
+				EA019C7E14C0FC16008FBCB1 /* Purchases */,
 				EA03810C13B2630200A31FF7 /* Metadata */,
 				EAB4427913454EB8000DA3E9 /* Content */,
 				EA6EA1EB135F6D5A000123B0 /* Promos */,
@@ -503,6 +523,7 @@
 				EA9AB66914A3B2EE00079704 /* PHReward.h in Headers */,
 				EA9AB66A14A3B2EE00079704 /* PHPublisherPromosRequest.h in Headers */,
 				EA9AB66B14A3B2EE00079704 /* PHPublisherOpenRequest.h in Headers */,
+				EA019C8114C0FCE5008FBCB1 /* PHPublisherIAPTrackingRequest.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -664,6 +685,7 @@
 				EA03812013B2A0F200A31FF7 /* PHNotificationBadgeRenderer.m in Sources */,
 				EAB2B44813CBD172006D2391 /* PHReward.m in Sources */,
 				EA1799E014200FAE005F286F /* PHConstants.m in Sources */,
+				EA019C8314C0FCE5008FBCB1 /* PHPublisherIAPTrackingRequest.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -702,6 +724,7 @@
 				EA6ADFC81475F22C00DBE60B /* PHPublisherContentRequestTest.m in Sources */,
 				D1E15B7C14981C39001241EE /* SDURLCache.m in Sources */,
 				D118AE5D14B78C3C00C76E2C /* PHUrlPrefetchOperation.m in Sources */,
+				EA019C8214C0FCE5008FBCB1 /* PHPublisherIAPTrackingRequest.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -731,6 +754,7 @@
 				EA9AB65014A3B0D500079704 /* PHReward.m in Sources */,
 				EA9AB65214A3B0D500079704 /* PHPublisherPromosRequest.m in Sources */,
 				EA9AB65414A3B0D500079704 /* PHPublisherOpenRequest.m in Sources */,
+				EA019C8414C0FCE5008FBCB1 /* PHPublisherIAPTrackingRequest.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
