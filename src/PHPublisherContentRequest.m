@@ -642,14 +642,19 @@ PHPublisherContentDismissType * const PHPublisherNoContentTriggeredDismiss = @"P
             purchase.name = [purchaseData valueForKey:PHPublisherContentRequestPurchaseNameKey];
             purchase.quantity = [[purchaseData valueForKey:PHPublisherContentRequestPurchaseQuantityKey] integerValue];
             purchase.receipt = [[purchaseData valueForKey:PHPublisherContentRequestPurchaseReceiptKey] stringValue];
+            NSDictionary *purchaseCallback = [NSDictionary dictionaryWithObjectsAndKeys:
+                                              @"callback", callback, 
+                                              @"response", nil, 
+                                              @"error", nil, 
+                                            nil];
+            purchase.callback = purchaseCallback;
+            [purchaseCallback release];
             
             if ([self.delegate respondsToSelector:@selector(request:makePurchase:)]) {
                 [(id <PHPublisherContentRequestDelegate>)self.delegate request:self makePurchase:purchase];
             }
         }
     }
-    
-    //[source sendCallback:callback withResponse:nil error:nil];
 }
 
 #pragma mark - Close button control

@@ -14,6 +14,7 @@
 #import "PHConstants.h"
 #import "SDURLCache.h"
 #import "PHUrlPrefetchOperation.h"
+#import "PHPurchase.h"
 
 #define MAX_MARGIN 20
 
@@ -61,6 +62,18 @@ static NSMutableSet *allContentViews = nil;
 +(void)clearContentViews{
     @synchronized(allContentViews){
         [allContentViews release], allContentViews = nil;
+    }
+}
+
+-(void)contentViewsCallback:(NSNotification *) notification{
+
+    PHPurchase *purchase = [notification object];
+
+    if ([[notification name] isEqualToString:PHCONTENTVIEW_CALLBACK_NOTIFICATION]){
+
+        PH_LOG(@"Successfully received the notification: %@ for purchase named: %@", PHCONTENTVIEW_CALLBACK_NOTIFICATION, [purchase name]);
+        NSDictionary *callBack = [purchase callback];
+        [self sendCallback:[[callBack valueForKey:@"callback"] stringValue] withResponse:[[callBack valueForKey:@"response"] stringValue] error:[[callBack valueForKey:@"error"] stringValue]];
     }
 }
 
@@ -304,7 +317,9 @@ static NSMutableSet *allContentViews = nil;
     }
     
     [self addSubview:[self activityView]];
-    
+
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(contentViewsCallback) name:PHCONTENTVIEW_CALLBACK_NOTIFICATION object:nil];
+
     //TRACK_ORIENTATION see STOP_TRACK_ORIENTATION
     [[NSNotificationCenter defaultCenter] 
      addObserver:self
@@ -368,7 +383,12 @@ static NSMutableSet *allContentViews = nil;
             [self viewDidDismiss];
         }
     }
-    
+
+    [[NSNotificationCenter defaultCenter] 
+     removeObserver:self 
+     name:PHCONTENTVIEW_CALLBACK_NOTIFICATION 
+     object:nil];
+
     //STOP_TRACK_ORIENTATION see TRACK_ORIENTATION
     [[NSNotificationCenter defaultCenter] 
      removeObserver:self 

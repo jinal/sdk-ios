@@ -19,6 +19,12 @@
 #define PH_CONTENT_ADDRESS @"media.playhaven.com"
 #endif
 
+
+// PHContentView notification that a callback is ready for processing
+//
+#define PHCONTENTVIEW_CALLBACK_NOTIFICATION  @"PHContentViewPHCallbackNotification"
+
+
 // PH_DISPATCH_PROTOCOL_VERSION
 // Defines characteristics of the requests that get sent from content units to
 // native code. See content-templates:src/js/playhaven.js for template impl.
