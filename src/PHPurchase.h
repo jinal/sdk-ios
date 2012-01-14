@@ -9,8 +9,9 @@
 #import <Foundation/Foundation.h>
 
 typedef enum{
-    PHPurchasedCancel,
-    PHPurchased
+    PHPurchaseResolutionBuy,
+    PHPurchaseResolutionCancel,
+    PHPurchaseResolutionError
 } PHPurchaseResolutionType;
 
 @interface PHPurchase : NSObject{
@@ -19,18 +20,20 @@ typedef enum{
     NSString *_item;
     NSInteger _quanity;
     NSString *_receipt;
-    NSDictionary *_callback;
+    NSString *_callback;
 }
+
++(NSString *)stringForResolution:(PHPurchaseResolutionType)resolution;
 
 @property (nonatomic, copy) NSString *productIdentifier;
 @property (nonatomic, copy) NSString *name;
 @property (nonatomic, assign) NSInteger quantity;
 @property (nonatomic, copy) NSString *receipt;
-@property (nonatomic, copy) NSDictionary *callback;
+@property (nonatomic, copy) NSString *callback;
 
 //
 // Called by the Publisher to share the results of the IAP with Play Haven dashboard
 //
--(void) reportResolutuion:(PHPurchase *)purchase resolution:(PHPurchaseResolutionType)res;
+-(void) reportResolution:(PHPurchaseResolutionType)resolution;
 
 @end

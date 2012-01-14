@@ -66,14 +66,9 @@ static NSMutableSet *allContentViews = nil;
 }
 
 -(void)contentViewsCallback:(NSNotification *) notification{
-
-    PHPurchase *purchase = [notification object];
-
     if ([[notification name] isEqualToString:PHCONTENTVIEW_CALLBACK_NOTIFICATION]){
-
-        PH_LOG(@"Successfully received the notification: %@ for purchase named: %@", PHCONTENTVIEW_CALLBACK_NOTIFICATION, [purchase name]);
-        NSDictionary *callBack = [purchase callback];
-        [self sendCallback:[[callBack valueForKey:@"callback"] stringValue] withResponse:[[callBack valueForKey:@"response"] stringValue] error:[[callBack valueForKey:@"error"] stringValue]];
+        NSDictionary *callBack = (NSDictionary *)[notification object];
+        [self sendCallback:[callBack valueForKey:@"callback"] withResponse:[callBack valueForKey:@"response"] error:[callBack valueForKey:@"error"]];
     }
 }
 
@@ -318,7 +313,7 @@ static NSMutableSet *allContentViews = nil;
     
     [self addSubview:[self activityView]];
 
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(contentViewsCallback) name:PHCONTENTVIEW_CALLBACK_NOTIFICATION object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(contentViewsCallback:) name:PHCONTENTVIEW_CALLBACK_NOTIFICATION object:nil];
 
     //TRACK_ORIENTATION see STOP_TRACK_ORIENTATION
     [[NSNotificationCenter defaultCenter] 
@@ -537,7 +532,10 @@ static NSMutableSet *allContentViews = nil;
 #pragma mark - callbacks
 -(BOOL)sendCallback:(NSString *)callback withResponse:(id)response error:(id)error{
     NSString *_callback = @"null", *_response = @"null", *_error = @"null";
-    if (!!callback) _callback = callback;
+    if (!!callback){
+        PH_LOG(@"Sending callback with id: %@", callback);
+        _callback = callback;       
+    }
     
     SBJsonWriterPH *jsonWriter = [SBJsonWriterPH new];
     if (!!response) {
