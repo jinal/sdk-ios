@@ -13,6 +13,7 @@
 #import "PHStringUtil.h"
 #import "PHReward.h"
 #import "PHPurchase.h"
+#import "PHPublisherIAPTrackingRequest.h"
 #import "JSON.h"
 
 NSString *const PHPublisherContentRequestRewardIDKey = @"reward";
@@ -20,11 +21,12 @@ NSString *const PHPublisherContentRequestRewardQuantityKey = @"quantity";
 NSString *const PHPublisherContentRequestRewardReceiptKey = @"receipt";
 NSString *const PHPublisherContentRequestRewardSignatureKey = @"signature";
 
-NSString *const PHPublisherContentRequestPurchaseProductIDKey = @"productId";
+NSString *const PHPublisherContentRequestPurchaseProductIDKey = @"product";
 NSString *const PHPublisherContentRequestPurchaseNameKey = @"name";
 NSString *const PHPublisherContentRequestPurchaseQuantityKey = @"quantity";
 NSString *const PHPublisherContentRequestPurchaseReceiptKey = @"receipt";
 NSString *const PHPublisherContentRequestPurchaseSignatureKey = @"signature";
+NSString *const PHPublisherContentRequestPurchaseCookieKey = @"cookie";
 
 PHPublisherContentDismissType * const PHPublisherContentUnitTriggeredDismiss = @"PHPublisherContentUnitTriggeredDismiss";
 PHPublisherContentDismissType * const PHPublisherNativeCloseButtonTriggeredDismiss = @"PHPublisherNativeCloseButtonTriggeredDismiss";
@@ -643,6 +645,9 @@ PHPublisherContentDismissType * const PHPublisherNoContentTriggeredDismiss = @"P
             purchase.quantity = [[purchaseData valueForKey:PHPublisherContentRequestPurchaseQuantityKey] integerValue];
             purchase.receipt = [[purchaseData valueForKey:PHPublisherContentRequestPurchaseReceiptKey] stringValue];
             purchase.callback = callback;
+            
+            NSString *cookie = [[purchaseData valueForKey:PHPublisherContentRequestPurchaseCookieKey] stringValue];
+            [PHPublisherIAPTrackingRequest setConversionCookie:cookie forProduct:purchase.productIdentifier];
             
             if ([self.delegate respondsToSelector:@selector(request:makePurchase:)]) {
                 [(id <PHPublisherContentRequestDelegate>)self.delegate request:self makePurchase:purchase];

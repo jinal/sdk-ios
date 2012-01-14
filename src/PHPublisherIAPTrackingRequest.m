@@ -15,21 +15,6 @@
 
 @implementation PHPublisherIAPTrackingRequest
 
-+(NSString *)stringForResolution:(PHPublisherIAPTrackingResolution)resolution{
-    NSString *result = @"error";
-    switch (resolution) {
-        case PHPublisherIAPTrackingResolutionPurchased:
-            result = @"buy";
-            break;
-            
-        default:
-            result = @"cancel";
-            break;
-    }
-    
-    return result;
-}
-
 +(NSMutableDictionary *)allConversionCookies{
     static NSMutableDictionary *conversionCookies;
     if (conversionCookies == nil) {
@@ -70,7 +55,7 @@
     return [NSDictionary dictionaryWithObjectsAndKeys:
             self.product, @"product",
             [NSNumber numberWithInteger: self.quantity], @"quantity",
-            [PHPublisherIAPTrackingRequest stringForResolution:self.resolution], @"resolution",
+            [PHPurchase stringForResolution:self.resolution], @"resolution",
             _productInfo.price, @"price",
             _productInfo.priceLocale, @"price_locale", 
             [PHPublisherIAPTrackingRequest getConversionCookieForProduct:self.product], @"cookie", nil];
@@ -89,7 +74,7 @@
     if ([response.products count] > 0) {
         SKProduct *productInfo = [response.products objectAtIndex:0];
         [_productInfo release], _productInfo = [productInfo retain];
-        [self send];
+        [super send];
     } else {
         [self didFailWithError:PHCreateError(PHProductRequestErrorType)];
     }

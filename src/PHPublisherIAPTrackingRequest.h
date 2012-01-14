@@ -9,26 +9,20 @@
 #import <Foundation/Foundation.h>
 #import <StoreKit/StoreKit.h>
 #import "PHAPIRequest.h"
-
-typedef enum{
-    PHPublisherIAPTrackingResolutionPurchased,
-    PHPublisherIAPTrackingResolutionCanceled,
-    PHPublisherIAPTrackingResolutionError
-} PHPublisherIAPTrackingResolution
+#import "PHPurchase.h"
 
 @interface PHPublisherIAPTrackingRequest : PHAPIRequest<SKProductsRequestDelegate>{
     NSString *_product;
     NSInteger _quantity;
     SKProduct *_productInfo;
-    PHPublisherIAPTrackingResolution _resolution;
+    PHPurchaseResolutionType _resolution;
 }
 
-+(NSString *)stringForResolution: (PHPublisherIAPTrackingResolution) resolution;
 +(void)setConversionCookie:(NSString *)cookie forProduct:(NSString *)product;
 +(NSString *)getConversionCookieForProduct:(NSString *)product;
 
-@property (nonatomic, retain) NSString *product;
+@property (nonatomic, copy) NSString *product;
 @property (nonatomic, assign) NSInteger quantity;
-@property (nonatomic, assign) PHPublisherIAPTrackingResolution resolution;
+@property (nonatomic, assign) PHPurchaseResolutionType resolution;
 
 @end
