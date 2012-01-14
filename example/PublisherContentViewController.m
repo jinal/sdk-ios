@@ -105,6 +105,13 @@
   [self addMessage:message];
 }
 
+-(void)request:(PHPublisherContentRequest *)request makePurchase:(PHPurchase *)purchase{
+    NSString *message = [NSString stringWithFormat:@"Purchased: %dx %@", purchase.quantity, purchase.productIdentifier];
+    [self addMessage:message];
+
+    [purchase reportResolution:PHPurchaseResolutionBuy];
+}
+
 #pragma - Notifications
 /*
  * Refresh your notification view from the server each time it appears. 

@@ -12,12 +12,19 @@
 #import "PHConstants.h"
 #import "PHStringUtil.h"
 #import "PHReward.h"
+#import "PHPurchase.h"
 #import "JSON.h"
 
 NSString *const PHPublisherContentRequestRewardIDKey = @"reward";
 NSString *const PHPublisherContentRequestRewardQuantityKey = @"quantity";
 NSString *const PHPublisherContentRequestRewardReceiptKey = @"receipt";
 NSString *const PHPublisherContentRequestRewardSignatureKey = @"signature";
+
+NSString *const PHPublisherContentRequestPurchaseProductIDKey = @"productId";
+NSString *const PHPublisherContentRequestPurchaseNameKey = @"name";
+NSString *const PHPublisherContentRequestPurchaseQuantityKey = @"quantity";
+NSString *const PHPublisherContentRequestPurchaseReceiptKey = @"receipt";
+NSString *const PHPublisherContentRequestPurchaseSignatureKey = @"signature";
 
 PHPublisherContentDismissType * const PHPublisherContentUnitTriggeredDismiss = @"PHPublisherContentUnitTriggeredDismiss";
 PHPublisherContentDismissType * const PHPublisherNativeCloseButtonTriggeredDismiss = @"PHPublisherNativeCloseButtonTriggeredDismiss";
@@ -122,12 +129,12 @@ PHPublisherContentDismissType * const PHPublisherNoContentTriggeredDismiss = @"P
 }
 
 -(UIView *)overlayWindow{
-  if (_overlayWindow == nil){
-    _overlayWindow = [[UIView alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
-    _overlayWindow.backgroundColor = [UIColor colorWithWhite:0.0 alpha:0.5];
-  }
-  
-  return  _overlayWindow;
+    if (_overlayWindow == nil){
+        _overlayWindow = [[UIView alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+        _overlayWindow.backgroundColor = [UIColor colorWithWhite:0.0 alpha:0.5];
+    }
+    
+    return  _overlayWindow;
 }
 
 -(UIButton *)closeButton{
@@ -135,7 +142,7 @@ PHPublisherContentDismissType * const PHPublisherNoContentTriggeredDismiss = @"P
         _closeButton = [[UIButton buttonWithType:UIButtonTypeCustom] retain];
         _closeButton.frame = CGRectMake(0, 0, 40, 40);
         _closeButton.hidden = YES;
-
+        
         UIImage
         *closeImage = [self contentView:nil imageForCloseButtonState:UIControlStateNormal],
         *closeActiveImage = [self contentView:nil imageForCloseButtonState:UIControlStateHighlighted];
@@ -416,6 +423,7 @@ PHPublisherContentDismissType * const PHPublisherNoContentTriggeredDismiss = @"P
     
     [contentView redirectRequest:@"ph://subcontent" toTarget:self action:@selector(requestSubcontent:callback:source:)];
     [contentView redirectRequest:@"ph://reward" toTarget:self action:@selector(requestRewards:callback:source:)];
+    [contentView redirectRequest:@"ph://purchase" toTarget:self action:@selector(requestPurchases:callback:source:)];
     [contentView redirectRequest:@"ph://closeButton" toTarget:self action:@selector(requestCloseButton:callback:source:)];
     
     contentView.content = content;
@@ -447,7 +455,7 @@ PHPublisherContentDismissType * const PHPublisherNoContentTriggeredDismiss = @"P
         }
         [contentViews release];
     }
-        
+    
     if ([self.delegate respondsToSelector:@selector(request:contentDidDismissWithType:)]) {
         [self.delegate performSelector:@selector(request:contentDidDismissWithType:) 
                             withObject:self 
@@ -481,11 +489,11 @@ PHPublisherContentDismissType * const PHPublisherNoContentTriggeredDismiss = @"P
                             withObject:PHPublisherApplicationBackgroundTriggeredDismiss];
     } else {
         if ([self.delegate respondsToSelector:@selector(requestContentDidDismiss:)]) {
-        [self.delegate performSelector:@selector(requestContentDidDismiss:) 
-                            withObject:self];
+            [self.delegate performSelector:@selector(requestContentDidDismiss:) 
+                                withObject:self];
         }
     }
-
+    
     [self finish];
 }
 
@@ -528,7 +536,7 @@ PHPublisherContentDismissType * const PHPublisherNoContentTriggeredDismiss = @"P
             [self.delegate performSelector:@selector(requestContentDidDismiss:) 
                                 withObject:self];
         }
-
+        
         [self finish];
     }
 }
@@ -603,6 +611,44 @@ PHPublisherContentDismissType * const PHPublisherNoContentTriggeredDismiss = @"P
     }
     
     [source sendCallback:callback withResponse:nil error:nil];
+}
+
+#pragma mark - Purchase unlocking methods
+-(BOOL)isValidPurchase:(NSDictionary *)purchaseData{
+    NSString *productId = [purchaseData valueForKey:PHPublisherContentRequestPurchaseProductIDKey];
+    NSString *name = [purchaseData valueForKey:PHPublisherContentRequestPurchaseNameKey];
+    NSNumber *quantity = [purchaseData valueForKey:PHPublisherContentRequestPurchaseQuantityKey];
+    NSNumber *receipt = [purchaseData valueForKey:PHPublisherContentRequestPurchaseReceiptKey];
+    NSString *signature = [purchaseData valueForKey:PHPublisherContentRequestPurchaseSignatureKey];
+    
+    NSString *generatedSignatureString = [NSString stringWithFormat:@"%@:%@:%@:%@:%@:%@",
+                                          productId,
+                                          name,
+                                          quantity, 
+                                          [[UIDevice currentDevice] uniqueIdentifier], 
+                                          receipt, 
+                                          self.secret];
+    NSString *generatedSignature = [PHStringUtil hexDigestForString:generatedSignatureString];
+    
+    return [generatedSignature isEqualToString:signature];
+}
+
+-(void)requestPurchases:(NSDictionary *)queryParameters callback:(NSString *)callback source:(PHContentView *)source{
+    NSArray *purchasesArray = [queryParameters valueForKey:@"purchases"];
+    for (NSDictionary *purchaseData in purchasesArray) {
+        if ([self isValidPurchase:purchaseData]) {
+            PHPurchase *purchase = [PHPurchase new];
+            purchase.productIdentifier = [purchaseData valueForKey:PHPublisherContentRequestPurchaseProductIDKey];
+            purchase.name = [purchaseData valueForKey:PHPublisherContentRequestPurchaseNameKey];
+            purchase.quantity = [[purchaseData valueForKey:PHPublisherContentRequestPurchaseQuantityKey] integerValue];
+            purchase.receipt = [[purchaseData valueForKey:PHPublisherContentRequestPurchaseReceiptKey] stringValue];
+            purchase.callback = callback;
+            
+            if ([self.delegate respondsToSelector:@selector(request:makePurchase:)]) {
+                [(id <PHPublisherContentRequestDelegate>)self.delegate request:self makePurchase:purchase];
+            }
+        }
+    }
 }
 
 #pragma mark - Close button control
