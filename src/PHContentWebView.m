@@ -120,4 +120,26 @@
   _isAnimating = NO;
 }
 
+#ifdef PH_UNIT_TESTING
+-(void)setDelegate:(id)delegate{
+    
+}
+
+-(id)delegate{
+    return nil;
+}
+
+-(NSString *)stringByEvaluatingJavaScriptFromString:(NSString *)javascriptString{
+    return @"OK";
+}
+
+-(void)stopLoading{
+    
+}
+
+-(void)loadRequest:(NSURLRequest *)request{
+    
+}
+#endif
+
 @end
