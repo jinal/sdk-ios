@@ -91,6 +91,15 @@ int PHNetworkStatus(void);
 #define PH_MAX_SIZE_MEMORY_CACHE        1024*1024          // 1MB mem cache
 #define PH_MAX_SIZE_FILESYSTEM_CACHE    1024*1024*10       // 10MB disk cache
 
+// Event Tracking definitions
+//
+#define PH_MAX_EVENT_QUEUES     5                   // Number of event queues to store on disk. An event queue is
+                                                    // started every application start
+#define PH_MAX_EVENT_RECORDS    500                 // Maximum number of event records a event queue can hold.
+                                                    // Event tracking stops once this is reached
+#define PH_MAX_EVENT_RECORDS_SEND_PER_REQUEST   100 // Maximum number of event records that are sent during
+                                                    // a PHEventTrackingRequest
+
 //
 // Play Haven default images
 //

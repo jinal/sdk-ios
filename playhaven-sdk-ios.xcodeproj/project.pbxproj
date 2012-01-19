@@ -9,6 +9,10 @@
 /* Begin PBXBuildFile section */
 		D118AE5D14B78C3C00C76E2C /* PHUrlPrefetchOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = D118AE5C14B78C3C00C76E2C /* PHUrlPrefetchOperation.m */; };
 		D118AE5F14B7A7FD00C76E2C /* PHUrlPrefetchOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = D118AE5C14B78C3C00C76E2C /* PHUrlPrefetchOperation.m */; };
+		D1612F3E14C79251003B6FCD /* PHEventTrackingRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = D1612F3D14C79251003B6FCD /* PHEventTrackingRequest.m */; };
+		D1612F4114C79261003B6FCD /* PHEventTracking.m in Sources */ = {isa = PBXBuildFile; fileRef = D1612F4014C79261003B6FCD /* PHEventTracking.m */; };
+		D1612F4414C7B355003B6FCD /* PHEvent.m in Sources */ = {isa = PBXBuildFile; fileRef = D1612F4314C7B355003B6FCD /* PHEvent.m */; };
+		D1612F4714C7B672003B6FCD /* PHEventTimeInGame.m in Sources */ = {isa = PBXBuildFile; fileRef = D1612F4614C7B672003B6FCD /* PHEventTimeInGame.m */; };
 		D175008E149193790037A036 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D175008D149193790037A036 /* CFNetwork.framework */; };
 		D1E15B7C14981C39001241EE /* SDURLCache.m in Sources */ = {isa = PBXBuildFile; fileRef = D1E15B7B14981C39001241EE /* SDURLCache.m */; };
 		D1E15B7D14981E90001241EE /* SDURLCache.m in Sources */ = {isa = PBXBuildFile; fileRef = D1E15B7B14981C39001241EE /* SDURLCache.m */; };
@@ -135,6 +139,14 @@
 		D111108F14BBC54D0035B39E /* SDURLCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SDURLCache.h; sourceTree = "<group>"; };
 		D118AE5B14B78C3C00C76E2C /* PHUrlPrefetchOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PHUrlPrefetchOperation.h; sourceTree = "<group>"; };
 		D118AE5C14B78C3C00C76E2C /* PHUrlPrefetchOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PHUrlPrefetchOperation.m; sourceTree = "<group>"; };
+		D1612F3C14C79251003B6FCD /* PHEventTrackingRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PHEventTrackingRequest.h; sourceTree = "<group>"; };
+		D1612F3D14C79251003B6FCD /* PHEventTrackingRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PHEventTrackingRequest.m; sourceTree = "<group>"; };
+		D1612F3F14C79261003B6FCD /* PHEventTracking.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PHEventTracking.h; sourceTree = "<group>"; };
+		D1612F4014C79261003B6FCD /* PHEventTracking.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PHEventTracking.m; sourceTree = "<group>"; };
+		D1612F4214C7B355003B6FCD /* PHEvent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PHEvent.h; sourceTree = "<group>"; };
+		D1612F4314C7B355003B6FCD /* PHEvent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PHEvent.m; sourceTree = "<group>"; };
+		D1612F4514C7B672003B6FCD /* PHEventTimeInGame.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PHEventTimeInGame.h; sourceTree = "<group>"; };
+		D1612F4614C7B672003B6FCD /* PHEventTimeInGame.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PHEventTimeInGame.m; sourceTree = "<group>"; };
 		D175008D149193790037A036 /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
 		D1E15B7B14981C39001241EE /* SDURLCache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SDURLCache.m; sourceTree = "<group>"; };
 		EA03810913B25F4300A31FF7 /* PHPublisherMetadataRequestTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PHPublisherMetadataRequestTest.m; sourceTree = "<group>"; };
@@ -285,6 +297,22 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		D1612F3714C7690A003B6FCD /* Event Tracking */ = {
+			isa = PBXGroup;
+			children = (
+				D1612F3C14C79251003B6FCD /* PHEventTrackingRequest.h */,
+				D1612F3D14C79251003B6FCD /* PHEventTrackingRequest.m */,
+				D1612F3F14C79261003B6FCD /* PHEventTracking.h */,
+				D1612F4014C79261003B6FCD /* PHEventTracking.m */,
+				D1612F4214C7B355003B6FCD /* PHEvent.h */,
+				D1612F4314C7B355003B6FCD /* PHEvent.m */,
+				D1612F4514C7B672003B6FCD /* PHEventTimeInGame.h */,
+				D1612F4614C7B672003B6FCD /* PHEventTimeInGame.m */,
+			);
+			name = "Event Tracking";
+			path = ..;
+			sourceTree = "<group>";
+		};
 		D1E15B7914981C39001241EE /* Cache */ = {
 			isa = PBXGroup;
 			children = (
@@ -386,6 +414,7 @@
 		EA523D941343EE9D0057DEA5 /* Publisher SDK */ = {
 			isa = PBXGroup;
 			children = (
+				D1612F3714C7690A003B6FCD /* Event Tracking */,
 				EA03810C13B2630200A31FF7 /* Metadata */,
 				EAB4427913454EB8000DA3E9 /* Content */,
 				EA6EA1EB135F6D5A000123B0 /* Promos */,
@@ -693,6 +722,10 @@
 				EA6ADFC81475F22C00DBE60B /* PHPublisherContentRequestTest.m in Sources */,
 				D1E15B7C14981C39001241EE /* SDURLCache.m in Sources */,
 				D118AE5D14B78C3C00C76E2C /* PHUrlPrefetchOperation.m in Sources */,
+				D1612F3E14C79251003B6FCD /* PHEventTrackingRequest.m in Sources */,
+				D1612F4114C79261003B6FCD /* PHEventTracking.m in Sources */,
+				D1612F4414C7B355003B6FCD /* PHEvent.m in Sources */,
+				D1612F4714C7B672003B6FCD /* PHEventTimeInGame.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
