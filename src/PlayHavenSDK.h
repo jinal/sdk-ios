@@ -10,6 +10,8 @@
 #import "PHPublisherContentRequest.h"
 #import "PHPublisherPromosRequest.h"
 #import "PHPublisherMetadataRequest.h"
+#import "PHPublisherIAPTrackingRequest.h"
 
 #import "PHNotificationView.h"
 #import "PHReward.h"
+#import "PHPurchase.h"

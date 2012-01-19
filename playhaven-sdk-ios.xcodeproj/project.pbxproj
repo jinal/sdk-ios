@@ -10,8 +10,16 @@
 		D118AE5D14B78C3C00C76E2C /* PHUrlPrefetchOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = D118AE5C14B78C3C00C76E2C /* PHUrlPrefetchOperation.m */; };
 		D118AE5F14B7A7FD00C76E2C /* PHUrlPrefetchOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = D118AE5C14B78C3C00C76E2C /* PHUrlPrefetchOperation.m */; };
 		D175008E149193790037A036 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D175008D149193790037A036 /* CFNetwork.framework */; };
+		D1BD481B14C0ED3300EE8A5A /* PHPurchase.m in Sources */ = {isa = PBXBuildFile; fileRef = D1BD481914C0CC6300EE8A5A /* PHPurchase.m */; };
+		D1BD481C14C0EDC500EE8A5A /* PHPurchase.m in Sources */ = {isa = PBXBuildFile; fileRef = D1BD481914C0CC6300EE8A5A /* PHPurchase.m */; };
+		D1BD481D14C0EDD100EE8A5A /* PHPurchase.m in Sources */ = {isa = PBXBuildFile; fileRef = D1BD481914C0CC6300EE8A5A /* PHPurchase.m */; };
 		D1E15B7C14981C39001241EE /* SDURLCache.m in Sources */ = {isa = PBXBuildFile; fileRef = D1E15B7B14981C39001241EE /* SDURLCache.m */; };
 		D1E15B7D14981E90001241EE /* SDURLCache.m in Sources */ = {isa = PBXBuildFile; fileRef = D1E15B7B14981C39001241EE /* SDURLCache.m */; };
+		EA019C8114C0FCE5008FBCB1 /* PHPublisherIAPTrackingRequest.h in Headers */ = {isa = PBXBuildFile; fileRef = EA019C7F14C0FCE5008FBCB1 /* PHPublisherIAPTrackingRequest.h */; };
+		EA019C8214C0FCE5008FBCB1 /* PHPublisherIAPTrackingRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = EA019C8014C0FCE5008FBCB1 /* PHPublisherIAPTrackingRequest.m */; };
+		EA019C8314C0FCE5008FBCB1 /* PHPublisherIAPTrackingRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = EA019C8014C0FCE5008FBCB1 /* PHPublisherIAPTrackingRequest.m */; };
+		EA019C8414C0FCE5008FBCB1 /* PHPublisherIAPTrackingRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = EA019C8014C0FCE5008FBCB1 /* PHPublisherIAPTrackingRequest.m */; };
+		EA019C8614C102D4008FBCB1 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EA019C8514C102D4008FBCB1 /* StoreKit.framework */; };
 		EA03810A13B25F4300A31FF7 /* PHPublisherMetadataRequestTest.m in Sources */ = {isa = PBXBuildFile; fileRef = EA03810913B25F4300A31FF7 /* PHPublisherMetadataRequestTest.m */; };
 		EA03810F13B26A1A00A31FF7 /* PHPublisherMetadataRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = EA03810E13B26A1A00A31FF7 /* PHPublisherMetadataRequest.m */; };
 		EA03811313B26FF500A31FF7 /* PHNotificationViewTest.m in Sources */ = {isa = PBXBuildFile; fileRef = EA03811213B26FF500A31FF7 /* PHNotificationViewTest.m */; };
@@ -66,6 +74,7 @@
 		EA6EA1E8135F458E000123B0 /* PHPublisherTokensRequestTest.m in Sources */ = {isa = PBXBuildFile; fileRef = EA6EA1E7135F458E000123B0 /* PHPublisherTokensRequestTest.m */; };
 		EA6EA1EF135F6D77000123B0 /* PHPublisherPromosRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = EA6EA1ED135F6D77000123B0 /* PHPublisherPromosRequest.m */; };
 		EA7BC61A13537F8700B4518D /* PHURLLoaderTest.m in Sources */ = {isa = PBXBuildFile; fileRef = EA7BC61813537F8700B4518D /* PHURLLoaderTest.m */; };
+		EA8A6D3414C8C5CA000B86A5 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EA019C8514C102D4008FBCB1 /* StoreKit.framework */; };
 		EA9AB62014A3B0AA00079704 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D30AB110D05D00D00671497 /* Foundation.framework */; };
 		EA9AB62B14A3B0D500079704 /* SBJsonBase.m in Sources */ = {isa = PBXBuildFile; fileRef = EAB44264134539F4000DA3E9 /* SBJsonBase.m */; };
 		EA9AB62D14A3B0D500079704 /* SBJsonParser.m in Sources */ = {isa = PBXBuildFile; fileRef = EAB44266134539F4000DA3E9 /* SBJsonParser.m */; };
@@ -136,7 +145,12 @@
 		D118AE5B14B78C3C00C76E2C /* PHUrlPrefetchOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PHUrlPrefetchOperation.h; sourceTree = "<group>"; };
 		D118AE5C14B78C3C00C76E2C /* PHUrlPrefetchOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PHUrlPrefetchOperation.m; sourceTree = "<group>"; };
 		D175008D149193790037A036 /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
+		D1BD481814C0CC6300EE8A5A /* PHPurchase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PHPurchase.h; sourceTree = "<group>"; };
+		D1BD481914C0CC6300EE8A5A /* PHPurchase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PHPurchase.m; sourceTree = "<group>"; };
 		D1E15B7B14981C39001241EE /* SDURLCache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SDURLCache.m; sourceTree = "<group>"; };
+		EA019C7F14C0FCE5008FBCB1 /* PHPublisherIAPTrackingRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PHPublisherIAPTrackingRequest.h; sourceTree = "<group>"; };
+		EA019C8014C0FCE5008FBCB1 /* PHPublisherIAPTrackingRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PHPublisherIAPTrackingRequest.m; sourceTree = "<group>"; };
+		EA019C8514C102D4008FBCB1 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
 		EA03810913B25F4300A31FF7 /* PHPublisherMetadataRequestTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PHPublisherMetadataRequestTest.m; sourceTree = "<group>"; };
 		EA03810D13B26A1A00A31FF7 /* PHPublisherMetadataRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PHPublisherMetadataRequest.h; sourceTree = "<group>"; };
 		EA03810E13B26A1A00A31FF7 /* PHPublisherMetadataRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PHPublisherMetadataRequest.m; sourceTree = "<group>"; };
@@ -216,6 +230,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				EA019C8614C102D4008FBCB1 /* StoreKit.framework in Frameworks */,
 				D175008E149193790037A036 /* CFNetwork.framework in Frameworks */,
 				EABAA6981450ED640040B937 /* SystemConfiguration.framework in Frameworks */,
 				EA12ABD51365DBB700CB2F24 /* UIKit.framework in Frameworks */,
@@ -228,6 +243,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				EA8A6D3414C8C5CA000B86A5 /* StoreKit.framework in Frameworks */,
 				EAA547D714BF62AC00254A54 /* CFNetwork.framework in Frameworks */,
 				EA6ADFC51475CF3A00DBE60B /* SystemConfiguration.framework in Frameworks */,
 				EAB44397134554B3000DA3E9 /* Foundation.framework in Frameworks */,
@@ -273,6 +289,7 @@
 		29B97323FDCFA39411CA2CEA /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				EA019C8514C102D4008FBCB1 /* StoreKit.framework */,
 				D175008D149193790037A036 /* CFNetwork.framework */,
 				EABAA6971450ED640040B937 /* SystemConfiguration.framework */,
 				1DF5F4DF0D08C38300B7A737 /* UIKit.framework */,
@@ -292,6 +309,15 @@
 				D118AE5C14B78C3C00C76E2C /* PHUrlPrefetchOperation.m */,
 			);
 			path = Cache;
+			sourceTree = "<group>";
+		};
+		EA019C7E14C0FC16008FBCB1 /* Purchases */ = {
+			isa = PBXGroup;
+			children = (
+				EA019C7F14C0FCE5008FBCB1 /* PHPublisherIAPTrackingRequest.h */,
+				EA019C8014C0FCE5008FBCB1 /* PHPublisherIAPTrackingRequest.m */,
+			);
+			name = Purchases;
 			sourceTree = "<group>";
 		};
 		EA03810C13B2630200A31FF7 /* Metadata */ = {
@@ -384,6 +410,7 @@
 		EA523D941343EE9D0057DEA5 /* Publisher SDK */ = {
 			isa = PBXGroup;
 			children = (
+				EA019C7E14C0FC16008FBCB1 /* Purchases */,
 				EA03810C13B2630200A31FF7 /* Metadata */,
 				EAB4427913454EB8000DA3E9 /* Content */,
 				EA6EA1EB135F6D5A000123B0 /* Promos */,
@@ -447,6 +474,8 @@
 				EAED519E134B949D00D0DCB6 /* PHPublisherContentRequest.m */,
 				EAB2B44513CBD172006D2391 /* PHReward.h */,
 				EAB2B44613CBD172006D2391 /* PHReward.m */,
+				D1BD481814C0CC6300EE8A5A /* PHPurchase.h */,
+				D1BD481914C0CC6300EE8A5A /* PHPurchase.m */,
 			);
 			name = Content;
 			sourceTree = "<group>";
@@ -493,6 +522,7 @@
 				EA9AB66B14A3B2EE00079704 /* PHPublisherOpenRequest.h in Headers */,
 				EA5E5C5914C60D660026B3E0 /* SDURLCache.h in Headers */,
 				EA5E5C5A14C60D660026B3E0 /* PHUrlPrefetchOperation.h in Headers */,
+				EA019C8114C0FCE5008FBCB1 /* PHPublisherIAPTrackingRequest.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -624,6 +654,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D1BD481D14C0EDD100EE8A5A /* PHPurchase.m in Sources */,
 				D118AE5F14B7A7FD00C76E2C /* PHUrlPrefetchOperation.m in Sources */,
 				D1E15B7D14981E90001241EE /* SDURLCache.m in Sources */,
 				EA03811813B272FB00A31FF7 /* PHPublisherMetadataRequest.m in Sources */,
@@ -652,6 +683,7 @@
 				EA03812013B2A0F200A31FF7 /* PHNotificationBadgeRenderer.m in Sources */,
 				EAB2B44813CBD172006D2391 /* PHReward.m in Sources */,
 				EA1799E014200FAE005F286F /* PHConstants.m in Sources */,
+				EA019C8314C0FCE5008FBCB1 /* PHPublisherIAPTrackingRequest.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -659,6 +691,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D1BD481B14C0ED3300EE8A5A /* PHPurchase.m in Sources */,
 				EA523D8B1343EE670057DEA5 /* PHPublisherOpenRequestTest.m in Sources */,
 				EA523D9B1343EEDA0057DEA5 /* PHPublisherOpenRequest.m in Sources */,
 				EA523D9E1343EEED0057DEA5 /* PHStringUtil.m in Sources */,
@@ -688,6 +721,7 @@
 				EA6ADFC81475F22C00DBE60B /* PHPublisherContentRequestTest.m in Sources */,
 				D1E15B7C14981C39001241EE /* SDURLCache.m in Sources */,
 				D118AE5D14B78C3C00C76E2C /* PHUrlPrefetchOperation.m in Sources */,
+				EA019C8214C0FCE5008FBCB1 /* PHPublisherIAPTrackingRequest.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -697,6 +731,7 @@
 			files = (
 				EA5E5C5614C60D570026B3E0 /* SDURLCache.m in Sources */,
 				EA5E5C5714C60D570026B3E0 /* PHUrlPrefetchOperation.m in Sources */,
+				D1BD481C14C0EDC500EE8A5A /* PHPurchase.m in Sources */,
 				EA9AB62B14A3B0D500079704 /* SBJsonBase.m in Sources */,
 				EA9AB62D14A3B0D500079704 /* SBJsonParser.m in Sources */,
 				EA9AB62F14A3B0D500079704 /* SBJsonWriter.m in Sources */,
@@ -717,6 +752,7 @@
 				EA9AB65014A3B0D500079704 /* PHReward.m in Sources */,
 				EA9AB65214A3B0D500079704 /* PHPublisherPromosRequest.m in Sources */,
 				EA9AB65414A3B0D500079704 /* PHPublisherOpenRequest.m in Sources */,
+				EA019C8414C0FCE5008FBCB1 /* PHPublisherIAPTrackingRequest.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
