@@ -9,7 +9,7 @@
 #import <UIKit/UIImage.h>
 
 // Constants
-#define PH_SDK_VERSION @"1.3.14"
+#define PH_SDK_VERSION @"1.5.0"
 
 #ifndef PH_BASE_URL
 #define PH_BASE_URL @"http://api2.playhaven.com"

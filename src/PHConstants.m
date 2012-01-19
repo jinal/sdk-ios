@@ -23,7 +23,7 @@
 #define IFT_ETHER 0x6/* Ethernet CSMACD */
 #endif
 
-BOOL _localWiFiAvailable();
+BOOL _localWiFiAvailable(void);
 
 NSError *PHCreateError(PHErrorType errorType){
   static NSArray *errorArray;
