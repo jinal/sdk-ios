@@ -27,7 +27,7 @@
   UIInterfaceOrientation _orientation;
   NSObject<PHContentViewDelegate> *_delegate;
   
-  PHContentWebView *_webView;
+  UIWebView *_webView;
   BOOL _willAnimate;
   
   NSMutableDictionary *_redirects;

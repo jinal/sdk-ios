@@ -8,7 +8,6 @@
 
 #import "PHContentView.h"
 #import "PHContent.h"
-#import "PHContentWebView.h"
 #import "NSObject+QueryComponents.h"
 #import "JSON.h"
 #import "PHConstants.h"
@@ -35,6 +34,8 @@
 -(void) closeView:(BOOL)animated;
 -(void)prepareForReuse;
 -(void)resetRedirects;
+-(void)bounceOut;
+-(void)bounceIn;
 @end
 
 static NSMutableSet *allContentViews = nil;
@@ -108,7 +109,7 @@ static NSMutableSet *allContentViews = nil;
                       loadContextRedirect,@"ph://loadContext",
                       nil];
 #ifndef PH_UNIT_TESTING         
-        _webView = [[PHContentWebView alloc] initWithFrame:CGRectZero];
+        _webView = [[UIWebView alloc] initWithFrame:CGRectZero];
         [self addSubview:_webView];
 #endif
         self.content = content;
@@ -236,8 +237,8 @@ static NSMutableSet *allContentViews = nil;
     [self sizeToFitOrientation:YES];
     
     [_webView setDelegate:self];
-    _webView.transform = CGAffineTransformIdentity;
-    _webView.alpha = 1.0;
+    self.transform = CGAffineTransformIdentity;
+    self.alpha = 1.0;
     
     [self loadTemplate];
     
@@ -297,7 +298,7 @@ static NSMutableSet *allContentViews = nil;
         [self activityView].center = _webView.center;
         
         if (animated) {
-            [_webView bounceInWithTarget:self action:@selector(viewDidShow)];
+            [self bounceIn];
         } else {
             [self viewDidShow];
         }
@@ -363,7 +364,7 @@ static NSMutableSet *allContentViews = nil;
         }
     } else if (self.content.transition == PHContentTransitionDialog){
         if (_willAnimate) {
-            [_webView bounceOutWithTarget:self action:@selector(viewDidDismiss)];
+            [self bounceOut];
         } else {
             [self viewDidDismiss];
         }
@@ -560,5 +561,92 @@ static NSMutableSet *allContentViews = nil;
     [self sendCallback:[contextData valueForKey:@"callback"]
           withResponse:responseDict 
                  error:errorDict];
+}
+
+#pragma mark - PH_DIALOG animation methods
+#define ALPHA_OUT 0.0f
+#define ALPHA_IN 1.0f
+
+#define BOUNCE_OUT CGAffineTransformMakeScale(0.8,0.8)
+#define BOUNCE_MID CGAffineTransformMakeScale(1.1,1.1)
+#define BOUNCE_IN  CGAffineTransformIdentity
+
+#define DURATION_1 0.125
+#define DURATION_2 0.125
+
+-(void)bounceIn{
+    self.transform = BOUNCE_OUT;
+    self.alpha = ALPHA_OUT;
+    
+    [UIView beginAnimations:@"bounce" context:nil];
+    [UIView setAnimationCurve:UIViewAnimationCurveEaseOut];
+    [UIView setAnimationDuration:DURATION_1];
+    [UIView setAnimationDelegate:self];
+    [UIView setAnimationDidStopSelector:@selector(continueBounceIn)];
+    
+    self.transform = BOUNCE_MID;
+    self.alpha = ALPHA_IN;
+    
+    [UIView commitAnimations];
+}
+
+-(void)continueBounceIn{
+    self.transform = BOUNCE_MID;
+    self.alpha = ALPHA_IN;
+    
+    [UIView beginAnimations:@"bounce2" context:nil];
+    [UIView setAnimationCurve:UIViewAnimationCurveEaseIn];
+    [UIView setAnimationDuration:DURATION_2];
+    [UIView setAnimationDelegate:self];
+    [UIView setAnimationDidStopSelector:@selector(finishBounceIn)];
+    
+    self.transform = BOUNCE_IN;
+    
+    [UIView commitAnimations];
+}
+
+-(void)finishBounceIn{
+    self.transform = BOUNCE_IN;
+    self.alpha = ALPHA_IN;
+    
+    [self viewDidShow];
+}
+
+-(void)bounceOut{
+    self.transform = BOUNCE_IN;
+    self.alpha = ALPHA_IN;
+    
+    [UIView beginAnimations:@"bounce" context:nil];
+    [UIView setAnimationCurve:UIViewAnimationCurveEaseOut];
+    [UIView setAnimationDuration:DURATION_1];
+    [UIView setAnimationDelegate:self];
+    [UIView setAnimationDidStopSelector:@selector(continueBounceOut)];
+    
+    self.transform = BOUNCE_MID;
+    
+    [UIView commitAnimations];
+}
+
+-(void)continueBounceOut{
+    self.transform = BOUNCE_MID;
+    self.alpha = ALPHA_IN;
+    
+    [UIView beginAnimations:@"bounce2" context:nil];
+    [UIView setAnimationCurve:UIViewAnimationCurveEaseIn];
+    [UIView setAnimationDuration:DURATION_2];
+    [UIView setAnimationDelegate:self];
+    [UIView setAnimationDidStopSelector:@selector(finishBounceOut)];
+    
+    self.transform = BOUNCE_OUT;
+    self.alpha = ALPHA_OUT;
+    
+    [UIView commitAnimations];
+}
+
+-(void)finishBounceOut{
+    self.transform = BOUNCE_OUT;
+    self.alpha = ALPHA_OUT;
+    
+    [self viewDidDismiss];
 }
 @end
