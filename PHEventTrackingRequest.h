@@ -10,6 +10,12 @@
 #import "PHAPIRequest.h"
 #import "PHEvent.h"
 
-@interface PHEventTrackingRequest : PHAPIRequest
+@interface PHEventTrackingRequest : PHAPIRequest{
+    PHEvent *_event;
+    NSString *event_queue_hash;
+}
+
+@property (nonatomic, copy) PHEvent *event;
+@property (nonatomic, copy) NSString *event_queue_hash;
 
 @end

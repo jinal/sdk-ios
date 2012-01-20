@@ -10,6 +10,7 @@
 #import "PHConstants.h"
 #import "SDURLCache.h"
 #import "PHURLPrefetchOperation.h"
+#import "PHEventTracking.h"
 
 @interface PHAPIRequest(Private)
 -(void)finish;
@@ -26,6 +27,9 @@
                                                         diskPath:[SDURLCachePH defaultCachePath]];
         [NSURLCache setSharedURLCache:urlCache];
         [urlCache release];
+
+        // Start up an event queue and start tracking
+        PHEventTracking *eventTracking = [PHEventTracking eventTrackingForApp];
     }
 }
 

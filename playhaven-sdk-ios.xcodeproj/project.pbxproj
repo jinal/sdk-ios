@@ -14,6 +14,13 @@
 		D1612F4414C7B355003B6FCD /* PHEvent.m in Sources */ = {isa = PBXBuildFile; fileRef = D1612F4314C7B355003B6FCD /* PHEvent.m */; };
 		D1612F4714C7B672003B6FCD /* PHEventTimeInGame.m in Sources */ = {isa = PBXBuildFile; fileRef = D1612F4614C7B672003B6FCD /* PHEventTimeInGame.m */; };
 		D175008E149193790037A036 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D175008D149193790037A036 /* CFNetwork.framework */; };
+		D17B943214CA0E7E00978C20 /* PHEventTrackingRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = D1612F3D14C79251003B6FCD /* PHEventTrackingRequest.m */; };
+		D17B943314CA0E7E00978C20 /* PHEventTracking.m in Sources */ = {isa = PBXBuildFile; fileRef = D1612F4014C79261003B6FCD /* PHEventTracking.m */; };
+		D17B943414CA0E7E00978C20 /* PHEvent.m in Sources */ = {isa = PBXBuildFile; fileRef = D1612F4314C7B355003B6FCD /* PHEvent.m */; };
+		D17B943514CA0E7E00978C20 /* PHEventTimeInGame.m in Sources */ = {isa = PBXBuildFile; fileRef = D1612F4614C7B672003B6FCD /* PHEventTimeInGame.m */; };
+		D17B943E14CA244B00978C20 /* PublisherTrackingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D17B943C14CA244B00978C20 /* PublisherTrackingViewController.m */; };
+		D17B944114CA282900978C20 /* PublisherTrackingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D17B943C14CA244B00978C20 /* PublisherTrackingViewController.m */; };
+		D17B944214CA2B3900978C20 /* PublisherTrackingViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = D17B943D14CA244B00978C20 /* PublisherTrackingViewController.xib */; };
 		D1E15B7C14981C39001241EE /* SDURLCache.m in Sources */ = {isa = PBXBuildFile; fileRef = D1E15B7B14981C39001241EE /* SDURLCache.m */; };
 		D1E15B7D14981E90001241EE /* SDURLCache.m in Sources */ = {isa = PBXBuildFile; fileRef = D1E15B7B14981C39001241EE /* SDURLCache.m */; };
 		EA03810A13B25F4300A31FF7 /* PHPublisherMetadataRequestTest.m in Sources */ = {isa = PBXBuildFile; fileRef = EA03810913B25F4300A31FF7 /* PHPublisherMetadataRequestTest.m */; };
@@ -148,6 +155,9 @@
 		D1612F4514C7B672003B6FCD /* PHEventTimeInGame.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PHEventTimeInGame.h; sourceTree = "<group>"; };
 		D1612F4614C7B672003B6FCD /* PHEventTimeInGame.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PHEventTimeInGame.m; sourceTree = "<group>"; };
 		D175008D149193790037A036 /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
+		D17B943B14CA244B00978C20 /* PublisherTrackingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PublisherTrackingViewController.h; sourceTree = "<group>"; };
+		D17B943C14CA244B00978C20 /* PublisherTrackingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PublisherTrackingViewController.m; sourceTree = "<group>"; };
+		D17B943D14CA244B00978C20 /* PublisherTrackingViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PublisherTrackingViewController.xib; sourceTree = "<group>"; };
 		D1E15B7B14981C39001241EE /* SDURLCache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SDURLCache.m; sourceTree = "<group>"; };
 		EA03810913B25F4300A31FF7 /* PHPublisherMetadataRequestTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PHPublisherMetadataRequestTest.m; sourceTree = "<group>"; };
 		EA03810D13B26A1A00A31FF7 /* PHPublisherMetadataRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PHPublisherMetadataRequest.h; sourceTree = "<group>"; };
@@ -357,6 +367,9 @@
 				EA12AC431366339D00CB2F24 /* PublisherContentViewController.h */,
 				EA12AC441366339D00CB2F24 /* PublisherContentViewController.m */,
 				EA50F3D21436426F0055EB3A /* PublisherContentViewController.xib */,
+				D17B943B14CA244B00978C20 /* PublisherTrackingViewController.h */,
+				D17B943C14CA244B00978C20 /* PublisherTrackingViewController.m */,
+				D17B943D14CA244B00978C20 /* PublisherTrackingViewController.xib */,
 			);
 			path = example;
 			sourceTree = "<group>";
@@ -618,6 +631,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D17B944214CA2B3900978C20 /* PublisherTrackingViewController.xib in Resources */,
 				EA12ABDD1365DBB700CB2F24 /* InfoPlist.strings in Resources */,
 				EA12ABE61365DBB700CB2F24 /* MainWindow.xib in Resources */,
 				EA12ABEC1365DBB700CB2F24 /* RootViewController.xib in Resources */,
@@ -656,6 +670,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D17B944114CA282900978C20 /* PublisherTrackingViewController.m in Sources */,
+				D17B943214CA0E7E00978C20 /* PHEventTrackingRequest.m in Sources */,
+				D17B943314CA0E7E00978C20 /* PHEventTracking.m in Sources */,
+				D17B943414CA0E7E00978C20 /* PHEvent.m in Sources */,
+				D17B943514CA0E7E00978C20 /* PHEventTimeInGame.m in Sources */,
 				D118AE5F14B7A7FD00C76E2C /* PHUrlPrefetchOperation.m in Sources */,
 				D1E15B7D14981E90001241EE /* SDURLCache.m in Sources */,
 				EA03811813B272FB00A31FF7 /* PHPublisherMetadataRequest.m in Sources */,
@@ -726,6 +745,7 @@
 				D1612F4114C79261003B6FCD /* PHEventTracking.m in Sources */,
 				D1612F4414C7B355003B6FCD /* PHEvent.m in Sources */,
 				D1612F4714C7B672003B6FCD /* PHEventTimeInGame.m in Sources */,
+				D17B943E14CA244B00978C20 /* PublisherTrackingViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

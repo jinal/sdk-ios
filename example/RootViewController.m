@@ -9,6 +9,7 @@
 #import "RootViewController.h"
 #import "PublisherOpenViewController.h"
 #import "PublisherContentViewController.h"
+#import "PublisherTrackingViewController.h"
 
 @interface RootViewController(Private)
 -(void)loadTokenAndSecretFromDefaults;
@@ -81,7 +82,7 @@
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-  return 2;
+  return 3;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -98,10 +99,14 @@
       cell.textLabel.text = @"Open";
       cell.detailTextLabel.text = @"/publisher/open/";
       break;
-    case 1:
-      cell.textLabel.text = @"Content";
-      cell.detailTextLabel.text = @"/publisher/content/";
-      break;
+      case 1:
+          cell.textLabel.text = @"Content";
+          cell.detailTextLabel.text = @"/publisher/content/";
+          break;
+      case 2:
+          cell.textLabel.text = @"Tracking";
+          cell.detailTextLabel.text = @"/publisher/tracking/";
+          break;
     default:
       break;
   }
@@ -120,12 +125,19 @@
       [self.navigationController pushViewController:controller animated:YES];
       [controller release];
     } else if (indexPath.row == 1){
-      PublisherContentViewController *controller = [[PublisherContentViewController alloc] initWithNibName:@"PublisherContentViewController" bundle:nil];
-      controller.title = @"Content";
-      controller.token = self.tokenField.text;
-      controller.secret = self.secretField.text;
-      [self.navigationController pushViewController:controller animated:YES];
-      [controller release];
+        PublisherContentViewController *controller = [[PublisherContentViewController alloc] initWithNibName:@"PublisherContentViewController" bundle:nil];
+        controller.title = @"Content";
+        controller.token = self.tokenField.text;
+        controller.secret = self.secretField.text;
+        [self.navigationController pushViewController:controller animated:YES];
+        [controller release];
+    } else if (indexPath.row == 2){
+        PublisherTrackingViewController *controller = [[PublisherTrackingViewController alloc] initWithNibName:@"PublisherTrackingViewController" bundle:nil];
+        controller.title = @"Tracking";
+        controller.token = self.tokenField.text;
+        controller.secret = self.secretField.text;
+        [self.navigationController pushViewController:controller animated:YES];
+        [controller release];
     } 
   } else {
     UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Missing Credentials" message:@"You must supply a PlayHaven API token and secret to use this app. To get a token and secret, please visit http://playhaven.com on your computer and sign up." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];

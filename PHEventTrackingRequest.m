@@ -19,8 +19,10 @@
 
 @implementation PHEventTrackingRequest
 
+@synthesize event, event_queue_hash;
+
 -(void)dealloc{
-    //[_product release], _product = nil;
+    [_event release], _event = nil;
     [super dealloc];
 }
 
@@ -32,25 +34,13 @@
 }
 
 -(NSDictionary *)additionalParameters{
-    return nil;
-    /*
-    return [NSDictionary dictionaryWithObjectsAndKeys:
-            self.product, @"product",
-            [NSNumber numberWithInteger: self.quantity], @"quantity",
-            [PHPurchase stringForResolution:self.resolution], @"resolution",
-            _productInfo.price, @"price",
-            _productInfo.priceLocale, @"price_locale", 
-            [PHPublisherIAPTrackingRequest getConversionCookieForProduct:self.product], @"cookie", nil];
-    */
-}
 
--(void)send{
-    /*
-    NSSet *productSet = [NSSet setWithObject:self.product];
-    SKProductsRequest *request = [[SKProductsRequest alloc] initWithProductIdentifiers:productSet];
-    [request setDelegate:self];
-    [request start];
-    */
+    // Loop here with number should send per request - PH_MAX_EVENT_RECORDS_SEND_PER_REQUEST
+    NSString *unixTime = [[[NSString alloc] initWithFormat:@"%0.0f", [_event.eventTimestamp timeIntervalSince1970]] autorelease];
+    return [NSDictionary dictionaryWithObjectsAndKeys:
+            [NSNumber numberWithInteger:_event.eventType], @"event_type",
+            _event.eventData, @"event_data",
+            unixTime, @"event_timestamp", nil];
 }
 
 #pragma mark - PHAPIRequest response delegate
