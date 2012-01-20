@@ -13,6 +13,10 @@
 
 @end
 
+
+// NOTE: have a send event records and a send all option
+
+
 @implementation PHEventTrackingRequest
 
 -(void)dealloc{

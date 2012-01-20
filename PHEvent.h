@@ -25,4 +25,6 @@ typedef enum{
 @property (nonatomic, copy) NSString *eventData;
 @property (nonatomic, copy) NSDate *eventTimestamp;
 
+- (void)saveEventToDisk:(NSString *)fileName;
+
 @end

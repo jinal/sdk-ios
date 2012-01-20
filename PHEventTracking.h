@@ -14,6 +14,8 @@
 
 }
 
-+(void) addEvent:(NSObject *)event;
++(void) addEvent:(PHEvent *)event;
++(void) clearEventQueue;
++(void) clearEventQueueCache;
 
 @end

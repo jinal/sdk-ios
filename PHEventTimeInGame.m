@@ -18,7 +18,7 @@ static NSString *const PHEventTimeInGameApplicationWillTerminate = @"phEventAppW
 
 
 @interface PHEventTimeInGame(Private)
--(id) initWithApp:(PHEventTrackingType)type withData:(NSString *)data withTimestamp:(NSDate *)timestamp;
+-(id) initWithData:(PHEventTrackingType)type withData:(NSString *)data withTimestamp:(NSDate *)timestamp;
 -(void) applicationEnteredBackgroundNotificationHandler;
 -(void) applicationWillEnterForegroundNotificationHandler;
 -(void) applicationDidBecomeActiveNotificationHandler;
@@ -45,7 +45,7 @@ static NSString *const PHEventTimeInGameApplicationWillTerminate = @"phEventAppW
 
 #pragma mark - Private Methods
 
--(id) initWithApp:(PHEventTrackingType)type withData:(NSString *)data withTimestamp:(NSDate *)timestamp{
+-(id) initWithData:(PHEventTrackingType)type withData:(NSString *)data withTimestamp:(NSDate *)timestamp{
     self = [self init];
     if (self) {
         self.eventType = type;
@@ -58,9 +58,8 @@ static NSString *const PHEventTimeInGameApplicationWillTerminate = @"phEventAppW
 
 +(PHEventTimeInGame *) createPHEventApplicationDidStart{
 
-    PHEventTimeInGame *newEvent = [[PHEventTimeInGame alloc] initWithApp:PHEventTypeTimeInGame withData:PHEventTimeInGameApplicationDidEnterBackground withTimestamp:[NSDate date]];
+    PHEventTimeInGame *newEvent = [[PHEventTimeInGame alloc] initWithData:PHEventTypeTimeInGame withData:PHEventTimeInGameApplicationDidEnterBackground withTimestamp:[NSDate date]];
     [PHEventTracking addEvent:newEvent];
-    //[newEvent release];
     return newEvent;
 }
 
@@ -68,35 +67,35 @@ static NSString *const PHEventTimeInGameApplicationWillTerminate = @"phEventAppW
 
 -(void) applicationDidEnterBackgroundNotificationHandler{
 
-    PHEventTimeInGame *newEvent = [[PHEventTimeInGame alloc] initWithApp:PHEventTypeTimeInGame withData:PHEventTimeInGameApplicationDidEnterBackground withTimestamp:[NSDate date]];
+    PHEventTimeInGame *newEvent = [[PHEventTimeInGame alloc] initWithData:PHEventTypeTimeInGame withData:PHEventTimeInGameApplicationDidEnterBackground withTimestamp:[NSDate date]];
     [PHEventTracking addEvent:newEvent];
     [newEvent release];
 }
 
 -(void) applicationWillEnterForegroundNotificationHandler{
     
-    PHEventTimeInGame *newEvent = [[PHEventTimeInGame alloc] initWithApp:PHEventTypeTimeInGame withData:PHEventTimeInGameApplicationWillEnterForeground withTimestamp:[NSDate date]];
+    PHEventTimeInGame *newEvent = [[PHEventTimeInGame alloc] initWithData:PHEventTypeTimeInGame withData:PHEventTimeInGameApplicationWillEnterForeground withTimestamp:[NSDate date]];
     [PHEventTracking addEvent:newEvent];
     [newEvent release];
 }
 
 -(void) applicationDidBecomeActiveNotificationHandler{
     
-    PHEventTimeInGame *newEvent = [[PHEventTimeInGame alloc] initWithApp:PHEventTypeTimeInGame withData:PHEventTimeInGameApplicationDidBecomeActive withTimestamp:[NSDate date]];
+    PHEventTimeInGame *newEvent = [[PHEventTimeInGame alloc] initWithData:PHEventTypeTimeInGame withData:PHEventTimeInGameApplicationDidBecomeActive withTimestamp:[NSDate date]];
     [PHEventTracking addEvent:newEvent];
     [newEvent release];
 }
 
 -(void) applicationWillResignActiveNotificationHandler{
     
-    PHEventTimeInGame *newEvent = [[PHEventTimeInGame alloc] initWithApp:PHEventTypeTimeInGame withData:PHEventTimeInGameApplicationWillResignActive withTimestamp:[NSDate date]];
+    PHEventTimeInGame *newEvent = [[PHEventTimeInGame alloc] initWithData:PHEventTypeTimeInGame withData:PHEventTimeInGameApplicationWillResignActive withTimestamp:[NSDate date]];
     [PHEventTracking addEvent:newEvent];
     [newEvent release];
 }
 
 -(void) applicationWillTerminateNotificationHandler{
     
-    PHEventTimeInGame *newEvent = [[PHEventTimeInGame alloc] initWithApp:PHEventTypeTimeInGame withData:PHEventTimeInGameApplicationWillTerminate withTimestamp:[NSDate date]];
+    PHEventTimeInGame *newEvent = [[PHEventTimeInGame alloc] initWithData:PHEventTypeTimeInGame withData:PHEventTimeInGameApplicationWillTerminate withTimestamp:[NSDate date]];
     [PHEventTracking addEvent:newEvent];
     [newEvent release];
 }

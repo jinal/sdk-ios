@@ -15,19 +15,28 @@
 
 #pragma mark NSCoding
 
-- (id)initWithCoder:(NSCoder *)decoder {
+#define kEventTypeKey        @"type"
+#define kEventDataKey        @"data"
+#define kEventTimestampKey   @"timestamp"
+
+- (id)initWithCoder:(NSCoder *)decoder{
     if (self = [super init]) {
-        _eventType = [decoder decodeIntegerForKey:@"type"];
-        _eventData = [decoder decodeObjectForKey:@"data"];
-        _eventTimestamp = [decoder decodeObjectForKey:@"timestamp"];
+        _eventType = [decoder decodeIntegerForKey:kEventTypeKey];
+        _eventData = [decoder decodeObjectForKey:kEventDataKey];
+        _eventTimestamp = [decoder decodeObjectForKey:kEventTimestampKey];
     }
     return self;
 }
 
-- (void)encodeWithCoder:(NSCoder *)encoder {
-    [encoder encodeInt:_eventType forKey:@"type"];
-    [encoder encodeObject:_eventData forKey:@"data"];
-    [encoder encodeObject:_eventTimestamp forKey:@"timestamp"];
+- (void)encodeWithCoder:(NSCoder *)encoder{
+    [encoder encodeInt:_eventType forKey:kEventTypeKey];
+    [encoder encodeObject:_eventData forKey:kEventDataKey];
+    [encoder encodeObject:_eventTimestamp forKey:kEventTimestampKey];
+}
+
+- (void)saveEventToDisk:(NSString *)fileName{
+    
+    [NSKeyedArchiver archiveRootObject:self toFile:fileName];    
 }
 
 #pragma mark NSObject
