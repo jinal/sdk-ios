@@ -29,7 +29,7 @@
         [urlCache release];
 
         // Start up an event queue and start tracking
-        PHEventTracking *eventTracking = [PHEventTracking eventTrackingForApp];
+        [PHEventTracking eventTrackingForApp];
     }
 }
 

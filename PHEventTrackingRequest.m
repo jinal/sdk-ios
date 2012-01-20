@@ -33,6 +33,24 @@
     return PH_URL(/v3/publisher/tracking/);
 }
 
+/*
+ +(void) sendEventQueueToServer{
+ 
+ // Get and send the current event queue
+ NSMutableDictionary *eventQueueDictionary = [[NSDictionary dictionaryWithContentsOfFile:[PHEventTracking getEventQueuePlistFile]] autorelease];
+ NSInteger current_event_queue = [[eventQueueDictionary objectForKey:PHEventTrackingCurrentEventQueueKey] integerValue];
+ NSMutableArray *event_queues = [eventQueueDictionary objectForKey:PHEventTrackingEventQueuesKey];
+ NSDictionary *event_queue = [event_queues objectAtIndex:current_event_queue];
+ NSString *queue_hash = [event_queue objectForKey:PHEventTrackingEventQueueHashKey];
+ 
+ PHEventTrackingRequest *request = [PHEventTrackingRequest requestForApp:@"token" secret:@"secret"];
+ //    request.delegate = self;
+ request.event_queue_hash = queue_hash;
+ [request send];
+ 
+ }
+*/
+
 -(NSDictionary *)additionalParameters{
 
     // Loop here with number should send per request - PH_MAX_EVENT_RECORDS_SEND_PER_REQUEST

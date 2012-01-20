@@ -14,14 +14,12 @@
     [super startRequest];
     
     /*
-     * This is an alternate implementation which allows you you get response 
-     * data from API requests. This isn't necessary for most developers.
+     * Send the current event queue up to the server
      */
-    /*
-    PHPublisherOpenRequest * request = [PHPublisherOpenRequest requestForApp:self.token secret:self.secret];
+    PHEventTrackingRequest *request = [PHEventTrackingRequest requestForApp:@"token" secret:@"secret"];
     request.delegate = self;
+    request.event_queue_hash = [[PHEventTracking eventTrackingForApp] getCurrentEventQueueHash];
     [request send];
-    */
 }
 
 -(IBAction)sendToServerButtonPressed:(id)sender{

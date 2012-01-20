@@ -18,6 +18,7 @@ static NSString *const PHEventTrackingNextEventQueueKey = @"event_queue_next";
 static NSString *const PHEventTrackingEventQueuesKey = @"event_queues";
 static NSString *const PHEventTrackingNextEventRecordKey = @"event_record_next";
 
+static PHEventTracking *appEventTracking = nil;
 
 @interface PHEventTracking(Private)
 +(NSString *) defaultEventQueuePath;
@@ -29,7 +30,7 @@ static NSString *const PHEventTrackingNextEventRecordKey = @"event_record_next";
 
 #pragma mark - Static Methods
 
-+(void) initialize{
+-(void) initEventTracking{
 
     if  (self == [PHEventTracking class]){
         
@@ -86,30 +87,28 @@ static NSString *const PHEventTrackingNextEventRecordKey = @"event_record_next";
     }
 }
 
-+(id) eventTrackingForApp{
-    return [[[self class] alloc] autorelease];
-}
-
-+(void) sendEventTrackingDataToServer{
-    // Send the oldest event queue first
-    // HOW FIGURE THIS OUT? - use a key?  the one behind current?
-
-}
-
-+(void) sendEventQueueToServer{
-
-    // Get and send the current event queue
++(NSString *) getCurrentEventQueueHash{
     NSMutableDictionary *eventQueueDictionary = [[NSDictionary dictionaryWithContentsOfFile:[PHEventTracking getEventQueuePlistFile]] autorelease];
     NSInteger current_event_queue = [[eventQueueDictionary objectForKey:PHEventTrackingCurrentEventQueueKey] integerValue];
     NSMutableArray *event_queues = [eventQueueDictionary objectForKey:PHEventTrackingEventQueuesKey];
     NSDictionary *event_queue = [event_queues objectAtIndex:current_event_queue];
-    NSString *queue_hash = [event_queue objectForKey:PHEventTrackingEventQueueHashKey];
+    return [event_queue objectForKey:PHEventTrackingEventQueueHashKey];
+}
 
-    PHEventTrackingRequest *request = [PHEventTrackingRequest requestForApp:@"token" secret:@"secret"];
-//    request.delegate = self;
-    request.event_queue_hash = queue_hash;
-    [request send];
++(id) eventTrackingForApp{
+    @synchronized(self) {
+        if (appEventTracking == nil)
+            appEventTracking = [[self alloc] init];
 
+            return appEventTracking;
+    }
+}
+
+- (id)init {
+    if (self = [super init]) {
+        [self initEventTracking];
+    }
+    return self;
 }
 
 +(NSString *) defaultEventQueuePath
@@ -222,13 +221,6 @@ static NSString *const PHEventTrackingNextEventRecordKey = @"event_record_next";
 +(void) clearEventQueueCache{
     // clears all event queues and plist files
     [[[[NSFileManager alloc] init] autorelease] removeItemAtPath:[PHEventTracking getEventQueuePlistFile] error:nil];
-}
-
-#pragma mark NSObject
-
--(void) dealloc{
-
-    [super dealloc];
 }
 
 #pragma mark - PHEventTrackingRequest
