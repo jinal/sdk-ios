@@ -8,6 +8,7 @@
 
 #import "PHEventTrackingRequest.h"
 #import "PHConstants.h"
+#import "PHEventTracking.h"
 
 @interface PHEventTrackingRequest(Private)
 
@@ -53,6 +54,8 @@
 
 -(NSDictionary *)additionalParameters{
 
+    event_queue_hash = [[PHEventTracking eventTrackingForApp] getCurrentEventQueueHash];
+
     // Loop here with number should send per request - PH_MAX_EVENT_RECORDS_SEND_PER_REQUEST
     NSString *unixTime = [[[NSString alloc] initWithFormat:@"%0.0f", [_event.eventTimestamp timeIntervalSince1970]] autorelease];
     return [NSDictionary dictionaryWithObjectsAndKeys:
@@ -65,12 +68,12 @@
 
 -(void)didSucceedWithResponse:(NSDictionary *)responseData{
 
-    // If successful clean up the event cache or event records that was sent to the server.
+    // If successful clean up the event cache or event records that where sent to the server.
+    [[PHEventTracking eventTrackingForApp] clearEventQueue:event_queue_hash];
 
     if ([self.delegate respondsToSelector:@selector(request:didSucceedWithResponse:)]) {
         [self.delegate performSelector:@selector(request:didSucceedWithResponse:) withObject:self withObject:responseData];
     }
 }
-
 
 @end

@@ -223,18 +223,4 @@ static PHEventTracking *appEventTracking = nil;
     [[[[NSFileManager alloc] init] autorelease] removeItemAtPath:[PHEventTracking getEventQueuePlistFile] error:nil];
 }
 
-#pragma mark - PHEventTrackingRequest
-
--(void)request:(PHEventTrackingRequest *)request didSucceedWithResponse:(NSDictionary *)responseData{
-    NSString *message = [NSString stringWithFormat:@"[OK] Success with response: %@",responseData];
-    NSLog(@"tracking request didSucceedWithResponse returned: %@", message);
-
-    [PHEventTracking clearEventQueue:request.event_queue_hash];
-}
-/*
--(void)request:(PHAPIRequest *)request didFailWithError:(NSError *)error{
-    NSString *message = [NSString stringWithFormat:@"[ERROR] Failed with error: %@", error];
-    NSLog(@"tracking request didFailWithError returned: %@", message);
-}
-*/
 @end

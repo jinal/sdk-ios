@@ -18,12 +18,7 @@
      */
     PHEventTrackingRequest *request = [PHEventTrackingRequest requestForApp:@"token" secret:@"secret"];
     request.delegate = self;
-    request.event_queue_hash = [[PHEventTracking eventTrackingForApp] getCurrentEventQueueHash];
     [request send];
-}
-
--(IBAction)sendToServerButtonPressed:(id)sender{
-    NSLog(@"Sending event tracking to server....");
 }
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
@@ -67,14 +62,14 @@
 -(void)request:(PHAPIRequest *)request didSucceedWithResponse:(NSDictionary *)responseData{
     NSString *message = [NSString stringWithFormat:@"[OK] Success with response: %@",responseData];
     [self addMessage:message];
-    
+
     [self finishRequest];
 }
 
 -(void)request:(PHAPIRequest *)request didFailWithError:(NSError *)error{
     NSString *message = [NSString stringWithFormat:@"[ERROR] Failed with error: %@", error];
     [self addMessage:message];
-    
+
     [self finishRequest];
 }
 

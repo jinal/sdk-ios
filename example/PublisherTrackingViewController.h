@@ -11,9 +11,7 @@
 #import "PlayHavenSDK.h"
 
 @interface PublisherTrackingViewController : ExampleViewController<PHAPIRequestDelegate>{
-    
-}
 
--(IBAction)sendToServerButtonPressed:(id)sender;
+}
 
 @end
