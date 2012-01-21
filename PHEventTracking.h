@@ -36,4 +36,15 @@
 +(void) clearEventQueue:(NSString *)qhash;
 +(void) clearEventQueueCache;
 
++(NSString *) getEventQueuePlistFile;
++(NSString *) defaultEventQueuePath;
+
+
+#define PHEVENT_QUEUE_INFO_FILENAME @"event_queue_cache.plist"
+#define PHEVENT_TRACKING_EVENTQUEUE_HASH_KEY @"event_queue_hash"
+#define PHEVENT_TRACKING_EVENTQUEUE_CURRENT_KEY @"event_queue_first"
+#define PHEVENT_TRACKING_EVENTQUEUE_NEXT_KEY @"event_queue_next"
+#define PHEVENT_TRACKING_EVENTQUEUES_KEY @"event_queues"
+#define PHEVENT_TRACKING_EVENTRECORD_NEXT_KEY @"event_record_next"
+
 @end

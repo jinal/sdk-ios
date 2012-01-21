@@ -20,10 +20,10 @@
 
 @implementation PHEventTrackingRequest
 
-@synthesize event, event_queue_hash;
+@synthesize event_queue_hash;
 
 -(void)dealloc{
-    [_event release], _event = nil;
+    [event_queue_hash release], event_queue_hash = nil;
     [super dealloc];
 }
 
@@ -34,33 +34,35 @@
     return PH_URL(/v3/publisher/tracking/);
 }
 
-/*
- +(void) sendEventQueueToServer{
- 
- // Get and send the current event queue
- NSMutableDictionary *eventQueueDictionary = [[NSDictionary dictionaryWithContentsOfFile:[PHEventTracking getEventQueuePlistFile]] autorelease];
- NSInteger current_event_queue = [[eventQueueDictionary objectForKey:PHEventTrackingCurrentEventQueueKey] integerValue];
- NSMutableArray *event_queues = [eventQueueDictionary objectForKey:PHEventTrackingEventQueuesKey];
- NSDictionary *event_queue = [event_queues objectAtIndex:current_event_queue];
- NSString *queue_hash = [event_queue objectForKey:PHEventTrackingEventQueueHashKey];
- 
- PHEventTrackingRequest *request = [PHEventTrackingRequest requestForApp:@"token" secret:@"secret"];
- //    request.delegate = self;
- request.event_queue_hash = queue_hash;
- [request send];
- 
- }
-*/
-
 -(NSDictionary *)additionalParameters{
 
+    // Send just the current queue for now
     event_queue_hash = [[PHEventTracking eventTrackingForApp] getCurrentEventQueueHash];
 
+    NSMutableDictionary *eventQueueDictionary = [[NSDictionary dictionaryWithContentsOfFile:[PHEventTracking getEventQueuePlistFile]] autorelease];
+    NSMutableArray *event_queues = [eventQueueDictionary objectForKey:PHEVENT_TRACKING_EVENTQUEUES_KEY];
+    NSDictionary *found_queue = nil;
+    for (NSDictionary *queue in event_queues){
+        
+        NSString *queue_hash = [queue objectForKey:PHEVENT_TRACKING_EVENTQUEUE_HASH_KEY];
+        if ([queue_hash isEqualToString:event_queue_hash])
+            found_queue = queue;
+    }
+    if (!found_queue)
+        return nil;
+    
+    // **************
     // Loop here with number should send per request - PH_MAX_EVENT_RECORDS_SEND_PER_REQUEST
-    NSString *unixTime = [[[NSString alloc] initWithFormat:@"%0.0f", [_event.eventTimestamp timeIntervalSince1970]] autorelease];
+    // **************
+
+    NSString *queue_hash = [found_queue objectForKey:PHEVENT_TRACKING_EVENTQUEUE_HASH_KEY];
+    NSString *event_record_filename = [[NSString stringWithFormat:@"%@/event_record-%@-0", [PHEventTracking defaultEventQueuePath], queue_hash] autorelease];
+    PHEvent *event = [NSKeyedUnarchiver unarchiveObjectWithFile:event_record_filename];
+
+    NSString *unixTime = [[[NSString alloc] initWithFormat:@"%0.0f", [event.eventTimestamp timeIntervalSince1970]] autorelease];
     return [NSDictionary dictionaryWithObjectsAndKeys:
-            [NSNumber numberWithInteger:_event.eventType], @"event_type",
-            _event.eventData, @"event_data",
+            [NSNumber numberWithInteger:event.eventType], @"event_type",
+            event.eventData, @"event_data",
             unixTime, @"event_timestamp", nil];
 }
 
@@ -70,6 +72,7 @@
 
     // If successful clean up the event cache or event records that where sent to the server.
     [[PHEventTracking eventTrackingForApp] clearEventQueue:event_queue_hash];
+    [event_queue_hash release], event_queue_hash = nil;
 
     if ([self.delegate respondsToSelector:@selector(request:didSucceedWithResponse:)]) {
         [self.delegate performSelector:@selector(request:didSucceedWithResponse:) withObject:self withObject:responseData];
