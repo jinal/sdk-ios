@@ -8,7 +8,7 @@ An API token and secret is required to use this SDK. These tokens uniquely ident
 
 What's new in 1.6.0
 ===================
-* After a successful open call, the SDK will pre-cache content template data in the background.
+* After a successful open call, the SDK will pre-cache content template data in the background. Be sure to add the source in the Cache directory to your project.
 * CFNetwork.framework is now required.
 * Fixes memory leaks in reachability code.
 
@@ -31,6 +31,7 @@ If you are using Unity for your game, please integrate the Unity SDK located her
 1. Add the following from the sdk-ios directory that you downloaded or cloned from github to your project:
   * src directory 
   * JSON directory
+  * Cache directory
 1. Ensure the following frameworks are included with your project, add any missing frameworks in the Build Phases tab for your application's target:
   * UIKit.framework
   * Foundation.framework
