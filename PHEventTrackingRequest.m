@@ -100,7 +100,7 @@
 
         NSString *unixTime = [[[NSString alloc] initWithFormat:@"%0.0f", [event.eventTimestamp timeIntervalSince1970]] autorelease];
         NSDictionary *event_record = [NSDictionary dictionaryWithObjectsAndKeys:
-                                                    [NSNumber numberWithInteger:event.eventType], @"event_type",
+                                                    event.eventType, @"event_type",
                                                     event.eventData, @"event_data",
                                                     unixTime, @"event_timestamp", nil];
         [all_events addObject:event_record];

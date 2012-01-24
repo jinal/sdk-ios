@@ -46,7 +46,7 @@ static NSString *const PHEventTimeInGameApplicationWillTerminate = @"phEventAppW
 
 +(PHEventTimeInGame *) createPHEventApplicationDidStart{
 
-    PHEventTimeInGame *newEvent = [[PHEventTimeInGame alloc] initWithData:PHEventTypeTimeInGame withData:PHEventTimeInGameApplicationDidEnterBackground withTimestamp:[NSDate date]];
+    PHEventTimeInGame *newEvent = [[PHEventTimeInGame alloc] initWithData:NSStringFromClass([PHEventTimeInGame class]) withData:PHEventTimeInGameApplicationDidEnterBackground withTimestamp:[NSDate date]];
     [PHEventTracking addEvent:newEvent];
     return newEvent;
 }
@@ -55,35 +55,35 @@ static NSString *const PHEventTimeInGameApplicationWillTerminate = @"phEventAppW
 
 -(void) applicationDidEnterBackgroundNotificationHandler{
 
-    PHEventTimeInGame *newEvent = [[PHEventTimeInGame alloc] initWithData:PHEventTypeTimeInGame withData:PHEventTimeInGameApplicationDidEnterBackground withTimestamp:[NSDate date]];
+    PHEventTimeInGame *newEvent = [[PHEventTimeInGame alloc] initWithData:NSStringFromClass([self class]) withData:PHEventTimeInGameApplicationDidEnterBackground withTimestamp:[NSDate date]];
     [PHEventTracking addEvent:newEvent];
     [newEvent release];
 }
 
 -(void) applicationWillEnterForegroundNotificationHandler{
     
-    PHEventTimeInGame *newEvent = [[PHEventTimeInGame alloc] initWithData:PHEventTypeTimeInGame withData:PHEventTimeInGameApplicationWillEnterForeground withTimestamp:[NSDate date]];
+    PHEventTimeInGame *newEvent = [[PHEventTimeInGame alloc] initWithData:NSStringFromClass([self class]) withData:PHEventTimeInGameApplicationWillEnterForeground withTimestamp:[NSDate date]];
     [PHEventTracking addEvent:newEvent];
     [newEvent release];
 }
 
 -(void) applicationDidBecomeActiveNotificationHandler{
     
-    PHEventTimeInGame *newEvent = [[PHEventTimeInGame alloc] initWithData:PHEventTypeTimeInGame withData:PHEventTimeInGameApplicationDidBecomeActive withTimestamp:[NSDate date]];
+    PHEventTimeInGame *newEvent = [[PHEventTimeInGame alloc] initWithData:NSStringFromClass([self class]) withData:PHEventTimeInGameApplicationDidBecomeActive withTimestamp:[NSDate date]];
     [PHEventTracking addEvent:newEvent];
     [newEvent release];
 }
 
 -(void) applicationWillResignActiveNotificationHandler{
     
-    PHEventTimeInGame *newEvent = [[PHEventTimeInGame alloc] initWithData:PHEventTypeTimeInGame withData:PHEventTimeInGameApplicationWillResignActive withTimestamp:[NSDate date]];
+    PHEventTimeInGame *newEvent = [[PHEventTimeInGame alloc] initWithData:NSStringFromClass([self class]) withData:PHEventTimeInGameApplicationWillResignActive withTimestamp:[NSDate date]];
     [PHEventTracking addEvent:newEvent];
     [newEvent release];
 }
 
 -(void) applicationWillTerminateNotificationHandler{
     
-    PHEventTimeInGame *newEvent = [[PHEventTimeInGame alloc] initWithData:PHEventTypeTimeInGame withData:PHEventTimeInGameApplicationWillTerminate withTimestamp:[NSDate date]];
+    PHEventTimeInGame *newEvent = [[PHEventTimeInGame alloc] initWithData:NSStringFromClass([self class]) withData:PHEventTimeInGameApplicationWillTerminate withTimestamp:[NSDate date]];
     [PHEventTracking addEvent:newEvent];
     [newEvent release];
 }

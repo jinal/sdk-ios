@@ -8,24 +8,18 @@
 
 #import <Foundation/Foundation.h>
 
-
-typedef enum{
-    PHEventTypeTimeInGame
-} PHEventTrackingType;
-
-
 @interface PHEvent : NSObject <NSCoding>{
-    PHEventTrackingType _eventType;
+    NSString *_eventType;
     NSString *_eventData;
     NSDate *_eventTimestamp;                // NOTE: store as unix format timestamp or NSDate and change when send to server?
                                             //    time_t unixTime = (time_t) [[NSDate date] timeIntervalSince1970];
 }
 
-@property (nonatomic, assign) PHEventTrackingType eventType;
+@property (nonatomic, assign) NSString *eventType;
 @property (nonatomic, copy) NSString *eventData;
 @property (nonatomic, copy) NSDate *eventTimestamp;
 
--(id) initWithData:(PHEventTrackingType)type withData:(NSString *)data withTimestamp:(NSDate *)timestamp;
+-(id) initWithData:(NSString *)type withData:(NSString *)data withTimestamp:(NSDate *)timestamp;
 -(void) saveEventToDisk:(NSString *)fileName;
 
 @end

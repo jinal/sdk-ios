@@ -19,7 +19,7 @@
 #define kEventDataKey        @"data"
 #define kEventTimestampKey   @"timestamp"
 
--(id) initWithData:(PHEventTrackingType)type withData:(NSString *)data withTimestamp:(NSDate *)timestamp{
+-(id) initWithData:(NSString *)type withData:(NSString *)data withTimestamp:(NSDate *)timestamp{
     self = [self init];
     if (self) {
         self.eventType = type;
@@ -32,7 +32,7 @@
 
 - (id) initWithCoder:(NSCoder *)decoder{
     if (self = [super init]) {
-        _eventType = [decoder decodeIntegerForKey:kEventTypeKey];
+        _eventType = [decoder decodeObjectForKey:kEventTypeKey];
         _eventData = [decoder decodeObjectForKey:kEventDataKey];
         _eventTimestamp = [decoder decodeObjectForKey:kEventTimestampKey];
     }
@@ -40,7 +40,7 @@
 }
 
 - (void) encodeWithCoder:(NSCoder *)encoder{
-    [encoder encodeInt:_eventType forKey:kEventTypeKey];
+    [encoder encodeObject:_eventType forKey:kEventTypeKey];
     [encoder encodeObject:_eventData forKey:kEventDataKey];
     [encoder encodeObject:_eventTimestamp forKey:kEventTimestampKey];
 }
