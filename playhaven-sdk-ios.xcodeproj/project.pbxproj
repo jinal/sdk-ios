@@ -21,6 +21,7 @@
 		D17B943E14CA244B00978C20 /* PublisherTrackingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D17B943C14CA244B00978C20 /* PublisherTrackingViewController.m */; };
 		D17B944114CA282900978C20 /* PublisherTrackingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D17B943C14CA244B00978C20 /* PublisherTrackingViewController.m */; };
 		D17B944214CA2B3900978C20 /* PublisherTrackingViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = D17B943D14CA244B00978C20 /* PublisherTrackingViewController.xib */; };
+		D17B944514CE13C700978C20 /* PHEventTrackingRequestTest.m in Sources */ = {isa = PBXBuildFile; fileRef = D17B944414CE13C700978C20 /* PHEventTrackingRequestTest.m */; };
 		D1E15B7C14981C39001241EE /* SDURLCache.m in Sources */ = {isa = PBXBuildFile; fileRef = D1E15B7B14981C39001241EE /* SDURLCache.m */; };
 		D1E15B7D14981E90001241EE /* SDURLCache.m in Sources */ = {isa = PBXBuildFile; fileRef = D1E15B7B14981C39001241EE /* SDURLCache.m */; };
 		EA03810A13B25F4300A31FF7 /* PHPublisherMetadataRequestTest.m in Sources */ = {isa = PBXBuildFile; fileRef = EA03810913B25F4300A31FF7 /* PHPublisherMetadataRequestTest.m */; };
@@ -158,6 +159,7 @@
 		D17B943B14CA244B00978C20 /* PublisherTrackingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PublisherTrackingViewController.h; sourceTree = "<group>"; };
 		D17B943C14CA244B00978C20 /* PublisherTrackingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PublisherTrackingViewController.m; sourceTree = "<group>"; };
 		D17B943D14CA244B00978C20 /* PublisherTrackingViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PublisherTrackingViewController.xib; sourceTree = "<group>"; };
+		D17B944414CE13C700978C20 /* PHEventTrackingRequestTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PHEventTrackingRequestTest.m; sourceTree = "<group>"; };
 		D1E15B7B14981C39001241EE /* SDURLCache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SDURLCache.m; sourceTree = "<group>"; };
 		EA03810913B25F4300A31FF7 /* PHPublisherMetadataRequestTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PHPublisherMetadataRequestTest.m; sourceTree = "<group>"; };
 		EA03810D13B26A1A00A31FF7 /* PHPublisherMetadataRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PHPublisherMetadataRequest.h; sourceTree = "<group>"; };
@@ -394,6 +396,7 @@
 				EAB4423213452026000DA3E9 /* PHAPIRequestTest.m */,
 				EA6EA1E7135F458E000123B0 /* PHPublisherTokensRequestTest.m */,
 				EA03810913B25F4300A31FF7 /* PHPublisherMetadataRequestTest.m */,
+				D17B944414CE13C700978C20 /* PHEventTrackingRequestTest.m */,
 			);
 			path = tests;
 			sourceTree = "<group>";
@@ -746,6 +749,7 @@
 				D1612F4414C7B355003B6FCD /* PHEvent.m in Sources */,
 				D1612F4714C7B672003B6FCD /* PHEventTimeInGame.m in Sources */,
 				D17B943E14CA244B00978C20 /* PublisherTrackingViewController.m in Sources */,
+				D17B944514CE13C700978C20 /* PHEventTrackingRequestTest.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

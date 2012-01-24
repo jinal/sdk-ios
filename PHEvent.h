@@ -25,6 +25,7 @@ typedef enum{
 @property (nonatomic, copy) NSString *eventData;
 @property (nonatomic, copy) NSDate *eventTimestamp;
 
+-(id) initWithData:(PHEventTrackingType)type withData:(NSString *)data withTimestamp:(NSDate *)timestamp;
 -(void) saveEventToDisk:(NSString *)fileName;
 
 @end

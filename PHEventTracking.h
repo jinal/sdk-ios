@@ -25,9 +25,14 @@
 +(void) addEvent:(PHEvent *)event;
 
 /*
- *  Returns the current event queues hash
+ *  Returns the current event queue hash
  */
 +(NSString *) getCurrentEventQueueHash;
+
+/*
+ *  Returns the next event queue hash to send to server
+ */
++(NSString *) getEventQueueToSendHash;
 
 /*
  * Selectors for cleaning and clearing event queue cache.
@@ -44,6 +49,7 @@
 #define PHEVENT_TRACKING_EVENTQUEUE_HASH_KEY @"event_queue_hash"
 #define PHEVENT_TRACKING_EVENTQUEUE_CURRENT_KEY @"event_queue_first"
 #define PHEVENT_TRACKING_EVENTQUEUE_NEXT_KEY @"event_queue_next"
+#define PHEVENT_TRACKING_EVENTQUEUE_CREATED_KEY @"event_queue_created"
 #define PHEVENT_TRACKING_EVENTQUEUES_KEY @"event_queues"
 #define PHEVENT_TRACKING_EVENTRECORD_NEXT_KEY @"event_record_next"
 

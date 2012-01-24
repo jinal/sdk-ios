@@ -18,7 +18,6 @@ static NSString *const PHEventTimeInGameApplicationWillTerminate = @"phEventAppW
 
 
 @interface PHEventTimeInGame(Private)
--(id) initWithData:(PHEventTrackingType)type withData:(NSString *)data withTimestamp:(NSDate *)timestamp;
 -(void) applicationEnteredBackgroundNotificationHandler;
 -(void) applicationWillEnterForegroundNotificationHandler;
 -(void) applicationDidBecomeActiveNotificationHandler;
@@ -43,18 +42,7 @@ static NSString *const PHEventTimeInGameApplicationWillTerminate = @"phEventAppW
     }
 }
 
-#pragma mark - Private Methods
-
--(id) initWithData:(PHEventTrackingType)type withData:(NSString *)data withTimestamp:(NSDate *)timestamp{
-    self = [self init];
-    if (self) {
-        self.eventType = type;
-        self.eventData = data;
-        self.eventTimestamp = timestamp;
-    }
-    
-    return self;
-}
+#pragma mark - Public Methods
 
 +(PHEventTimeInGame *) createPHEventApplicationDidStart{
 

@@ -91,6 +91,7 @@ int PHNetworkStatus(void);
 #define PH_MAX_SIZE_MEMORY_CACHE        1024*1024          // 1MB mem cache
 #define PH_MAX_SIZE_FILESYSTEM_CACHE    1024*1024*10       // 10MB disk cache
 
+
 // Event Tracking definitions
 //
 #define PH_MAX_EVENT_QUEUES     5                   // Number of event queues to store on disk. An event queue is
