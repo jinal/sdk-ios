@@ -1,4 +1,4 @@
-PlayHaven SDK 1.3.14
+PlayHaven SDK 1.6.0
 ====================
 PlayHaven is a real-time mobile game marketing platform to help you take control of the business of your games.
 
@@ -6,8 +6,14 @@ Acquire, retain, re-engage, and monetize your players with the help of PlayHaven
 
 An API token and secret is required to use this SDK. These tokens uniquely identify your app to PlayHaven and prevent others from making requests to the API on your behalf. To get a token and secret, please visit the PlayHaven developer dashboard at https://dashboard.playhaven.com
 
-What's new in 1.3.14
-====================
+What's new in 1.6.0
+===================
+* After a successful open call, the SDK will pre-cache content template data in the background. Be sure to add the source in the Cache directory to your project.
+* CFNetwork.framework is now required.
+* Fixes memory leaks in reachability code.
+
+1.3.14
+======
 * Content units will no longer crash the app during a dismiss.
 * PlayHaven.bundle is no longer required, PlayHaven now includes all image assets into the SDK
 * New dismiss delegate for content unit requests that indicates the reason the view was dismissed. The old dismiss delegate will continue to work but has been deprecated.
@@ -25,12 +31,14 @@ If you are using Unity for your game, please integrate the Unity SDK located her
 1. Add the following from the sdk-ios directory that you downloaded or cloned from github to your project:
   * src directory 
   * JSON directory
+  * Cache directory
 1. Ensure the following frameworks are included with your project, add any missing frameworks in the Build Phases tab for your application's target:
   * UIKit.framework
   * Foundation.framework
   * CoreGraphics.framework
   * QuartzCore.framework
   * SystemConfiguration.framework
+  * CFNetwork.framework
 1. Include the PlayHavenSDK headers in your code wherever you will be using PlayHaven request classes.
 
     \#import "PlayHavenSDK.h"
@@ -203,3 +211,14 @@ This method will be called inside of the PHNotificationView instance -(void)draw
 
 This method will be called to calculate an appropriate frame for the notification badge each time the notification data changes. Using specific keys inside of notificationData, you will need to calculate an appropriate size.
 
+#### *NEW* Caching with prefetching of URLs in background
+
+To use caching and prefetching of URL's a publisher only needs to make a PHPublisherOpenRequest. The Play Haven SDK is currently set up to managed the cache and prefetch the URL's automatically in the background. The publisher has more control over the caching defaults using the information provided below.
+
+PHPublisherOpenRequest now returns an array of URL's that can be prefetched. When the response is received from the server the prefetch URL's are stored locally in a plist file and a queue of NSOperation's are created to downoad the data in concurrent background tasks. The PHConstants.h define PH_MAX_CONCURRENT_OPERATIONS is used for setting the max concurrent operations and PH_PREFETCH_URL_PLIST is the name of the plist file for storing the prefetch URL list in the cache applications directory. The Publisher can use the following methods to force a redownload of the prefetch URL list if a plist file exists, cancel any operations currently being run and clear the prefetch cache files.
+
+    -(void) downloadPrefetchURLs;
+    -(void) cancelPrefetchDownload;
+    -(void) clearPrefetchCache;
+
+When the PHPublisherOpenRequest is initialized it will create a subclass of NSURLCache called SDURLCache. This is used for caching the UIWebview data to memory and/or the file system. The setting for the size (in bytes) of the memory cache and file system cache can be found in PHConstants.h - PH_MAX_SIZE_MEMORY_CACHE and PH_MAX_SIZE_FILESYSTEM_CACHE. The current defaults are 1MB for the memory cache and 10MB for the file system cache. The class SDURLCache has methods for clearing the cache if you need more file system space in the applications cache directory. SDURLCache has several background tasks that manages the cache size. The cache data files are stored in the application cache directory.

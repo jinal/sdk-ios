@@ -9,10 +9,14 @@
 #import <UIKit/UIImage.h>
 
 // Constants
-#define PH_SDK_VERSION @"1.3.14"
+#define PH_SDK_VERSION @"1.6.0"
 
 #ifndef PH_BASE_URL
 #define PH_BASE_URL @"http://api2.playhaven.com"
+#endif
+
+#ifndef PH_CONTENT_ADDRESS
+#define PH_CONTENT_ADDRESS @"http://media.playhaven.com"
 #endif
 
 // PH_DISPATCH_PROTOCOL_VERSION
@@ -47,9 +51,13 @@
 #define PH_URL(PATH) [PH_BASE_URL stringByAppendingString:@#PATH]
 #define PH_URL_FMT(PATH,FMT) [PH_BASE_URL stringByAppendingFormat:@#PATH, FMT]
 
+#ifndef PH_LOG
 #define PH_LOG(COMMENT,...) NSLog(@"[PlayHaven-%@] %@",PH_SDK_VERSION, [NSString stringWithFormat:COMMENT,__VA_ARGS__])
+#endif
 
+#ifndef PH_NOTE
 #define PH_NOTE(COMMENT) NSLog(@"[PlayHaven-%@] %@",PH_SDK_VERSION, COMMENT)
+#endif
 
 #define PH_MULTITASKING_SUPPORTED [[UIDevice currentDevice] respondsToSelector:@selector(isMultitaskingSupported)] && [[UIDevice currentDevice] isMultitaskingSupported]
 
@@ -73,6 +81,15 @@ NSError *PHCreateError(PHErrorType errorType);
 // 2: WiFi
 int PHNetworkStatus(void);
 
+
+// Caching constant definitions
+//
+#define PH_PREFETCH_URL_PLIST @"prefetchCache.plist"
+
+#define PH_MAX_CONCURRENT_OPERATIONS    2
+
+#define PH_MAX_SIZE_MEMORY_CACHE        1024*1024          // 1MB mem cache
+#define PH_MAX_SIZE_FILESYSTEM_CACHE    1024*1024*10       // 10MB disk cache
 
 //
 // Play Haven default images

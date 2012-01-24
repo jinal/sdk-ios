@@ -44,7 +44,7 @@
     NSDate *now = [[NSDate alloc] initWithTimeIntervalSinceNow:0];
     NSTimeInterval totalDelta = [now timeIntervalSinceDate:_startRequestDate];
     NSTimeInterval intervalDelta =[now timeIntervalSinceDate:_deltaRequestDate];
-    NSString *message = [NSString stringWithFormat:@"🕑 %f secs total (+ %f secs)", totalDelta, intervalDelta];
+    NSString *message = [NSString stringWithFormat:@"[TIME] %f secs total (+ %f secs)", totalDelta, intervalDelta];
     [self addMessage:message];
     
     [_deltaRequestDate release], _deltaRequestDate = now;

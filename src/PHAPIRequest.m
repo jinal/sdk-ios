@@ -19,9 +19,17 @@
 +(NSMutableSet *)allRequests;
 -(void)finish;
 -(void)afterConnectionDidFinishLoading;
++(void) checkDNSResolutionForURLPath:(NSString *)urlPath;
 @end
 
 @implementation PHAPIRequest
+
++(void)initialize{
+    if  (self == [PHAPIRequest class]){
+        [PHAPIRequest checkDNSResolutionForURLPath:PH_BASE_URL];
+        [PHAPIRequest checkDNSResolutionForURLPath:PH_CONTENT_ADDRESS];
+    }
+}
 
 +(NSMutableSet *)allRequests{
     static NSMutableSet *allRequests = nil;
@@ -65,6 +73,41 @@
     
     return self;
 }
+
+static void cfHostClientCallBack(CFHostRef host, CFHostInfoType typeInfo, const CFStreamError *error, void *info){
+    // Do nothing but cleanup
+    CFHostUnscheduleFromRunLoop(host, CFRunLoopGetCurrent(), kCFRunLoopCommonModes);
+    CFHostSetClient(host, NULL, NULL);
+    CFRelease(host);
+    CFRunLoopStop(CFRunLoopGetCurrent());
+}
+
++(void) checkDNSResolutionForURLPath:(NSString *)urlPath{
+    // HACK: Ignoring the potential leak of api_host in because cleanup
+    // is handled by cfHostClientCallBack
+
+#ifndef __clang_analyzer__
+
+    NSString *server_address  = [urlPath substringFromIndex:7];
+    CFHostClientContext api_context = { 0, (void *)(CFStringRef)server_address, CFRetain, CFRelease, NULL };
+    CFHostRef api_host = CFHostCreateWithName(kCFAllocatorDefault, (CFStringRef)server_address);
+    if (!CFHostSetClient(api_host, cfHostClientCallBack, &api_context))
+    {
+        CFRelease(api_host);
+        return;
+    }
+    
+    CFHostScheduleWithRunLoop(api_host, CFRunLoopGetCurrent(), kCFRunLoopCommonModes);
+    if (!CFHostStartInfoResolution(api_host, kCFHostReachability, nil)){
+        CFHostUnscheduleFromRunLoop(api_host, CFRunLoopGetCurrent(), kCFRunLoopCommonModes);
+        CFHostSetClient(api_host, NULL, NULL);
+        CFRelease(api_host);
+    }
+    
+#endif
+}
+
+
 
 -(id)init{
     self = [super init];
@@ -157,7 +200,7 @@
   if (_connection == nil) {
     PH_LOG(@"Sending request: %@", [self.URL absoluteString]);
     NSURLRequest *request = [NSURLRequest requestWithURL:self.URL 
-                                             cachePolicy:NSURLRequestReturnCacheDataElseLoad 
+                                             cachePolicy:NSURLRequestReloadIgnoringLocalCacheData 
                                          timeoutInterval:PH_REQUEST_TIMEOUT];
     _connection = [[NSURLConnection alloc] initWithRequest:request delegate:self];
     [_connection start];
@@ -194,7 +237,8 @@
 }
 
 -(void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data{
-  [_connectionData appendData:data];
+    
+    [_connectionData appendData:data];
 }
 
 -(void)connectionDidFinishLoading:(NSURLConnection *)connection{
@@ -203,8 +247,7 @@
         [self.delegate performSelector:@selector(requestDidFinishLoading:) withObject:self withObject:nil];
     }
     
-    NSString *responseString = [[NSString alloc] initWithData:_connectionData encoding:NSUTF8StringEncoding];
-    
+    NSString *responseString = [[NSString alloc] initWithData:_connectionData encoding:NSUTF8StringEncoding];    
     SBJsonParserPH *parser = [[SBJsonParserPH alloc] init];
     NSDictionary* resultDictionary = [parser objectWithString:responseString];
     [parser release];

@@ -88,20 +88,20 @@
 }
 
 -(void)request:(PHPublisherContentRequest *)request contentDidDismissWithType:(PHPublisherContentDismissType *)type{
-    NSString *message = [NSString stringWithFormat:@"✔ User dismissed request: %@ of type %@",request, type];
+    NSString *message = [NSString stringWithFormat:@"[OK] User dismissed request: %@ of type %@",request, type];
     [self addMessage:message];
     
     [self finishRequest];
 }
 
 -(void)request:(PHPublisherContentRequest *)request didFailWithError:(NSError *)error{
-    NSString *message = [NSString stringWithFormat:@"✖ Failed with error: %@", error];
+    NSString *message = [NSString stringWithFormat:@"[ERROR] Failed with error: %@", error];
     [self addMessage:message];
     [self finishRequest];
 }
 
 -(void)request:(PHPublisherContentRequest *)request unlockedReward:(PHReward *)reward{
-  NSString *message = [NSString stringWithFormat:@"☆ Unlocked reward: %dx %@", reward.quantity, reward.name];
+  NSString *message = [NSString stringWithFormat:@"Unlocked reward: %dx %@", reward.quantity, reward.name];
   [self addMessage:message];
 }
 

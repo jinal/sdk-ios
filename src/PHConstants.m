@@ -23,7 +23,7 @@
 #define IFT_ETHER 0x6/* Ethernet CSMACD */
 #endif
 
-NSString *_getWiFiIPAddress(void);
+BOOL _localWiFiAvailable(void);
 
 NSError *PHCreateError(PHErrorType errorType){
   static NSArray *errorArray;
@@ -49,28 +49,29 @@ NSError *PHCreateError(PHErrorType errorType){
  * getWiFiIPAddress code courtesy of Matt Brown
  * http://mattbsoftware.blogspot.com/2009/04/how-to-get-ip-address-of-iphone-os-v221.html
  */
-NSString *_getWiFiIPAddress(){
-  
-  BOOL success;
-  struct ifaddrs * addrs;
-  const struct ifaddrs * cursor;
-  
-  success = getifaddrs(&addrs) == 0;
-  if (success) {
-    cursor = addrs;
+BOOL _localWiFiAvailable()
+{
+    struct ifaddrs *addresses;
+    struct ifaddrs *cursor;
+    BOOL wiFiAvailable = NO;
+    if (getifaddrs(&addresses) != 0) return NO;
+    
+    cursor = addresses;
     while (cursor != NULL) {
-      if (cursor->ifa_addr->sa_family == AF_INET && (cursor->ifa_flags & IFF_LOOPBACK) == 0){ // this second test keeps from picking up the loopback address
-        NSString *name = [NSString stringWithUTF8String:cursor->ifa_name];
-        if ([name isEqualToString:@"en0"] || [name isEqualToString:@"en1"]) { // found the WiFi adapter
-          return [NSString stringWithUTF8String:inet_ntoa(((struct sockaddr_in *)cursor->ifa_addr)->sin_addr)];
+        if (cursor -> ifa_addr -> sa_family == AF_INET
+            && !(cursor -> ifa_flags & IFF_LOOPBACK)) // Ignore the loopback address
+        {
+            // Check for WiFi adapter
+            if (strcmp(cursor -> ifa_name, "en0") == 0) {
+                wiFiAvailable = YES;
+                break;
+            }
         }
-      }
-      
-      cursor = cursor->ifa_next;
+        cursor = cursor -> ifa_next;
     }
-    freeifaddrs(addrs);
-  }
-  return NULL;
+    
+    freeifaddrs(addresses);
+    return wiFiAvailable;
 }
 
 /*
@@ -91,6 +92,8 @@ int PHNetworkStatus(){
   SCNetworkReachabilityFlags flags;
 	SCNetworkReachabilityGetFlags(target, &flags);
   
+    CFRelease(target);
+    
   BOOL isReachable = ((flags & kSCNetworkFlagsReachable) != 0);
   BOOL needsConnection = ((flags & kSCNetworkFlagsConnectionRequired) != 0);
   
@@ -99,12 +102,11 @@ int PHNetworkStatus(){
     
     // determine what type of connection is available
     BOOL isCellularConnection = ((flags & kSCNetworkReachabilityFlagsIsWWAN) != 0);
-    NSString *wifiIPAddress = _getWiFiIPAddress();
     
     if(isCellularConnection) 
       return 1; // cellular connection available
     
-    if(wifiIPAddress)
+    if(_localWiFiAvailable())
       return 2; // wifi connection available
   }
     
