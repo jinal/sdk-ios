@@ -28,8 +28,10 @@
         [NSURLCache setSharedURLCache:urlCache];
         [urlCache release];
 
+#ifdef PH_USE_EVENT_TRACKING
         // Start up an event queue and start tracking
         [PHEventTracking eventTrackingForApp];
+#endif
     }
 }
 

@@ -47,7 +47,7 @@
 
 #define PHEVENT_QUEUE_INFO_FILENAME @"event_queue_cache.plist"
 #define PHEVENT_TRACKING_EVENTQUEUE_HASH_KEY @"event_queue_hash"
-#define PHEVENT_TRACKING_EVENTQUEUE_CURRENT_KEY @"event_queue_first"
+#define PHEVENT_TRACKING_EVENTQUEUE_CURRENT_KEY @"event_queue_current"
 #define PHEVENT_TRACKING_EVENTQUEUE_NEXT_KEY @"event_queue_next"
 #define PHEVENT_TRACKING_EVENTQUEUE_CREATED_KEY @"event_queue_created"
 #define PHEVENT_TRACKING_EVENTQUEUES_KEY @"event_queues"

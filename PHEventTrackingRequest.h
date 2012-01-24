@@ -19,7 +19,7 @@
 +(id)requestForApp:(NSString *)token secret:(NSString *)secret delegate:(id)delegate;
 
 #define PHEVENT_REQUEST_INFO_FILENAME @"event_request_cache.plist"
-#define PHEVENT_REQUEST_CURR_EVENT_QUEUE_HASH_KEY @"eventrequest_next_record"
+#define PHEVENT_REQUEST_CURR_EVENT_QUEUE_HASH_KEY @"eventrequest_current_hash"
 #define PHEVENT_REQUEST_NEXT_RECORD_KEY @"eventrequest_next_record"
 #define PHEVENT_REQUEST_TOTAL_SENT_RECORDS_KEY @"eventrequest_records_sent"
 
