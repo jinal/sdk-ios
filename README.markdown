@@ -1,4 +1,4 @@
-PlayHaven SDK 1.3.14
+PlayHaven SDK 1.6.0
 ====================
 PlayHaven is a real-time mobile game marketing platform to help you take control of the business of your games.
 
@@ -6,8 +6,14 @@ Acquire, retain, re-engage, and monetize your players with the help of PlayHaven
 
 An API token and secret is required to use this SDK. These tokens uniquely identify your app to PlayHaven and prevent others from making requests to the API on your behalf. To get a token and secret, please visit the PlayHaven developer dashboard at https://dashboard.playhaven.com
 
-What's new in 1.3.14
-====================
+What's new in 1.6.0
+===================
+* After a successful open call, the SDK will pre-cache content template data in the background. Be sure to add the source in the Cache directory to your project.
+* CFNetwork.framework is now required.
+* Fixes memory leaks in reachability code.
+
+1.3.14
+======
 * Content units will no longer crash the app during a dismiss.
 * PlayHaven.bundle is no longer required, PlayHaven now includes all image assets into the SDK
 * New dismiss delegate for content unit requests that indicates the reason the view was dismissed. The old dismiss delegate will continue to work but has been deprecated.
@@ -25,6 +31,7 @@ If you are using Unity for your game, please integrate the Unity SDK located her
 1. Add the following from the sdk-ios directory that you downloaded or cloned from github to your project:
   * src directory 
   * JSON directory
+  * Cache directory
 1. Ensure the following frameworks are included with your project, add any missing frameworks in the Build Phases tab for your application's target:
   * UIKit.framework
   * Foundation.framework

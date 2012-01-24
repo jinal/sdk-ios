@@ -23,7 +23,7 @@
 #define IFT_ETHER 0x6/* Ethernet CSMACD */
 #endif
 
-BOOL _localWiFiAvailable();
+BOOL _localWiFiAvailable(void);
 
 NSError *PHCreateError(PHErrorType errorType){
   static NSArray *errorArray;
@@ -34,6 +34,7 @@ NSError *PHCreateError(PHErrorType errorType){
                   @"The content you requested was not able to be shown because it is missing required orientation data.",
                   @"The content you requested has been dismissed because PlayHaven was not able to load content data.",
                   @"PlayHaven was not able to create the content unit overlay",
+                  @"PlayHaven was not able to get product information from Apple",
                   nil];
   }
   

@@ -9,7 +9,7 @@
 #import <UIKit/UIImage.h>
 
 // Constants
-#define PH_SDK_VERSION @"1.3.14"
+#define PH_SDK_VERSION @"1.6.0"
 
 #ifndef PH_BASE_URL
 #define PH_BASE_URL @"http://api2.playhaven.com"
@@ -18,6 +18,12 @@
 #ifndef PH_CONTENT_ADDRESS
 #define PH_CONTENT_ADDRESS @"http://media.playhaven.com"
 #endif
+
+
+// PHContentView notification that a callback is ready for processing
+//
+#define PHCONTENTVIEW_CALLBACK_NOTIFICATION  @"PHContentViewPHCallbackNotification"
+
 
 // PH_DISPATCH_PROTOCOL_VERSION
 // Defines characteristics of the requests that get sent from content units to
@@ -67,7 +73,8 @@ typedef enum{
   PHRequestResponseErrorType,
   PHOrientationErrorType,
   PHLoadContextErrorType,
-  PHWindowErrorType
+  PHWindowErrorType,
+  PHProductRequestErrorType,
 } PHErrorType;
 
 NSError *PHCreateError(PHErrorType errorType);

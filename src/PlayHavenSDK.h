@@ -11,7 +11,9 @@
 #import "PHPublisherPromosRequest.h"
 #import "PHPublisherMetadataRequest.h"
 #import "PHEventTrackingRequest.h"
+#import "PHPublisherIAPTrackingRequest.h"
 
 #import "PHEventTracking.h"
 #import "PHNotificationView.h"
 #import "PHReward.h"
+#import "PHPurchase.h"
