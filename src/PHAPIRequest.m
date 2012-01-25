@@ -56,6 +56,24 @@
     [canceledRequests makeObjectsPerformSelector:@selector(cancel)];
 }
 
++(int)cancelRequestWithHashCode:(int)hashCode{
+    NSEnumerator *allRequests = [[PHAPIRequest allRequests] objectEnumerator];
+    PHAPIRequest *request = nil;
+    PHAPIRequest *cancelRequest = nil;
+
+    while (request = [allRequests nextObject]){
+        if ([request hashCode] == hashCode) {
+            cancelRequest = request;
+        }
+    }
+    if (cancelRequest != nil){
+        [cancelRequest performSelector:@selector(cancel)];
+        return 1;
+    } else{
+        return 0;
+    }
+}
+
 +(NSString *) base64SignatureWithString:(NSString *)string{
   return [PHStringUtil b64DigestForString:string];
 }
