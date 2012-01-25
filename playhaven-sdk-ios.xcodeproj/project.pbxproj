@@ -51,7 +51,6 @@
 		EA12AC201365DE1300CB2F24 /* PHContent.m in Sources */ = {isa = PBXBuildFile; fileRef = EAB4429513454F34000DA3E9 /* PHContent.m */; };
 		EA12AC211365DE1300CB2F24 /* PHContentView.m in Sources */ = {isa = PBXBuildFile; fileRef = EA0BB5DD13463C00007F95FA /* PHContentView.m */; };
 		EA12AC221365DE1300CB2F24 /* PHPublisherContentRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = EAED519E134B949D00D0DCB6 /* PHPublisherContentRequest.m */; };
-		EA12AC241365DE1300CB2F24 /* PHPublisherPromosRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = EA6EA1ED135F6D77000123B0 /* PHPublisherPromosRequest.m */; };
 		EA12AC251365DE1300CB2F24 /* PHPublisherOpenRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = EA523D8E1343EE790057DEA5 /* PHPublisherOpenRequest.m */; };
 		EA12AC3C13662AD700CB2F24 /* ExampleViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EA12AC3B13662AD700CB2F24 /* ExampleViewController.m */; };
 		EA12AC3F13662DC400CB2F24 /* PublisherOpenViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EA12AC3E13662DC400CB2F24 /* PublisherOpenViewController.m */; };
@@ -71,8 +70,6 @@
 		EA5E5C5A14C60D660026B3E0 /* PHUrlPrefetchOperation.h in Headers */ = {isa = PBXBuildFile; fileRef = D118AE5B14B78C3C00C76E2C /* PHUrlPrefetchOperation.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		EA6ADFC51475CF3A00DBE60B /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EABAA6971450ED640040B937 /* SystemConfiguration.framework */; };
 		EA6ADFC81475F22C00DBE60B /* PHPublisherContentRequestTest.m in Sources */ = {isa = PBXBuildFile; fileRef = EA6ADFC71475F22C00DBE60B /* PHPublisherContentRequestTest.m */; };
-		EA6EA1E8135F458E000123B0 /* PHPublisherTokensRequestTest.m in Sources */ = {isa = PBXBuildFile; fileRef = EA6EA1E7135F458E000123B0 /* PHPublisherTokensRequestTest.m */; };
-		EA6EA1EF135F6D77000123B0 /* PHPublisherPromosRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = EA6EA1ED135F6D77000123B0 /* PHPublisherPromosRequest.m */; };
 		EA7BC61A13537F8700B4518D /* PHURLLoaderTest.m in Sources */ = {isa = PBXBuildFile; fileRef = EA7BC61813537F8700B4518D /* PHURLLoaderTest.m */; };
 		EA8A6D3414C8C5CA000B86A5 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EA019C8514C102D4008FBCB1 /* StoreKit.framework */; };
 		EA9AB62014A3B0AA00079704 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D30AB110D05D00D00671497 /* Foundation.framework */; };
@@ -94,7 +91,6 @@
 		EA9AB64A14A3B0D500079704 /* PHContentView.m in Sources */ = {isa = PBXBuildFile; fileRef = EA0BB5DD13463C00007F95FA /* PHContentView.m */; };
 		EA9AB64C14A3B0D500079704 /* PHPublisherContentRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = EAED519E134B949D00D0DCB6 /* PHPublisherContentRequest.m */; };
 		EA9AB65014A3B0D500079704 /* PHReward.m in Sources */ = {isa = PBXBuildFile; fileRef = EAB2B44613CBD172006D2391 /* PHReward.m */; };
-		EA9AB65214A3B0D500079704 /* PHPublisherPromosRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = EA6EA1ED135F6D77000123B0 /* PHPublisherPromosRequest.m */; };
 		EA9AB65414A3B0D500079704 /* PHPublisherOpenRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = EA523D8E1343EE790057DEA5 /* PHPublisherOpenRequest.m */; };
 		EA9AB65514A3B2ED00079704 /* JSON.h in Headers */ = {isa = PBXBuildFile; fileRef = EAB4425E134539F4000DA3E9 /* JSON.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		EA9AB65614A3B2ED00079704 /* SBJsonBase.h in Headers */ = {isa = PBXBuildFile; fileRef = EAB44263134539F4000DA3E9 /* SBJsonBase.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -116,7 +112,6 @@
 		EA9AB66614A3B2ED00079704 /* PHContentView.h in Headers */ = {isa = PBXBuildFile; fileRef = EA0BB5DC13463C00007F95FA /* PHContentView.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		EA9AB66714A3B2ED00079704 /* PHPublisherContentRequest.h in Headers */ = {isa = PBXBuildFile; fileRef = EAED519D134B949D00D0DCB6 /* PHPublisherContentRequest.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		EA9AB66914A3B2EE00079704 /* PHReward.h in Headers */ = {isa = PBXBuildFile; fileRef = EAB2B44513CBD172006D2391 /* PHReward.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		EA9AB66A14A3B2EE00079704 /* PHPublisherPromosRequest.h in Headers */ = {isa = PBXBuildFile; fileRef = EA6EA1EC135F6D77000123B0 /* PHPublisherPromosRequest.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		EA9AB66B14A3B2EE00079704 /* PHPublisherOpenRequest.h in Headers */ = {isa = PBXBuildFile; fileRef = EA523D8D1343EE790057DEA5 /* PHPublisherOpenRequest.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		EAA547D714BF62AC00254A54 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D175008D149193790037A036 /* CFNetwork.framework */; };
 		EAB2B44713CBD172006D2391 /* PHReward.m in Sources */ = {isa = PBXBuildFile; fileRef = EAB2B44613CBD172006D2391 /* PHReward.m */; };
@@ -196,9 +191,6 @@
 		EA523DB21343F7BA0057DEA5 /* PHAPIRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PHAPIRequest.m; sourceTree = "<group>"; };
 		EA6031CD1361FFD6007B2BF5 /* PlayHavenSDK.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PlayHavenSDK.h; sourceTree = "<group>"; };
 		EA6ADFC71475F22C00DBE60B /* PHPublisherContentRequestTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PHPublisherContentRequestTest.m; sourceTree = "<group>"; };
-		EA6EA1E7135F458E000123B0 /* PHPublisherTokensRequestTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PHPublisherTokensRequestTest.m; sourceTree = "<group>"; };
-		EA6EA1EC135F6D77000123B0 /* PHPublisherPromosRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PHPublisherPromosRequest.h; sourceTree = "<group>"; };
-		EA6EA1ED135F6D77000123B0 /* PHPublisherPromosRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PHPublisherPromosRequest.m; sourceTree = "<group>"; };
 		EA7BC61813537F8700B4518D /* PHURLLoaderTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PHURLLoaderTest.m; sourceTree = "<group>"; };
 		EA9AB61F14A3B0AA00079704 /* libPlayHaven.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPlayHaven.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		EAB19C8C1357BA390067F27A /* PHConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PHConstants.h; sourceTree = "<group>"; };
@@ -375,7 +367,6 @@
 				EA7BC61813537F8700B4518D /* PHURLLoaderTest.m */,
 				EA523D8A1343EE670057DEA5 /* PHPublisherOpenRequestTest.m */,
 				EAB4423213452026000DA3E9 /* PHAPIRequestTest.m */,
-				EA6EA1E7135F458E000123B0 /* PHPublisherTokensRequestTest.m */,
 				EA03810913B25F4300A31FF7 /* PHPublisherMetadataRequestTest.m */,
 			);
 			path = tests;
@@ -413,7 +404,6 @@
 				EA019C7E14C0FC16008FBCB1 /* Purchases */,
 				EA03810C13B2630200A31FF7 /* Metadata */,
 				EAB4427913454EB8000DA3E9 /* Content */,
-				EA6EA1EB135F6D5A000123B0 /* Promos */,
 				EA523D951343EEA60057DEA5 /* Open */,
 			);
 			name = "Publisher SDK";
@@ -436,15 +426,6 @@
 				EA523D8C1343EE790057DEA5 /* src */,
 			);
 			name = "PlayHaven SDK";
-			sourceTree = "<group>";
-		};
-		EA6EA1EB135F6D5A000123B0 /* Promos */ = {
-			isa = PBXGroup;
-			children = (
-				EA6EA1EC135F6D77000123B0 /* PHPublisherPromosRequest.h */,
-				EA6EA1ED135F6D77000123B0 /* PHPublisherPromosRequest.m */,
-			);
-			name = Promos;
 			sourceTree = "<group>";
 		};
 		EAB4425D134539F4000DA3E9 /* JSON */ = {
@@ -518,7 +499,6 @@
 				EA9AB66614A3B2ED00079704 /* PHContentView.h in Headers */,
 				EA9AB66714A3B2ED00079704 /* PHPublisherContentRequest.h in Headers */,
 				EA9AB66914A3B2EE00079704 /* PHReward.h in Headers */,
-				EA9AB66A14A3B2EE00079704 /* PHPublisherPromosRequest.h in Headers */,
 				EA9AB66B14A3B2EE00079704 /* PHPublisherOpenRequest.h in Headers */,
 				EA5E5C5914C60D660026B3E0 /* SDURLCache.h in Headers */,
 				EA5E5C5A14C60D660026B3E0 /* PHUrlPrefetchOperation.h in Headers */,
@@ -672,7 +652,6 @@
 				EA12AC201365DE1300CB2F24 /* PHContent.m in Sources */,
 				EA12AC211365DE1300CB2F24 /* PHContentView.m in Sources */,
 				EA12AC221365DE1300CB2F24 /* PHPublisherContentRequest.m in Sources */,
-				EA12AC241365DE1300CB2F24 /* PHPublisherPromosRequest.m in Sources */,
 				EA12AC251365DE1300CB2F24 /* PHPublisherOpenRequest.m in Sources */,
 				EA12AC3C13662AD700CB2F24 /* ExampleViewController.m in Sources */,
 				EA12AC3F13662DC400CB2F24 /* PublisherOpenViewController.m in Sources */,
@@ -706,8 +685,6 @@
 				EAC53A94134E5F7A00F2F956 /* NSObject+QueryComponents.m in Sources */,
 				EA4C1912134E84D300755983 /* PHURLLoader.m in Sources */,
 				EA7BC61A13537F8700B4518D /* PHURLLoaderTest.m in Sources */,
-				EA6EA1E8135F458E000123B0 /* PHPublisherTokensRequestTest.m in Sources */,
-				EA6EA1EF135F6D77000123B0 /* PHPublisherPromosRequest.m in Sources */,
 				EA4ABA11135F859D0062AE77 /* UIDevice+HardwareString.m in Sources */,
 				EAE0F5FC1385D1120062B950 /* PHPublisherSubContentRequest.m in Sources */,
 				EA03810A13B25F4300A31FF7 /* PHPublisherMetadataRequestTest.m in Sources */,
@@ -750,7 +727,6 @@
 				EA9AB64A14A3B0D500079704 /* PHContentView.m in Sources */,
 				EA9AB64C14A3B0D500079704 /* PHPublisherContentRequest.m in Sources */,
 				EA9AB65014A3B0D500079704 /* PHReward.m in Sources */,
-				EA9AB65214A3B0D500079704 /* PHPublisherPromosRequest.m in Sources */,
 				EA9AB65414A3B0D500079704 /* PHPublisherOpenRequest.m in Sources */,
 				EA019C8414C0FCE5008FBCB1 /* PHPublisherIAPTrackingRequest.m in Sources */,
 			);
