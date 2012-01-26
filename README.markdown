@@ -8,7 +8,7 @@ An API token and secret is required to use this SDK. These tokens uniquely ident
 
 What's new in 1.6.1
 ===================
-* Fixes crash bug that occasionally appears after multiple content unit dismisses.
+* Fixes crash bug that occasionally appears after multiple content units have been displayed.
 
 1.6.0
 =====
