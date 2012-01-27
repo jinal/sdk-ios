@@ -448,9 +448,9 @@ static NSMutableSet *allContentViews = nil;
             case 5:
                 [redirect setArgument:&self atIndex:4]; 
             case 4:
-                if(!!callback) [redirect setArgument:&callback atIndex:3]; 
+                [redirect setArgument:&callback atIndex:3]; 
             case 3:
-                if(!!context) [redirect setArgument:&context atIndex:2]; 
+                [redirect setArgument:&context atIndex:2]; 
             default:
                 break;
         }

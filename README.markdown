@@ -1,4 +1,4 @@
-PlayHaven SDK 1.6.0
+PlayHaven SDK 1.6.1
 ====================
 PlayHaven is a real-time mobile game marketing platform to help you take control of the business of your games.
 
@@ -6,8 +6,12 @@ Acquire, retain, re-engage, and monetize your players with the help of PlayHaven
 
 An API token and secret is required to use this SDK. These tokens uniquely identify your app to PlayHaven and prevent others from making requests to the API on your behalf. To get a token and secret, please visit the PlayHaven developer dashboard at https://dashboard.playhaven.com
 
-What's new in 1.6.0
+What's new in 1.6.1
 ===================
+* Fixes crash bug that occasionally appears after multiple content units have been displayed.
+
+1.6.0
+=====
 * After a successful open call, the SDK will pre-cache content template data in the background. Be sure to add the source in the Cache directory to your project.
 * CFNetwork.framework is now required.
 * Fixes memory leaks in reachability code.
