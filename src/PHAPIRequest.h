@@ -29,7 +29,9 @@
 +(NSString *) base64SignatureWithString:(NSString *)string;
 
 +(id)requestForApp:(NSString *)token secret:(NSString *)secret;
++(id)requestWithHashCode:(int)hashCode;
 +(void)cancelAllRequestsWithDelegate:(id) delegate;
++(int)cancelRequestWithHashCode:(int)hashCode;
 
 @property (nonatomic, copy) NSString *urlPath;
 @property (nonatomic, readonly) NSURL *URL;
