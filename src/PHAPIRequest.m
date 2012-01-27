@@ -57,21 +57,12 @@
 }
 
 +(int)cancelRequestWithHashCode:(int)hashCode{
-    NSEnumerator *allRequests = [[PHAPIRequest allRequests] objectEnumerator];
-    PHAPIRequest *request = nil;
-    PHAPIRequest *cancelRequest = nil;
-
-    while (request = [allRequests nextObject]){
-        if ([request hashCode] == hashCode) {
-            cancelRequest = request;
-        }
-    }
-    if (cancelRequest != nil){
-        [cancelRequest performSelector:@selector(cancel)];
+    PHAPIRequest *request = [self requestWithHashCode:hashCode];
+    if (!!request) {
+        [request cancel];
         return 1;
-    } else{
-        return 0;
-    }
+    } 
+    return 0;
 }
 
 +(NSString *) base64SignatureWithString:(NSString *)string{
@@ -80,6 +71,12 @@
 
 +(id) requestForApp:(NSString *)token secret:(NSString *)secret{
   return [[[[self class] alloc] initWithApp:token secret:secret] autorelease];
+}
+
++(id)requestWithHashCode:(int)hashCode{
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"hashCode == %d",hashCode];
+    NSSet *resultSet = [[self allRequests] filteredSetUsingPredicate:predicate];
+    return [resultSet anyObject];
 }
 
 -(id) initWithApp:(NSString *)token secret:(NSString *)secret{
