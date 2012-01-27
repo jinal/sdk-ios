@@ -39,6 +39,9 @@
   PHContentView *_contentView;
   BOOL _didDismiss, _didLaunch;
 }@end
+@interface PHContentViewRedirectRecyclingTest : SenTestCase{
+    BOOL _shouldExpectParameter;
+}@end
 @interface PHPublisherContentRequestTest : SenTestCase @end
 @interface PHPublisherContentRewardsTest : SenTestCase @end
 @interface PHPublisherContentRequestPreservationTest : SenTestCase @end
@@ -146,11 +149,11 @@
 @implementation PHContentViewRedirectTest
 
 -(void)setUp{
-  _content = [[PHContent alloc] init];
-  
-  _contentView = [[PHContentView alloc] initWithContent:_content];
-  [_contentView redirectRequest:@"ph://dismiss" toTarget:self action:@selector(dismissRequestCallback:)];
-  [_contentView redirectRequest:@"ph://launch" toTarget:self action:@selector(launchRequestCallback:)];
+    _content = [[PHContent alloc] init];
+    
+    _contentView = [[PHContentView alloc] initWithContent:_content];
+    [_contentView redirectRequest:@"ph://dismiss" toTarget:self action:@selector(dismissRequestCallback:)];
+    [_contentView redirectRequest:@"ph://launch" toTarget:self action:@selector(launchRequestCallback:)];
 }
 
 -(void)testRegularRequest{
@@ -187,6 +190,35 @@
   [_content release], _content = nil;
   [_contentView release], _contentView = nil;
   [super dealloc];
+}
+
+@end
+
+@implementation PHContentViewRedirectRecyclingTest
+-(void)testRedirectRecycling{
+    PHContent *content = [[PHContent alloc] init];
+    PHContentView *contentView = [[PHContentView alloc] initWithContent:content];
+    [content release];
+    
+    [contentView redirectRequest:@"ph://test" toTarget:self action:@selector(handleTest:)];
+    
+    NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:@"ph://test?context=%7B%22url%22%3A%22http%3A%2F%2Fadidas.com%22%7D"]];
+    _shouldExpectParameter = YES;
+    STAssertFalse([contentView webView:nil shouldStartLoadWithRequest:request navigationType:UIWebViewNavigationTypeLinkClicked], @"Didn't redirect to dispatch handler");
+    
+    //NOTE: This rest ensures that invocation objects are being properly recycled.
+    NSURLRequest *nextRequest = [NSURLRequest requestWithURL:[NSURL URLWithString:@"ph://test"]];
+    _shouldExpectParameter = NO;
+    STAssertFalse([contentView webView:nil shouldStartLoadWithRequest:nextRequest navigationType:UIWebViewNavigationTypeLinkClicked], @"Didn't redirect next request to dispatch handler");
+}
+
+-(void)handleTest:(NSDictionary *)parameters{
+    NSString *url = [parameters valueForKey:@"url"];
+    if (_shouldExpectParameter) {
+        STAssertNotNil(url, @"Expected parameter was not present");
+    } else  {
+        STAssertNil(url, @"Expected nil returned a value");
+    }
 }
 
 @end
