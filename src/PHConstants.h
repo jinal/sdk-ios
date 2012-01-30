@@ -34,7 +34,7 @@
 //      in query string. Rewards support requires this setting.
 //   3: Unknown dispatches are ignored instead of throwing an error
 // * 4: ph://launch dispatches no longer create native spinner views
-#define PH_DISPATCH_PROTOCOL_VERSION 4
+#define PH_DISPATCH_PROTOCOL_VERSION 5
 
 // PH_REQUEST_TIMEOUT
 // Defines the maximum amount of time that an API request will wait for a 

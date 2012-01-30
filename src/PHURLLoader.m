@@ -116,7 +116,10 @@
   
   if (self.opensFinalURLOnDevice) {
     //actually open in app at this point
-    [[UIApplication sharedApplication] openURL:self.targetURL];
+    if ([[UIApplication sharedApplication] canOpenURL:self.targetURL])
+        [[UIApplication sharedApplication] openURL:self.targetURL];
+    else
+        [self fail];
   }
 }
 
