@@ -56,12 +56,27 @@
     [canceledRequests makeObjectsPerformSelector:@selector(cancel)];
 }
 
++(int)cancelRequestWithHashCode:(int)hashCode{
+    PHAPIRequest *request = [self requestWithHashCode:hashCode];
+    if (!!request) {
+        [request cancel];
+        return 1;
+    } 
+    return 0;
+}
+
 +(NSString *) base64SignatureWithString:(NSString *)string{
   return [PHStringUtil b64DigestForString:string];
 }
 
 +(id) requestForApp:(NSString *)token secret:(NSString *)secret{
   return [[[[self class] alloc] initWithApp:token secret:secret] autorelease];
+}
+
++(id)requestWithHashCode:(int)hashCode{
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"hashCode == %d",hashCode];
+    NSSet *resultSet = [[self allRequests] filteredSetUsingPredicate:predicate];
+    return [resultSet anyObject];
 }
 
 -(id) initWithApp:(NSString *)token secret:(NSString *)secret{

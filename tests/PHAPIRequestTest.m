@@ -16,6 +16,10 @@
 #define HASH_STRING  @"DEVICE_ID:PUBLISHER_TOKEN:PUBLISHER_SECRET:NONCE"
 #define EXPECTED_HASH @"3L0xlrDOt02UrTDwMSnye05Awwk"
 
+@interface PHAPIRequest(Private)
++(NSMutableSet *)allRequests;
+@end
+
 @interface PHAPIRequestTest : SenTestCase @end
 @interface PHAPIRequestResponseTest : SenTestCase<PHAPIRequestDelegate>{
   PHAPIRequest *_request;
@@ -27,7 +31,7 @@
   BOOL _didProcess;
 }
 @end
-
+@interface PHAPIRequestByHashCodeTest : SenTestCase @end
 
 @implementation PHAPIRequestTest
 
@@ -160,6 +164,36 @@
 
 -(void)tearDown{
   STAssertTrue(_didProcess, @"Did not actually process request!");
+}
+
+@end
+
+@implementation PHAPIRequestByHashCodeTest
+
+-(void)testRequestByHashCode{
+    int hashCode = 100;
+    
+    PHAPIRequest *request = [PHAPIRequest requestForApp:PUBLISHER_TOKEN secret:PUBLISHER_SECRET];
+    request.hashCode = hashCode;
+    
+    PHAPIRequest *retrievedRequest = [PHAPIRequest requestWithHashCode:hashCode];
+    STAssertTrue(request == retrievedRequest, @"Request was not able to be retrieved by hashCode.");
+    STAssertNil([PHAPIRequest requestWithHashCode:hashCode+1], @"Non-existent hashCode returned a request.");
+    
+    [request cancel];
+     STAssertNil([PHAPIRequest requestWithHashCode:hashCode], @"Canceled request was retrieved by hashCode");
+}
+
+-(void)testRequestCancelByHashCode{
+    int hashCode = 200;
+    
+    PHAPIRequest *request = [PHAPIRequest requestForApp:PUBLISHER_TOKEN secret:PUBLISHER_SECRET];
+    request.hashCode = hashCode;
+    
+    STAssertTrue([PHAPIRequest cancelRequestWithHashCode:hashCode] == 1, @"Request was not canceled!");
+    STAssertTrue([PHAPIRequest cancelRequestWithHashCode:hashCode] == 0, @"Canceled request was canceled again.");
+    STAssertTrue([PHAPIRequest cancelRequestWithHashCode:hashCode+1] == 0, @"Nonexistent request was canceled.");
+    STAssertFalse([[PHAPIRequest allRequests] containsObject:request], @"Request was not removed from request array!");
 }
 
 @end

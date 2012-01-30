@@ -8,7 +8,6 @@
 
 #import "PHPublisherOpenRequest.h"
 #import "PHPublisherContentRequest.h"
-#import "PHPublisherPromosRequest.h"
 #import "PHPublisherMetadataRequest.h"
 #import "PHEventTrackingRequest.h"
 #import "PHPublisherIAPTrackingRequest.h"
