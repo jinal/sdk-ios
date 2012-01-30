@@ -46,7 +46,7 @@ static NSString *const PHEventTimeInGameApplicationWillTerminate = @"phEventAppW
 
 +(PHEventTimeInGame *) createPHEventApplicationDidStart{
 
-    PHEventTimeInGame *newEvent = [[PHEventTimeInGame alloc] initWithData:NSStringFromClass([PHEventTimeInGame class]) withData:PHEventTimeInGameApplicationDidEnterBackground withTimestamp:[NSDate date]];
+    PHEventTimeInGame *newEvent = [[[PHEventTimeInGame alloc] initWithData:NSStringFromClass([PHEventTimeInGame class]) withData:PHEventTimeInGameApplicationDidEnterBackground withTimestamp:[NSDate date]] autorelease];
     [PHEventTracking addEvent:newEvent];
     return newEvent;
 }

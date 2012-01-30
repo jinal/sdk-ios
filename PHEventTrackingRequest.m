@@ -71,9 +71,9 @@
 
 -(NSDictionary *)additionalParameters{
 
-    NSInteger next_event_record;
+    NSInteger next_event_record = 0;
     NSMutableDictionary *eventRequestDictionary;
-    NSFileManager *fileManager = [[NSFileManager alloc] init];
+    NSFileManager *fileManager = [[[NSFileManager alloc] init] autorelease];
     if (![fileManager fileExistsAtPath:[PHEventTracking defaultEventQueuePath]]){
         
         event_queue_hash = [[PHEventTracking eventTrackingForApp] getEventQueueToSendHash];
@@ -83,7 +83,7 @@
         
     } else{
 
-        eventRequestDictionary = [[NSDictionary dictionaryWithContentsOfFile:[PHEventTracking getEventQueuePlistFile]] autorelease];
+        eventRequestDictionary = [NSDictionary dictionaryWithContentsOfFile:[PHEventTracking getEventQueuePlistFile]];
         event_queue_hash = [eventRequestDictionary objectForKey:PHEVENT_REQUEST_CURR_EVENT_QUEUE_HASH_KEY];
         next_event_record = [[eventRequestDictionary objectForKey:PHEVENT_REQUEST_NEXT_RECORD_KEY] integerValue];
     }
@@ -92,7 +92,7 @@
     NSInteger actual_sent_records = 0;
     for (int i = 0; i < PH_MAX_EVENT_RECORDS_SEND_PER_REQUEST; i++){
 
-        NSString *event_record_filename = [[NSString stringWithFormat:@"%@/event_record-%@-%d", [PHEventTracking defaultEventQueuePath], event_queue_hash, next_event_record] autorelease];
+        NSString *event_record_filename = [NSString stringWithFormat:@"%@/event_record-%@-%d", [PHEventTracking defaultEventQueuePath], event_queue_hash, next_event_record];
         if (![fileManager fileExistsAtPath:event_record_filename])
             break;
 
@@ -104,16 +104,12 @@
                                                     event.eventData, @"event_data",
                                                     unixTime, @"event_timestamp", nil];
         [all_events addObject:event_record];
-        [event_record release];
         next_event_record++;
         actual_sent_records++;
     }
 
     [eventRequestDictionary setValue:[NSNumber numberWithInt:actual_sent_records] forKey:PHEVENT_REQUEST_TOTAL_SENT_RECORDS_KEY];
     [eventRequestDictionary writeToFile:[PHEventTracking getEventQueuePlistFile] atomically:YES];
-    [eventRequestDictionary release];
-
-    [fileManager release];
 
     return [NSDictionary dictionaryWithObjectsAndKeys:
             all_events, @"events", nil];
@@ -126,8 +122,8 @@
     // If the sent data is from the current event queue just remove the sent event records.
     if ([[PHEventTracking getCurrentEventQueueHash] isEqualToString:event_queue_hash]){
 
-        NSFileManager *fileManager = [[NSFileManager alloc] init];
-        NSDictionary *eventRequestDictionary = [[NSDictionary dictionaryWithContentsOfFile:[PHEventTracking getEventQueuePlistFile]] autorelease];
+        NSFileManager *fileManager = [[[NSFileManager alloc] init] autorelease];
+        NSDictionary *eventRequestDictionary = [NSDictionary dictionaryWithContentsOfFile:[PHEventTracking getEventQueuePlistFile]];
 
         if ([self.delegate respondsToSelector:@selector(request:didSucceedWithResponse:)]){
             [self.delegate performSelector:@selector(request:didSucceedWithResponse:) withObject:eventRequestDictionary withObject:responseData];
@@ -137,7 +133,7 @@
         NSInteger actual_event_records = [[eventRequestDictionary objectForKey:PHEVENT_REQUEST_TOTAL_SENT_RECORDS_KEY] integerValue];
         for (int i = next_event_record; i < actual_event_records; i++){
             
-            NSString *event_record_filename = [[NSString stringWithFormat:@"%@/event_record-%@-%d", [PHEventTracking defaultEventQueuePath], event_queue_hash, i] autorelease];
+            NSString *event_record_filename = [NSString stringWithFormat:@"%@/event_record-%@-%d", [PHEventTracking defaultEventQueuePath], event_queue_hash, i];
             if ([fileManager fileExistsAtPath:event_record_filename])
                 [fileManager removeItemAtPath:event_record_filename error:NULL];
             next_event_record++;
@@ -146,8 +142,6 @@
         [eventRequestDictionary setValue:[NSNumber numberWithInt:next_event_record] forKey:PHEVENT_REQUEST_NEXT_RECORD_KEY];
         [eventRequestDictionary setValue:[NSNumber numberWithInt:0] forKey:PHEVENT_REQUEST_TOTAL_SENT_RECORDS_KEY];
         [eventRequestDictionary writeToFile:[PHEventTracking getEventQueuePlistFile] atomically:YES];
-        [eventRequestDictionary release];
-        [fileManager release];
     } else{
 
         // Not the current queue so remove all event queue records
