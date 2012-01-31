@@ -59,6 +59,11 @@ static PHEventTracking *appEventTracking = nil;
         NSInteger next_event_queue = [[eventQueueDictionary objectForKey:PHEVENT_TRACKING_EVENTQUEUE_NEXT_KEY] integerValue];
         NSInteger current_event_queue = next_event_queue;
         NSDictionary *event_queue = [event_queues objectAtIndex:current_event_queue];
+        // if current is not empty remove the old event queue
+        NSString *queue_hash = [event_queue objectForKey:PHEVENT_TRACKING_EVENTQUEUE_HASH_KEY];
+        if (![queue_hash isEqualToString:@""]){
+            [PHEventTracking clearEventQueue:queue_hash];
+        }
         [event_queue setValue:[NSNumber numberWithDouble:seconds] forKey:PHEVENT_TRACKING_EVENTQUEUE_CREATED_KEY];
         [event_queue setValue:currentEventQueueHash forKey:PHEVENT_TRACKING_EVENTQUEUE_HASH_KEY];
         [event_queue setValue:[NSNumber numberWithInt:0] forKey:PHEVENT_TRACKING_EVENTRECORD_NEXT_KEY];
