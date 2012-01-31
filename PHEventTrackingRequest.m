@@ -76,7 +76,12 @@
     NSFileManager *fileManager = [[[NSFileManager alloc] init] autorelease];
     if (![fileManager fileExistsAtPath:[PHEventTracking defaultEventQueuePath]]){
         
-        event_queue_hash = [[PHEventTracking eventTrackingForApp] getEventQueueToSendHash];
+        event_queue_hash = [PHEventTracking getEventQueueToSendHash];
+        if (event_queue_hash == nil){
+            
+            PH_NOTE(@"Need to call PHPublisherOpenRequest to intialize PHEventTracking");
+            return nil;
+        }
         eventRequestDictionary = [NSDictionary dictionaryWithObjectsAndKeys:
                                               event_queue_hash, PHEVENT_REQUEST_CURR_EVENT_QUEUE_HASH_KEY,
                                               [NSNumber numberWithInt:1], PHEVENT_REQUEST_NEXT_RECORD_KEY, nil];
@@ -85,6 +90,11 @@
 
         eventRequestDictionary = [NSDictionary dictionaryWithContentsOfFile:[PHEventTracking getEventQueuePlistFile]];
         event_queue_hash = [eventRequestDictionary objectForKey:PHEVENT_REQUEST_CURR_EVENT_QUEUE_HASH_KEY];
+        if (event_queue_hash == nil){
+
+            PH_NOTE(@"Need to call PHPublisherOpenRequest to intialize PHEventTracking");
+            return nil;
+        }
         next_event_record = [[eventRequestDictionary objectForKey:PHEVENT_REQUEST_NEXT_RECORD_KEY] integerValue];
     }
 

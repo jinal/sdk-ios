@@ -11,12 +11,11 @@
 @interface PHEvent : NSObject <NSCoding>{
     NSString *_eventType;
     NSString *_eventData;
-    NSDate *_eventTimestamp;                // NOTE: store as unix format timestamp or NSDate and change when send to server?
-                                            //    time_t unixTime = (time_t) [[NSDate date] timeIntervalSince1970];
+    NSDate *_eventTimestamp;
 }
 
-@property (nonatomic, assign) NSString *eventType;
-@property (nonatomic, copy) NSString *eventData;
+@property (nonatomic, copy) NSString *eventType;    // assign since static?
+@property (nonatomic, copy) NSString *eventData;    // assign since static?
 @property (nonatomic, copy) NSDate *eventTimestamp;
 
 -(id) initWithData:(NSString *)type withData:(NSString *)data withTimestamp:(NSDate *)timestamp;

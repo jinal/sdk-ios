@@ -14,6 +14,11 @@
     
 }
 
-+(PHEventTimeInGame *) createPHEventApplicationDidStart;
+-(void) registerApplicationDidStartEvent;
+-(void) applicationDidEnterBackgroundNotificationHandler:(NSNotification *) notification;
+-(void) applicationWillEnterForegroundNotificationHandler:(NSNotification *) notification;
+-(void) applicationDidBecomeActiveNotificationHandler:(NSNotification *) notification;
+-(void) applicationWillResignActiveNotificationHandler:(NSNotification *) notification;
+-(void) applicationWillTerminateNotificationHandler:(NSNotification *) notification;
 
 @end

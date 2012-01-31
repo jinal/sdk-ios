@@ -10,8 +10,9 @@
 
 @implementation PHEvent
 
-@synthesize eventType, eventData, eventTimestamp;
-
+@synthesize eventType = _eventType;
+@synthesize eventData = _eventData;
+@synthesize eventTimestamp = _eventTimestamp;
 
 #pragma mark NSCoding
 
@@ -22,9 +23,9 @@
 -(id) initWithData:(NSString *)type withData:(NSString *)data withTimestamp:(NSDate *)timestamp{
     self = [self init];
     if (self) {
-        self.eventType = type;
-        self.eventData = data;
-        self.eventTimestamp = timestamp;
+        _eventType = type;
+        _eventData = data;
+        _eventTimestamp = timestamp;
     }
     
     return self;
@@ -55,6 +56,7 @@
 - (void) dealloc{
     
     [super dealloc];
+    [_eventType release], _eventType = nil;
     [_eventData release], _eventData = nil;
     [_eventTimestamp release], _eventTimestamp = nil;
 }

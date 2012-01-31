@@ -22,66 +22,68 @@ static PHEventTracking *appEventTracking = nil;
 #pragma mark - Static Methods
 
 -(void) initEventTracking{
-
-    if  (self == [PHEventTracking class]){
         
-        PHEventTimeInGame *appStartedEvent = [PHEventTimeInGame createPHEventApplicationDidStart];
+    uiApplicationEvents = [[PHEventTimeInGame alloc] init];
 
-        NSString *currentEventQueueHash = [PHEventTracking cacheKeyForTimestamp:[appStartedEvent eventTimestamp]];
-        NSDate *date = [NSDate date];
-        NSTimeInterval seconds = [date timeIntervalSince1970];
-        NSFileManager *fileManager = [[[NSFileManager alloc] init] autorelease];
-        if (![fileManager fileExistsAtPath:[PHEventTracking getEventQueuePlistFile]]){
+    NSDate *date = [NSDate date];
+    NSTimeInterval seconds = [date timeIntervalSince1970];
+    NSString *currentEventQueueHash = [PHEventTracking cacheKeyForTimestamp:date];
+    NSFileManager *fileManager = [[[NSFileManager alloc] init] autorelease];
+    if (![fileManager fileExistsAtPath:[PHEventTracking getEventQueuePlistFile]]){
 
-            // no plist file so start fresh event queue cache
-            NSMutableArray *event_queues = [[NSMutableArray alloc] initWithCapacity:PH_MAX_EVENT_QUEUES];
-            for (int i = 0; i < PH_MAX_EVENT_QUEUES; i++){
-                NSDictionary *event_queue = [NSDictionary dictionaryWithObjectsAndKeys:
-                                             [NSNumber numberWithInt:0], PHEVENT_TRACKING_EVENTRECORD_NEXT_KEY,
-                                             [NSNumber numberWithDouble:seconds],PHEVENT_TRACKING_EVENTQUEUE_CREATED_KEY,
-                                             currentEventQueueHash, PHEVENT_TRACKING_EVENTQUEUE_HASH_KEY, nil];
-                currentEventQueueHash = @"";
-                seconds = 0;
-                [event_queues addObject:event_queue];
-            }
-
-            NSDictionary *eventQueueDictionary = [NSDictionary dictionaryWithObjectsAndKeys:
-                                                  [NSNumber numberWithInt:0], PHEVENT_TRACKING_EVENTQUEUE_CURRENT_KEY,
-                                                  [NSNumber numberWithInt:1], PHEVENT_TRACKING_EVENTQUEUE_NEXT_KEY,
-                                                  event_queues, PHEVENT_TRACKING_EVENTQUEUES_KEY, nil];
-
-            [eventQueueDictionary writeToFile:[PHEventTracking getEventQueuePlistFile] atomically:YES];
-            [eventQueueDictionary release];
-        } else{
-
-            // Get current plist and update to start a new event queue
-            NSMutableDictionary *eventQueueDictionary = [NSDictionary dictionaryWithContentsOfFile:[PHEventTracking getEventQueuePlistFile]];
-            NSMutableArray *event_queues = [eventQueueDictionary objectForKey:PHEVENT_TRACKING_EVENTQUEUES_KEY];
-            
-            NSInteger next_event_queue = [[eventQueueDictionary objectForKey:PHEVENT_TRACKING_EVENTQUEUE_NEXT_KEY] integerValue];
-            NSInteger current_event_queue = next_event_queue;
-            NSDictionary *event_queue = [event_queues objectAtIndex:current_event_queue];
-            [event_queue setValue:[NSNumber numberWithDouble:seconds] forKey:PHEVENT_TRACKING_EVENTQUEUE_CREATED_KEY];
-            [event_queue setValue:currentEventQueueHash forKey:PHEVENT_TRACKING_EVENTQUEUE_HASH_KEY];
-            [event_queue setValue:[NSNumber numberWithInt:0] forKey:PHEVENT_TRACKING_EVENTRECORD_NEXT_KEY];
-
-            next_event_queue++;
-            if (next_event_queue > PH_MAX_EVENT_QUEUES){
-                next_event_queue = 0;
-            }
-                
-            [eventQueueDictionary setValue:[NSNumber numberWithInt:current_event_queue] forKey:PHEVENT_TRACKING_EVENTQUEUE_CURRENT_KEY];
-            [eventQueueDictionary setValue:[NSNumber numberWithInt:next_event_queue] forKey:PHEVENT_TRACKING_EVENTQUEUE_NEXT_KEY];
-            [eventQueueDictionary writeToFile:[PHEventTracking getEventQueuePlistFile] atomically:YES];
+        // no plist file so start fresh event queue cache
+        NSMutableArray *event_queues = [[NSMutableArray alloc] initWithCapacity:PH_MAX_EVENT_QUEUES];
+        for (int i = 0; i < PH_MAX_EVENT_QUEUES; i++){
+            NSDictionary *event_queue = [NSDictionary dictionaryWithObjectsAndKeys:
+                                         [NSNumber numberWithInt:0], PHEVENT_TRACKING_EVENTRECORD_NEXT_KEY,
+                                         [NSNumber numberWithDouble:seconds],PHEVENT_TRACKING_EVENTQUEUE_CREATED_KEY,
+                                         currentEventQueueHash, PHEVENT_TRACKING_EVENTQUEUE_HASH_KEY, nil];
+            currentEventQueueHash = @"";
+            seconds = 0;
+            [event_queues addObject:event_queue];
         }
 
-        [PHEventTracking addEvent:appStartedEvent];
+        NSDictionary *eventQueueDictionary = [NSDictionary dictionaryWithObjectsAndKeys:
+                                              [NSNumber numberWithInt:0], PHEVENT_TRACKING_EVENTQUEUE_CURRENT_KEY,
+                                              [NSNumber numberWithInt:1], PHEVENT_TRACKING_EVENTQUEUE_NEXT_KEY,
+                                              event_queues, PHEVENT_TRACKING_EVENTQUEUES_KEY, nil];
+
+        [eventQueueDictionary writeToFile:[PHEventTracking getEventQueuePlistFile] atomically:NO];
+        [eventQueueDictionary release];
+    } else{
+
+        // Get current plist and update to start a new event queue
+        NSMutableDictionary *eventQueueDictionary = [NSDictionary dictionaryWithContentsOfFile:[PHEventTracking getEventQueuePlistFile]];
+        NSMutableArray *event_queues = [eventQueueDictionary objectForKey:PHEVENT_TRACKING_EVENTQUEUES_KEY];
+        
+        NSInteger next_event_queue = [[eventQueueDictionary objectForKey:PHEVENT_TRACKING_EVENTQUEUE_NEXT_KEY] integerValue];
+        NSInteger current_event_queue = next_event_queue;
+        NSDictionary *event_queue = [event_queues objectAtIndex:current_event_queue];
+        [event_queue setValue:[NSNumber numberWithDouble:seconds] forKey:PHEVENT_TRACKING_EVENTQUEUE_CREATED_KEY];
+        [event_queue setValue:currentEventQueueHash forKey:PHEVENT_TRACKING_EVENTQUEUE_HASH_KEY];
+        [event_queue setValue:[NSNumber numberWithInt:0] forKey:PHEVENT_TRACKING_EVENTRECORD_NEXT_KEY];
+
+        next_event_queue++;
+        if (next_event_queue >= PH_MAX_EVENT_QUEUES){
+            next_event_queue = 0;
+        }
+            
+        [eventQueueDictionary setValue:[NSNumber numberWithInt:current_event_queue] forKey:PHEVENT_TRACKING_EVENTQUEUE_CURRENT_KEY];
+        [eventQueueDictionary setValue:[NSNumber numberWithInt:next_event_queue] forKey:PHEVENT_TRACKING_EVENTQUEUE_NEXT_KEY];
+        [eventQueueDictionary writeToFile:[PHEventTracking getEventQueuePlistFile] atomically:NO];
     }
+
+    [uiApplicationEvents registerApplicationDidStartEvent];
 }
 
 +(NSString *) getCurrentEventQueueHash{
     
     NSMutableDictionary *eventQueueDictionary = [NSDictionary dictionaryWithContentsOfFile:[PHEventTracking getEventQueuePlistFile]];
+    if (eventQueueDictionary == nil){
+        
+        PH_NOTE(@"Need to call PHPublisherOpenRequest to intialize PHEventTracking");
+        return nil;
+    }
     NSInteger current_event_queue = [[eventQueueDictionary objectForKey:PHEVENT_TRACKING_EVENTQUEUE_CURRENT_KEY] integerValue];
     NSMutableArray *event_queues = [eventQueueDictionary objectForKey:PHEVENT_TRACKING_EVENTQUEUES_KEY];
     NSDictionary *event_queue = [event_queues objectAtIndex:current_event_queue];
@@ -91,6 +93,11 @@ static PHEventTracking *appEventTracking = nil;
 +(NSString *) getEventQueueToSendHash{
     
     NSMutableDictionary *eventQueueDictionary = [NSDictionary dictionaryWithContentsOfFile:[PHEventTracking getEventQueuePlistFile]];
+    if (eventQueueDictionary == nil){
+        
+        PH_NOTE(@"Need to call PHPublisherOpenRequest to intialize PHEventTracking");
+        return nil;
+    }
     NSMutableArray *event_queues = [eventQueueDictionary objectForKey:PHEVENT_TRACKING_EVENTQUEUES_KEY];
 
     // Send the oldest event queue to the server
@@ -107,7 +114,7 @@ static PHEventTracking *appEventTracking = nil;
         [event_queue setValue:@"" forKey:PHEVENT_TRACKING_EVENTQUEUE_HASH_KEY];
         [event_queue setValue:[NSNumber numberWithInt:0] forKey:PHEVENT_TRACKING_EVENTRECORD_NEXT_KEY];
         [eventQueueDictionary setValue:event_queues forKey:PHEVENT_TRACKING_EVENTQUEUES_KEY];
-        [eventQueueDictionary writeToFile:[PHEventTracking getEventQueuePlistFile] atomically:YES];
+        [eventQueueDictionary writeToFile:[PHEventTracking getEventQueuePlistFile] atomically:NO];
         return queue_hash;
     }
 
@@ -118,16 +125,9 @@ static PHEventTracking *appEventTracking = nil;
     @synchronized(self) {
         if (appEventTracking == nil)
             appEventTracking = [[self alloc] init];
-
+            [appEventTracking initEventTracking];
             return appEventTracking;
     }
-}
-
-- (id)init {
-    if (self = [super init]){
-        [self initEventTracking];
-    }
-    return self;
 }
 
 +(NSString *) defaultEventQueuePath

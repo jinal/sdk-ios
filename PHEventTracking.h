@@ -11,7 +11,7 @@
 #import "PHEventTimeInGame.h"
 
 @interface PHEventTracking : NSObject{
-
+    PHEventTimeInGame *uiApplicationEvents;
 }
 
 /*

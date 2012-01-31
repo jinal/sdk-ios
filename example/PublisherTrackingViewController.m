@@ -67,7 +67,7 @@
 }
 
 -(void)request:(PHAPIRequest *)request didFailWithError:(NSError *)error{
-    NSString *message = [NSString stringWithFormat:@"[ERROR] Failed with error: %@", error];
+    NSString *message = [NSString stringWithFormat:@"[ERROR] Failed with error: Need to make an open request to initialize tracking, %@", error];
     [self addMessage:message];
 
     [self finishRequest];
