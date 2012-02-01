@@ -14,6 +14,10 @@
 #import "UIDevice+HardwareString.h"
 #import "PHConstants.h"
 
+#ifdef PH_USE_NETWORK_FIXTURES
+#import "WWURLConnection.h"
+#endif
+
 @interface PHAPIRequest(Private)
 -(id)initWithApp:(NSString *)token secret:(NSString *)secret;
 +(NSMutableSet *)allRequests;
@@ -28,6 +32,9 @@
     if  (self == [PHAPIRequest class]){
         [PHAPIRequest checkDNSResolutionForURLPath:PH_BASE_URL];
         [PHAPIRequest checkDNSResolutionForURLPath:PH_CONTENT_ADDRESS];
+#ifdef PH_USE_NETWORK_FIXTURES
+        [WWURLConnection setResponsesFromFileNamed:@"dev.wwfixtures"];
+#endif
     }
 }
 
@@ -215,9 +222,14 @@ static void cfHostClientCallBack(CFHostRef host, CFHostInfoType typeInfo, const 
     if (_connection == nil) {
         PH_LOG(@"Sending request: %@", [self.URL absoluteString]);
         NSURLRequest *request = [NSURLRequest requestWithURL:self.URL 
-                                                cachePolicy:NSURLRequestReloadIgnoringLocalCacheData 
-                                                timeoutInterval:PH_REQUEST_TIMEOUT];
+                                                 cachePolicy:NSURLRequestReloadIgnoringLocalCacheData 
+                                             timeoutInterval:PH_REQUEST_TIMEOUT];
+        
+#ifdef PH_USE_NETWORK_FIXTURES
+        _connection = [[WWURLConnection connectionWithRequest:request delegate:self] retain];
+#else
         _connection = [[NSURLConnection alloc] initWithRequest:request delegate:self];
+#endif
         [_connection start];
     }
 }

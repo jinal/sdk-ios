@@ -71,6 +71,50 @@
 		EA6ADFC51475CF3A00DBE60B /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EABAA6971450ED640040B937 /* SystemConfiguration.framework */; };
 		EA6ADFC81475F22C00DBE60B /* PHPublisherContentRequestTest.m in Sources */ = {isa = PBXBuildFile; fileRef = EA6ADFC71475F22C00DBE60B /* PHPublisherContentRequestTest.m */; };
 		EA7BC61A13537F8700B4518D /* PHURLLoaderTest.m in Sources */ = {isa = PBXBuildFile; fileRef = EA7BC61813537F8700B4518D /* PHURLLoaderTest.m */; };
+		EA86C7BF14D9E75600CB1551 /* PHPurchase.m in Sources */ = {isa = PBXBuildFile; fileRef = D1BD481914C0CC6300EE8A5A /* PHPurchase.m */; };
+		EA86C7C014D9E75600CB1551 /* PHUrlPrefetchOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = D118AE5C14B78C3C00C76E2C /* PHUrlPrefetchOperation.m */; };
+		EA86C7C114D9E75600CB1551 /* SDURLCache.m in Sources */ = {isa = PBXBuildFile; fileRef = D1E15B7B14981C39001241EE /* SDURLCache.m */; };
+		EA86C7C214D9E75600CB1551 /* PHPublisherMetadataRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = EA03810E13B26A1A00A31FF7 /* PHPublisherMetadataRequest.m */; };
+		EA86C7C314D9E75600CB1551 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = EA12ABDF1365DBB700CB2F24 /* main.m */; };
+		EA86C7C414D9E75600CB1551 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = EA12ABE21365DBB700CB2F24 /* AppDelegate.m */; };
+		EA86C7C514D9E75600CB1551 /* RootViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EA12ABE81365DBB700CB2F24 /* RootViewController.m */; };
+		EA86C7C614D9E75600CB1551 /* SBJsonBase.m in Sources */ = {isa = PBXBuildFile; fileRef = EAB44264134539F4000DA3E9 /* SBJsonBase.m */; };
+		EA86C7C714D9E75600CB1551 /* SBJsonParser.m in Sources */ = {isa = PBXBuildFile; fileRef = EAB44266134539F4000DA3E9 /* SBJsonParser.m */; };
+		EA86C7C814D9E75600CB1551 /* SBJsonWriter.m in Sources */ = {isa = PBXBuildFile; fileRef = EAB44268134539F4000DA3E9 /* SBJsonWriter.m */; };
+		EA86C7C914D9E75600CB1551 /* NSObject+QueryComponents.m in Sources */ = {isa = PBXBuildFile; fileRef = EAC53A92134E5F7A00F2F956 /* NSObject+QueryComponents.m */; };
+		EA86C7CA14D9E75600CB1551 /* UIDevice+HardwareString.m in Sources */ = {isa = PBXBuildFile; fileRef = EA4ABA0F135F859D0062AE77 /* UIDevice+HardwareString.m */; };
+		EA86C7CB14D9E75600CB1551 /* PHURLLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = EA4C1910134E84D300755983 /* PHURLLoader.m */; };
+		EA86C7CC14D9E75600CB1551 /* PHAPIRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = EA523DB21343F7BA0057DEA5 /* PHAPIRequest.m */; };
+		EA86C7CD14D9E75600CB1551 /* PHStringUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = EA523D901343EE790057DEA5 /* PHStringUtil.m */; };
+		EA86C7CE14D9E75600CB1551 /* PHContent.m in Sources */ = {isa = PBXBuildFile; fileRef = EAB4429513454F34000DA3E9 /* PHContent.m */; };
+		EA86C7CF14D9E75600CB1551 /* PHContentView.m in Sources */ = {isa = PBXBuildFile; fileRef = EA0BB5DD13463C00007F95FA /* PHContentView.m */; };
+		EA86C7D014D9E75600CB1551 /* PHPublisherContentRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = EAED519E134B949D00D0DCB6 /* PHPublisherContentRequest.m */; };
+		EA86C7D114D9E75600CB1551 /* PHPublisherOpenRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = EA523D8E1343EE790057DEA5 /* PHPublisherOpenRequest.m */; };
+		EA86C7D214D9E75600CB1551 /* ExampleViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EA12AC3B13662AD700CB2F24 /* ExampleViewController.m */; };
+		EA86C7D314D9E75600CB1551 /* PublisherOpenViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EA12AC3E13662DC400CB2F24 /* PublisherOpenViewController.m */; };
+		EA86C7D414D9E75600CB1551 /* PublisherContentViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EA12AC441366339D00CB2F24 /* PublisherContentViewController.m */; };
+		EA86C7D514D9E75600CB1551 /* PHPublisherSubContentRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = EAE0F5FB1385D1120062B950 /* PHPublisherSubContentRequest.m */; };
+		EA86C7D614D9E75600CB1551 /* PHNotificationView.m in Sources */ = {isa = PBXBuildFile; fileRef = EA03811513B272C400A31FF7 /* PHNotificationView.m */; };
+		EA86C7D714D9E75600CB1551 /* PHNotificationRenderer.m in Sources */ = {isa = PBXBuildFile; fileRef = EA03811A13B298AF00A31FF7 /* PHNotificationRenderer.m */; };
+		EA86C7D814D9E75600CB1551 /* PHNotificationBadgeRenderer.m in Sources */ = {isa = PBXBuildFile; fileRef = EA03811E13B2A0F200A31FF7 /* PHNotificationBadgeRenderer.m */; };
+		EA86C7D914D9E75600CB1551 /* PHReward.m in Sources */ = {isa = PBXBuildFile; fileRef = EAB2B44613CBD172006D2391 /* PHReward.m */; };
+		EA86C7DA14D9E75600CB1551 /* PHConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = EA1799DF14200FAE005F286F /* PHConstants.m */; };
+		EA86C7DB14D9E75600CB1551 /* PHPublisherIAPTrackingRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = EA019C8014C0FCE5008FBCB1 /* PHPublisherIAPTrackingRequest.m */; };
+		EA86C7DD14D9E75600CB1551 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EA019C8514C102D4008FBCB1 /* StoreKit.framework */; };
+		EA86C7DE14D9E75600CB1551 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D175008D149193790037A036 /* CFNetwork.framework */; };
+		EA86C7DF14D9E75600CB1551 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EABAA6971450ED640040B937 /* SystemConfiguration.framework */; };
+		EA86C7E014D9E75600CB1551 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DF5F4DF0D08C38300B7A737 /* UIKit.framework */; };
+		EA86C7E114D9E75600CB1551 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D30AB110D05D00D00671497 /* Foundation.framework */; };
+		EA86C7E214D9E75600CB1551 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 288765FC0DF74451002DB57D /* CoreGraphics.framework */; };
+		EA86C7E414D9E75600CB1551 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = EA12ABDB1365DBB700CB2F24 /* InfoPlist.strings */; };
+		EA86C7E514D9E75600CB1551 /* MainWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = EA12ABE41365DBB700CB2F24 /* MainWindow.xib */; };
+		EA86C7E614D9E75600CB1551 /* RootViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = EA12ABEA1365DBB700CB2F24 /* RootViewController.xib */; };
+		EA86C7E714D9E75600CB1551 /* PublisherContentViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = EA50F3D21436426F0055EB3A /* PublisherContentViewController.xib */; };
+		EA86C7E814D9E75600CB1551 /* ExampleViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = EABC1CE6143A770000638B09 /* ExampleViewController.xib */; };
+		EA86C7F514D9E77D00CB1551 /* WWURLConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = EA86C7F214D9E77D00CB1551 /* WWURLConnection.m */; };
+		EA86C7F614D9E77D00CB1551 /* WWURLMatching.m in Sources */ = {isa = PBXBuildFile; fileRef = EA86C7F414D9E77D00CB1551 /* WWURLMatching.m */; };
+		EA86C7F814D9EAC800CB1551 /* dev.wwfixtures in Resources */ = {isa = PBXBuildFile; fileRef = EA86C7F714D9EAC800CB1551 /* dev.wwfixtures */; };
+		EA86C7FA14D9EB8600CB1551 /* content-integration.json in Resources */ = {isa = PBXBuildFile; fileRef = EA86C7F914D9EB8600CB1551 /* content-integration.json */; };
 		EA8A6D3414C8C5CA000B86A5 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EA019C8514C102D4008FBCB1 /* StoreKit.framework */; };
 		EA9AB62014A3B0AA00079704 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D30AB110D05D00D00671497 /* Foundation.framework */; };
 		EA9AB62B14A3B0D500079704 /* SBJsonBase.m in Sources */ = {isa = PBXBuildFile; fileRef = EAB44264134539F4000DA3E9 /* SBJsonBase.m */; };
@@ -192,6 +236,13 @@
 		EA6031CD1361FFD6007B2BF5 /* PlayHavenSDK.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PlayHavenSDK.h; sourceTree = "<group>"; };
 		EA6ADFC71475F22C00DBE60B /* PHPublisherContentRequestTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PHPublisherContentRequestTest.m; sourceTree = "<group>"; };
 		EA7BC61813537F8700B4518D /* PHURLLoaderTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PHURLLoaderTest.m; sourceTree = "<group>"; };
+		EA86C7EC14D9E75600CB1551 /* Example (Fixtures).app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Example (Fixtures).app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		EA86C7F114D9E77D00CB1551 /* WWURLConnection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WWURLConnection.h; sourceTree = "<group>"; };
+		EA86C7F214D9E77D00CB1551 /* WWURLConnection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WWURLConnection.m; sourceTree = "<group>"; };
+		EA86C7F314D9E77D00CB1551 /* WWURLMatching.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WWURLMatching.h; sourceTree = "<group>"; };
+		EA86C7F414D9E77D00CB1551 /* WWURLMatching.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WWURLMatching.m; sourceTree = "<group>"; };
+		EA86C7F714D9EAC800CB1551 /* dev.wwfixtures */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = dev.wwfixtures; sourceTree = "<group>"; };
+		EA86C7F914D9EB8600CB1551 /* content-integration.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "content-integration.json"; sourceTree = "<group>"; };
 		EA9AB61F14A3B0AA00079704 /* libPlayHaven.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPlayHaven.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		EAB19C8C1357BA390067F27A /* PHConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PHConstants.h; sourceTree = "<group>"; };
 		EAB2B44513CBD172006D2391 /* PHReward.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PHReward.h; sourceTree = "<group>"; };
@@ -244,6 +295,19 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		EA86C7DC14D9E75600CB1551 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				EA86C7DD14D9E75600CB1551 /* StoreKit.framework in Frameworks */,
+				EA86C7DE14D9E75600CB1551 /* CFNetwork.framework in Frameworks */,
+				EA86C7DF14D9E75600CB1551 /* SystemConfiguration.framework in Frameworks */,
+				EA86C7E014D9E75600CB1551 /* UIKit.framework in Frameworks */,
+				EA86C7E114D9E75600CB1551 /* Foundation.framework in Frameworks */,
+				EA86C7E214D9E75600CB1551 /* CoreGraphics.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		EA9AB61C14A3B0AA00079704 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -261,6 +325,7 @@
 				EA14C6611342604000E228E0 /* Unit Tests.octest */,
 				EA12ABD31365DBB700CB2F24 /* Example.app */,
 				EA9AB61F14A3B0AA00079704 /* libPlayHaven.a */,
+				EA86C7EC14D9E75600CB1551 /* Example (Fixtures).app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -268,6 +333,7 @@
 		29B97314FDCFA39411CA2CEA /* CustomTemplate */ = {
 			isa = PBXGroup;
 			children = (
+				EA86C7F014D9E77D00CB1551 /* WaterWorks */,
 				EA523DA81343F1C50057DEA5 /* README.markdown */,
 				EA6031CC1361FEE7007B2BF5 /* PlayHaven SDK */,
 				EA523D891343EE670057DEA5 /* tests */,
@@ -428,6 +494,19 @@
 			name = "PlayHaven SDK";
 			sourceTree = "<group>";
 		};
+		EA86C7F014D9E77D00CB1551 /* WaterWorks */ = {
+			isa = PBXGroup;
+			children = (
+				EA86C7F114D9E77D00CB1551 /* WWURLConnection.h */,
+				EA86C7F214D9E77D00CB1551 /* WWURLConnection.m */,
+				EA86C7F314D9E77D00CB1551 /* WWURLMatching.h */,
+				EA86C7F414D9E77D00CB1551 /* WWURLMatching.m */,
+				EA86C7F714D9EAC800CB1551 /* dev.wwfixtures */,
+				EA86C7F914D9EB8600CB1551 /* content-integration.json */,
+			);
+			path = WaterWorks;
+			sourceTree = "<group>";
+		};
 		EAB4425D134539F4000DA3E9 /* JSON */ = {
 			isa = PBXGroup;
 			children = (
@@ -544,6 +623,23 @@
 			productReference = EA14C6611342604000E228E0 /* Unit Tests.octest */;
 			productType = "com.apple.product-type.bundle";
 		};
+		EA86C7BD14D9E75600CB1551 /* Example (Fixtures) */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = EA86C7E914D9E75600CB1551 /* Build configuration list for PBXNativeTarget "Example (Fixtures)" */;
+			buildPhases = (
+				EA86C7BE14D9E75600CB1551 /* Sources */,
+				EA86C7DC14D9E75600CB1551 /* Frameworks */,
+				EA86C7E314D9E75600CB1551 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "Example (Fixtures)";
+			productName = example;
+			productReference = EA86C7EC14D9E75600CB1551 /* Example (Fixtures).app */;
+			productType = "com.apple.product-type.application";
+		};
 		EA9AB61E14A3B0AA00079704 /* PlayHaven */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = EA9AB62714A3B0AA00079704 /* Build configuration list for PBXNativeTarget "PlayHaven" */;
@@ -586,6 +682,7 @@
 			targets = (
 				EA14C6601342604000E228E0 /* Unit Tests */,
 				EA12ABD21365DBB700CB2F24 /* Example */,
+				EA86C7BD14D9E75600CB1551 /* Example (Fixtures) */,
 				EA9AB61E14A3B0AA00079704 /* PlayHaven */,
 			);
 		};
@@ -608,6 +705,20 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		EA86C7E314D9E75600CB1551 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				EA86C7E414D9E75600CB1551 /* InfoPlist.strings in Resources */,
+				EA86C7E514D9E75600CB1551 /* MainWindow.xib in Resources */,
+				EA86C7E614D9E75600CB1551 /* RootViewController.xib in Resources */,
+				EA86C7E714D9E75600CB1551 /* PublisherContentViewController.xib in Resources */,
+				EA86C7E814D9E75600CB1551 /* ExampleViewController.xib in Resources */,
+				EA86C7F814D9EAC800CB1551 /* dev.wwfixtures in Resources */,
+				EA86C7FA14D9EB8600CB1551 /* content-integration.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -699,6 +810,44 @@
 				D1E15B7C14981C39001241EE /* SDURLCache.m in Sources */,
 				D118AE5D14B78C3C00C76E2C /* PHUrlPrefetchOperation.m in Sources */,
 				EA019C8214C0FCE5008FBCB1 /* PHPublisherIAPTrackingRequest.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		EA86C7BE14D9E75600CB1551 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				EA86C7BF14D9E75600CB1551 /* PHPurchase.m in Sources */,
+				EA86C7C014D9E75600CB1551 /* PHUrlPrefetchOperation.m in Sources */,
+				EA86C7C114D9E75600CB1551 /* SDURLCache.m in Sources */,
+				EA86C7C214D9E75600CB1551 /* PHPublisherMetadataRequest.m in Sources */,
+				EA86C7C314D9E75600CB1551 /* main.m in Sources */,
+				EA86C7C414D9E75600CB1551 /* AppDelegate.m in Sources */,
+				EA86C7C514D9E75600CB1551 /* RootViewController.m in Sources */,
+				EA86C7C614D9E75600CB1551 /* SBJsonBase.m in Sources */,
+				EA86C7C714D9E75600CB1551 /* SBJsonParser.m in Sources */,
+				EA86C7C814D9E75600CB1551 /* SBJsonWriter.m in Sources */,
+				EA86C7C914D9E75600CB1551 /* NSObject+QueryComponents.m in Sources */,
+				EA86C7CA14D9E75600CB1551 /* UIDevice+HardwareString.m in Sources */,
+				EA86C7CB14D9E75600CB1551 /* PHURLLoader.m in Sources */,
+				EA86C7CC14D9E75600CB1551 /* PHAPIRequest.m in Sources */,
+				EA86C7CD14D9E75600CB1551 /* PHStringUtil.m in Sources */,
+				EA86C7CE14D9E75600CB1551 /* PHContent.m in Sources */,
+				EA86C7CF14D9E75600CB1551 /* PHContentView.m in Sources */,
+				EA86C7D014D9E75600CB1551 /* PHPublisherContentRequest.m in Sources */,
+				EA86C7D114D9E75600CB1551 /* PHPublisherOpenRequest.m in Sources */,
+				EA86C7D214D9E75600CB1551 /* ExampleViewController.m in Sources */,
+				EA86C7D314D9E75600CB1551 /* PublisherOpenViewController.m in Sources */,
+				EA86C7D414D9E75600CB1551 /* PublisherContentViewController.m in Sources */,
+				EA86C7D514D9E75600CB1551 /* PHPublisherSubContentRequest.m in Sources */,
+				EA86C7D614D9E75600CB1551 /* PHNotificationView.m in Sources */,
+				EA86C7D714D9E75600CB1551 /* PHNotificationRenderer.m in Sources */,
+				EA86C7D814D9E75600CB1551 /* PHNotificationBadgeRenderer.m in Sources */,
+				EA86C7D914D9E75600CB1551 /* PHReward.m in Sources */,
+				EA86C7DA14D9E75600CB1551 /* PHConstants.m in Sources */,
+				EA86C7DB14D9E75600CB1551 /* PHPublisherIAPTrackingRequest.m in Sources */,
+				EA86C7F514D9E77D00CB1551 /* WWURLConnection.m in Sources */,
+				EA86C7F614D9E77D00CB1551 /* WWURLMatching.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -895,6 +1044,44 @@
 			};
 			name = Release;
 		};
+		EA86C7EA14D9E75600CB1551 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PRECOMPILE_PREFIX_HEADER = NO;
+				GCC_PREPROCESSOR_DEFINITIONS = "PH_USE_NETWORK_FIXTURES=1";
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				INFOPLIST_FILE = example/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 3.0;
+				PRODUCT_NAME = "Example (Fixtures)";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Debug;
+		};
+		EA86C7EB14D9E75600CB1551 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_PRECOMPILE_PREFIX_HEADER = NO;
+				GCC_PREPROCESSOR_DEFINITIONS = "PH_USE_NETWORK_FIXTURES=1";
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				INFOPLIST_FILE = example/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 3.0;
+				PRODUCT_NAME = "Example (Fixtures)";
+				VALIDATE_PRODUCT = YES;
+				WRAPPER_EXTENSION = app;
+			};
+			name = Release;
+		};
 		EA9AB62814A3B0AA00079704 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -962,6 +1149,15 @@
 			buildConfigurations = (
 				EA14C6631342604000E228E0 /* Debug */,
 				EA14C6641342604000E228E0 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		EA86C7E914D9E75600CB1551 /* Build configuration list for PBXNativeTarget "Example (Fixtures)" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				EA86C7EA14D9E75600CB1551 /* Debug */,
+				EA86C7EB14D9E75600CB1551 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
