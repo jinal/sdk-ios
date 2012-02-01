@@ -15,17 +15,17 @@
 @synthesize callback = _callback;
 
 -(NSURL *) URL{
-  if (_URL == nil) {
-    NSString *urlString = [self urlPath];
-    _URL = [[NSURL alloc] initWithString:urlString]; 
-  }
-  
-  return _URL;
+    if (_URL == nil) {
+        NSString *urlString = [self urlPath];
+        _URL = [[NSURL alloc] initWithString:urlString]; 
+    }
+    
+    return _URL;
 }
 
 -(void)dealloc{
-  [_callback release], _callback = nil;
-  [super dealloc];
+    [_callback release], _callback = nil;
+    [super dealloc];
 }
 
 @end

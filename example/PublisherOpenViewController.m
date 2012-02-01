@@ -11,16 +11,16 @@
 @implementation PublisherOpenViewController
 
 -(void)startRequest{
-  [super startRequest];
-  
-  /*
-   * This is an alternate implementation which allows you you get response 
-   * data from API requests. This isn't necessary for most developers.
-   */
+    [super startRequest];
     
-  PHPublisherOpenRequest * request = [PHPublisherOpenRequest requestForApp:self.token secret:self.secret];
-  request.delegate = self;
-  [request send];
+    /*
+     * This is an alternate implementation which allows you you get response 
+     * data from API requests. This isn't necessary for most developers.
+     */
+    
+    PHPublisherOpenRequest * request = [PHPublisherOpenRequest requestForApp:self.token secret:self.secret];
+    request.delegate = self;
+    [request send];
 }
 
 -(void)dealloc{
@@ -32,7 +32,7 @@
 -(void)request:(PHAPIRequest *)request didSucceedWithResponse:(NSDictionary *)responseData{
     NSString *message = [NSString stringWithFormat:@"[OK] Success with response: %@",responseData];
     [self addMessage:message];
-
+    
     [self finishRequest];
 }
 

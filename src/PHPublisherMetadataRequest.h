@@ -10,7 +10,7 @@
 #import "PHAPIRequest.h"
 
 @interface PHPublisherMetadataRequest : PHAPIRequest{
-  NSString *_placement;
+    NSString *_placement;
 }
 
 +(id)requestForApp:(NSString *)token secret:(NSString *)secret placement:(NSString *)placement delegate:(id)delegate;

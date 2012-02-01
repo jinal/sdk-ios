@@ -20,36 +20,36 @@
 @implementation PHPublisherMetadataRequest
 
 +(id)requestForApp:(NSString *)token secret:(NSString *)secret placement:(NSString *)placement delegate:(id)delegate{
-  return [[[[self class] alloc] initWithApp:token secret:secret placement:placement delegate:delegate] autorelease];
+    return [[[[self class] alloc] initWithApp:token secret:secret placement:placement delegate:delegate] autorelease];
 }
 
 -(id)initWithApp:(NSString *)token secret:(NSString *)secret placement:(NSString *)placement delegate:(id)delegate{
-  if ((self = [self initWithApp:token secret:secret])) {
-    self.placement = placement;
-    self.delegate = delegate;
-  }
-  
-  return self;
+    if ((self = [self initWithApp:token secret:secret])) {
+        self.placement = placement;
+        self.delegate = delegate;
+    }
+    
+    return self;
 }
 
 @synthesize placement = _placement;
 
 -(void)dealloc{
-  [_placement release], _placement = nil;
-  [super dealloc];
+    [_placement release], _placement = nil;
+    [super dealloc];
 }
 
 #pragma mark - PHAPIRequest
 
 -(NSString *)urlPath{
-  return PH_URL(/v3/publisher/content/);
+    return PH_URL(/v3/publisher/content/);
 }
 
 -(NSDictionary *)additionalParameters{
-  return [NSDictionary dictionaryWithObjectsAndKeys:
-          self.placement, @"placement_id",
-          @"1", @"metadata",
-          nil];
+    return [NSDictionary dictionaryWithObjectsAndKeys:
+            self.placement, @"placement_id",
+            @"1", @"metadata",
+            nil];
 }
 
 @end

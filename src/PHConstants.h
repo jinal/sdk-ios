@@ -69,11 +69,11 @@
 
 // Errors
 typedef enum{
-  PHAPIResponseErrorType,
-  PHRequestResponseErrorType,
-  PHOrientationErrorType,
-  PHLoadContextErrorType,
-  PHWindowErrorType,
+    PHAPIResponseErrorType,
+    PHRequestResponseErrorType,
+    PHOrientationErrorType,
+    PHLoadContextErrorType,
+    PHWindowErrorType,
 } PHErrorType;
 
 NSError *PHCreateError(PHErrorType errorType);
@@ -101,11 +101,11 @@ int PHNetworkStatus(void);
 // Play Haven default images
 //
 typedef struct{
-  int width;
-  int height;
-  int length;
-  char data[];
-  
+    int width;
+    int height;
+    int length;
+    char data[];
+    
 } playHavenImage;
 
 //

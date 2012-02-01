@@ -9,9 +9,9 @@
 #import <UIKit/UIKit.h>
 
 @interface RootViewController : UITableViewController {
-
-  UITextField *tokenField;
-  UITextField *secretField;
+    
+    UITextField *tokenField;
+    UITextField *secretField;
 }
 
 @property (nonatomic, retain) IBOutlet UITextField *tokenField;

@@ -87,12 +87,12 @@
         SKProduct *productInfo = [response.products objectAtIndex:0];
         [_productInfo release], _productInfo = [productInfo retain];
     }
-
+    
     [super send];
 }
 
 -(void)request:(SKRequest *)request didFailWithError:(NSError *)error{
-
+    
     [super send];
 }
 

@@ -9,9 +9,9 @@
 #import <Foundation/Foundation.h>
 
 @interface PHReward : NSObject{
-  NSString *_reward;
-  NSInteger _quanity;
-  NSString *_receipt;
+    NSString *_reward;
+    NSInteger _quanity;
+    NSString *_receipt;
 }
 
 @property (nonatomic, copy) NSString *name;

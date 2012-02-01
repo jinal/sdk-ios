@@ -12,13 +12,13 @@
 @class PHPublisherMetadataRequest;
 
 @interface PHNotificationView : UIView<PHAPIRequestDelegate>{
-  NSString *_app;
-  NSString *_secret;
-  NSString *_placement;
-  
-  NSDictionary *_notificationData;
-  PHNotificationRenderer *_notificationRenderer;
-  PHPublisherMetadataRequest *_request;
+    NSString *_app;
+    NSString *_secret;
+    NSString *_placement;
+    
+    NSDictionary *_notificationData;
+    PHNotificationRenderer *_notificationRenderer;
+    PHPublisherMetadataRequest *_request;
 }
 
 +(void)setRendererClass:(Class)rendererClass forType:(NSString *)type;

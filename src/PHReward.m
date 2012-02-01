@@ -15,10 +15,10 @@
 @synthesize receipt = _receipt;
 
 -(void)dealloc{
-  [_reward release], _reward = nil;
-  [_receipt release], _receipt = nil;
-  
-  [super dealloc];
+    [_reward release], _reward = nil;
+    [_receipt release], _receipt = nil;
+    
+    [super dealloc];
 }
 
 @end

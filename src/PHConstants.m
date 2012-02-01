@@ -26,24 +26,24 @@
 BOOL _localWiFiAvailable(void);
 
 NSError *PHCreateError(PHErrorType errorType){
-  static NSArray *errorArray;
-  if (errorArray == nil) {
-    errorArray = [[NSArray alloc] initWithObjects:
-                  @"PlayHaven received an error response from the API. Please check your token and secret values and try again.",
-                  @"Response was successful, but did not contain a response object.",
-                  @"The content you requested was not able to be shown because it is missing required orientation data.",
-                  @"The content you requested has been dismissed because PlayHaven was not able to load content data.",
-                  @"PlayHaven was not able to create the content unit overlay",
-                  @"PlayHaven was not able to get product information from Apple",
-                  nil];
-  }
-  
-  NSString *errorMessage = [errorArray objectAtIndex:errorType];
-  NSDictionary *userInfo = [NSDictionary dictionaryWithObjectsAndKeys:
-                            errorMessage, NSLocalizedDescriptionKey,
-                            nil];
-  
-  return [NSError errorWithDomain:@"PlayHavenSDK" code:(NSInteger)errorType userInfo:userInfo];
+    static NSArray *errorArray;
+    if (errorArray == nil) {
+        errorArray = [[NSArray alloc] initWithObjects:
+                      @"PlayHaven received an error response from the API. Please check your token and secret values and try again.",
+                      @"Response was successful, but did not contain a response object.",
+                      @"The content you requested was not able to be shown because it is missing required orientation data.",
+                      @"The content you requested has been dismissed because PlayHaven was not able to load content data.",
+                      @"PlayHaven was not able to create the content unit overlay",
+                      @"PlayHaven was not able to get product information from Apple",
+                      nil];
+    }
+    
+    NSString *errorMessage = [errorArray objectAtIndex:errorType];
+    NSDictionary *userInfo = [NSDictionary dictionaryWithObjectsAndKeys:
+                              errorMessage, NSLocalizedDescriptionKey,
+                              nil];
+    
+    return [NSError errorWithDomain:@"PlayHavenSDK" code:(NSInteger)errorType userInfo:userInfo];
 }
 
 /*
@@ -81,37 +81,37 @@ BOOL _localWiFiAvailable()
  */
 
 int PHNetworkStatus(){
-  //TODO: change this to check API accessibility specifically
+    //TODO: change this to check API accessibility specifically
 	struct sockaddr_in zeroAddr;
 	bzero(&zeroAddr, sizeof(zeroAddr));
 	zeroAddr.sin_len = sizeof(zeroAddr);
 	zeroAddr.sin_family = AF_INET;
-  
+    
 	SCNetworkReachabilityRef target = 
-  SCNetworkReachabilityCreateWithAddress(NULL, (struct sockaddr *) &zeroAddr);
-  
-  SCNetworkReachabilityFlags flags;
+    SCNetworkReachabilityCreateWithAddress(NULL, (struct sockaddr *) &zeroAddr);
+    
+    SCNetworkReachabilityFlags flags;
 	SCNetworkReachabilityGetFlags(target, &flags);
-  
+    
     CFRelease(target);
     
-  BOOL isReachable = ((flags & kSCNetworkFlagsReachable) != 0);
-  BOOL needsConnection = ((flags & kSCNetworkFlagsConnectionRequired) != 0);
-  
-  if(isReachable && !needsConnection) // connection is available 
-  {
+    BOOL isReachable = ((flags & kSCNetworkFlagsReachable) != 0);
+    BOOL needsConnection = ((flags & kSCNetworkFlagsConnectionRequired) != 0);
     
-    // determine what type of connection is available
-    BOOL isCellularConnection = ((flags & kSCNetworkReachabilityFlagsIsWWAN) != 0);
+    if(isReachable && !needsConnection) // connection is available 
+    {
+        
+        // determine what type of connection is available
+        BOOL isCellularConnection = ((flags & kSCNetworkReachabilityFlagsIsWWAN) != 0);
+        
+        if(isCellularConnection) 
+            return 1; // cellular connection available
+        
+        if(_localWiFiAvailable())
+            return 2; // wifi connection available
+    }
     
-    if(isCellularConnection) 
-      return 1; // cellular connection available
-    
-    if(_localWiFiAvailable())
-      return 2; // wifi connection available
-  }
-    
-  return 0; // no connection at all
+    return 0; // no connection at all
 }
 
 //

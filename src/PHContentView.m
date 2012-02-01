@@ -218,7 +218,7 @@ static NSMutableSet *allContentViews = nil;
     } else {
         self.frame = CGRectMake(0, 0, width, height);
     }
-        
+    
     self.center = center;
     
     if (transform) {
@@ -302,7 +302,7 @@ static NSMutableSet *allContentViews = nil;
         if ([self.delegate respondsToSelector:@selector(borderColorForContentView:)]) {
             _webView.layer.borderColor = [[self.delegate borderColorForContentView:self] CGColor];
         }
-                
+        
         [self activityView].center = _webView.center;
         
         if (animated) {
@@ -313,9 +313,9 @@ static NSMutableSet *allContentViews = nil;
     }
     
     [self addSubview:[self activityView]];
-
+    
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(contentViewsCallback:) name:PHCONTENTVIEW_CALLBACK_NOTIFICATION object:nil];
-
+    
     //TRACK_ORIENTATION see STOP_TRACK_ORIENTATION
     [[NSNotificationCenter defaultCenter] 
      addObserver:self
@@ -335,7 +335,7 @@ static NSMutableSet *allContentViews = nil;
 }
 
 -(void)dismissWithError:(NSError *)error{
-
+    
     // This is here because get called 2x
     // first from handleLoadContext:
     // second from webView:didFailLoadWithError:
@@ -379,12 +379,12 @@ static NSMutableSet *allContentViews = nil;
             [self viewDidDismiss];
         }
     }
-
+    
     [[NSNotificationCenter defaultCenter] 
      removeObserver:self 
      name:PHCONTENTVIEW_CALLBACK_NOTIFICATION 
      object:nil];
-
+    
     //STOP_TRACK_ORIENTATION see TRACK_ORIENTATION
     [[NSNotificationCenter defaultCenter] 
      removeObserver:self 
@@ -394,11 +394,11 @@ static NSMutableSet *allContentViews = nil;
 
 -(void)loadTemplate {
     [_webView stopLoading];
-
+    
     PH_LOG(@"Loading content unit template: %@", self.content.URL);
     [_webView loadRequest:[NSURLRequest requestWithURL:self.content.URL
-                                        cachePolicy:NSURLRequestUseProtocolCachePolicy
-                                        timeoutInterval:PH_REQUEST_TIMEOUT]];
+                                           cachePolicy:NSURLRequestUseProtocolCachePolicy
+                                       timeoutInterval:PH_REQUEST_TIMEOUT]];
 }
 
 -(void)viewDidShow{
@@ -430,7 +430,7 @@ static NSMutableSet *allContentViews = nil;
         urlPath = [NSString stringWithFormat:@"%@://%@%@", [url scheme], [url host], [url path]];
     
     NSInvocation *redirect = [_redirects valueForKey:urlPath];
-
+    
     if (redirect) {
         NSDictionary *queryComponents = [url queryComponents];
         NSString *callback = [queryComponents valueForKey:@"callback"];

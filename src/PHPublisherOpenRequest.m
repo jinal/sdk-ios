@@ -18,12 +18,12 @@
 @implementation PHPublisherOpenRequest
 
 +(void)initialize{
-
+    
     if  (self == [PHPublisherOpenRequest class]){
         // Initializes pre-fetching and webview caching
         SDURLCachePH *urlCache = [[SDURLCachePH alloc] initWithMemoryCapacity:PH_MAX_SIZE_MEMORY_CACHE
-                                                        diskCapacity:PH_MAX_SIZE_FILESYSTEM_CACHE
-                                                        diskPath:[SDURLCachePH defaultCachePath]];
+                                                                 diskCapacity:PH_MAX_SIZE_FILESYSTEM_CACHE
+                                                                     diskPath:[SDURLCachePH defaultCachePath]];
         [NSURLCache setSharedURLCache:urlCache];
         [urlCache release];
     }
@@ -54,17 +54,17 @@
 #pragma mark - PHAPIRequest response delegate
 
 -(void)didSucceedWithResponse:(NSDictionary *)responseData{
-
+    
     if ([responseData count] > 0){
-
+        
         NSString *cachePlist = [PHURLPrefetchOperation getCachePlistFile];
         NSFileManager *fileManager = [[NSFileManager alloc] init];
         if ([fileManager fileExistsAtPath:cachePlist]){
-
+            
             [fileManager removeItemAtPath:cachePlist error:NULL];
         }
         [responseData writeToFile:cachePlist atomically:YES];
-
+        
         NSArray *urlArray = (NSArray *)[responseData objectForKey:@"precache"];
         for (NSString *urlString in urlArray){
             
@@ -73,10 +73,10 @@
             [self.prefetchOperations addOperation:urlpo];
             [urlpo release];
         }
-
+        
         [fileManager release];
     }
-
+    
     // Don't finish the request before prefetching has completed!
     if ([self.delegate respondsToSelector:@selector(request:didSucceedWithResponse:)]) {
         [self.delegate performSelector:@selector(request:didSucceedWithResponse:) withObject:self withObject:responseData];
@@ -107,13 +107,13 @@
 }
 
 -(void) clearPrefetchCache{
-
+    
     NSString *cachePlist = [PHURLPrefetchOperation getCachePlistFile];
     NSMutableDictionary *prefetchUrlDictionary = [[[NSMutableDictionary alloc] initWithContentsOfFile:cachePlist] autorelease];
     NSArray *urlArray = (NSArray *)[prefetchUrlDictionary objectForKey:@"precache"];
     NSFileManager *fileManager = [[[NSFileManager alloc] init] autorelease];
     for (NSString *urlString in urlArray){
-
+        
         NSURL *url = [NSURL URLWithString:urlString];
         NSString *cacheKey = [SDURLCachePH cacheKeyForURL:url];
         NSString *cacheFilePath = [[SDURLCachePH defaultCachePath] stringByAppendingPathComponent:cacheKey];

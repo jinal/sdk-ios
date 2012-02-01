@@ -10,18 +10,18 @@
 #import <UIKit/UIKit.h>
 
 typedef enum{
-  PHContentTransitionUnknown,
-  PHContentTransitionModal,
-  PHContentTransitionDialog
+    PHContentTransitionUnknown,
+    PHContentTransitionModal,
+    PHContentTransitionDialog
 } PHContentTransitionType;
 
 @interface PHContent : NSObject {
-  NSDictionary *_frameDict;
-  NSURL *_URL;
-  PHContentTransitionType _transition;
-  NSDictionary *_context;
-  NSTimeInterval _closeButtonDelay;
-  NSString *_closeButtonURLPath;
+    NSDictionary *_frameDict;
+    NSURL *_URL;
+    PHContentTransitionType _transition;
+    NSDictionary *_context;
+    NSTimeInterval _closeButtonDelay;
+    NSString *_closeButtonURLPath;
 }
 
 +(id)contentWithDictionary:(NSDictionary *)dictionaryRepresentation;

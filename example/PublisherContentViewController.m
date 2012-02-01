@@ -37,7 +37,7 @@
         [request send];
         
         [self setRequest:request];
-
+        
         [self.navigationItem.rightBarButtonItem setTitle:@"Cancel"];
     } else {
         [self addMessage:@"Request canceled!"];
@@ -52,7 +52,7 @@
 
 -(void)finishRequest{
     [super finishRequest];
-
+    
     //Cleaning up after a completed request
     self.request = nil;
     [self.navigationItem.rightBarButtonItem setTitle:@"Start"];      
@@ -80,7 +80,7 @@
 -(void)request:(PHPublisherContentRequest *)request contentDidDisplay:(PHContent *)content{
     //This is a good place to clear any notification views attached to this request.
     [_notificationView clear];
-  
+    
     NSString *message = [NSString stringWithFormat:@"Displayed content: %@",content];
     [self addMessage:message];
     
@@ -101,14 +101,14 @@
 }
 
 -(void)request:(PHPublisherContentRequest *)request unlockedReward:(PHReward *)reward{
-  NSString *message = [NSString stringWithFormat:@"Unlocked reward: %dx %@", reward.quantity, reward.name];
-  [self addMessage:message];
+    NSString *message = [NSString stringWithFormat:@"Unlocked reward: %dx %@", reward.quantity, reward.name];
+    [self addMessage:message];
 }
 
 -(void)request:(PHPublisherContentRequest *)request makePurchase:(PHPurchase *)purchase{
     NSString *message = [NSString stringWithFormat:@"Purchased: %dx %@", purchase.quantity, purchase.productIdentifier];
     [self addMessage:message];
-
+    
     [purchase reportResolution:PHPurchaseResolutionBuy];
 }
 
@@ -120,32 +120,32 @@
  */
 
 -(void)viewDidLoad{
-  [super viewDidLoad];
+    [super viewDidLoad];
     
     [self startTimers];
     [[PHPublisherContentRequest requestForApp:self.token secret:self.secret placement:@"more_games" delegate:self] preload];
     
-  _notificationView = [[PHNotificationView alloc] initWithApp:self.token secret:self.secret placement:@"more_games"];
-  _notificationView.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin;
+    _notificationView = [[PHNotificationView alloc] initWithApp:self.token secret:self.secret placement:@"more_games"];
+    _notificationView.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin;
 }
 
 -(void)viewDidUnload{
     [self setPlacementField:nil];
-  [super viewDidUnload];
-  [_notificationView removeFromSuperview];
-  [_notificationView release], _notificationView = nil;
+    [super viewDidUnload];
+    [_notificationView removeFromSuperview];
+    [_notificationView release], _notificationView = nil;
 }
 
 -(void)viewDidAppear:(BOOL)animated{
-  [super viewDidAppear:animated];
-  [self.view addSubview:_notificationView];
-  [_notificationView setCenter:CGPointMake(self.view.frame.size.width - 22, 19)];
-  [_notificationView refresh];
+    [super viewDidAppear:animated];
+    [self.view addSubview:_notificationView];
+    [_notificationView setCenter:CGPointMake(self.view.frame.size.width - 22, 19)];
+    [_notificationView refresh];
 }
 
 -(void)viewDidDisappear:(BOOL)animated{
-  [super viewDidDisappear:animated];
-  [_notificationView removeFromSuperview];
+    [super viewDidDisappear:animated];
+    [_notificationView removeFromSuperview];
 }
 
 @end

@@ -16,12 +16,12 @@
 
 
 @interface PHURLLoader : NSObject {
-  id <PHURLLoaderDelegate> _delegate;
-  NSURLConnection *_connection;
-  NSURL *_targetURL;
-  NSInteger _totalRedirects;
-  BOOL _opensFinalURLOnDevice;
-  id _context;
+    id <PHURLLoaderDelegate> _delegate;
+    NSURLConnection *_connection;
+    NSURL *_targetURL;
+    NSInteger _totalRedirects;
+    BOOL _opensFinalURLOnDevice;
+    id _context;
 }
 
 

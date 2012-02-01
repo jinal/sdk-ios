@@ -27,135 +27,135 @@
 #pragma mark Static
 
 +(PHURLLoader *) openDeviceURL:(NSString *)url{
-  PHURLLoader *result = [[[PHURLLoader alloc] init] autorelease];
-  result.targetURL = [NSURL URLWithString:url];
-  [result open];
-  
-  return result;
+    PHURLLoader *result = [[[PHURLLoader alloc] init] autorelease];
+    result.targetURL = [NSURL URLWithString:url];
+    [result open];
+    
+    return result;
 }
 
 +(NSMutableSet *)allLoaders{
-  static NSMutableSet *allLoaders = nil;
-  
-  if (allLoaders == nil) {
-    allLoaders = [[NSMutableSet alloc] init];
-  }
-  
-  return allLoaders;
+    static NSMutableSet *allLoaders = nil;
+    
+    if (allLoaders == nil) {
+        allLoaders = [[NSMutableSet alloc] init];
+    }
+    
+    return allLoaders;
 }
 
 +(void)invalidateAllLoadersWithDelegate:(id<PHURLLoaderDelegate>)delegate{
-  NSEnumerator *allLoaders = [[PHURLLoader allLoaders] objectEnumerator];
-  PHURLLoader *loader = nil;
-  
-  NSMutableSet *invalidatedLoaders = [NSMutableSet set];
-  
-  while (loader = [allLoaders nextObject]){
-    if ([[loader delegate] isEqual:delegate]) {
-      [invalidatedLoaders addObject:loader];
+    NSEnumerator *allLoaders = [[PHURLLoader allLoaders] objectEnumerator];
+    PHURLLoader *loader = nil;
+    
+    NSMutableSet *invalidatedLoaders = [NSMutableSet set];
+    
+    while (loader = [allLoaders nextObject]){
+        if ([[loader delegate] isEqual:delegate]) {
+            [invalidatedLoaders addObject:loader];
+        }
     }
-  }
-  
-  [invalidatedLoaders makeObjectsPerformSelector:@selector(invalidate)];
+    
+    [invalidatedLoaders makeObjectsPerformSelector:@selector(invalidate)];
 }
 
 
 #pragma mark -
 #pragma mark Instance
 -(id)init{
-  if ((self = [super init])) {
-    _opensFinalURLOnDevice = YES;
-  }
-  
-  return self;
+    if ((self = [super init])) {
+        _opensFinalURLOnDevice = YES;
+    }
+    
+    return self;
 }
 
 -(void) dealloc{
-  [_targetURL release], _targetURL = nil;
-  [_connection release], _connection = nil;
-  [_context release], _context = nil;
-  
-  [super dealloc];
+    [_targetURL release], _targetURL = nil;
+    [_connection release], _connection = nil;
+    [_context release], _context = nil;
+    
+    [super dealloc];
 }
 
 #pragma mark -
 #pragma mark PHURLLoader
 -(void) open{
-  if (!!self.targetURL) {
-    PH_LOG(@"opening url %@", self.targetURL);
-    _totalRedirects = 0;
-    NSURLRequest *request = [NSURLRequest requestWithURL:self.targetURL];
-    
-    @synchronized(self){
-      [_connection cancel];
-      [_connection release], _connection = [[NSURLConnection alloc] initWithRequest:request delegate:self startImmediately:YES];
-
-      
-      //PHURLLOADER_RETAIN see PHURLLOADER_RELEASE
-      [[PHURLLoader allLoaders] addObject:self];
+    if (!!self.targetURL) {
+        PH_LOG(@"opening url %@", self.targetURL);
+        _totalRedirects = 0;
+        NSURLRequest *request = [NSURLRequest requestWithURL:self.targetURL];
+        
+        @synchronized(self){
+            [_connection cancel];
+            [_connection release], _connection = [[NSURLConnection alloc] initWithRequest:request delegate:self startImmediately:YES];
+            
+            
+            //PHURLLOADER_RETAIN see PHURLLOADER_RELEASE
+            [[PHURLLoader allLoaders] addObject:self];
+        }
     }
-  }
 }
 
 -(void) invalidate{
-  self.delegate = nil;
-  
-  //PHURLLOADER_RELEASE see PHURLLOADER_RETAIN
-  @synchronized(self){
-    [_connection cancel];
-    [[PHURLLoader allLoaders] removeObject:self];
-  }
+    self.delegate = nil;
+    
+    //PHURLLOADER_RELEASE see PHURLLOADER_RETAIN
+    @synchronized(self){
+        [_connection cancel];
+        [[PHURLLoader allLoaders] removeObject:self];
+    }
 }
 
 -(void)finish{
-  if ([self.delegate respondsToSelector:@selector(loaderFinished:)]) {
-    [self.delegate loaderFinished:self];
-  }
-  
-  [self invalidate];
-  
-  if (self.opensFinalURLOnDevice) {
-    //actually open in app at this point
-    [[UIApplication sharedApplication] openURL:self.targetURL];
-  }
+    if ([self.delegate respondsToSelector:@selector(loaderFinished:)]) {
+        [self.delegate loaderFinished:self];
+    }
+    
+    [self invalidate];
+    
+    if (self.opensFinalURLOnDevice) {
+        //actually open in app at this point
+        [[UIApplication sharedApplication] openURL:self.targetURL];
+    }
 }
 
 -(void)fail{
-  if ([self.delegate respondsToSelector:@selector(loaderFailed:)]) {
-    [self.delegate loaderFailed:self];
-  }
-  
-  [self invalidate];
+    if ([self.delegate respondsToSelector:@selector(loaderFailed:)]) {
+        [self.delegate loaderFailed:self];
+    }
+    
+    [self invalidate];
 }
 
 
 #pragma mark -
 #pragma mark NSURLConnection
 -(NSURLRequest *) connection:(NSURLConnection *)connection willSendRequest:(NSURLRequest *)request redirectResponse:(NSURLResponse *)response{
-  self.targetURL = [request URL];
-  if (++_totalRedirects < MAXIMUM_REDIRECTS) {
-    return request;
-  } else {
-    PH_LOG(@"max redirects with URL %@", self.targetURL);
-    [self finish];
-    return nil;
-  }
+    self.targetURL = [request URL];
+    if (++_totalRedirects < MAXIMUM_REDIRECTS) {
+        return request;
+    } else {
+        PH_LOG(@"max redirects with URL %@", self.targetURL);
+        [self finish];
+        return nil;
+    }
 }
 
 -(void) connection:(NSURLConnection *)connection didFailWithError:(NSError *)error{
-  PH_LOG(@"failing with error: %@", [error localizedDescription]);
-  [self fail];
+    PH_LOG(@"failing with error: %@", [error localizedDescription]);
+    [self fail];
 }
 
 -(void) connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response{
-  NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *)response;
-  if ([httpResponse statusCode] < 300) {
-    PH_LOG(@"finishing with URL %@", self.targetURL);
-    [self finish];
-  } else {
-    PH_LOG(@"failing with URL %@", self.targetURL);
-    [self fail];
-  }
+    NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *)response;
+    if ([httpResponse statusCode] < 300) {
+        PH_LOG(@"finishing with URL %@", self.targetURL);
+        [self finish];
+    } else {
+        PH_LOG(@"failing with URL %@", self.targetURL);
+        [self fail];
+    }
 }
 
 @end
