@@ -37,10 +37,12 @@
 @synthesize product;
 @synthesize quantity;
 @synthesize resolution;
+@synthesize skError;
 
 -(void)dealloc{
     [_product release], _product = nil;
     [_productInfo release], _productInfo = nil;
+    [_skError release], _skError = nil;
     [super dealloc];
 }
 
@@ -52,13 +54,23 @@
 }
 
 -(NSDictionary *)additionalParameters{
-    return [NSDictionary dictionaryWithObjectsAndKeys:
-            self.product, @"product",
-            [NSNumber numberWithInteger: self.quantity], @"quantity",
-            [PHPurchase stringForResolution:self.resolution], @"resolution",
-            _productInfo.price, @"price",
-            _productInfo.priceLocale, @"price_locale", 
-            [PHPublisherIAPTrackingRequest getConversionCookieForProduct:self.product], @"cookie", nil];
+    if (_skError == nil)
+        return [NSDictionary dictionaryWithObjectsAndKeys:
+                self.product, @"product",
+                [NSNumber numberWithInteger: self.quantity], @"quantity",
+                [PHPurchase stringForResolution:self.resolution], @"resolution",
+                @"ios", @"store", 
+                _productInfo.price, @"price",
+                _productInfo.priceLocale, @"price_locale", 
+                [PHPublisherIAPTrackingRequest getConversionCookieForProduct:self.product], @"cookie", nil];
+    else
+        return [NSDictionary dictionaryWithObjectsAndKeys:
+                self.product, @"product",
+                [NSNumber numberWithInteger: self.quantity], @"quantity",
+                [PHPurchase stringForResolution:self.resolution], @"resolution",
+                @"ios", @"store", 
+                [NSNumber numberWithInteger: _skError.code], @"error_code",
+                [PHPublisherIAPTrackingRequest getConversionCookieForProduct:self.product], @"cookie", nil];
 }
 
 -(void)send{
@@ -74,14 +86,14 @@
     if ([response.products count] > 0) {
         SKProduct *productInfo = [response.products objectAtIndex:0];
         [_productInfo release], _productInfo = [productInfo retain];
-        [super send];
-    } else {
-        [self didFailWithError:PHCreateError(PHProductRequestErrorType)];
     }
+
+    [super send];
 }
 
 -(void)request:(SKRequest *)request didFailWithError:(NSError *)error{
-    [self didFailWithError:PHCreateError(PHProductRequestErrorType)];
+
+    [super send];
 }
 
 @end

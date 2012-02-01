@@ -74,7 +74,6 @@ typedef enum{
   PHOrientationErrorType,
   PHLoadContextErrorType,
   PHWindowErrorType,
-  PHProductRequestErrorType,
 } PHErrorType;
 
 NSError *PHCreateError(PHErrorType errorType);
