@@ -14,8 +14,11 @@ NSString *readLineAsNSString(FILE *file)
 {
     char buffer[4096];
     
+    // tune this capacity to your liking -- larger buffer sizes will be faster, but
+    // use more memory
     NSMutableString *result = [NSMutableString stringWithCapacity:256];
     
+    // Read up to 4095 non-newline characters
     int charsRead;
     do
     {
